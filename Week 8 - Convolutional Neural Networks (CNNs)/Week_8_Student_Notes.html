@@ -236,8 +236,8 @@
                     By the end of this chapter, you will be able to:<br />
                     1. <strong>Explain</strong> the limitations of Dense Networks for image data.<br />
                     2. <strong>Describe</strong> the mechanics of Convolution and Pooling layers.<br />
-                    3. ** Calculate<strong> the output shape of a tensor passing through a CNN.<br />
-                        4. </strong>Implement** the classic LeNet-5 architecture in PyTorch.</p>
+                    3. <strong>Calculate</strong> the output shape of a tensor passing through a CNN.<br />
+                    4. <strong>Implement</strong> the classic LeNet-5 architecture in PyTorch.</p>
                 </div>
             </div>
             <!-- break -->
@@ -312,7 +312,8 @@
                 <strong>Pooling</strong> layers reduce the spatial dimensions of the feature maps, typically by keeping
                 only the maximum value in a small window (Max Pooling). This reduces the computational load by
                 discarding up to 75% of the data while making the network <strong>translation invariant</strong>—meaning
-                a cat in the top-left corner is recognized just as well as a cat in the bottom-right.</p>
+                a cat in the top-left corner is recognized just as well as a cat in the bottom-right.
+            </p>
             <p><img alt="Figure 2: Max Pooling Operation" src="images/pooling_operation.png" /><br />
                 <em>Figure 2: Max Pooling Operation. A 2x2 window slides across the feature map, keeping only the
                     maximum value to reduce spatial dimensions.</em>
@@ -350,7 +351,8 @@
                 Feature Maps).<br />
                 3. <strong>Pass through Pool Layer (2x2)</strong>: The spatial dimensions are cut in half. -&gt;
                 <code>[6, 14, 14]</code>.<br />
-                4. <strong>Repeat</strong>: Another Conv/Pool block might take us to -&gt; <code>[16, 5, 5]</code>.</p>
+                4. <strong>Repeat</strong>: Another Conv/Pool block might take us to -&gt; <code>[16, 5, 5]</code>.
+            </p>
             <h3>3.2 The Flattening Problem</h3>
             <p>At the end of the feature extraction, we have a 3D volume of data
                 (<code>16 channels x 5 height x 5 width</code>). But our final Classifier (Fully Connected Layer)
@@ -393,7 +395,8 @@
             <ol>
                 <li><strong>Define the Network</strong>: You will create a class that inherits from
                     <code>nn.Module</code>, defining the layers (<code>Conv2d</code>, <code>Linear</code>) in the
-                    constructor.</li>
+                    constructor.
+                </li>
                 <li><strong>Forward Pass</strong>: You will implement the <code>forward()</code> method to define how
                     data flows through these layers.</li>
                 <li><strong>Training</strong>: You will use the <code>torch.optim</code> module to handle the weight
