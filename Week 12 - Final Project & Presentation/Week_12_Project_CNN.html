@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Image Classifier (CNN) - Week 12</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E',
+                        secondary: '#c9984a',
+                    },
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                pre: { backgroundColor: '#0f0f0f', color: '#e2e8f0', borderLeft: '4px solid #c9984a' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9' },
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#cbd5e1',
+                                h1: { color: '#38bdf8' },
+                                h2: { color: '#c9984a' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="Week_12_Student_Notes.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <span class="font-bold text-lg">← Back to Project Hub</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="p-3 rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+                    </svg>
+                </div>
+                <h1 class="m-0 text-3xl font-bold text-secondary dark:text-yellow-400">Option B: Image Classifier (CNN)
+                </h1>
+            </div>
+
+            <h2>Project: Computer Vision Classifier</h2>
+            <p><strong>Goal:</strong> Build and optimize a Convolutional Neural Network (CNN) to classify images into at
+                least 5 distinct categories.</p>
+
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Specific Learning Outcomes</strong><br />
+                    1. Implement Data Augmentation to solve overfitting.<br />
+                    2. Design deep ConvNet architectures (filters, pooling, dropout).<br />
+                    3. Visualize intermediate layer activations (Explainable AI).</div>
+            </div>
+
+            <hr />
+
+            <h2>1. The Scenario</h2>
+            <blockquote>
+                <p>Choose a real-world visual problem. Examples include: identifying crop diseases from leaf photos,
+                    classifying different types of traffic signs for autonomous systems, or detecting fractures in
+                    medical X-ray imaging. Your model must be robust enough to handle variations in the input data.</p>
+            </blockquote>
+
+            <h2>2. Tools & Constraints</h2>
+            <ul>
+                <li><strong>Dataset:</strong> You must find a suitable dataset (Kaggle, Google Dataset Search). Minimum
+                    5 classes, minimum 500 images per class.</li>
+                <li><strong>Framework:</strong> TensorFlow (Keras) or PyTorch.</li>
+                <li><strong>Constraint:</strong> You cannot use a pre-trained model (like ResNet50) as your
+                    <em>primary</em> submission. You must build a CNN from scratch first. You can compare against
+                    Transfer Learning for extra credit.</li>
+            </ul>
+
+            <hr />
+
+            <h2>3. Step-by-Step Pipeline</h2>
+
+            <h3>Step 1: Data Preprocessing & Augmentation</h3>
+            <p>Raw images are rarely perfect. You must implement specific augmentations relevant to your domain:</p>
+            <pre><code class="language-python"># Example Keras Augmentation
+datagen = ImageDataGenerator(
+    rotation_range=20,
+    width_shift_range=0.2,
+    horizontal_flip=True,
+    rescale=1./255
+)
+</code></pre>
+            <p><strong>Requirement:</strong> Visualize the augmented images in your notebook.</p>
+
+            <h3>Step 2: Architecture Design</h3>
+            <p>Build a CNN with at least:</p>
+            <ul>
+                <li>3 Convolutional Blocks (Conv2D + ReLU + MaxPooling).</li>
+                <li>Flatten Layer.</li>
+                <li>Dense (Fully Connected) Layers.</li>
+                <li>Dropout (to prevent overfitting).</li>
+            </ul>
+
+            <h3>Step 3: Training & Tuning</h3>
+            <p>Monitor <strong>Training vs Validation Loss</strong>. If your model overfits (low training loss, high
+                validation loss), you must adjust:</p>
+            <ul>
+                <li>Dropout rate.</li>
+                <li>L2 Regularization.</li>
+                <li>Augmentation intensity.</li>
+            </ul>
+
+            <h3>Step 4: Explainability (Crucial)</h3>
+            <p>DL models are black boxes. You must "open" them.</p>
+            <ul>
+                <li><strong>Visualizing Filters:</strong> Show what patterns the first Conv layer is detecting (edges,
+                    textures).</li>
+                <li><strong>Activation Maps:</strong> Pass a test image and show the feature map output of the 2nd
+                    Convolutional layer.</li>
+            </ul>
+
+            <h3>Step 5: Evaluation</h3>
+            <ul>
+                <li>Confusion Matrix (Which classes get mixed up?).</li>
+                <li>Show the "Most Confused" images (Why did it fail?).</li>
+            </ul>
+
+        </article>
+    </main>
+</body>
+
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: NLP Sentiment Analyzer - Week 12</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E',
+                        secondary: '#c9984a',
+                    },
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                pre: { backgroundColor: '#0f0f0f', color: '#e2e8f0', borderLeft: '4px solid #c9984a' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9' },
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#cbd5e1',
+                                h1: { color: '#38bdf8' },
+                                h2: { color: '#c9984a' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="Week_12_Student_Notes.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <span class="font-bold text-lg">← Back to Project Hub</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="p-3 rounded-full bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                        </path>
+                    </svg>
+                </div>
+                <h1 class="m-0 text-3xl font-bold text-secondary dark:text-yellow-400">Option B: NLP Sentiment Analyzer
+                </h1>
+            </div>
+
+            <h2>Project: Text Analysis System</h2>
+            <p><strong>Goal:</strong> Build a Natural Language Processing model to automatically classify text based on
+                emotion, sentiment (Positive/Negative/Neutral), or topic.</p>
+
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Specific Learning Outcomes</strong><br />
+                    1. Master Text Preprocessing (Tokenization, Lemmatization, Stop-words).<br />
+                    2. Implement and Compare Sparse (TF-IDF) vs Dense (Embeddings) representations.<br />
+                    3. Train Sequence models (RNNs) or Dense Classifiers for text.</div>
+            </div>
+
+            <hr />
+
+            <h2>1. The Scenario</h2>
+            <blockquote>
+                <p>Social media feeds, product reviews, and customer support tickets generate massive amounts of
+                    unstructured text. Your task is to build an engine that reads this text and tags it. E.g., flagging
+                    "Urgent" support tickets or tracking the sentiment of a brand launch on Twitter.</p>
+            </blockquote>
+
+            <h2>2. Tools & Constraints</h2>
+            <ul>
+                <li><strong>Dataset:</strong> IMDb Reviews, Amazon Products, Twitter Sentiment sets (Kaggle).</li>
+                <li><strong>Libraries:</strong> NLTK/Spacy (preprocessing), TensorFlow/PyTorch (Modeling).</li>
+                <li><strong>Constraint:</strong> You must implement <strong>Correction/Cleaning logic</strong> (handling
+                    emojis, slang, or URLs) specifically.</li>
+            </ul>
+
+            <hr />
+
+            <h2>3. Step-by-Step Pipeline</h2>
+
+            <h3>Step 1: Text Preprocessing (The Heavy Lifting)</h3>
+            <p>You cannot feed raw strings to a model.</p>
+            <ul>
+                <li><strong>Cleaning:</strong> Lowercasing, removing punctuation/HTML tags.</li>
+                <li><strong>Tokenization:</strong> Splitting sentences into words.</li>
+                <li><strong>Normalization:</strong> Lemmatization (running -> run) or Stemming.</li>
+                <li><strong>Stop Word Removal:</strong> removing "the", "is", "at".</li>
+            </ul>
+
+            <h3>Step 2: Vectorization (The Core Requirement)</h3>
+            <p>You must implement <strong>TWO</strong> approaches and compare them:</p>
+            <ol>
+                <li><strong>Approach A (Traditional):</strong> Bag-of-Words or TF-IDF. (Sparse vectors).</li>
+                <li><strong>Approach B (Modern):</strong> Word Embeddings. Use a pre-trained embedding (GloVe/Word2Vec)
+                    OR learn an Embedding layer (Keras <code>Embedding</code>).</li>
+            </ol>
+
+            <h3>Step 3: Model Architecture</h3>
+            <ul>
+                <li><strong>For Approach A:</strong> Logistic Regression or a simple Dense Neural Network.</li>
+                <li><strong>For Approach B:</strong> An LSTM/GRU layer or 1D-CNN layer to capture context.</li>
+            </ul>
+
+            <h3>Step 4: Training & Evaluation</h3>
+            <ul>
+                <li>Compare the accuracy of Approach A vs Approach B.</li>
+                <li>Does the Embedding model understand "Not bad" (positive) better than the Bag-of-Words model?</li>
+                <li><strong>Test Case:</strong> Create a list of 5 tricky sentences (sarcasm, double negatives) and see
+                    how your model predicts them.</li>
+            </ul>
+
+        </article>
+    </main>
+</body>
+
+</html>

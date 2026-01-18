@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project: Time-Series Forecasting - Week 12</title>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E',
+                        secondary: '#c9984a',
+                    },
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                pre: { backgroundColor: '#0f0f0f', color: '#e2e8f0', borderLeft: '4px solid #c9984a' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9' },
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#cbd5e1',
+                                h1: { color: '#38bdf8' },
+                                h2: { color: '#c9984a' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</head>
+
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="Week_12_Student_Notes.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <span class="font-bold text-lg">← Back to Project Hub</span>
+            </a>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+
+            <div class="flex items-center space-x-4 mb-8">
+                <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+                <h1 class="m-0 text-3xl font-bold text-secondary dark:text-yellow-400">Option B: Time-Series Forecasting
+                </h1>
+            </div>
+
+            <h2>Project: Predictive Modeling</h2>
+            <p><strong>Goal:</strong> Build a sequence model to predict future values based on historical trends,
+                handling patterns like seasonality and trend.</p>
+
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Specific Learning Outcomes</strong><br />
+                    1. Master Data Windowing (creating sequences from continuous data).<br />
+                    2. Implement Recurrent Neural Networks (LSTM or GRU).<br />
+                    3. Evaluate forecasting performance (MAE vs MSE).</div>
+            </div>
+
+            <hr />
+
+            <h2>1. The Scenario</h2>
+            <blockquote>
+                <p>Forecasting is critical for resource planning. Can you predict the price of Bitcoin next week? Or the
+                    energy consumption of a city based on temperature? Or the number of server requests during Black
+                    Friday?</p>
+            </blockquote>
+
+            <h2>2. Tools & Constraints</h2>
+            <ul>
+                <li><strong>Dataset:</strong> Stock Prices (Yahoo Finance), Weather Data, Energy Consumption, Server
+                    Logs.</li>
+                <li><strong>Architecture:</strong> RNN, LSTM, or GRU in TensorFlow/PyTorch.</li>
+                <li><strong>Constraint:</strong> You MUST demonstrate a baseline (e.g., Linear Regression or "Previous
+                    Value") comparison to prove your Deep Learning model adds value.</li>
+            </ul>
+
+            <hr />
+
+            <h2>3. Step-by-Step Pipeline</h2>
+
+            <h3>Step 1: Data Preparation (Windowing)</h3>
+            <p>Time series data is sequential. You need to convert it into supervised learning pairs
+                <code>(X, y)</code>.</p>
+            <pre><code class="language-python"># Example: Window Size 30
+# Input (X): Days 1-30
+# Label (y): Day 31
+</code></pre>
+            <p><strong>Requirement:</strong> Split data chronologically (Train on Past, Test on Future). <strong>Do not
+                    shuffle randomly!</strong></p>
+
+            <h3>Step 2: Feature Engineering</h3>
+            <ul>
+                <li><strong>Scaling:</strong> Use MinMaxScaler (LSTM is sensitive to scale).</li>
+                <li><strong>Seasonality:</strong> Extract "Day of Week" or "Month" as additional features.</li>
+                <li><strong>Lag Features:</strong> Add previous steps as input columns.</li>
+            </ul>
+
+            <h3>Step 3: Model Architecture</h3>
+            <p>Build a Recurrent Network:</p>
+            <ul>
+                <li><strong>Layer 1:</strong> LSTM or GRU (units=50, return_sequences=True/False).</li>
+                <li><strong>Dropout:</strong> Essential to prevent overfitting.</li>
+                <li><strong>Output:</strong> Dense(1) (for regression).</li>
+            </ul>
+
+            <h3>Step 4: Training & Evaluation</h3>
+            <ul>
+                <li><strong>Loss Function:</strong> MSE (Mean Squared Error) or MAE.</li>
+                <li><strong>Viz:</strong> Plot <code>Actual</code> vs <code>Predicted</code> lines overlapping.</li>
+                <li><strong>Metric:</strong> Calculate how far off your predictions are on average (RMSE).</li>
+            </ul>
+
+            <h3>Step 5: Future Projection</h3>
+            <p>Try to predict multiple steps ahead (auto-regressive prediction) and visualize how the error compounds
+                over time.</p>
+
+        </article>
+    </main>
+</body>
+
+</html>
