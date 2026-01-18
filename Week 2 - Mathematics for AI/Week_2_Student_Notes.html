@@ -1,89 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 2 Student Notes - AI Course</title>
-    
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                fontFamily: { sans: ['Inter', 'sans-serif'] },
-                colors: {
-                    primary: '#002F6E', // VUT Midnight Blue
-                    secondary: '#c9984a', // Gold
-                    background: '#f8fafc',
-                    card: '#ffffff',
-                },
-                typography: {
-                    DEFAULT: {
-                        css: {
-                            color: '#334155',
-                            maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
-                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                            'code::before': { content: '""' },
-                            'code::after': { content: '""' }
-                        }
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E', // VUT Midnight Blue
+                        secondary: '#c9984a', // Gold
+                        background: '#f8fafc',
+                        card: '#ffffff',
                     },
-                    dark: {
-                        css: {
-                            color: '#cbd5e1',
-                            h1: { color: '#38bdf8' }, // Sky 400
-                            h2: { color: '#c9984a' },
-                            h3: { color: '#38bdf8' },
-                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                maxWidth: '100%',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                h3: { color: '#1e3a5f' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                                'code::before': { content: '""' },
+                                'code::after': { content: '""' }
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#e2e8f0',
+                                h1: { color: '#38bdf8' }, // Sky 400
+                                h2: { color: '#c9984a' },
+                                h3: { color: '#38bdf8' },
+                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#cbd5e1' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
                         }
                     }
                 }
             }
         }
-    }
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const themeToggle = document.getElementById('theme-toggle');
-        const html = document.documentElement;
-        const iconSun = document.getElementById('icon-sun');
-        const iconMoon = document.getElementById('icon-moon');
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            iconSun.classList.remove('hidden');
-            iconMoon.classList.add('hidden');
-        } else {
-            html.classList.remove('dark');
-            iconSun.classList.add('hidden');
-            iconMoon.classList.remove('hidden');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.theme = 'light';
-                iconSun.classList.add('hidden');
-                iconMoon.classList.remove('hidden');
-            } else {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 html.classList.add('dark');
-                localStorage.theme = 'dark';
                 iconSun.classList.remove('hidden');
                 iconMoon.classList.add('hidden');
+            } else {
+                html.classList.remove('dark');
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
             }
-        });
-    });
-</script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+            themeToggle.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    iconSun.classList.add('hidden');
+                    iconMoon.classList.remove('hidden');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    iconSun.classList.remove('hidden');
+                    iconMoon.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -98,14 +100,27 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* Glossary Tooltip */
-        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
-        html.dark .glossary-term:hover { color: #ffffff; }
+        .glossary-term {
+            color: #c9984a;
+            border-bottom: 2px dotted #c9984a;
+            cursor: help;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .glossary-term:hover {
+            color: #1e3a5f;
+        }
+
+        html.dark .glossary-term:hover {
+            color: #ffffff;
+        }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
         pre {
             background: #0f0f0f !important;
-            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            border-left: 4px solid #c9984a !important;
+            /* VUT Gold */
             padding: 20px !important;
             margin: 20px 0 !important;
             border-radius: 5px !important;
@@ -114,9 +129,11 @@
             line-height: 1.5 !important;
             color: #e2e8f0 !important;
         }
+
         code {
             font-family: 'Courier New', monospace !important;
         }
+
         /* Override prose defaults */
         .prose pre {
             background-color: transparent;
@@ -125,104 +142,165 @@
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
-    
-<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-            <div class="flex flex-col">
-                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
-                </span>
+
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 pt-20 transition-colors duration-300">
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="../index.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <div class="flex flex-col">
+                    <span
+                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
+                        Intelligence
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
+                            2026</span>
+                    </span>
+                </div>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-200 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
+                    Home</a>
+                <a href="../glossary.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-200 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+                <button id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </button>
             </div>
-        </a>
-        <div class="flex items-center space-x-6">
-            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
-            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            </button>
         </div>
-    </div>
-</nav>
+    </nav>
 
-    
+
     <main class="container mx-auto px-4 max-w-5xl mb-12">
-        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            
-<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
-    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
-        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
-            <img src="../images/week_2_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
-        </div>
-        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 2</span>
-    </div>
-    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-3xl font-bold text-secondary m-0">Mathematics for AI</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
-    </div>
-</div>
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
 
-            
-            
-<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
-<strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
-<strong>Topic</strong>: Linear Algebra, Calculus, and Probability for Machine Learning<br />
-<strong>Reading Time</strong>: ~90 Minutes</p></div></div>
-<hr />
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-By the end of this chapter, you will be able to:<br />
-1.  <strong>Translate</strong> mathematical notation (vectors, summation) into executable NumPy code.<br />
-2.  <strong>Operate</strong> on high-dimensional data using Matrix Multiplication (Dot Product).<br />
-3.  <strong>Explain</strong> how Derivatives and Gradients drive the learning process in AI.<br />
-4.  <strong>Visualize</strong> Probability Distributions to understand data uncertainty.<br />
-5.  <strong>Implement</strong> a basic Gradient Descent algorithm from scratch.</p></div></div>
-<!-- break -->
+            <div
+                class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+                <div
+                    class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+                    <div
+                        class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+                        <img src="../images/week_2_icon.png"
+                            class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+                    </div>
+                    <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 2</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                    <h1 class="text-3xl font-bold text-secondary m-0">Mathematics for AI</h1>
+                    <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
+                </div>
+            </div>
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
-Mathematics is not a barrier to entry; it is the <em>engine</em> under the hood. In this chapter, we demystify the equations found in AI papers. We adopt a <strong>"Math as Code"</strong> approach: for every intuition we introduce, we will immediately see the refined formula, and then write the corresponding Python implementation. We focus on the big three: <strong>Linear Algebra</strong> (Data Structure), <strong>Calculus</strong> (Optimization), and <strong>Probability</strong> (Uncertainty).</p></div></div>
-<hr />
-<h2>1. Linear Algebra: The Structure of Data</h2>
-<h3>1.1 Vectors and Spaces</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-Before we look at code, what is a vector?<br />
-Geometrically, a <strong>vector</strong> is an <strong>arrow</strong> in space. It has:<br />
-1.  <strong>Direction</strong>: Where it points.<br />
-2.  <strong>Magnitude</strong>: How long it is.</p>
-<p>In Computer Science, we flatten this arrow into a simple <strong>list of numbers</strong>. These numbers are coordinates—instructions on how to travel from the origin $(0,0)$ to the tip of the arrow.</p>
-<p><img src="../images/week_2_vector.png" width="600" alt="Vector Intuition"></p>
-<center><em>Figure 1.1: A vector [3, 2] represents moving 3 steps Right and 2 steps Up.</em></center>
 
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-A vector $\mathbf{x}$ in $n$-dimensional space ($\mathbb{R}^n$) is written as a column:<br />
-$$ \mathbf{x} = \begin{bmatrix} x_1 \ x_2 \ \vdots \ x_n \end{bmatrix} $$</p>
-<pre><code class="language-python">import numpy as np
+
+            <div
+                class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-200">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base [&>p]:!m-0">
+                    <p><strong>Course</strong>: Computer Systems Engineering<br />
+                        <strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
+                        <strong>Topic</strong>: Linear Algebra, Calculus, and Probability for Machine Learning<br />
+                        <strong>Reading Time</strong>: ~90 Minutes
+                    </p>
+                </div>
+            </div>
+            <hr />
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-200">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+                    By the end of this chapter, you will be able to:<br />
+                    1. <strong>Translate</strong> mathematical notation (vectors, summation) into executable NumPy
+                    code.<br />
+                    2. <strong>Operate</strong> on high-dimensional data using Matrix Multiplication (Dot
+                    Product).<br />
+                    3. <strong>Explain</strong> how Derivatives and Gradients drive the learning process in AI.<br />
+                    4. <strong>Visualize</strong> Probability Distributions to understand data uncertainty.<br />
+                    5. <strong>Implement</strong> a basic Gradient Descent algorithm from scratch.<br />
+                    <br />
+                    <strong>Chapter Goal</strong>:<br />
+                    Mathematics is not a barrier to entry; it is the <em>engine</em> under the hood. In this chapter, we
+                    demystify the equations found in AI papers. We adopt a <strong>"Math as Code"</strong> approach: for
+                    every intuition we introduce, we will immediately see the refined formula, and then write the
+                    corresponding Python implementation. We focus on the big three: <strong>Linear Algebra</strong>
+                    (Data Structure), <strong>Calculus</strong> (Optimization), and <strong>Probability</strong>
+                    (Uncertainty).</p>
+                </div>
+            </div>
+            <hr />
+            <h2>1. Linear Algebra: The Structure of Data</h2>
+            <h3>1.1 Vectors and Spaces</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                Before we look at code, what is a vector?<br />
+                Geometrically, a <strong>vector</strong> is an <strong>arrow</strong> in space. It has:<br />
+                1. <strong>Direction</strong>: Where it points.<br />
+                2. <strong>Magnitude</strong>: How long it is.</p>
+            <p>In Computer Science, we flatten this arrow into a simple <strong>list of numbers</strong>. These numbers
+                are coordinates—instructions on how to travel from the origin $(0,0)$ to the tip of the arrow.</p>
+            <p><img src="../images/week_2_vector.png" width="600" alt="Vector Intuition"></p>
+            <center><em>Figure 1.1: A vector [3, 2] represents moving 3 steps Right and 2 steps Up.</em></center>
+
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                A vector $\mathbf{x}$ in $n$-dimensional space ($\mathbb{R}^n$) is written as a column:<br />
+                $$ \mathbf{x} = \begin{bmatrix} x_1 \ x_2 \ \vdots \ x_n \end{bmatrix} $$</p>
+            <pre><code class="language-python">import numpy as np
 
 # A vector is just a 1D Array
 x = np.array([3, 2]) 
 </code></pre>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-In AI, <strong>everything is a vector</strong>. </p>
-<ul>
-<li>
-<p><strong>Natural Language Processing (NLP)</strong>: Words are converted into "Word Vectors" (Embeddings). The word "King" might be <code>[0.9, 0.2, ...]</code>. The direction of the arrow captures the <em>meaning</em> of the word.</p>
-</li>
-<li>
-<p><strong>Recommender Systems</strong>: You are a vector. Netflix represents your taste as a list of numbers (e.g., <code>[LikesAction, LikesRomance, LikesAnime]</code>). Finding a movie you'll like is just finding another vector pointing in the same direction.</p>
-</li>
-</ul>
-<h3>1.2 Matrices as Transformations</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-A <strong>Matrix</strong> is often taught as a "grid of numbers". This is boring and misses the point.<br />
-In AI, think of a Matrix as a <strong>Machine</strong> that inputs a vector and outputs a new, transformed vector. It <strong>warps space</strong>. It can rotate, stretch, or shear the geometric grid that the vectors live on.</p>
-<p><img src="../images/week_2_matrix_transform.png" width="600" alt="Matrix Transformation"></p>
-<center><em>Figure 1.2: A Matrix acts as a function, transforming the original grid (left) into a sheared grid (right).</em></center>
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                In AI, <strong>everything is a vector</strong>. </p>
+            <ul>
+                <li>
+                    <p><strong>Natural Language Processing (NLP)</strong>: Words are converted into "Word Vectors"
+                        (Embeddings). The word "King" might be <code>[0.9, 0.2, ...]</code>. The direction of the arrow
+                        captures the <em>meaning</em> of the word.</p>
+                </li>
+                <li>
+                    <p><strong>Recommender Systems</strong>: You are a vector. Netflix represents your taste as a list
+                        of numbers (e.g., <code>[LikesAction, LikesRomance, LikesAnime]</code>). Finding a movie you'll
+                        like is just finding another vector pointing in the same direction.</p>
+                </li>
+            </ul>
+            <h3>1.2 Matrices as Transformations</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                A <strong>Matrix</strong> is often taught as a "grid of numbers". This is boring and misses the
+                point.<br />
+                In AI, think of a Matrix as a <strong>Machine</strong> that inputs a vector and outputs a new,
+                transformed vector. It <strong>warps space</strong>. It can rotate, stretch, or shear the geometric grid
+                that the vectors live on.</p>
+            <p><img src="../images/week_2_matrix_transform.png" width="600" alt="Matrix Transformation"></p>
+            <center><em>Figure 1.2: A Matrix acts as a function, transforming the original grid (left) into a sheared
+                    grid (right).</em></center>
 
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-When we multiply a vector $\mathbf{x}$ by a matrix $\mathbf{A}$, we apply the transformation:<br />
-$$ \mathbf{Ax} = \mathbf{b} $$</p>
-<pre><code class="language-python"># The Transformation Machine (Matrix)
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                When we multiply a vector $\mathbf{x}$ by a matrix $\mathbf{A}$, we apply the transformation:<br />
+                $$ \mathbf{Ax} = \mathbf{b} $$</p>
+            <pre><code class="language-python"># The Transformation Machine (Matrix)
 A = np.array([
     [1, 1], 
     [0, 1]
@@ -235,38 +313,41 @@ x = np.array([2, 2])
 b = A @ x 
 # Result: [4, 2] -&gt; The y-value stayed same, x-value shifted!
 </code></pre>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-<strong>Neural Networks</strong> are just giant chains of matrix transformations.</p>
-<ul>
-<li>
-<p><strong>Layer 1</strong>: Rotates the input image data.</p>
-</li>
-<li>
-<p><strong>Layer 2</strong>: Re-scales it.</p>
-</li>
-<li>
-<p><strong>Layer 3</strong>: Warps it until the "Cat" pixels are separated from the "Dog" pixels.<br />
-When you see a Deep Learning paper with 100 layers, it just means they are applying 100 consecutive geometric distortions to the data until the answer becomes obvious.</p>
-</li>
-</ul>
-<h3>1.3 The Dot Product</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-How do we know if two vectors are similar? We use the <strong>Dot Product</strong>.<br />
-It effectively measures the <strong>alignment</strong> between two arrows.</p>
-<ul>
-<li>
-<p>Pointing same way? <strong>High score</strong>.</p>
-</li>
-<li>
-<p>Perpendicular ($90^\circ$)? <strong>Zero</strong>.</p>
-</li>
-<li>
-<p>Opposite way? <strong>Negative score</strong>.</p>
-</li>
-</ul>
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-$$ \mathbf{a} \cdot \mathbf{b} = \sum_{i=1}^{n} a_i b_i $$</p>
-<pre><code class="language-python"># Feature Vector (e.g., [Study Hours, Sleep Hours])
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                <strong>Neural Networks</strong> are just giant chains of matrix transformations.
+            </p>
+            <ul>
+                <li>
+                    <p><strong>Layer 1</strong>: Rotates the input image data.</p>
+                </li>
+                <li>
+                    <p><strong>Layer 2</strong>: Re-scales it.</p>
+                </li>
+                <li>
+                    <p><strong>Layer 3</strong>: Warps it until the "Cat" pixels are separated from the "Dog"
+                        pixels.<br />
+                        When you see a Deep Learning paper with 100 layers, it just means they are applying 100
+                        consecutive geometric distortions to the data until the answer becomes obvious.</p>
+                </li>
+            </ul>
+            <h3>1.3 The Dot Product</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                How do we know if two vectors are similar? We use the <strong>Dot Product</strong>.<br />
+                It effectively measures the <strong>alignment</strong> between two arrows.</p>
+            <ul>
+                <li>
+                    <p>Pointing same way? <strong>High score</strong>.</p>
+                </li>
+                <li>
+                    <p>Perpendicular ($90^\circ$)? <strong>Zero</strong>.</p>
+                </li>
+                <li>
+                    <p>Opposite way? <strong>Negative score</strong>.</p>
+                </li>
+            </ul>
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                $$ \mathbf{a} \cdot \mathbf{b} = \sum_{i=1}^{n} a_i b_i $$</p>
+            <pre><code class="language-python"># Feature Vector (e.g., [Study Hours, Sleep Hours])
 inputs = np.array([2, 5])
 
 # Weights (Importance of each feature)
@@ -276,62 +357,70 @@ weights = np.array([0.8, 0.1])
 score = np.dot(inputs, weights) 
 # Calculation: (2*0.8) + (5*0.1) = 1.6 + 0.5 = 2.1
 </code></pre>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-This simple operation is the heartbeat of the <strong>Attention Mechanism</strong> in Transformers (GPT-4).</p>
-<ul>
-<li>
-<p><strong>User Query</strong>: "What is the capital of France?" (Vector A)</p>
-</li>
-<li>
-<p><strong>Database Document</strong>: "Paris is the capital..." (Vector B)</p>
-</li>
-<li>
-<p><strong>Dot Product</strong>: High match! The model "pays attention" to this document.<br />
-Deep Learning is essentially billions of Dot Products calculating similarity scores between pieces of information.</p>
-</li>
-</ul>
-<h3>1.4 Eigenvalues and Eigenvectors</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-If a Matrix spins and stretches everything, is there anything that <em>stays the same</em>?<br />
-Yes. <strong>Eigenvectors</strong> are the "stubborn" vectors that refuse to rotate. They only get stretched (scaled).<br />
-The amount they stretch is the <strong>Eigenvalue</strong>.</p>
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-$$ \mathbf{A}\mathbf{v} = \lambda \mathbf{v} $$<br />
-Where $\mathbf{v}$ is the Eigenvector (direction) and $\lambda$ is the Eigenvalue (scaling factor).</p>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-This is the math behind <strong>Principal Component Analysis (PCA)</strong>.</p>
-<ul>
-<li>
-<p>Imagine a cloud of data points (e.g., customer data).</p>
-</li>
-<li>
-<p>The <strong>Eigenvectors</strong> point along the "main axes" of the cloud—the directions where the data varies the most.</p>
-</li>
-<li>
-<p><strong>Application</strong>: We use this to Compress Data. If we only keep the top 2 Eigenvectors, we capture 90% of the information with only 10% of the storage. This is crucial for reducing noise and training models faster on massive datasets.</p>
-</li>
-</ul>
-<hr />
-<h2>2. Calculus: The Engine of Learning</h2>
-<h3>2.1 The Gradient and Descent</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-AI models start "dumb" (random weights). They learn by making mistakes and correcting them.<br />
-Imagine you are standing on a foggy mountain at night. You want to get to the valley (Minimum Error). You can't see the bottom, but you can feel the slope of the ground under your feet.</p>
-<ul>
-<li>
-<p><strong>Slope</strong>: Tells you which way is Up.</p>
-</li>
-<li>
-<p><strong>Descent</strong>: You step in the <em>opposite</em> direction (Down).</p>
-</li>
-</ul>
-<p><img src="../images/week_2_gradient_bowl.png" width="600" alt="Gradient Descent"></p>
-<center><em>Figure 2.1: The Error landscape (Bowl). The Red Ball rolls down the steepest path (Gradient) to reach the minimum.</em></center>
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                This simple operation is the heartbeat of the <strong>Attention Mechanism</strong> in Transformers
+                (GPT-4).</p>
+            <ul>
+                <li>
+                    <p><strong>User Query</strong>: "What is the capital of France?" (Vector A)</p>
+                </li>
+                <li>
+                    <p><strong>Database Document</strong>: "Paris is the capital..." (Vector B)</p>
+                </li>
+                <li>
+                    <p><strong>Dot Product</strong>: High match! The model "pays attention" to this document.<br />
+                        Deep Learning is essentially billions of Dot Products calculating similarity scores between
+                        pieces of information.</p>
+                </li>
+            </ul>
+            <h3>1.4 Eigenvalues and Eigenvectors</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                If a Matrix spins and stretches everything, is there anything that <em>stays the same</em>?<br />
+                Yes. <strong>Eigenvectors</strong> are the "stubborn" vectors that refuse to rotate. They only get
+                stretched (scaled).<br />
+                The amount they stretch is the <strong>Eigenvalue</strong>.</p>
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                $$ \mathbf{A}\mathbf{v} = \lambda \mathbf{v} $$<br />
+                Where $\mathbf{v}$ is the Eigenvector (direction) and $\lambda$ is the Eigenvalue (scaling factor).</p>
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                This is the math behind <strong>Principal Component Analysis (PCA)</strong>.</p>
+            <ul>
+                <li>
+                    <p>Imagine a cloud of data points (e.g., customer data).</p>
+                </li>
+                <li>
+                    <p>The <strong>Eigenvectors</strong> point along the "main axes" of the cloud—the directions where
+                        the data varies the most.</p>
+                </li>
+                <li>
+                    <p><strong>Application</strong>: We use this to Compress Data. If we only keep the top 2
+                        Eigenvectors, we capture 90% of the information with only 10% of the storage. This is crucial
+                        for reducing noise and training models faster on massive datasets.</p>
+                </li>
+            </ul>
+            <hr />
+            <h2>2. Calculus: The Engine of Learning</h2>
+            <h3>2.1 The Gradient and Descent</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                AI models start "dumb" (random weights). They learn by making mistakes and correcting them.<br />
+                Imagine you are standing on a foggy mountain at night. You want to get to the valley (Minimum Error).
+                You can't see the bottom, but you can feel the slope of the ground under your feet.</p>
+            <ul>
+                <li>
+                    <p><strong>Slope</strong>: Tells you which way is Up.</p>
+                </li>
+                <li>
+                    <p><strong>Descent</strong>: You step in the <em>opposite</em> direction (Down).</p>
+                </li>
+            </ul>
+            <p><img src="../images/week_2_gradient_bowl.png" width="600" alt="Gradient Descent"></p>
+            <center><em>Figure 2.1: The Error landscape (Bowl). The Red Ball rolls down the steepest path (Gradient) to
+                    reach the minimum.</em></center>
 
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-The <strong>Gradient</strong> ($\nabla f$) is a vector of partial derivatives pointing Uphill.<br />
-$$ \theta_{new} = \theta_{old} - \text{LearningRate} \times \nabla f $$</p>
-<pre><code class="language-python">x = 10.0  # Start position
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                The <strong>Gradient</strong> ($\nabla f$) is a vector of partial derivatives pointing Uphill.<br />
+                $$ \theta_{new} = \theta_{old} - \text{LearningRate} \times \nabla f $$</p>
+            <pre><code class="language-python">x = 10.0  # Start position
 lr = 0.1  # Step size (Learning Rate)
 
 grad = 2 * x      # Calculate Slope (Gradient of x^2 is 2x)
@@ -339,50 +428,60 @@ x = x - lr * grad # Step Downhill
 
 print(x) # 8.0 (Closer to 0)
 </code></pre>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-This "ball rolling down a hill" algorithm (Gradient Descent) is how <strong>ALL</strong> Neural Networks learn.</p>
-<ul>
-<li>
-<p><strong>Loss Function</strong>: The "Mountain". It represents the difference between the model's guess and the correct answer.</p>
-</li>
-<li>
-<p><strong>Training</strong>: We calculate the gradient of the Loss with respect to millions of parameters (weights) and nudge them all slightly "downhill". After millions of steps, the model reaches the bottom: it has "learned" to categorize the image or translate the text with minimal error.</p>
-</li>
-</ul>
-<h3>2.2 The Chain Rule</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-Neural networks are deep. They are layers upon layers of functions:<br />
-$$ y = f(\text{Layer3}( \text{Layer2}( \text{Layer1}(x) ) )) $$<br />
-If the output is wrong, who is to blame? Layer 3? Layer 1?<br />
-The <strong>Chain Rule</strong> tells us how to ripple the error backwards through the chain, assigning "blame" (gradient) to each link.</p>
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-$$ \frac{dz}{dx} = \frac{dz}{dy} \times \frac{dy}{dx} $$</p>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-This is the math behind <strong>Backpropagation</strong>.<br />
-Without the Chain Rule, we could calculate the error, but we wouldn't know <em>how</em> to update the weights in the first layer of a deep network. The Chain Rule allows us to train "Deep" networks rather than just shallow ones, enabling the modern AI revolution.</p>
-<hr />
-<h2>3. Probability: The Language of Uncertainty</h2>
-<h3>3.1 Bayes' Theorem</h3>
-<p><strong>1. The Concept (Intuition)</strong><br />
-AI rarely deals with certainties. It deals with probabilities.<br />
-<strong>Bayes' Theorem</strong> is a logic engine for updating your beliefs.</p>
-<ul>
-<li>
-<p><strong>Prior</strong>: What you believed before (e.g., "Most emails are not spam").</p>
-</li>
-<li>
-<p><strong>Evidence</strong>: What you just saw (e.g., "This email contains the word 'Viagra'").</p>
-</li>
-<li>
-<p><strong>Posterior</strong>: Your new belief (e.g., "Okay, now it's probably spam").</p>
-</li>
-</ul>
-<p><img src="../images/week_2_bayes_v2.png" width="600" alt="Bayes Flow"></p>
-<center><em>Figure 3.1: Updating belief from Prior (Initial) to Posterior (Refined) based on Evidence.</em></center>
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                This "ball rolling down a hill" algorithm (Gradient Descent) is how <strong>ALL</strong> Neural Networks
+                learn.</p>
+            <ul>
+                <li>
+                    <p><strong>Loss Function</strong>: The "Mountain". It represents the difference between the model's
+                        guess and the correct answer.</p>
+                </li>
+                <li>
+                    <p><strong>Training</strong>: We calculate the gradient of the Loss with respect to millions of
+                        parameters (weights) and nudge them all slightly "downhill". After millions of steps, the model
+                        reaches the bottom: it has "learned" to categorize the image or translate the text with minimal
+                        error.</p>
+                </li>
+            </ul>
+            <h3>2.2 The Chain Rule</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                Neural networks are deep. They are layers upon layers of functions:<br />
+                $$ y = f(\text{Layer3}( \text{Layer2}( \text{Layer1}(x) ) )) $$<br />
+                If the output is wrong, who is to blame? Layer 3? Layer 1?<br />
+                The <strong>Chain Rule</strong> tells us how to ripple the error backwards through the chain, assigning
+                "blame" (gradient) to each link.</p>
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                $$ \frac{dz}{dx} = \frac{dz}{dy} \times \frac{dy}{dx} $$</p>
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                This is the math behind <strong>Backpropagation</strong>.<br />
+                Without the Chain Rule, we could calculate the error, but we wouldn't know <em>how</em> to update the
+                weights in the first layer of a deep network. The Chain Rule allows us to train "Deep" networks rather
+                than just shallow ones, enabling the modern AI revolution.</p>
+            <hr />
+            <h2>3. Probability: The Language of Uncertainty</h2>
+            <h3>3.1 Bayes' Theorem</h3>
+            <p><strong>1. The Concept (Intuition)</strong><br />
+                AI rarely deals with certainties. It deals with probabilities.<br />
+                <strong>Bayes' Theorem</strong> is a logic engine for updating your beliefs.
+            </p>
+            <ul>
+                <li>
+                    <p><strong>Prior</strong>: What you believed before (e.g., "Most emails are not spam").</p>
+                </li>
+                <li>
+                    <p><strong>Evidence</strong>: What you just saw (e.g., "This email contains the word 'Viagra'").</p>
+                </li>
+                <li>
+                    <p><strong>Posterior</strong>: Your new belief (e.g., "Okay, now it's probably spam").</p>
+                </li>
+            </ul>
+            <p><img src="../images/week_2_bayes_v2.png" width="600" alt="Bayes Flow"></p>
+            <center><em>Figure 3.1: Updating belief from Prior (Initial) to Posterior (Refined) based on Evidence.</em>
+            </center>
 
-<p><strong>2. The Formula (Math &amp; Code)</strong><br />
-$$ P(A|B) = \frac{P(B|A) \times P(A)}{P(B)} $$</p>
-<pre><code class="language-python"># Toy Spam Filter Example
+            <p><strong>2. The Formula (Math &amp; Code)</strong><br />
+                $$ P(A|B) = \frac{P(B|A) \times P(A)}{P(B)} $$</p>
+            <pre><code class="language-python"># Toy Spam Filter Example
 p_spam = 0.4                  # Prior: 40% of mail is spam
 p_word_given_spam = 0.8       # Likelihood: &quot;Buy&quot; appears in 80% of spam
 p_word_given_ham = 0.1        # &quot;Buy&quot; appears in only 10% of normal mail
@@ -394,40 +493,49 @@ p_word = (p_word_given_spam * p_spam) + (p_word_given_ham * 0.6)
 p_spam_given_word = (p_word_given_spam * p_spam) / p_word
 print(f&quot;Chance of Spam: {p_spam_given_word:.2%}&quot;)
 </code></pre>
-<p><strong>3. AI Application (Why do we care?)</strong><br />
-Bayesian reasoning is fundamental to <strong>Generative AI</strong> and <strong>Robotics</strong>.</p>
-<ul>
-<li>
-<p><strong>Self-Driving Cars</strong>: A car uses sensors (Evidence) to update its map of the world (Posterior). "I thought the lane was clear (Prior), but the Lidar saw a shape (Evidence), so now I believe there is a pedestrian (Posterior)."</p>
-</li>
-<li>
-<p><strong>Active Learning</strong>: Models use uncertainty (Bayesian Uncertainty) to decide which data they need to learn from next.</p>
-</li>
-</ul>
-<hr />
-<h2>4. Summary</h2>
-<p>We have rebuilt our mathematical foundation.</p>
-<ul>
-<li>
-<p><strong>Linear Algebra</strong> gave us the <strong>Structure</strong> (Vectors/Matrices) to represent data.</p>
-</li>
-<li>
-<p><strong>Calculus</strong> gave us the <strong>Engine</strong> (Gradients) to optimize and learn.</p>
-</li>
-<li>
-<p><strong>Probability</strong> gave us the <strong>Logic</strong> (Bayes) to reason under uncertainty.</p>
-</li>
-</ul>
-<p>In <strong>Week 3</strong>, we will stop doing this math by hand and start using <strong>NumPy</strong> and <strong>Pandas</strong> to do it at scale.</p>
-            
-            
-<div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
-    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
-    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's material? Take the interactive quiz now!</p>
-    <a href="Week_2_Quiz.html" class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
-        Start Quiz
-    </a>
-</div>
+            <p><strong>3. AI Application (Why do we care?)</strong><br />
+                Bayesian reasoning is fundamental to <strong>Generative AI</strong> and <strong>Robotics</strong>.</p>
+            <ul>
+                <li>
+                    <p><strong>Self-Driving Cars</strong>: A car uses sensors (Evidence) to update its map of the world
+                        (Posterior). "I thought the lane was clear (Prior), but the Lidar saw a shape (Evidence), so now
+                        I believe there is a pedestrian (Posterior)."</p>
+                </li>
+                <li>
+                    <p><strong>Active Learning</strong>: Models use uncertainty (Bayesian Uncertainty) to decide which
+                        data they need to learn from next.</p>
+                </li>
+            </ul>
+            <hr />
+            <h2>4. Summary</h2>
+            <p>We have rebuilt our mathematical foundation.</p>
+            <ul>
+                <li>
+                    <p><strong>Linear Algebra</strong> gave us the <strong>Structure</strong> (Vectors/Matrices) to
+                        represent data.</p>
+                </li>
+                <li>
+                    <p><strong>Calculus</strong> gave us the <strong>Engine</strong> (Gradients) to optimize and learn.
+                    </p>
+                </li>
+                <li>
+                    <p><strong>Probability</strong> gave us the <strong>Logic</strong> (Bayes) to reason under
+                        uncertainty.</p>
+                </li>
+            </ul>
+            <p>In <strong>Week 3</strong>, we will stop doing this math by hand and start using <strong>NumPy</strong>
+                and <strong>Pandas</strong> to do it at scale.</p>
+
+
+            <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+                <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
+                    material? Take the interactive quiz now!</p>
+                <a href="Week_2_Quiz.html"
+                    class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+                    Start Quiz
+                </a>
+            </div>
 
         </article>
     </main>
@@ -436,33 +544,55 @@ Bayesian reasoning is fundamental to <strong>Generative AI</strong> and <strong>
         Vaal University of Technology - AI Module 2026
     </footer>
 
-    
-<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
-    
-                        <a href="../Week%201%20-%20Introduction%20to%20Artificial%20Intelligence/Week_1_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 1</span>
-                        </a>
-                        
-    
-    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
-             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-        </div>
-        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
-    </a>
 
-    
-                        <a href="../Week%203%20-%20Python%20for%20AI%20&%20Data%20Handling/Week_3_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 3</span>
-                        </a>
-                        
-</div>
+    <div
+        class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+
+        <a href="../Week%201%20-%20Introduction%20to%20Artificial%20Intelligence/Week_1_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                1</span>
+        </a>
+
+
+        <a href="../index.html"
+            class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                    </path>
+                </svg>
+            </div>
+            <span
+                class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course
+                Index</span>
+        </a>
+
+
+        <a href="../Week%203%20-%20Python%20for%20AI%20&%20Data%20Handling/Week_3_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                3</span>
+        </a>
+
+    </div>
 
 </body>
+
 </html>
