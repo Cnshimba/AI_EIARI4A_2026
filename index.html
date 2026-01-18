@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Index - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="./index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="./index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="./glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+            
+            <div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-40 flex-shrink-0 flex items-center justify-center bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-800">
+        <img src="images/course_index_icon.png" class="h-full w-full object-contain p-2" alt="Course Index Icon">
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6">
+        <h1 class="text-3xl font-bold text-yellow-600 dark:text-yellow-400 m-0 text-center">Artificial Intelligence</h1>
+        <span class="text-xs font-bold text-gray-400 tracking-widest uppercase mt-2">EIARI4A</span>
+    </div>
+</div>
+
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-6 overflow-hidden">
+    <div class="w-48 flex-shrink-0">
+        <img src="instructor/instructor.jpg" class="w-full h-full object-cover" alt="Mr. KT Nshimba">
+    </div>
+    <div class="flex-1 p-6">
+        <h3 class="text-xl font-bold text-primary dark:text-sky-400 mb-3">Course Designer & Instructor</h3>
+
+        <p class="text-lg font-bold text-primary dark:text-sky-400 mb-1">Mr. KT Nshimba</p>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-1">PhD Computer Science | BTech Computer Systems Engineering | BSc Computer Science</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 italic">Programme Coordinator: Computer Systems & Process Control</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 italic">Cisco Networking Academy Manager | Huawei ICT Academy Manager</p>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-3 italic"><strong>Certifications:</strong> CyberOPS | Network Security | CCNA | Linux | Datacom | Python</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm mb-3">
+            <div>
+                <p class="text-gray-600 dark:text-gray-400"><span class="font-semibold text-primary dark:text-sky-400">Experience:</span> 15+ years as lecturer</p>
+                <p class="text-gray-600 dark:text-gray-400"><span class="font-semibold text-primary dark:text-sky-400">Research Focus:</span> IoT, Cyber Security, HPC</p>
+            </div>
+            <div>
+                <p class="text-gray-600 dark:text-gray-400"><span class="font-semibold text-primary dark:text-sky-400">Office:</span> Building R, Room 005</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3 text-xs items-center">
+            <a href="mailto:kabiane@vut.ac.za" class="flex items-center gap-1 text-primary dark:text-sky-400 hover:opacity-80 transition-opacity">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                kabiane@vut.ac.za
+            </a>
+            <a href="tel:+27169507519" class="flex items-center gap-1 text-primary dark:text-sky-400 hover:opacity-80 transition-opacity">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56-.35-.12-.74-.03-1.01.24l-1.57 1.97c-2.83-1.35-5.48-3.9-6.89-6.83l1.95-1.66c.27-.28.35-.67.24-1.02-.37-1.11-.56-2.3-.56-3.53 0-.54-.45-.99-.99-.99H4.19C3.65 3 3 3.24 3 3.99 3 13.28 10.73 21 20.01 21c.71 0 .99-.63.99-1.18v-3.45c0-.54-.45-.99-.99-.99z"/></svg>
+                +27 16 950 7519
+            </a>
+            <a href="https://orcid.org/0000-0002-0709-1123" target="_blank" class="flex items-center gap-1 text-primary dark:text-sky-400 hover:opacity-80 transition-opacity">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 4.378c.525 0 .947.431.947.947 0 .525-.422.947-.947.947-.525 0-.947-.422-.947-.947 0-.525.422-.947.947-.947zm-.722 3.038h1.444v10.041H6.647V7.416zm3.562 0h3.9c3.712 0 5.344 2.653 5.344 5.025 0 2.578-1.016 5.016-4.95 5.016h-4.294V7.416zm1.444 8.653h2.053c1.731 0 3.544-.794 3.544-3.572 0-2.381-1.478-3.691-3.544-3.691h-2.053v7.263z"/></svg>
+                ORCID
+            </a>
+            <a href="https://linkedin.com/in/carlos-nshimba" target="_blank" class="flex items-center gap-1 text-primary dark:text-sky-400 hover:opacity-80 transition-opacity">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                LinkedIn
+            </a>
+        </div>
+
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">Vaal University of Technology | Department of Electrical Engineering: Computer Systems Engineering</p>
+    </div>
+</div>
+
+<hr />
+<h2>Course Overview</h2>
+<p>This course provides a comprehensive introduction to Artificial Intelligence, covering foundational mathematics, machine learning algorithms, neural networks, and modern AI applications including Generative AI and Large Language Models.</p>
+<p>It is offered as an introductory module to AI in the <strong>Computer Systems Engineering</strong> program, as part of the <strong>Advanced Diploma</strong> curriculum. This serves as a foundation course to prepare students for more advanced modules in the Advanced Diploma and later the <strong>PGDip</strong> course.</p>
+<hr />
+<h2>Weekly Materials</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Week</th>
+<th style="text-align: left;">Topic</th>
+<th style="text-align: left;">Student Notes</th>
+<th style="text-align: left;">Labs</th>
+<th style="text-align: left;">Slides</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>1</strong></td>
+<td style="text-align: left;">Introduction to Artificial Intelligence</td>
+<td style="text-align: left;"><a href="Week%201%20-%20Introduction%20to%20Artificial%20Intelligence/Week_1_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%201%20-%20Introduction%20to%20Artificial%20Intelligence/Week_1_Lab_1_AI_Tools_and_Setup.html">Lab: AI Tools &amp; Setup</a></td>
+<td style="text-align: left;"><a href="Week%201%20-%20Introduction%20to%20Artificial%20Intelligence/Week_1_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>2</strong></td>
+<td style="text-align: left;">Mathematics for AI</td>
+<td style="text-align: left;"><a href="Week%202%20-%20Mathematics%20for%20AI/Week_2_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"><a href="Week%202%20-%20Mathematics%20for%20AI/Week_2_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>3</strong></td>
+<td style="text-align: left;">Python for AI &amp; Data Handling</td>
+<td style="text-align: left;"><a href="Week%203%20-%20Python%20for%20AI%20%26%20Data%20Handling/Week_3_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%203%20-%20Python%20for%20AI%20%26%20Data%20Handling/Week_3_Lab_1_Guide.html">Lab: Python Data Science</a></td>
+<td style="text-align: left;"><a href="Week%203%20-%20Python%20for%20AI%20%26%20Data%20Handling/Week_3_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>4</strong></td>
+<td style="text-align: left;">Machine Learning Foundations</td>
+<td style="text-align: left;"><a href="Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;">-</td>
+<td style="text-align: left;"><a href="Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>5</strong></td>
+<td style="text-align: left;">Supervised Learning Algorithms</td>
+<td style="text-align: left;"><a href="Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Lab_1_Linear_Regression.ipynb" download>Lab 1: Linear Regression</a><br><a href="Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Lab_2_Linear_Regression_Expansion.ipynb" download>Lab 2: Linear Regression Expansion</a><br><a href="Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Lab_3_Logistic_Regression.ipynb" download>Lab 3: Logistic Regression</a><br><a href="Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Lab_4_Decision_Trees.ipynb" download>Lab 4: Decision Trees</a></td>
+<td style="text-align: left;"><a href="Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>6</strong></td>
+<td style="text-align: left;">Unsupervised Learning</td>
+<td style="text-align: left;"><a href="Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%206%20-%20Unsupervised%20Learning/Week_6_Lab_1_KMeans_Clustering.html">Lab: K-Means Clustering</a><br><a href="Week%206%20-%20Unsupervised%20Learning/Week_6_Semester_Assignment.html"><strong>Semester Assignment</strong></a></td>
+<td style="text-align: left;"><a href="Week%206%20-%20Unsupervised%20Learning/Week_6_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>7</strong></td>
+<td style="text-align: left;">Neural Networks &amp; Deep Learning Basics</td>
+<td style="text-align: left;"><a href="Week%207%20-%20Neural%20Networks%20%26%20Deep%20Learning%20Basics/Week_7_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%207%20-%20Neural%20Networks%20%26%20Deep%20Learning%20Basics/Week_7_Lab_1_FCNN_from_Scratch.html">Lab: FCNN from Scratch</a></td>
+<td style="text-align: left;"><a href="Week%207%20-%20Neural%20Networks%20%26%20Deep%20Learning%20Basics/Week_7_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>8</strong></td>
+<td style="text-align: left;">Convolutional Neural Networks (CNNs)</td>
+<td style="text-align: left;"><a href="Week%208%20-%20Convolutional%20Neural%20Networks%20(CNNs)/Week_8_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%208%20-%20Convolutional%20Neural%20Networks%20(CNNs)/Week_8_Lab_1_LeNet_PyTorch.html">Lab: LeNet PyTorch</a></td>
+<td style="text-align: left;"><a href="Week%208%20-%20Convolutional%20Neural%20Networks%20(CNNs)/Week_8_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>9</strong></td>
+<td style="text-align: left;">Natural Language Processing (NLP)</td>
+<td style="text-align: left;"><a href="Week%209%20-%20Natural%20Language%20Processing%20(NLP)/Week_9_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%209%20-%20Natural%20Language%20Processing%20(NLP)/Week_9_Lab_1_TextCNN_Classification.html">Lab: TextCNN Classification</a></td>
+<td style="text-align: left;"><a href="Week%209%20-%20Natural%20Language%20Processing%20(NLP)/Week_9_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>10</strong></td>
+<td style="text-align: left;">Generative AI &amp; Large Language Models</td>
+<td style="text-align: left;"><a href="Week%2010%20-%20Generative%20AI%20%26%20Large%20Language%20Models/Week_10_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%2010%20-%20Generative%20AI%20%26%20Large%20Language%20Models/Week_10_Lab_1_CPU_Inference.html">Lab 1: CPU Inference</a><br><a href="Week%2010%20-%20Generative%20AI%20%26%20Large%20Language%20Models/Week_10_Lab_2_GPU_Inference.html">Lab 2: GPU Inference</a></td>
+<td style="text-align: left;"><a href="Week%2010%20-%20Generative%20AI%20%26%20Large%20Language%20Models/Week_10_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>11</strong></td>
+<td style="text-align: left;">AI Ethics, Bias, and Responsible AI</td>
+<td style="text-align: left;"><a href="Week%2011%20-%20AI%20Ethics%2C%20Bias%2C%20and%20Responsible%20AI/Week_11_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%2011%20-%20AI%20Ethics%2C%20Bias%2C%20and%20Responsible%20AI/Week_11_Lab_1_Bias_Audit.html">Lab: Bias Audit</a></td>
+<td style="text-align: left;"><a href="Week%2011%20-%20AI%20Ethics%2C%20Bias%2C%20and%20Responsible%20AI/Week_11_Slides.html">Slides</a></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>12</strong></td>
+<td style="text-align: left;">Final Project &amp; Presentation</td>
+<td style="text-align: left;"><a href="Week%2012%20-%20Final%20Project%20%26%20Presentation/Week_12_Student_Notes.html">Student Notes</a></td>
+<td style="text-align: left;"><a href="Week%2012%20-%20Final%20Project%20%26%20Presentation/Week_12_Student_Notes.html"><strong>Project Launch</strong></a></td>
+<td style="text-align: left;"><a href="Week%2012%20-%20Final%20Project%20%26%20Presentation/Week_12_Slides.html">Slides</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Additional Resources</h2>
+<ul>
+<li>
+<p><a href="AI_v2_Course_Structure.html">AI Course Structure</a> - Detailed syllabus and learning outcomes</p>
+</li>
+<li>
+<p><a href="Week%206%20-%20Unsupervised%20Learning/Week_6_Semester_Assignment.html"><strong>Semester Assignment</strong></a> - <strong>Active Now</strong></p>
+</li>
+<li>
+<p><a href="AI_BOOKS/">AI Books Collection</a> - Reference materials and textbooks</p>
+</li>
+</ul>
+<hr />
+            
+            
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+    
+    <a href="./index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+</div>
+
+</body>
+</html>

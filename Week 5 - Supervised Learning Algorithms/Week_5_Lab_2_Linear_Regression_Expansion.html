@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5 Lab 2 Linear Regression Expansion - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_5_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 5</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Supervised Learning Algorithms</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 2: Linear Regression Expansion</span>
+    </div>
+</div>
+
+            
+<div class="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700 flex items-center justify-between">
+    <div>
+        <h4 class="font-bold text-slate-800 dark:text-slate-200">Jupyter Notebook Available</h4>
+        <p class="text-sm text-slate-600 dark:text-slate-400 m-0">Download the interactive coding lab to run on your local machine.</p>
+    </div>
+    <a href="Week_5_Lab_2_Linear_Regression_Expansion.ipynb" download target="_blank" class="ml-4 px-4 py-2 bg-secondary hover:bg-yellow-600 text-white font-medium rounded-md transition-colors shadow-sm no-underline whitespace-nowrap">
+        Download .ipynb
+    </a>
+</div>
+
+            
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal: Gradient Descent from Scratch</strong><br />
+In this lab, we dive deeper by implementing the math behind Linear Regression manually using <code>numpy</code>. This gives you a clear understanding of how the model "learns" using <strong>Gradient Descent</strong>.</p></div></div>
+<p>We will use the dataset <code>lr2_data.txt</code>.</p>
+<h3>Step 1: Import Dependencies</h3>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+</code></pre>
+<h3>Step 2: Define Gradient Calculation Function</h3>
+<p>The core of learning is calculating the <strong>Gradient</strong> (direction of steepest ascent). We want to move in the opposite direction (descent) to minimize error.</p>
+<p>The formula for the gradient is:<br />
+$$ \frac{\partial J}{\partial \theta} = \frac{1}{m} X^T (X\theta - y) $$</p>
+<pre><code class="language-python">def generate_gradient(X, theta, y):
+    sample_count = X.shape[0]
+    # Calculate gradient using matrix multiplication
+    return (1./sample_count) * X.T.dot(X.dot(theta) - y)
+</code></pre>
+<h3>Step 3: Define Data Loading Function</h3>
+<p>This helper function reads the <code>lr2_data.txt</code> file and splits it into Features (<code>X</code>) and Labels (<code>y</code>).</p>
+<pre><code class="language-python">def get_training_data(file_path):
+    try:
+        orig_data = np.loadtxt(file_path)
+        cols = orig_data.shape[1]
+        # Last column is y, previous columns are X
+        return (orig_data, orig_data[:, :cols - 1], orig_data[:, cols-1:])
+    except Exception as e:
+        print(f&quot;Error reading data: {e}&quot;)
+        return None
+</code></pre>
+<h3>Step 4: Initialize Parameters</h3>
+<p>We need to start our weights ($\theta$) somewhere. We initialize them to 1.</p>
+<pre><code class="language-python">def init_theta(feature_count):
+    return np.ones(feature_count).reshape(feature_count, 1)
+</code></pre>
+<h3>Step 5: Implement Gradient Descent Loop</h3>
+<p>This is the training loop:<br />
+1.  Calculate current Loss ($J(\theta)$).<br />
+2.  Calculate Gradient.<br />
+3.  Update $\theta$ using Learning Rate $\alpha$:<br />
+    $$ \theta := \theta - \alpha \times \text{gradient} $$<br />
+4.  Repeat until convergence (gradient becomes very small).</p>
+<pre><code class="language-python">def gradient_descending(X, y, theta, alpha):
+    Jthetas= []
+
+    # Calculate Initial Loss
+    Jtheta = (X.dot(theta)-y).T.dot(X.dot(theta)-y)
+    index = 0
+    gradient = generate_gradient(X, theta, y)
+
+    # Loop until gradient is close to zero
+    while not np.all(np.absolute(gradient) &lt;= 1e-5):
+        theta = theta - alpha * gradient
+        gradient = generate_gradient(X, theta, y)
+        Jtheta = (X.dot(theta)-y).T.dot(X.dot(theta)-y)
+
+        if (index+1) % 10 == 0:
+            Jthetas.append((index, Jtheta[0][0]))
+
+        index += 1
+        if index &gt; 10000: break # Safety break
+
+    return theta, Jthetas
+</code></pre>
+<h3>Step 6: Visualization Helpers</h3>
+<p>We define functions to plot the <strong>Loss Curve</strong> (to ensure the model is learning) and the final <strong>Regression Line</strong>.</p>
+<pre><code class="language-python">def showJTheta(diff_value):
+    p_x = []
+    p_y = []
+    for (index, sum) in diff_value:
+        p_x.append(index)
+        p_y.append(sum)
+    plt.plot(p_x, p_y, color='b')
+    plt.xlabel('Steps')
+    plt.ylabel('Loss Function')
+    plt.title('Step vs Loss Function Curve')
+    plt.show()
+
+def showlinercurve(theta, sample_training_set):
+    x, y = sample_training_set[:, 0], sample_training_set[:, 1]
+    z = theta[0] + theta[1] * x
+    plt.scatter(x, y, color='b', marker='x', label=&quot;Data Points&quot;)
+    plt.plot(x, z, 'r', color=&quot;r&quot;, label=&quot;Regression Curve&quot;)
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.title('Linear Regression Fit')
+    plt.legend()
+    plt.show()
+</code></pre>
+<h3>Step 7: Execution</h3>
+<p>Now we run our manual implementation.<br />
+<strong>Note</strong>: We add a column of <code>1</code>s to our Feature Matrix <code>X</code>. This is the "Bias Trick" to handle the Intercept term.</p>
+<pre><code class="language-python"># 1. Read Data
+data_path = &quot;lr2_data.txt&quot;
+# Assuming you have the file, otherwise create dummy data:
+# training_data_include_y = np.array([[1, 2], [2, 4], [3, 6]])
+# training_x = training_data_include_y[:, 0]
+# y = training_data_include_y[:, 1]
+
+training_data_include_y, training_x, y = get_training_data(data_path)
+
+if training_data_include_y is not None:
+    # 2. Prepare Data (Add Bias Term)
+    m = len(training_x)
+    x0 = np.ones((m, 1))
+    training_x_biased = np.hstack((x0, training_x.reshape(-1, 1)))
+
+    # 3. Setup Hyperparameters
+    sample_count, feature_count = training_x_biased.shape
+    alpha = 0.0000001 # Learning Rate
+
+    # 4. Train
+    theta = init_theta(feature_count)
+    result_theta, Jthetas = gradient_descending(training_x_biased, y.reshape(-1,1), theta, alpha)
+
+    # 5. Results
+    print(&quot;w (Bias): {}&quot;.format(result_theta[0][0]))
+    print(&quot;w (Slope): {}&quot;.format(result_theta[1][0]))
+
+    showJTheta(Jthetas)
+    showlinercurve(result_theta, training_data_include_y)
+else:
+    print(&quot;Data file not found. Ensure lr2_data.txt is in the same directory.&quot;)
+</code></pre>
+<h3>Summary</h3>
+<p>In this expansion lab, you looked under the hood of machine learning:<br />
+1.  <strong>The Math</strong>: You implemented the cost function $J(\theta)$ and gradient calculations manually.<br />
+2.  <strong>The Loop</strong>: You built the training loop that iteratively updates weights using $\theta := \theta - \alpha \nabla J$.<br />
+3.  <strong>Visualization</strong>: You observed how the Loss decreases over time, confirming the model is "learning."</p>
+<h3>Self Reflection</h3>
+<ol>
+<li><strong>Learning Rate</strong>: What happens if you change <code>alpha</code> to <code>0.1</code>? Or <code>0.000000001</code>? Try it and observe the Loss Curve.</li>
+<li><strong>Convergence</strong>: The loop stops when the gradient is small (<code>&lt;= 1e-5</code>). Why don't we just run it for a fixed 1,000,000 steps every time?</li>
+<li><strong>The Bias Trick</strong>: We added a column of <code>1</code>s to <code>X</code>. Why is this mathematical trick necessary for the "Intercept" ($b$)?</li>
+</ol>
+            
+            
+        
+                         <div class="mt-8 flex justify-center">
+                            <a href="Week_5_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
+                                Back to Chapter Labs
+                            </a>
+                         </div>
+                         
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 4</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 6</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

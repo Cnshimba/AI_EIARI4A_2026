@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 8 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 8: Convolutional Neural Networks (CNNs)</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this session, you will be able to:</p>
+<ol>
+<li><strong>Explain</strong> why Standard NN fails on images.</li>
+<li><strong>Describe</strong> the Convolution and Pooling operations.</li>
+<li><strong>Calculate</strong> Tensor shapes through a network.</li>
+<li><strong>Build</strong> the LeNet-5 Architecture in PyTorch.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Week 8 Goal</h2>
+<h3>Mastering Computer Vision</h3>
+<p>We are leaving manual backpropagation behind. This week, we adopt <strong>PyTorch</strong> to build professional-grade Deep Learning models. We will construct a <strong>CNN</strong> that can "see" and recognize handwritten digits, replicating the breakthrough that launched the modern AI boom.</p>
+</div>
+<div class="slide">
+<h2>3. The Problem with Dense Networks</h2>
+<p>Why can't we just use the network from last week?</p>
+<ul>
+<li>
+<p><strong>Spatial Loss</strong>: Flattening an image destroys the 2D structure (neighbors matter!).</p>
+</li>
+<li>
+<p><strong>Parameter Explosion</strong>: A 1000x1000 image into 100 neurons = 100 Million weights.</p>
+</li>
+<li>
+<p><strong>Overfitting</strong>: Memorizes training data instead of learning patterns.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. The Solution: Convolutions</h2>
+<p>Instead of connecting everything, we scan with a <strong>Filter</strong> (Kernel).</p>
+<p><img alt="Convolution" src="images/convolution_operation.png" /></p>
+<ul>
+<li>
+<p><strong>Local Features</strong>: Detects edges, lines, corners.</p>
+</li>
+<li>
+<p><strong>Translation Invariance</strong>: A cat is a cat, whether it's top-left or bottom-right.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>5. Checkpoint 1</h2>
+<h3>Concept Check</h3>
+<p>If you have a 10x10 image and you slide a 3x3 filter over it (no padding), what is the output size?</p>
+<details>
+<summary>Click for Answer</summary>
+
+**8x8**. Formula: (W - K) + 1 = (10 - 3) + 1 = 8.
+</details>
+</div>
+<div class="slide">
+<h2>6. Pooling Layers</h2>
+<p>After finding features, we valid <strong>Max Pooling</strong>.</p>
+<ul>
+<li>
+<p><strong>Downsampling</strong>: Reduces the image size (usually by half).</p>
+</li>
+<li>
+<p><strong>Abstraction</strong>: Keeps the strongest feature, discards noise.</p>
+</li>
+<li>
+<p><strong>Efficiency</strong>: Reduces computation by 75%.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. The LeNet-5 Architecture</h2>
+<p>The "Hello World" of Computer Vision.</p>
+<pre><code class="language-python">class LeNet(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.feature_extractor = nn.Sequential(
+            nn.Conv2d(1, 6, 5),    # C1
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2),    # S2
+            nn.Conv2d(6, 16, 5),   # C3
+            nn.ReLU(),
+            nn.MaxPool2d(2, 2)     # S4
+        )
+        self.classifier = nn.Sequential(
+            nn.Linear(16 * 4 * 4, 120),
+            nn.Linear(120, 84),
+            nn.Linear(84, 10)
+        )
+</code></pre>
+</div>
+<div class="slide">
+<h2>8. Checkpoint 2</h2>
+<h3>Shape Check</h3>
+<p>If our tensor is shape <code>[Batch, 16, 4, 4]</code>, what is the size of the flattened vector?</p>
+<details>
+<summary>Click for Answer</summary>
+
+**256**. (16 * 4 * 4 = 256). The fully connected layer needs exactly this many input neurons.
+</details>
+</div>
+<div class="slide">
+<h2>9. Summary</h2>
+<ul>
+<li>
+<p><strong>PyTorch</strong>: Handles the gradient math for us.</p>
+</li>
+<li>
+<p><strong>CNNs</strong>: Use Filters to find features and Pooling to reduce size.</p>
+</li>
+<li>
+<p><strong>LeNet-5</strong>: A classic stack of Conv-Pool-Conv-Pool-Linear layers.</p>
+</li>
+<li>
+<p><strong>Next Step</strong>: Build this in the Lab!</p>
+</li>
+</ul>
+</div>
+
+</body>
+</html>

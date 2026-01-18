@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 5 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 5 Slides: Supervised Learning Algorithms</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this week, you will be able to:</p>
+<ol>
+<li><strong>Differentiate</strong> between Linear Regression (Continuous) and Logistic Regression (Categorical).</li>
+<li><strong>Calculate</strong> the Mean Squared Error (MSE) loss function for regression tasks.</li>
+<li><strong>Implement</strong> Gradient Descent from scratch to optimize model weights.</li>
+<li><strong>Construct</strong> a Decision Tree to classify data based on entropy and information gain.</li>
+<li><strong>Apply</strong> the Sigmoid activation function to transform linear outputs into probabilities.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Chapter Goal</h2>
+<p>This week bridges the gap between pure theory and practical application. We demystify the mathematics of <strong>Linear Regression</strong> and explore the core loop of all ML systems: <strong>Model, Loss Function, and Optimizer</strong>.</p>
+</div>
+<div class="slide">
+<h2>1. What is Machine Learning?</h2>
+<h3>Tom Mitchell's Definition</h3>
+<blockquote>
+<p>A computer program is said to <strong>learn</strong> from experience $E$ with respect to some task $T$ and performance measure $P$, if its performance on $T$, as measured by $P$, improves with experience $E$.</p>
+</blockquote>
+<h3>Traditional vs. Machine Learning</h3>
+<p><strong>Traditional Programming</strong>:</p>
+<ul>
+<li>
+<p>You write the rules</p>
+</li>
+<li>
+<p><code>Data + Rules → Answers</code></p>
+</li>
+</ul>
+<p><strong>Machine Learning</strong>:</p>
+<ul>
+<li>
+<p>The computer learns the rules</p>
+</li>
+<li>
+<p><code>Data + Answers → Rules</code></p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>2. Types of Learning</h2>
+<h3>Supervised Learning</h3>
+<ul>
+<li>
+<p><strong>Data</strong>: Input ($X$) + Correct Output ($Y$)</p>
+</li>
+<li>
+<p><strong>Goal</strong>: Learn mapping $X \to Y$</p>
+</li>
+<li>
+<p><strong>Tasks</strong>:</p>
+</li>
+<li>
+<p><strong>Regression</strong>: Predict continuous values (prices, temperatures)</p>
+</li>
+<li>
+<p><strong>Classification</strong>: Predict categories (spam/not spam, cat/dog)</p>
+</li>
+</ul>
+<h3>Unsupervised Learning</h3>
+<ul>
+<li>
+<p><strong>Data</strong>: Input ($X$) only, no labels</p>
+</li>
+<li>
+<p><strong>Goal</strong>: Find hidden structure or patterns</p>
+</li>
+<li>
+<p><strong>Tasks</strong>: Clustering, dimensionality reduction</p>
+</li>
+</ul>
+<h3>Reinforcement Learning</h3>
+<ul>
+<li>
+<p><strong>Data</strong>: Rewards &amp; penalties from environment</p>
+</li>
+<li>
+<p><strong>Goal</strong>: Maximize cumulative reward</p>
+</li>
+<li>
+<p><strong>Example</strong>: Game playing, robotics</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Section 1: Linear Regression</h2>
+</div>
+<div class="slide">
+<h2>3. Linear Regression: The Basics</h2>
+<h3>Goal</h3>
+<p>Predict a <strong>continuous value</strong> from input features</p>
+<p><strong>Example</strong>: Predict house price from area</p>
+<h3>The Equation</h3>
+<p>$$y = wx + b$$</p>
+<p>Where:</p>
+<ul>
+<li>
+<p>$y$ = predicted output</p>
+</li>
+<li>
+<p>$x$ = input feature (e.g., house area)</p>
+</li>
+<li>
+<p>$w$ = weight (slope)</p>
+</li>
+<li>
+<p>$b$ = bias (intercept)</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. How Do We Learn?</h2>
+<h3>The Loss Function: Mean Squared Error (MSE)</h3>
+<p>How do we measure our prediction error?</p>
+<p>$$\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_{\text{pred}} - y_{\text{true}})^2$$</p>
+<p><strong>Goal</strong>: Minimize this error!</p>
+<h3>Gradient Descent</h3>
+<p><strong>The Optimizer</strong>: Algorithm to find the best $w$ and $b$</p>
+<p><strong>Analogy</strong>: Walking down a foggy mountain</p>
+<ol>
+<li>Look for the steepest descent</li>
+<li>Take a step (controlled by <strong>learning rate</strong> $\alpha$)</li>
+<li>Repeat until you reach the bottom</li>
+</ol>
+</div>
+<div class="slide">
+<h2>Section 1 Checkpoint</h2>
+<h3>Summary</h3>
+<ul>
+<li>
+<p><strong>Linear Regression</strong>: Predicts continuous values using $y = wx + b$</p>
+</li>
+<li>
+<p><strong>Loss Function (MSE)</strong>: Measures prediction error</p>
+</li>
+<li>
+<p><strong>Gradient Descent</strong>: Optimization algorithm to minimize loss</p>
+</li>
+</ul>
+<h3>Reflection</h3>
+<ul>
+<li>
+<p>Why do we square the errors in MSE?</p>
+</li>
+<li>
+<p>What happens if the learning rate is too large or too small?</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Section 2: Classification</h2>
+</div>
+<div class="slide">
+<h2>6. Regression vs. Classification</h2>
+<h3>Key Difference</h3>
+<p><strong>Regression</strong>:</p>
+<ul>
+<li>
+<p>Output: Continuous number</p>
+</li>
+<li>
+<p>Examples: $300k, $452k (house prices), 23.5°C (temperature)</p>
+</li>
+</ul>
+<p><strong>Classification</strong>:</p>
+<ul>
+<li>
+<p>Output: Discrete category/label</p>
+</li>
+<li>
+<p>Examples: Spam/Not Spam (0/1), Cat/Dog/Bird (0/1/2)</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. Logistic Regression</h2>
+<h3>Concept</h3>
+<p>Despite the name, it's a <strong>classification</strong> algorithm!</p>
+<p>Uses a linear equation to separate classes: $z = wx + b$</p>
+<p>But transforms it with the <strong>sigmoid function</strong>: $g(z) = \frac{1}{1 + e^{-z}}$</p>
+<h3>Why Sigmoid?</h3>
+<ul>
+<li>
+<p>Converts any number into a probability between 0 and 1</p>
+</li>
+<li>
+<p><strong>Decision rule</strong>: If $g(z) &gt; 0.5$ → Predict Class 1; If $g(z) &lt; 0.5$ → Predict Class 0</p>
+</li>
+</ul>
+<h3>Decision Boundary</h3>
+<p>The line/surface where $g(z) = 0.5$ separates the two classes</p>
+</div>
+<div class="slide">
+<h2>8. Decision Trees</h2>
+<h3>Concept</h3>
+<p>A <strong>flowchart-like structure</strong> for making decisions</p>
+<p>Think of it like a game of "20 Questions":</p>
+<ul>
+<li>
+<p>Ask a series of yes/no questions</p>
+</li>
+<li>
+<p>Each answer narrows down the possibilities</p>
+</li>
+<li>
+<p>Reach a final classification</p>
+</li>
+</ul>
+<h3>Key Concepts</h3>
+<p><strong>Entropy</strong>: Measure of impurity/randomness</p>
+<ul>
+<li>
+<p>Formula: $H(S) = -\sum p_i \log_2(p_i)$</p>
+</li>
+<li>
+<p>Low entropy = pure (all same class)</p>
+</li>
+<li>
+<p>High entropy = mixed classes</p>
+</li>
+</ul>
+<p><strong>Information Gain</strong>: Which question reduces entropy the most?</p>
+<ul>
+<li>The algorithm picks the question with highest information gain at each step</li>
+</ul>
+<h3>Advantages</h3>
+<ul>
+<li>
+<p><strong>Highly interpretable</strong>: You can visualize and understand the rules</p>
+</li>
+<li>
+<p><strong>Handles categorical data</strong>: No need for encoding like Logistic Regression</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Section 2 Checkpoint</h2>
+<h3>Summary</h3>
+<ul>
+<li>
+<p><strong>Classification</strong>: Predicting categories, not numbers</p>
+</li>
+<li>
+<p><strong>Logistic Regression</strong>: Linear boundary + sigmoid activation</p>
+</li>
+<li>
+<p><strong>Decision Trees</strong>: Rule-based, highly interpretable</p>
+</li>
+</ul>
+<h3>Reflection</h3>
+<ul>
+<li>
+<p>Why can't we use Linear Regression for classification?</p>
+</li>
+<li>
+<p>When would you choose Decision Trees over Logistic Regression?</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>10. Week 5 Summary</h2>
+<h3>What We Covered</h3>
+<p><strong>Regression</strong>:</p>
+<ul>
+<li>
+<p>Linear Regression for continuous predictions</p>
+</li>
+<li>
+<p>Gradient Descent for optimization</p>
+</li>
+<li>
+<p>Scikit-learn API and manual implementation</p>
+</li>
+</ul>
+<p><strong>Classification</strong>:</p>
+<ul>
+<li>
+<p>Logistic Regression for binary classification</p>
+</li>
+<li>
+<p>Decision Trees for rule-based decisions</p>
+</li>
+<li>
+<p>Handling categorical vs. numerical data</p>
+</li>
+</ul>
+<h3>Skills You Gained</h3>
+<ol>
+<li>Understanding the ML workflow (train, test, evaluate)</li>
+<li>Implementing algorithms from scratch</li>
+<li>Using industry-standard libraries (scikit-learn)</li>
+<li>Interpreting model predictions</li>
+</ol>
+</div>
+<div class="slide">
+<h2>Week 5 Hands-On Labs</h2>
+<p>This week includes <strong>4 practical labs</strong> to reinforce the concepts:</p>
+<h3>Regression Labs</h3>
+<ul>
+<li>
+<p><strong>Lab 1: Simple Linear Regression</strong> - Using Scikit-learn (<code>model.fit(X, y)</code>)</p>
+</li>
+<li>
+<p><strong>Lab 2: Gradient Descent from Scratch</strong> - Manual implementation with NumPy, train/test splits, RMSE evaluation</p>
+</li>
+</ul>
+<h3>Classification Labs</h3>
+<ul>
+<li>
+<p><strong>Lab 3: Logistic Regression</strong> - Binary classification (Rent decision), data normalization, probability outputs</p>
+</li>
+<li>
+<p><strong>Lab 4: Decision Trees</strong> - Play Tennis prediction, handling categorical data, tree visualization with graphviz</p>
+</li>
+</ul>
+<p><strong>Key Skills</strong>: You'll learn both the library way <em>and</em> the math way, understanding what happens under the hood.</p>
+</div>
+<div class="slide">
+<h2>Preparing for Week 6</h2>
+<p><strong>Next Week</strong>: Unsupervised Learning</p>
+<ul>
+<li>
+<p>K-Means Clustering</p>
+</li>
+<li>
+<p>Dimensionality Reduction (PCA)</p>
+</li>
+<li>
+<p>Anomaly Detection</p>
+</li>
+</ul>
+<p><strong>Action Items</strong>:</p>
+<ul>
+<li>
+<p>Complete all 4 lab notebooks</p>
+</li>
+<li>
+<p>Understand when to use regression vs. classification</p>
+</li>
+<li>
+<p>Practice explaining model predictions</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Questions?</h2>
+<p>Review the key concepts covered in this week's material.</p>
+<p><strong>Ready to dive into the labs?</strong></p>
+</div>
+
+</body>
+</html>

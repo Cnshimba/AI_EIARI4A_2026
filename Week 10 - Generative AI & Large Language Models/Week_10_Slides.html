@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 10: Generative AI &amp; Large Language Models</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this session, you will be able to:</p>
+<ol>
+<li><strong>Explain</strong> the Transformer Architecture (Attention is All You Need).</li>
+<li><strong>Describe</strong> the Pre-training vs. Alignment pipeline.</li>
+<li><strong>Compare</strong> Local vs. Cloud Deployment strategies.</li>
+<li><strong>Deploy</strong> Llama 3 for local inference.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Week 10 Goal</h2>
+<h3>The Age of Foundation Models</h3>
+<p>We are upgrading from "Training models" to "Using giants." Companies like Meta and Google have spent millions training models on the entire internet. This week, we learn to stand on the shoulders of these giants. We will explore the <strong>Transformer</strong> architecture and learn how to run a quantized <strong>Large Language Model (LLM)</strong> on a standard laptop.</p>
+</div>
+<div class="slide">
+<h2>3. The Transformer Revolution</h2>
+<p>Before 2017, we used RNNs (processed word-by-word, slow).<br />
+Then came <strong>Attention Is All You Need</strong> (Google, 2017).</p>
+<ul>
+<li>
+<p><strong>Key Idea</strong>: "Attention." The model looks at the <em>entire sentence at once</em>.</p>
+</li>
+<li>
+<p><strong>Mechanism</strong>: Self-Attention allows each word to "vote" on which other words are relevant to it.</p>
+</li>
+<li>
+<p><strong>Result</strong>: Massive parallelization $\rightarrow$ Massive models (GPT).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. How LLMs are Made</h2>
+<p>It's a two-step process:</p>
+<ol>
+<li><strong>Pre-Training</strong>: The "Library Phase."</li>
+</ol>
+<ul>
+<li>
+<p>Task: Predict the next word.</p>
+</li>
+<li>
+<p>Data: Trillions of tokens (Internet).</p>
+</li>
+<li>
+<p>Result: A model that knows English/Code but acts like an autocomplete.<br />
+2.  <strong>Fine-Tuning / Alignment</strong>: The "School Phase."</p>
+</li>
+<li>
+<p>Task: Follow Method/Chat.</p>
+</li>
+<li>
+<p>Data: Quality Q&amp;A pairs.</p>
+</li>
+<li>
+<p>Result: ChatGPT / Llama / Claude.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>5. Checkpoint 1</h2>
+<h3>Token Prediction</h3>
+<p>If I give the model: <em>"The capital of France is ..."</em><br />
+Why does it say <em>"Paris"</em>?</p>
+<details>
+<summary>Click for Answer</summary>
+
+It's not "looking up facts." It's calculating probabilities. In its training data, "Paris" is statistically the most likely token to follow that sequence.
+</details>
+</div>
+<div class="slide">
+<h2>6. Running LLMs Locally</h2>
+<p>"But don't I need an H100 GPU?"<br />
+Not anymore. Enter <strong>Quantization</strong>.</p>
+<ul>
+<li>
+<p><strong>FP16 (16-bit)</strong>: Standard training precision. Massive RAM usage.</p>
+</li>
+<li>
+<p><strong>INT4 (4-bit)</strong>: Quantized inference. slightly lower accuracy, 4x smaller.</p>
+</li>
+<li>
+<p><strong>GGUF</strong>: The file format we use to run Llama-3-8B on a CPU.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. The Stack</h2>
+<p>We will use <strong>Python + ctransformers</strong> or <strong>llama-cpp-python</strong>.</p>
+<pre><code class="language-python">from ctransformers import AutoModelForCausalLM
+
+llm = AutoModelForCausalLM.from_pretrained(
+    &quot;TheBloke/Llama-2-7b-Chat-GGUF&quot;, 
+    model_type=&quot;llama&quot;
+)
+
+print(llm(&quot;Explain AI to a 5 year old.&quot;))
+</code></pre>
+</div>
+<div class="slide">
+<h2>8. Summary</h2>
+<ul>
+<li>
+<p><strong>Transformers</strong>: Replaced RNNs by using Attention (Parallelizable).</p>
+</li>
+<li>
+<p><strong>Pre-training</strong>: Teaches language structure (Autocomplete).</p>
+</li>
+<li>
+<p><strong>Alignment</strong>: Teaches helpfulness (Chatbot).</p>
+</li>
+<li>
+<p><strong>Quantization</strong>: Allows us to run massive 8B+ parameter models on consumer hardware.</p>
+</li>
+</ul>
+</div>
+
+</body>
+</html>

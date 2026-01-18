@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 11 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 11: AI Ethics, Bias, and Responsible AI</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this session, you will be able to:</p>
+<ol>
+<li><strong>Identify</strong> sources of bias in datasets.</li>
+<li><strong>Explain</strong> the "Black Box" problem.</li>
+<li><strong>Apply</strong> Explainable AI (XAI) techniques.</li>
+<li><strong>Evaluate</strong> models for Fairness, not just Accuracy.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Week 11 Goal</h2>
+<h3>Responsible AI</h3>
+<p>We have built powerful models. Now we ask: <strong>Should</strong> we use them? AI systems affect real people—loans, hiring, policing. This week, we learn to audit our models for <strong>Bias</strong>, make them <strong>Explainable</strong> (XAI), and ensure they are <strong>Safe</strong> and <strong>Robust</strong>.</p>
+</div>
+<div class="slide">
+<h2>3. The Myth of Neutrality</h2>
+<p>"Math can't be racist." <strong>Wrong.</strong></p>
+<ul>
+<li>
+<p>Models learn from Data.</p>
+</li>
+<li>
+<p>Data is History.</p>
+</li>
+<li>
+<p>History is Biased.</p>
+</li>
+<li>
+<p>$\therefore$ Models automate History (and Bias).</p>
+</li>
+</ul>
+<blockquote>
+<p>[!TRUE]<br />
+If you train on resumes from the 1980s, your model will learn that "Men are Executives" and "Women are Secretaries."</p>
+</blockquote>
+</div>
+<div class="slide">
+<h2>4. Explainable AI (XAI)</h2>
+<p>The "Black Box" Problem: Deep Learning models are millions of numbers. We don't know <em>why</em> they decide things.</p>
+<h3>Techniques</h3>
+<ol>
+<li><strong>LIME/SHAP</strong>: Perturbs inputs to see what changes the output. "Use this to see <em>which pixels</em> made the car a car."</li>
+<li><strong>Feature Importance</strong>: (Trees) Which columns matter most?</li>
+</ol>
+</div>
+<div class="slide">
+<h2>5. Checkpoint 1</h2>
+<h3>Bias Audit</h3>
+<p>You train a facial recognition model. It works 99% of the time on White men but only 60% of the time on Black women.<br />
+Is this model "Accurate"?</p>
+<details>
+<summary>Click for Answer</summary>
+
+**Mathematically? Maybe.** If your test set is 90% White men, the average accuracy is high.
+**Ethically? No.** It is biased and discriminatory. You must analyze accuracy **per subgroup**.
+</details>
+</div>
+<div class="slide">
+<h2>6. The AI Engineering Responsibility</h2>
+<p>It is no longer enough to just "fit()" and "predict()".</p>
+<ul>
+<li>
+<p><strong>Audit Data</strong>: Check representation before training.</p>
+</li>
+<li>
+<p><strong>Audit Logic</strong>: Use XAI tools to verify reasoning.</p>
+</li>
+<li>
+<p><strong>Audit Outcomes</strong>: Check disparate impact on different groups.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. Summary</h2>
+<ul>
+<li>
+<p><strong>Bias</strong>: Comes from data (Sampling, Historical).</p>
+</li>
+<li>
+<p><strong>Fairness</strong>: Accuracy must be equal across groups.</p>
+</li>
+<li>
+<p><strong>XAI</strong>: We need to open the Black Box (SHAP, LIME).</p>
+</li>
+<li>
+<p><strong>Safety</strong>: AI must be robust against adversarial attacks.</p>
+</li>
+</ul>
+</div>
+
+</body>
+</html>

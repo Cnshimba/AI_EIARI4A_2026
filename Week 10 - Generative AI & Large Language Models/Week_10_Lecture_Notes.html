@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lecture Notes - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_10_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 10</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Generative AI & Large Language Models</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lecture Notes</span>
+    </div>
+</div>
+
+            
+            
+<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
+<strong>Module</strong>: Artificial Intelligence (AI)<br />
+<strong>Topic</strong>: Transformers &amp; LLMs<br />
+<strong>Duration</strong>: 90 Minutes</p></div></div>
+<hr />
+<h2>Lecture Outline</h2>
+<h3>Part 1: The Transformer Revolution (25 mins)</h3>
+<h4>1.1 Historical Context</h4>
+<ul>
+<li>
+<p><strong>Before 2017</strong>: RNN/LSTM dominance</p>
+</li>
+<li>
+<p>Sequential processing (one word at a time)</p>
+</li>
+<li>
+<p>Vanishing gradients on long sequences</p>
+</li>
+<li>
+<p>Slow training (no parallelization)</p>
+</li>
+<li>
+<p><strong>2017 Breakthrough</strong>: "Attention Is All You Need" (Vaswani et al.)</p>
+</li>
+<li>
+<p>Eliminated recurrence entirely</p>
+</li>
+<li>
+<p>Introduced self-attention</p>
+</li>
+<li>
+<p>Enabled massive parallelization</p>
+</li>
+</ul>
+<h4>1.2 Self-Attention Mechanism</h4>
+<p><strong>Core Idea</strong>: Relate every word to every other word</p>
+<p><strong>Example</strong>: "The animal didn't cross the street because it was too tired."</p>
+<ul>
+<li>
+<p>Query: "What does 'it' refer to?"</p>
+</li>
+<li>
+<p>Answer: Self-attention computes that "it" relates strongly to "animal" (not "street")</p>
+</li>
+</ul>
+<p><strong>Bank Disambiguation</strong>:</p>
+<ul>
+<li>
+<p>"Bank of the river" → "Bank" attends to "river"</p>
+</li>
+<li>
+<p>"Bank for money" → "Bank" attends to "money"</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Visual</strong>: Show self-attention diagram</p>
+</blockquote>
+<h4>1.3 The Math (Q, K, V)</h4>
+<p>Think of it as a <strong>differentiable database lookup</strong>:</p>
+<p><strong>Query (Q)</strong>: What am I looking for?<br />
+<strong>Key (K)</strong>: What do I offer as a match?<br />
+<strong>Value (V)</strong>: What content do I provide?</p>
+<p><strong>Steps</strong>:<br />
+1. Compute similarity: score = Q · K^T<br />
+2. Scale: score / √d_k<br />
+3. Softmax: weights = softmax(scores)<br />
+4. Weighted sum: output = weights · V</p>
+<p><strong>Causal Masking</strong>: In decoder models (GPT), prevent peeking at future tokens</p>
+<h4>1.4 Multi-Head Attention</h4>
+<p><strong>Why Multiple Heads?</strong></p>
+<ul>
+<li>
+<p>Each head learns different aspects</p>
+</li>
+<li>
+<p>Head 1: Syntax (subject-verb agreement)</p>
+</li>
+<li>
+<p>Head 2: Semantics (meaning relationships)</p>
+</li>
+<li>
+<p>Head 3: Positional relationships</p>
+</li>
+</ul>
+<p><strong>Implementation</strong>: Run 8-16 heads in parallel, concatenate outputs</p>
+<h4>1.5 Positional Encoding</h4>
+<p><strong>Problem</strong>: Attention has no inherent order<br />
+<strong>Solution</strong>: Add position information to embeddings</p>
+<ul>
+<li>
+<p>Sine/cosine waves (original Transformer)</p>
+</li>
+<li>
+<p>Learned embeddings (modern variants)</p>
+</li>
+</ul>
+<hr />
+<h3>Part 2: Large Language Models (25 mins)</h3>
+<h4>2.1 Pre-Training: The Foundation</h4>
+<p><strong>Objective</strong>: Predict next token</p>
+<p><strong>Training Data</strong> (2024-2026 models):</p>
+<ul>
+<li>
+<p>Wikipedia, books, code</p>
+</li>
+<li>
+<p>Filtered web crawls</p>
+</li>
+<li>
+<p>Specialized datasets (math, science)</p>
+</li>
+<li>
+<p>Petabytes of text</p>
+</li>
+</ul>
+<p><strong>What It Learns</strong> (accidentally):</p>
+<ul>
+<li>
+<p>Grammar and syntax</p>
+</li>
+<li>
+<p>World knowledge and facts</p>
+</li>
+<li>
+<p>Reasoning patterns</p>
+</li>
+<li>
+<p>Code structure</p>
+</li>
+</ul>
+<h4>2.2 Alignment: From Autocomplete to Assistant</h4>
+<p><strong>Problem</strong>: Raw models continue text, don't follow instructions</p>
+<p><strong>Solution: RLHF</strong> (Reinforcement Learning from Human Feedback)</p>
+<p><strong>Process</strong>:<br />
+1. Humans rank model outputs (good → bad)<br />
+2. Train reward model to predict human preferences<br />
+3. Optimize LLM against reward model</p>
+<p><strong>Modern Alternative</strong>: DPO (Direct Preference Optimization)</p>
+<ul>
+<li>
+<p>Simpler, more stable</p>
+</li>
+<li>
+<p>No separate reward model needed</p>
+</li>
+</ul>
+<p><strong>Example Transformation</strong>:</p>
+<ul>
+<li>
+<p><strong>Prompt</strong>: "How do I bake a cake?"</p>
+</li>
+<li>
+<p><strong>Pre-trained</strong>: Continues with random web text</p>
+</li>
+<li>
+<p><strong>Aligned</strong>: Provides structured recipe</p>
+</li>
+</ul>
+<h4>2.3 Architectural Flavors</h4>
+<p><strong>Encoder-Only</strong> (BERT):</p>
+<ul>
+<li>
+<p>Bidirectional (sees whole sentence)</p>
+</li>
+<li>
+<p>Best for: Classification, NER, QA</p>
+</li>
+</ul>
+<p><strong>Decoder-Only</strong> (GPT, Llama, Claude):</p>
+<ul>
+<li>
+<p>Autoregressive (left-to-right)</p>
+</li>
+<li>
+<p>Best for: Generation, chatbots</p>
+</li>
+<li>
+<p><strong>Dominant architecture</strong> for modern LLMs</p>
+</li>
+</ul>
+<p><strong>Encoder-Decoder</strong> (T5):</p>
+<ul>
+<li>
+<p>Both components</p>
+</li>
+<li>
+<p>Best for: Translation, summarization</p>
+</li>
+</ul>
+<h4>2.4 Emergent Abilities</h4>
+<p><strong>Phenomenon</strong>: Capabilities not explicitly trained</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p>Arithmetic (trained on text, learns calculation)</p>
+</li>
+<li>
+<p>Translation (monolingual data, learns translation)</p>
+</li>
+<li>
+<p>Reasoning (chain-of-thought)</p>
+</li>
+</ul>
+<p><strong>Hypothesis</strong>: Scale reveals generalizable patterns</p>
+<hr />
+<h3>Part 3: Deployment &amp; Optimization (20 mins)</h3>
+<h4>3.1 The Challenge</h4>
+<p><strong>Model Sizes</strong>:</p>
+<ul>
+<li>
+<p>Llama-3-8B: ~16GB (FP16)</p>
+</li>
+<li>
+<p>Llama-3-70B: ~140GB</p>
+</li>
+<li>
+<p>GPT-4: Unknown (estimated 1TB+)</p>
+</li>
+</ul>
+<p><strong>Hardware Constraints</strong>:</p>
+<ul>
+<li>
+<p>Consumer GPUs: 4-24GB VRAM</p>
+</li>
+<li>
+<p>Cloud instances: Expensive at scale</p>
+</li>
+</ul>
+<h4>3.2 Quantization</h4>
+<p><strong>Concept</strong>: Reduce numerical precision</p>
+<p><strong>Examples</strong>:</p>
+<ul>
+<li>
+<p>FP16 → INT8: 2x compression</p>
+</li>
+<li>
+<p>FP16 → INT4: 4x compression</p>
+</li>
+</ul>
+<p><strong>Trade-off</strong>: Minimal quality loss for huge size reduction</p>
+<p><strong>Formats</strong>:</p>
+<ul>
+<li>
+<p>GGUF (CPU-friendly)</p>
+</li>
+<li>
+<p>AWQ/GPTQ (GPU-optimized)</p>
+</li>
+</ul>
+<h4>3.3 Hugging Face Ecosystem</h4>
+<p><strong>The Hub</strong>: GitHub for AI</p>
+<ul>
+<li>
+<p>500,000+ models</p>
+</li>
+<li>
+<p>Datasets and demos</p>
+</li>
+<li>
+<p>Free hosting</p>
+</li>
+</ul>
+<p><strong>Key Libraries</strong>:</p>
+<ul>
+<li>
+<p><code>transformers</code>: Model loading/inference</p>
+</li>
+<li>
+<p><code>accelerate</code>: Multi-GPU training</p>
+</li>
+<li>
+<p><code>peft</code>: Parameter-efficient fine-tuning</p>
+</li>
+</ul>
+<h4>3.4 Deployment Pipeline</h4>
+<p><strong>Standard Flow</strong>:<br />
+1. <strong>Select Model</strong>: Match to hardware<br />
+2. <strong>Tokenize</strong>: Text → IDs<br />
+3. <strong>Inference</strong>: Forward pass → logits<br />
+4. <strong>Decode</strong>: Sample token → text<br />
+5. <strong>Loop</strong>: Repeat until done</p>
+<p><strong>Modern Stack</strong>:</p>
+<ul>
+<li>
+<p>vLLM: High-throughput serving</p>
+</li>
+<li>
+<p>FlashAttention: Memory-efficient attention</p>
+</li>
+<li>
+<p>Continuous batching</p>
+</li>
+</ul>
+<hr />
+<h2>Lab Preview (10 mins)</h2>
+<h3>Two Paths Based on Hardware</h3>
+<p><strong>Lab 1: CPU Inference</strong></p>
+<ul>
+<li>
+<p>Quantized model (GGUF format)</p>
+</li>
+<li>
+<p><code>ctransformers</code> library</p>
+</li>
+<li>
+<p>3-10 tokens/sec on laptop</p>
+</li>
+</ul>
+<p><strong>Lab 2: GPU Acceleration</strong></p>
+<ul>
+<li>
+<p>8-bit loading (CUDA)</p>
+</li>
+<li>
+<p><code>transformers</code> + <code>accelerate</code></p>
+</li>
+<li>
+<p>50+ tokens/sec on gaming GPU</p>
+</li>
+</ul>
+<p><strong>Outcome</strong>: Local chatbot with full privacy</p>
+<hr />
+<h2>Summary (5 mins)</h2>
+<h3>Key Takeaways</h3>
+<ol>
+<li><strong>Transformers</strong>: Self-attention enables parallel processing at scale</li>
+<li><strong>Pre-training</strong>: Next-token prediction teaches language + facts</li>
+<li><strong>Alignment</strong>: RLHF/DPO makes models helpful assistants</li>
+<li><strong>Decoder-only</strong>: Dominant architecture for generative AI</li>
+<li><strong>Deployment</strong>: Quantization + Hugging Face democratize access</li>
+</ol>
+<h3>Next Week</h3>
+<ul>
+<li>
+<p>Week 11: Prompt engineering &amp; ethics</p>
+</li>
+<li>
+<p>Advanced techniques</p>
+</li>
+<li>
+<p>Real-world applications</p>
+</li>
+</ul>
+<hr />
+<h2>Teaching Tips</h2>
+<ol>
+<li><strong>Live Demo</strong>: Show attention visualization (BERTviz or similar)</li>
+<li><strong>Interactive</strong>: Let students try Claude/GPT vs raw completion model</li>
+<li><strong>Misconceptions</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>"LLMs understand" → They predict patterns</p>
+</li>
+<li>
+<p>"Bigger is always better" → Context on use case</p>
+</li>
+<li>
+<p>"All open-source models are free" → Deployment costs matter</p>
+</li>
+</ul>
+<ol start="4">
+<li><strong>Engagement</strong>: Ask about ethical implications of emergent abilities</li>
+</ol>
+<hr />
+            
+            
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%209%20-%20Natural%20Language%20Processing%20(NLP)/Week_9_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 9</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%2011%20-%20AI%20Ethics,%20Bias,%20and%20Responsible%20AI/Week_11_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 11</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

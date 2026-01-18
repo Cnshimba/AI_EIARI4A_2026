@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7 Lecture Notes - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_7_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 7</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Neural Networks & Deep Learning Basics</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lecture Notes</span>
+    </div>
+</div>
+
+            
+            
+<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
+<strong>Module</strong>: Artificial Intelligence (AI)<br />
+<strong>Topic</strong>: Neural Networks &amp; Deep Learning Basics<br />
+<strong>Duration</strong>: 90 Minutes</p></div></div>
+<hr />
+<h2>Lecture Outline</h2>
+<h3>Part 1: From Classical ML to Deep Learning (15 mins)</h3>
+<h4>1.1 Recap of Classical Machine Learning</h4>
+<ul>
+<li>
+<p><strong>Week 5 - Supervised Learning</strong>:</p>
+</li>
+<li>
+<p>Linear Regression: Drew straight lines  </p>
+</li>
+<li>
+<p>Logistic Regression: S-curves for classification  </p>
+</li>
+<li>
+<p>Decision Trees: Rule-based splitting</p>
+</li>
+<li>
+<p><strong>Week 6 - Unsupervised Learning</strong>:</p>
+</li>
+<li>
+<p>K-Means: Found clusters without labels</p>
+</li>
+</ul>
+<h4>1.2 Limitations of Classical ML</h4>
+<ul>
+<li>
+<p>Limited to relatively simple decision boundaries</p>
+</li>
+<li>
+<p>Required manual feature engineering</p>
+</li>
+<li>
+<p>Struggled with high-dimensional data (images, audio, text)</p>
+</li>
+<li>
+<p>Could not learn hierarchical representations</p>
+</li>
+</ul>
+<h4>1.3 The Deep Learning Revolution</h4>
+<ul>
+<li>
+<p><strong>Neural Networks</strong>: Inspired by biological neurons</p>
+</li>
+<li>
+<p><strong>Deep</strong>: Many layers stacked (hierarchical learning)</p>
+</li>
+<li>
+<p>Automatic feature extraction from raw data</p>
+</li>
+<li>
+<p>State-of-the-art performance in computer vision, NLP, speech</p>
+</li>
+</ul>
+<hr />
+<h3>Part 2: The Perceptron - Building Block of AI (20 mins)</h3>
+<h4>2.1 Biological Inspiration</h4>
+<ul>
+<li>
+<p>Real neurons:</p>
+</li>
+<li>
+<p>Receive signals through dendrites</p>
+</li>
+<li>
+<p>Process in cell body</p>
+</li>
+<li>
+<p>Fire signal through axon if threshold exceeded</p>
+</li>
+<li>
+<p>Artificial neuron (perceptron):</p>
+</li>
+<li>
+<p>Inputs (x) = dendrites</p>
+</li>
+<li>
+<p>Weights (w) = connection strength</p>
+</li>
+<li>
+<p>Weighted sum + bias = cell body processing</p>
+</li>
+<li>
+<p>Activation function = firing threshold</p>
+</li>
+</ul>
+<h4>2.2 Mathematical Components</h4>
+<p><strong>1. Inputs (x)</strong></p>
+<ul>
+<li>
+<p>Raw data entering the neuron</p>
+</li>
+<li>
+<p>Example: Pixel values of an image</p>
+</li>
+</ul>
+<p><strong>2. Weights (w)</strong></p>
+<ul>
+<li>
+<p>Learned parameters</p>
+</li>
+<li>
+<p>Represent importance of each input</p>
+</li>
+<li>
+<p>Training = finding optimal weights</p>
+</li>
+</ul>
+<p><strong>3. Bias (b)</strong></p>
+<ul>
+<li>
+<p>Allows shifting the activation</p>
+</li>
+<li>
+<p>Like intercept in linear regression</p>
+</li>
+<li>
+<p>Enables neuron to fire even when inputs are zero</p>
+</li>
+</ul>
+<p><strong>4. Weighted Sum</strong><br />
+$$z = \sum_{i=1}^{n} (x_i \cdot w_i) + b = x_1w_1 + x_2w_2 + ... + x_nw_n + b$$</p>
+<p><strong>5. Activation Function</strong><br />
+$$a = f(z)$$</p>
+<blockquote>
+<p><strong>Teaching Point</strong>: Show neuron anatomy diagram (Figure 1 from student notes)</p>
+</blockquote>
+<hr />
+<h3>Part 3: Activation Functions - The Key to Non-Linearity (20 mins)</h3>
+<h4>3.1 Why Non-Linearity Matters</h4>
+<p><strong>The Linear Limitation</strong>:</p>
+<ul>
+<li>
+<p>Without activation: $f(x) = Wx + b$ (linear)</p>
+</li>
+<li>
+<p>Stack 100 linear layers: Still just $f(x) = W'x + b'$ (linear)</p>
+</li>
+<li>
+<p>Network collapses to glorified linear regression</p>
+</li>
+<li>
+<p>Can only learn straight decision boundaries</p>
+</li>
+</ul>
+<p><strong>Non-Linearity Solution</strong>:</p>
+<ul>
+<li>
+<p>Apply non-linear function at each neuron</p>
+</li>
+<li>
+<p>Network can approximate ANY function (Universal Approximation Theorem)</p>
+</li>
+<li>
+<p>Enables learning circles, curves, complex boundaries</p>
+</li>
+</ul>
+<h4>3.2 Common Activation Functions</h4>
+<p><strong>A. Sigmoid</strong><br />
+$$\sigma(z) = \frac{1}{1 + e^{-z}}$$</p>
+<p>Properties:</p>
+<ul>
+<li>
+<p>Output range: (0, 1)</p>
+</li>
+<li>
+<p>Smooth S-curve</p>
+</li>
+<li>
+<p>Interpretable as probabilities</p>
+</li>
+</ul>
+<p>Problems:</p>
+<ul>
+<li>
+<p>Vanishing gradients (saturates at extremes)</p>
+</li>
+<li>
+<p>Not zero-centered</p>
+</li>
+<li>
+<p>Computationally expensive (exponential)</p>
+</li>
+</ul>
+<p>Use cases:</p>
+<ul>
+<li>
+<p>Output layer for binary classification</p>
+</li>
+<li>
+<p>Legacy networks (historical)</p>
+</li>
+</ul>
+<p><strong>B. ReLU (Rectified Linear Unit)</strong><br />
+$$f(z) = max(0, z) = \begin{cases} z &amp; \text{if } z &gt; 0 \ 0 &amp; \text{if } z \leq 0 \end{cases}$$</p>
+<p>Properties:</p>
+<ul>
+<li>
+<p>Output range: [0, ∞)</p>
+</li>
+<li>
+<p>Extremely simple (just threshold at zero)</p>
+</li>
+<li>
+<p>Linear for positive values</p>
+</li>
+</ul>
+<p>Advantages:</p>
+<ul>
+<li>
+<p>No vanishing gradient for positive values</p>
+</li>
+<li>
+<p>Computationally efficient (just comparison)</p>
+</li>
+<li>
+<p>Sparse activation (many neurons = 0)</p>
+</li>
+<li>
+<p>Default choice for hidden layers</p>
+</li>
+</ul>
+<p>Problems:</p>
+<ul>
+<li>
+<p>Dying ReLU: Neurons can become permanently inactive</p>
+</li>
+<li>
+<p>Not zero-centered</p>
+</li>
+</ul>
+<p>Variants:</p>
+<ul>
+<li>
+<p>Leaky ReLU: Small negative slope for z &lt; 0</p>
+</li>
+<li>
+<p>Parametric ReLU: Learnable negative slope</p>
+</li>
+<li>
+<p>ELU: Exponential negative region</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Demo</strong>: Show activation function plots side-by-side</p>
+</blockquote>
+<hr />
+<h3>Part 4: Multi-Layer Perceptron Architecture (15 mins)</h3>
+<h4>4.1 Layer Types</h4>
+<p><strong>1. Input Layer</strong></p>
+<ul>
+<li>
+<p>Passive data reception</p>
+</li>
+<li>
+<p>No computation</p>
+</li>
+<li>
+<p>Size = number of features</p>
+</li>
+<li>
+<p>Example: 784 neurons for 28x28 MNIST images</p>
+</li>
+</ul>
+<p><strong>2. Hidden Layers</strong></p>
+<ul>
+<li>
+<p>Where learning happens</p>
+</li>
+<li>
+<p>Extract hierarchical features</p>
+</li>
+<li>
+<p>Layer 1: Simple patterns (edges, textures)</p>
+</li>
+<li>
+<p>Layer 2: Medium complexity (shapes)</p>
+</li>
+<li>
+<p>Layer 3+: High-level concepts (eyes, faces)</p>
+</li>
+<li>
+<p>"Deep" in Deep Learning = Many hidden layers</p>
+</li>
+</ul>
+<p><strong>3. Output Layer</strong></p>
+<ul>
+<li>
+<p>Final prediction</p>
+</li>
+<li>
+<p>Size = number of classes (classification) or 1 (regression)</p>
+</li>
+<li>
+<p>Example: 10 neurons for 10 digits (0-9)</p>
+</li>
+</ul>
+<h4>4.2 Fully-Connected (Dense) Networks</h4>
+<ul>
+<li>
+<p>Every neuron in Layer N connects to every neuron in Layer N+1</p>
+</li>
+<li>
+<p>Parameter count explodes:</p>
+</li>
+<li>
+<p>Layer 1 (784 inputs → 128 hidden): 784 × 128 = 100,352 weights</p>
+</li>
+<li>
+<p>Plus 128 biases = 100,480 parameters for one layer!</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Teaching Point</strong>: Draw 3-layer MLP on board, emphasize connectivity</p>
+</blockquote>
+<hr />
+<h3>Part 5: Training Process - Backpropagation (20 mins)</h3>
+<h4>5.1 The Four-Step Cycle</h4>
+<p><strong>Step 1: Forward Propagation</strong></p>
+<ul>
+<li>
+<p>Input flows through network layer by layer</p>
+</li>
+<li>
+<p>At each neuron: $z = Wx + b$, then $a = f(z)$</p>
+</li>
+<li>
+<p>Produces prediction at output layer</p>
+</li>
+<li>
+<p>Example: "I think this image is digit 3 with 50% confidence"</p>
+</li>
+</ul>
+<p><strong>Step 2: Loss Calculation</strong></p>
+<ul>
+<li>
+<p>Compare prediction to true label</p>
+</li>
+<li>
+<p>Loss function measures error</p>
+</li>
+<li>
+<p>Common losses:</p>
+</li>
+<li>
+<p>Mean Squared Error (MSE) for regression</p>
+</li>
+<li>
+<p>Cross-Entropy for classification</p>
+</li>
+<li>
+<p>Example: $Loss = (prediction - true)^2$</p>
+</li>
+</ul>
+<p><strong>Step 3: Backpropagation</strong></p>
+<ul>
+<li>
+<p>Calculate gradient of loss with respect to each weight</p>
+</li>
+<li>
+<p>Uses Chain Rule of calculus</p>
+</li>
+<li>
+<p>Flows backward through network</p>
+</li>
+<li>
+<p>Assigns "blame" for error to each weight</p>
+</li>
+<li>
+<p>$\frac{\partial Loss}{\partial w}$ = how much does this weight contribute to error?</p>
+</li>
+</ul>
+<p><strong>Step 4: Optimization (Weight Update)</strong></p>
+<ul>
+<li>
+<p>Gradient Descent: Move weights opposite to gradient</p>
+</li>
+<li>
+<p>Update rule: $w_{new} = w_{old} - \alpha \cdot \frac{\partial Loss}{\partial w}$</p>
+</li>
+<li>
+<p>$\alpha$ = learning rate (step size)</p>
+</li>
+<li>
+<p>Network becomes slightly better</p>
+</li>
+</ul>
+<h4>5.2 The Big Picture</h4>
+<ul>
+<li>
+<p>Repeat cycle thousands of times</p>
+</li>
+<li>
+<p>Each iteration (epoch) processes entire dataset</p>
+</li>
+<li>
+<p>Network gradually learns optimal weights</p>
+</li>
+<li>
+<p>Loss decreases over time</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Demo</strong>: Show loss curve decreasing during training</p>
+</blockquote>
+<hr />
+<h2>Lab Preview (5 mins)</h2>
+<h3>Lab Objectives</h3>
+<p>Build a neural network from scratch using ONLY Python and NumPy:</p>
+<ol>
+<li><strong>Affine Layer</strong>: Implement $z = Wx + b$ with forward and backward pass</li>
+<li><strong>ReLU Layer</strong>: Implement activation with forward and backward pass</li>
+<li><strong>SoftmaxWithLoss</strong>: Convert logits to probabilities and calculate cross-entropy</li>
+<li><strong>TwoLayerNet</strong>: Assemble complete network</li>
+<li><strong>Training Loop</strong>: Forward pass, loss, backward pass, update</li>
+</ol>
+<h3>Why From Scratch?</h3>
+<ul>
+<li>
+<p>Understand what PyTorch/TensorFlow do under the hood</p>
+</li>
+<li>
+<p>Appreciate automatic differentiation</p>
+</li>
+<li>
+<p>Debug deep learning issues more effectively</p>
+</li>
+<li>
+<p>Truly understand backpropagation mechanics</p>
+</li>
+</ul>
+<hr />
+<h2>Summary (5 mins)</h2>
+<h3>Key Takeaways</h3>
+<ol>
+<li><strong>Perceptron</strong>: Basic unit with inputs, weights, bias, and activation</li>
+<li><strong>Activation Functions</strong>: Introduce non-linearity (ReLU is standard for hidden layers)</li>
+<li><strong>MLP Architecture</strong>: Input → Hidden layers → Output (fully-connected)</li>
+<li><strong>Backpropagation</strong>: Forward pass → Loss → Backward pass → Weight update</li>
+<li><strong>Deep Learning</strong>: Many layers enable hierarchical feature learning</li>
+</ol>
+<h3>Next Week Preview</h3>
+<ul>
+<li>
+<p><strong>Week 8</strong>: Convolutional Neural Networks (CNNs)</p>
+</li>
+<li>
+<p>Specialized architecture for images</p>
+</li>
+<li>
+<p>Convolutional layers (local connectivity)</p>
+</li>
+<li>
+<p>Pooling layers (dimensionality reduction)</p>
+</li>
+<li>
+<p>PyTorch framework introduction</p>
+</li>
+</ul>
+<hr />
+<h2>Teaching Tips</h2>
+<ol>
+<li><strong>Use Analogies</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Neuron = decision-making cell</p>
+</li>
+<li>
+<p>Weights = importance multipliers</p>
+</li>
+<li>
+<p>Activation = firing threshold</p>
+</li>
+<li>
+<p>Network = team of specialists</p>
+</li>
+</ul>
+<ol start="2">
+<li><strong>Visual Aids</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Draw neurons with arrows</p>
+</li>
+<li>
+<p>Animate forward pass flow</p>
+</li>
+<li>
+<p>Show gradient flowing backward</p>
+</li>
+<li>
+<p>Plot activation functions</p>
+</li>
+</ul>
+<ol start="3">
+<li><strong>Interactive Demos</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Live code simple perceptron</p>
+</li>
+<li>
+<p>Show weight updates in real-time</p>
+</li>
+<li>
+<p>Visualize decision boundaries changing</p>
+</li>
+</ul>
+<ol start="4">
+<li><strong>Common Student Misconceptions</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>"More layers = always better" → No, can overfit</p>
+</li>
+<li>
+<p>"Bigger weights = better" → No, leads to overfitting and instability</p>
+</li>
+<li>
+<p>"Backprop is mysterious" → Just Chain Rule applied systematically</p>
+</li>
+<li>
+<p>"Neural networks think like humans" → No, just mathematical optimization</p>
+</li>
+</ul>
+<hr />
+            
+            
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 6</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%208%20-%20Convolutional%20Neural%20Networks%20(CNNs)/Week_8_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 8</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9 Lecture Notes - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_9_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 9</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Natural Language Processing (NLP)</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lecture Notes</span>
+    </div>
+</div>
+
+            
+            
+<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
+<strong>Module</strong>: Artificial Intelligence (AI)<br />
+<strong>Topic</strong>: Text Classification &amp; Word Embeddings<br />
+<strong>Duration</strong>: 90 Minutes</p></div></div>
+<hr />
+<h2>Lecture Outline</h2>
+<h3>Part 1: The NLP Challenge (15 mins)</h3>
+<h4>1.1 Why Text is Different</h4>
+<ul>
+<li>
+<p><strong>Structured Data</strong> (Week 5): Numbers in columns</p>
+</li>
+<li>
+<p><strong>Image Data</strong> (Week 8): Pixel grids (still numbers)</p>
+</li>
+<li>
+<p><strong>Text Data</strong>: Discrete, variable length, context-dependent</p>
+</li>
+</ul>
+<p><strong>Key Problem</strong>: Computers process numbers, not words</p>
+<h4>1.2 The Representation Challenge</h4>
+<ul>
+<li>
+<p>Cannot feed "Hello world" directly into matrix multiplication</p>
+</li>
+<li>
+<p>Need mathematical representation of language</p>
+</li>
+<li>
+<p>Must preserve semantic meaning</p>
+</li>
+</ul>
+<hr />
+<h3>Part 2: From Words to Numbers (20 mins)</h3>
+<h4>2.1 Tokenization</h4>
+<p><strong>Definition</strong>: Breaking text into atomic units</p>
+<p><strong>Example</strong>:</p>
+<pre><code>&quot;I love AI!&quot; → [&quot;I&quot;, &quot;love&quot;, &quot;AI&quot;, &quot;!&quot;]
+</code></pre>
+<p><strong>Strategies</strong>:</p>
+<ul>
+<li>
+<p>Word-level: Split on spaces</p>
+</li>
+<li>
+<p>Subword: BPE, WordPiece (used by modern LLMs)</p>
+</li>
+<li>
+<p>Character-level: Individual characters</p>
+</li>
+</ul>
+<h4>2.2 Preprocessing Pipeline</h4>
+<ol>
+<li><strong>Lowercasing</strong>: "Apple" → "apple"</li>
+<li><strong>Stopword removal</strong>: Remove "the", "and", "is"</li>
+<li><strong>Stemming/Lemmatization</strong>: "running" → "run"</li>
+</ol>
+<p><strong>Purpose</strong>: Reduce vocabulary size, remove noise</p>
+<h4>2.3 One-Hot Encoding</h4>
+<p><strong>Approach</strong>: Create vocabulary, assign each word an index</p>
+<p><strong>Example</strong> (Vocab size = 5):</p>
+<pre><code>&quot;cat&quot;   = [1, 0, 0, 0, 0]
+&quot;dog&quot;   = [0, 1, 0, 0, 0]
+&quot;love&quot;  = [0, 0, 1, 0, 0]
+</code></pre>
+<p><strong>Problems</strong>:</p>
+<ul>
+<li>
+<p>Sparse (50,000-word vocab → 50,000-dim vectors)</p>
+</li>
+<li>
+<p>No semantic relationships ("cat" vs "dog" equally distant as "cat" vs "car")</p>
+</li>
+<li>
+<p>Memory inefficient</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Visual</strong>: Show text processing pipeline diagram</p>
+</blockquote>
+<hr />
+<h3>Part 3: Word Embeddings Revolution (25 mins)</h3>
+<h4>3.1 The Breakthrough</h4>
+<p><strong>Idea</strong>: Map words to dense, low-dimensional vectors</p>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>
+<p>One-hot: 50,000 dimensions</p>
+</li>
+<li>
+<p>Embedding: 300 dimensions</p>
+</li>
+</ul>
+<h4>3.2 How Embeddings Learn Meaning</h4>
+<p><strong>Distributional Hypothesis</strong> (Firth, 1957):</p>
+<blockquote>
+<p>"You shall know a word by the company it keeps"</p>
+</blockquote>
+<p><strong>Training Approach</strong> (Word2Vec):</p>
+<ul>
+<li>
+<p>Look at context window (±5 words)</p>
+</li>
+<li>
+<p>Words appearing in similar contexts get similar vectors</p>
+</li>
+<li>
+<p>"King" appears near "palace", "crown", "man"</p>
+</li>
+<li>
+<p>"Queen" appears near "palace", "crown", "woman"</p>
+</li>
+<li>
+<p>Network learns "king" and "queen" are geometrically close</p>
+</li>
+</ul>
+<h4>3.3 Semantic Arithmetic</h4>
+<p><strong>Famous Example</strong>:<br />
+$$\text{King} - \text{Man} + \text{Woman} \approx \text{Queen}$$</p>
+<p><strong>Other Examples</strong>:</p>
+<ul>
+<li>
+<p>Paris - France + Italy ≈ Rome</p>
+</li>
+<li>
+<p>Walking - Walked + Swam ≈ Swimming</p>
+</li>
+</ul>
+<p><strong>Significance</strong>: Embeddings capture relationships, not just identity</p>
+<blockquote>
+<p><strong>Demo</strong>: Show word embedding visualization (King-Queen diagram)</p>
+</blockquote>
+<hr />
+<h3>Part 4: Neural Architectures for Text (20 mins)</h3>
+<h4>4.1 RNNs: The Sequential Approach</h4>
+<p><strong>Architecture</strong>:</p>
+<ul>
+<li>
+<p>Process one word at a time</p>
+</li>
+<li>
+<p>Maintain hidden state (memory)</p>
+</li>
+<li>
+<p>Pass information forward</p>
+</li>
+</ul>
+<p><strong>Problems</strong>:</p>
+<ul>
+<li>
+<p>Vanishing gradients (forgets beginning of long texts)</p>
+</li>
+<li>
+<p>Sequential (cannot parallelize)</p>
+</li>
+<li>
+<p>Slow training</p>
+</li>
+</ul>
+<p><strong>Historical Note</strong>: LSTMs improved but didn't solve core issues</p>
+<h4>4.2 CNNs for Text (TextCNN)</h4>
+<p><strong>Key Insight</strong>: Text is 1D image of word vectors</p>
+<p><strong>Operation</strong>:</p>
+<ul>
+<li>
+<p>1D convolution slides over word sequences</p>
+</li>
+<li>
+<p>Filters detect n-grams (2-3-4 word phrases)</p>
+</li>
+<li>
+<p>Example: Filter learns "not good" flips sentiment</p>
+</li>
+</ul>
+<p><strong>Advantages</strong>:</p>
+<ul>
+<li>
+<p>Parallel processing</p>
+</li>
+<li>
+<p>Fast training</p>
+</li>
+<li>
+<p>Detects local patterns effectively</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Visual</strong>: Show RNN vs CNN comparison</p>
+</blockquote>
+<hr />
+<h3>Part 5: Sentiment Analysis Application (10 mins)</h3>
+<h4>5.1 Problem Definition</h4>
+<p><strong>Task</strong>: Classify text as Positive/Negative</p>
+<p><strong>Example</strong>:</p>
+<ul>
+<li>
+<p>"This movie was amazing!" → Positive</p>
+</li>
+<li>
+<p>"Worst film ever." → Negative</p>
+</li>
+</ul>
+<h4>5.2 Pipeline</h4>
+<ol>
+<li><strong>Tokenize</strong>: Split into words</li>
+<li><strong>Numericalize</strong>: Words → IDs (vocabulary lookup)</li>
+<li><strong>Embed</strong>: IDs → Dense vectors (<code>nn.Embedding</code>)</li>
+<li><strong>Aggregate</strong>: Average embeddings or CNN</li>
+<li><strong>Classify</strong>: Linear layer → Sigmoid/Softmax</li>
+</ol>
+<hr />
+<h2>Lab Preview (5 mins)</h2>
+<h3>Lab Objectives</h3>
+<p>Build sentiment classifier in PyTorch:<br />
+1. Create vocabulary from training data<br />
+2. Implement <code>nn.EmbeddingBag</code> (averages word vectors)<br />
+3. Add linear classifier<br />
+4. Train on positive/negative reviews<br />
+5. Evaluate accuracy</p>
+<h3>Key PyTorch Components</h3>
+<ul>
+<li>
+<p><code>nn.Embedding</code>: Lookup table for word → vector</p>
+</li>
+<li>
+<p><code>nn.EmbeddingBag</code>: Embedding + averaging</p>
+</li>
+<li>
+<p>Simple but powerful for sentiment tasks</p>
+</li>
+</ul>
+<hr />
+<h2>Summary (5 mins)</h2>
+<h3>Key Takeaways</h3>
+<ol>
+<li><strong>Tokenization</strong>: First step in NLP pipeline</li>
+<li><strong>One-hot</strong>: Simple but inefficient</li>
+<li><strong>Embeddings</strong>: Dense vectors capturing semantic meaning</li>
+<li><strong>Semantic Arithmetic</strong>: Embeddings encode relationships</li>
+<li><strong>TextCNN</strong>: CNNs work for text via 1D convolutions</li>
+</ol>
+<h3>Next Week</h3>
+<ul>
+<li>
+<p><strong>Week 10</strong>: Foundation Models &amp; LLMs</p>
+</li>
+<li>
+<p>Transformers architecture</p>
+</li>
+<li>
+<p>Attention mechanisms</p>
+</li>
+<li>
+<p>ChatGPT and deployment</p>
+</li>
+</ul>
+<hr />
+<h2>Teaching Tips</h2>
+<ol>
+<li><strong>Use Examples</strong>: Show real tweets/reviews</li>
+<li><strong>Live Demo</strong>: Tokenize sentence on board</li>
+<li><strong>Visualization</strong>: Plot 2D projection of word embeddings</li>
+<li><strong>Historical Context</strong>: Explain RNN → CNN → Transformer evolution</li>
+<li><strong>Common Misconceptions</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>"Embeddings are just compression" → No, they encode meaning</p>
+</li>
+<li>
+<p>"Bigger embedding = better" → Not always, 300 is standard</p>
+</li>
+<li>
+<p>"One-hot is always bad" → Works for small vocabs</p>
+</li>
+</ul>
+<hr />
+            
+            
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%208%20-%20Convolutional%20Neural%20Networks%20(CNNs)/Week_8_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 8</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%2010%20-%20Generative%20AI%20&%20Large%20Language%20Models/Week_10_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 10</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

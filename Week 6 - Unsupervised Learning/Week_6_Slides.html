@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 6 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 6 Slides: Unsupervised Learning - Clustering</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this session, you will be able to:</p>
+<ol>
+<li><strong>Differentiate</strong> between Supervised (Labeled) and Unsupervised (Unlabeled) Learning.</li>
+<li><strong>Explain</strong> the concept of Clustering and its real-world applications.</li>
+<li><strong>Execute</strong> the K-Means algorithm (Assign $\rightarrow$ Update loop).</li>
+<li><strong>Evaluate</strong> the optimal number of clusters ($K$) using the Elbow Method.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Supervised vs Unsupervised</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Supervised</th>
+<th style="text-align: left;">Unsupervised</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Data</strong></td>
+<td style="text-align: left;">Labeled ($X, Y$)</td>
+<td style="text-align: left;">Unlabeled ($X$)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Goal</strong></td>
+<td style="text-align: left;">Prediction</td>
+<td style="text-align: left;">Discovery</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Feedback</strong></td>
+<td style="text-align: left;">"Wrong Answer" (Loss)</td>
+<td style="text-align: left;">"Similar Items"</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Analogy</strong></td>
+<td style="text-align: left;">Teacher in classroom</td>
+<td style="text-align: left;">Explorer in new land</td>
+</tr>
+</tbody>
+</table>
+<!-- note -->
+<p><strong>Key Insight</strong>: Supervised learning maps Inputs to Outputs. Unsupervised learning maps Inputs to <strong>Structure</strong>.</p>
+</div>
+<div class="slide">
+<h2>3. What is Clustering?</h2>
+<p><strong>Definition</strong>: Grouping a set of objects so that objects in the same group (Cluster) are more similar to each other than to those in other groups.</p>
+<ul>
+<li>
+<p><strong>Customer Segmentation</strong>: Grouping buyers by purchasing habits.</p>
+</li>
+<li>
+<p><strong>Image Compression</strong>: Grouping similar pixel colors.</p>
+</li>
+<li>
+<p><strong>Anomaly Detection</strong>: Finding points that <em>don't</em> belong to any group.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. The K-Means Algorithm</h2>
+<p>The goal is to partition data into <strong>K</strong> clusters.</p>
+<h3>The Algorithm Loop:</h3>
+<ol>
+<li><strong>Initialize</strong>: Pick <strong>K</strong> random centroids.</li>
+<li><strong>Assign</strong>: Color every point based on its <strong>nearest</strong> centroid.</li>
+<li><strong>Update</strong>: Move the centroid to the <strong>average center</strong> of its points.</li>
+<li><strong>Repeat</strong>: Keep cycling until centroids stop moving.</li>
+</ol>
+<!-- note -->
+<p>Think of the "Party Speaker" analogy. People move to the loudest speaker, then you move the speaker to the crowd's center. Repeat.</p>
+</div>
+<div class="slide">
+<h2>5. Checkpoint 1</h2>
+<p><strong>Scenario</strong>: You have a dataset of emails labeled "Spam" or "Not Spam".</p>
+<p><strong>Question</strong>: Is this a Supervised or Unsupervised problem?</p>
+<p>A) Supervised<br />
+B) Unsupervised<br />
+C) Reinforcement Learning</p>
+<details>
+<summary><strong>Answer</strong></summary>
+
+**A) Supervised**
+because we have **Labels** ("Spam"/"Not Spam").
+</details>
+</div>
+<div class="slide">
+<h2>6. Picking "K" (The Elbow Method)</h2>
+<p>How do we know if there are 3 clusters or 5?</p>
+<ul>
+<li>
+<p>We calculate the <strong>Inertia</strong> (Tightness of clusters) for different K values.</p>
+</li>
+<li>
+<p><strong>The Elbow Rule</strong>: Look for the point where the improvement <strong>flattens out</strong>.</p>
+</li>
+</ul>
+<p><img alt="Elbow Method" src="images/elbow_method.png" /><br />
+<em>Adding more clusters after the elbow gives diminishing returns.</em></p>
+</div>
+<div class="slide">
+<h2>7. Semester Assignment Overview</h2>
+<ul>
+<li>
+<p><strong>Topic</strong>: Network Intrusion Detection.</p>
+</li>
+<li>
+<p><strong>Scope</strong>: Weeks 1-6 (Supervised + Unsupervised).</p>
+</li>
+<li>
+<p><strong>Data</strong>: <code>semester_project_data.csv</code> (<strong>Dirty</strong> data you must clean).</p>
+</li>
+<li>
+<p><strong>Tasks</strong>:</p>
+<ol>
+<li>Clean Data (Part B).</li>
+<li>Visualize (Part C).</li>
+<li>Train Classifier (Part E).</li>
+<li>Run K-Means Clustering (Part F).</li>
+<li>Report (Part G).</li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>8. Summary</h2>
+<ul>
+<li>
+<p><strong>Unsupervised Learning</strong> finds hidden patterns in unlabeled data.</p>
+</li>
+<li>
+<p><strong>Clustering</strong> groups similar items together.</p>
+</li>
+<li>
+<p><strong>K-Means</strong> is an iterative algorithm: <strong>Assign $\rightarrow$ Update</strong>.</p>
+</li>
+<li>
+<p><strong>Elbow Method</strong> helps us choose the right number of clusters ($K$).</p>
+</li>
+</ul>
+<p><strong>Next Week</strong>: We leave classical ML and enter <strong>Neural Networks</strong> (Deep Learning).</p>
+</div>
+
+</body>
+</html>

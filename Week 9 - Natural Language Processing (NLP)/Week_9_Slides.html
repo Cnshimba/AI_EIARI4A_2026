@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 9: Natural Language Processing (NLP)</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this session, you will be able to:</p>
+<ol>
+<li><strong>Explain</strong> the Language Gap (Numbers vs. Meaning).</li>
+<li><strong>Perform</strong> Tokenization and Preprocessing.</li>
+<li><strong>Contrast</strong> One-Hot Encoding and Embeddings.</li>
+<li><strong>Build</strong> a Sentiment Classifier in PyTorch.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Week 9 Goal</h2>
+<h3>Teaching Machines to Read</h3>
+<p>Until now, we've done math on numbers and images. Text is different—it's messy and discrete. This week, we introduce <strong>Natural Language Processing (NLP)</strong>. We'll learn how to turn words into vectors (Embeddings) so our neural networks can understand human language.</p>
+</div>
+<div class="slide">
+<h2>3. The Language Gap</h2>
+<p>Computers don't speak English. They speak Matrix Multiplication.</p>
+<ul>
+<li>
+<p><strong>The Problem</strong>: How do we feed "Hello" into a Neural Network?</p>
+</li>
+<li>
+<p><strong>The Old Way</strong>: ASCI/Unicode? (Too fragile).</p>
+</li>
+<li>
+<p><strong>The ML Way</strong>: Convert words to meaningful vector representations.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. The NLP Pipeline</h2>
+<p><img alt="NLP Pipeline" src="images/nlp_pipeline.png" /></p>
+<ol>
+<li><strong>Corpus</strong>: Your raw text (dataset).</li>
+<li><strong>Tokenization</strong>: Splitting text into chunks (words/sub-words).</li>
+<li><strong>Indexing</strong>: Assigning a unique ID to each token.</li>
+<li><strong>Embedding</strong>: Converting IDs to dense vectors.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>5. Tokenization</h2>
+<p>Splitting the string.</p>
+<ul>
+<li>
+<p><strong>Word-Level</strong>: "I love AI" -&gt; ["I", "love", "AI"]</p>
+</li>
+<li>
+<p><strong>Char-Level</strong>: "AI" -&gt; ["A", "I"]</p>
+</li>
+<li>
+<p><strong>Sub-word (BPE)</strong>: "Unbeatable" -&gt; ["Un", "beat", "able"] (Modern Standard)</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>6. Embeddings vs One-Hot</h2>
+<h3>One-Hot Encoding</h3>
+<ul>
+<li>
+<p>Sparse, high-dimensional.</p>
+</li>
+<li>
+<p>"Cat" = [0, 1, 0...], "Dog" = [0, 0, 1...]</p>
+</li>
+<li>
+<p><strong>Issue</strong>: No relationship between words. Dot product is 0.</p>
+</li>
+</ul>
+<h3>Word Embeddings</h3>
+<ul>
+<li>
+<p>Dense, lower-dimensional.</p>
+</li>
+<li>
+<p>Learned representations where similar words allow similar vectors.</p>
+</li>
+<li>
+<p><strong>King - Man + Woman = Queen</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. Checkpoint 1</h2>
+<h3>Embedding Logic</h3>
+<p>If "Happy" has a vector <code>[0.9, 0.1]</code> and "Sad" has <code>[-0.9, -0.1]</code>, what happens if we minimize the distance between "Good" and "Happy"?</p>
+<details>
+<summary>Click for Answer</summary>
+
+"Good" will move closer to `[0.9, 0.1]`. The model learns that "Good" and "Happy" mean similar things because they appear in similar contexts.
+</details>
+</div>
+<div class="slide">
+<h2>8. EmbeddingBag (PyTorch)</h2>
+<p>A fast, efficient way to handle variable-length text.</p>
+<pre><code class="language-python">self.embedding = nn.EmbeddingBag(
+    num_embeddings=vocab_size, 
+    embedding_dim=64, 
+    sparse=False
+)
+</code></pre>
+<ul>
+<li>
+<p><strong>What it does</strong>: Looks up vectors for all words in a sentence and <strong>Averages</strong> them into one single vector.</p>
+</li>
+<li>
+<p><strong>Why</strong>: Feeding variable length sentences into a Linear layer is hard. Averaging makes them fixed size!</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>9. Summary</h2>
+<ul>
+<li>
+<p><strong>NLP</strong>: Bridge between human text and machine math.</p>
+</li>
+<li>
+<p><strong>Tokenization</strong>: Chopping text into math-able pieces.</p>
+</li>
+<li>
+<p><strong>Embeddings</strong>: The secret sauce that gives words meaning (geometry).</p>
+</li>
+<li>
+<p><strong>EmbeddingBag</strong>: A simple, fast way to classify text by averaging word vectors.</p>
+</li>
+</ul>
+</div>
+
+</body>
+</html>

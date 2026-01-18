@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 1 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 1: Introduction to Artificial Intelligence</h1>
+<p><strong>Course</strong>: Artificial Intelligence Module 2026</p>
+</div>
+<div class="slide">
+<h2>Welcome to the AI EIARI4A Module!</h2>
+<p>Welcome to the beginning of your journey into Artificial Intelligence! This week, we strip away the hype and mystique surrounding AI to reveal what it truly is: a diverse field of computer science with a rich history and tangible applications. You'll explore the fundamental question "What is AI?", trace its evolution from the Dartmouth Conference to today's Deep Learning revolution, and understand the three competing philosophies that have shaped the field. By the end of this week, you'll have a solid foundation to understand how modern AI works and where it's heading.</p>
+</div>
+<div class="slide">
+<h2>What You'll Learn This Week</h2>
+<h3>Learning Goals</h3>
+<p>By the end of this week, you will be able to:<br />
+1. <strong>Define</strong> what Artificial Intelligence is and understand the "AI Effect"<br />
+2. <strong>Differentiate</strong> between ANI, AGI, and ASI capability levels<br />
+3. <strong>Trace</strong> the history of AI from Dartmouth (1956) to the Deep Learning era<br />
+4. <strong>Compare</strong> the three schools of thought: Symbolism, Connectionism, and Behaviorism<br />
+5. <strong>Identify</strong> the four key AI domains: ML, DL, NLP, and Robotics<br />
+6. <strong>Understand</strong> the AI ecosystem (Data, Algorithms, Computing Power, Scenarios)</p>
+<h3>Week Goal</h3>
+<p>We strip away the hype and define what "Artificial Intelligence" actually is. We explore its history, the three major "Schools of Thought," and the key domains that make up the modern AI landscape.</p>
+</div>
+<div class="slide">
+<h2>1. What is AI?</h2>
+<h3>The Definition</h3>
+<p><strong>Artificial Intelligence (AI)</strong> is the branch of computer science dedicated to creating systems capable of performing tasks that typically require human intelligence.</p>
+<p><strong>Key Insight</strong>: "AI is whatever has not been done yet" — The AI Effect</p>
+<h3>The Hierarchy of Intelligence</h3>
+<p><strong>Artificial Narrow Intelligence (ANI)</strong>:</p>
+<ul>
+<li>
+<p>Specialized systems excelling at single tasks</p>
+</li>
+<li>
+<p>Examples: DeepBlue (chess), Google Maps, ChatGPT</p>
+</li>
+<li>
+<p><strong>Current State</strong>: This is where we are today</p>
+</li>
+</ul>
+<p><strong>Artificial General Intelligence (AGI)</strong>:</p>
+<ul>
+<li>
+<p>Human-level reasoning across diverse domains</p>
+</li>
+<li>
+<p>Can learn any intellectual task</p>
+</li>
+<li>
+<p><strong>Status</strong>: Theoretical/hypothetical</p>
+</li>
+</ul>
+<p><strong>Artificial Super Intelligence (ASI)</strong>:</p>
+<ul>
+<li>
+<p>Surpasses human intellect in every field</p>
+</li>
+<li>
+<p>Including creativity and social skills</p>
+</li>
+<li>
+<p><strong>Status</strong>: Speculative future</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>2. A Brief History of AI</h2>
+<h3>Key Milestones</h3>
+<p><strong>1956 - The Birth</strong>:</p>
+<ul>
+<li>
+<p>Dartmouth Conference</p>
+</li>
+<li>
+<p>John McCarthy coins "Artificial Intelligence"</p>
+</li>
+<li>
+<p>Logic Theorist proves mathematical theorems</p>
+</li>
+</ul>
+<p><strong>1974-1980 - First AI Winter</strong>:</p>
+<ul>
+<li>
+<p>Logic-based systems fail on real-world complexity</p>
+</li>
+<li>
+<p>Funding dries up, skepticism grows</p>
+</li>
+<li>
+<p>"Gloomy Period"</p>
+</li>
+</ul>
+<p><strong>1980s - Expert Systems Era</strong>:</p>
+<ul>
+<li>
+<p>Corporate "if-then" rule engines</p>
+</li>
+<li>
+<p>Knowledge Period returns</p>
+</li>
+<li>
+<p>Brittle and expensive to maintain</p>
+</li>
+</ul>
+<p><strong>2010s-Present - Deep Learning Revolution</strong>:</p>
+<ul>
+<li>
+<p>Big Data + Cloud Computing + GPUs</p>
+</li>
+<li>
+<p>Systems learn from data, not rules</p>
+</li>
+<li>
+<p>Vision, language, creativity breakthroughs</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Section 1 Checkpoint</h2>
+<h3>Summary</h3>
+<ul>
+<li>
+<p><strong>AI</strong> is creating systems that perform tasks requiring human intelligence</p>
+</li>
+<li>
+<p>We are currently in the <strong>ANI (Weak AI)</strong> era</p>
+</li>
+<li>
+<p>AI history is cyclical: hype → winter → rebirth</p>
+</li>
+<li>
+<p>Current era powered by <strong>Deep Learning</strong> (learning from data)</p>
+</li>
+</ul>
+<h3>Key Insight</h3>
+<p>The "AI Effect" constantly moves goalposts—yesterday's AI becomes today's standard software</p>
+</div>
+<div class="slide">
+<h2>3. The Three Schools of Thought</h2>
+<h3>Symbolism (Logic)</h3>
+<p><strong>"Thinking is Computing"</strong></p>
+<p><strong>Concept</strong>: Intelligence = symbol manipulation via logical rules</p>
+<p><strong>Mechanism</strong>: </p>
+<ul>
+<li>
+<p>Explicit programming: <code>If Bird(x) then Fly(x)</code></p>
+</li>
+<li>
+<p>Physical symbol systems</p>
+</li>
+</ul>
+<p><strong>Strengths</strong>: Chess, theorem proving, planning</p>
+<p><strong>Weaknesses</strong>: Perception, learning from raw data (can't write rules for "cat")</p>
+<p><strong>Example</strong>: Deep Blue, Expert Systems</p>
+</div>
+<div class="slide">
+<h3>Connectionism (Neural Networks)</h3>
+<p><strong>"Thinking is Biological"</strong></p>
+<p><strong>Concept</strong>: Intelligence emerges from networks of simple processing units</p>
+<p><strong>Mechanism</strong>:</p>
+<ul>
+<li>
+<p>Mimics brain's neural structure</p>
+</li>
+<li>
+<p>Learn patterns by adjusting connection weights</p>
+</li>
+<li>
+<p>Foundation of modern Deep Learning</p>
+</li>
+</ul>
+<p><strong>Strengths</strong>: Messy tasks—vision, speech, language</p>
+<p><strong>Status</strong>: <strong>Dominant school today</strong> (ChatGPT, Computer Vision)</p>
+<p><strong>Example</strong>: All modern Deep Learning systems</p>
+</div>
+<div class="slide">
+<h3>Behaviorism (Evolution)</h3>
+<p><strong>"Intelligence is Action"</strong></p>
+<p><strong>Concept</strong>: Adapt behavior through environment interaction</p>
+<p><strong>Mechanism</strong>:</p>
+<ul>
+<li>
+<p>Perception → Action loops</p>
+</li>
+<li>
+<p>No complete internal world model needed</p>
+</li>
+<li>
+<p>React correctly to stimuli</p>
+</li>
+</ul>
+<p><strong>Strengths</strong>: Robotics, physical world interaction</p>
+<p><strong>Example</strong>: Boston Dynamics robots, Reinforcement Learning</p>
+</div>
+<div class="slide">
+<h2>Section 2 Checkpoint</h2>
+<h3>The Three Philosophies</h3>
+<ul>
+<li>
+<p><strong>Symbolism</strong>: Explicit logic rules (GOFAI—Good Old-Fashioned AI)</p>
+</li>
+<li>
+<p><strong>Connectionism</strong>: Neural networks learning from data (<strong>Current dominant</strong>)</p>
+</li>
+<li>
+<p><strong>Behaviorism</strong>: Evolution through action (Robotics, RL)</p>
+</li>
+</ul>
+<h3>Reflection</h3>
+<p>Why did Connectionism become dominant in the 2010s?<br />
+<strong>Answer</strong>: Convergence of Big Data, GPUs, and scalable algorithms</p>
+</div>
+<div class="slide">
+<h2>4. The AI Triad: Key Elements</h2>
+<p>Modern AI requires three pillars to succeed:</p>
+<h3>1. Data (The Fuel)</h3>
+<ul>
+<li>
+<p>Big Data provides training examples</p>
+</li>
+<li>
+<p>Without data, models cannot learn</p>
+</li>
+</ul>
+<h3>2. Algorithms (The Engine)</h3>
+<ul>
+<li>
+<p>Mathematical techniques: CNNs, Transformers, Regression</p>
+</li>
+<li>
+<p>Process data to extract patterns</p>
+</li>
+</ul>
+<h3>3. Computing Power (The Chassis)</h3>
+<ul>
+<li>
+<p>GPUs, TPUs, NPUs, Ascend Chips</p>
+</li>
+<li>
+<p>Execute billions of matrix operations</p>
+</li>
+</ul>
+<p><strong>Together</strong>: These create the modern AI revolution</p>
+</div>
+<div class="slide">
+<h2>5. Key AI Domains</h2>
+<h3>Machine Learning (ML)</h3>
+<p><strong>Learning from data without explicit programming</strong></p>
+<p>Traditional: You write rules<br />
+ML: Machine discovers rules from data + answers</p>
+<h3>Deep Learning (DL)</h3>
+<p><strong>Neural networks with multiple layers</strong></p>
+<p>Learns hierarchical representations<br />
+Example: Lines → curves → shapes → car</p>
+<h3>Natural Language Processing (NLP)</h3>
+<p><strong>Computers understanding human language</strong></p>
+<p>Translation, sentiment analysis, text generation<br />
+Powers: ChatGPT, Google Translate</p>
+<h3>Robotics</h3>
+<p><strong>Physical manifestation of AI</strong></p>
+<p>Perception (sensors) → Planning → Action (motors)<br />
+Example: Boston Dynamics, autonomous vehicles</p>
+</div>
+<div class="slide">
+<h2>6. The AI Ecosystem</h2>
+<h3>The Four Pillars</h3>
+<ol>
+<li><strong>Data</strong>: Training examples and memory</li>
+<li><strong>Algorithms</strong>: Mathematical engines (CNNs, Transformers)</li>
+<li><strong>Computing Power</strong>: Specialized hardware (GPUs, TPUs)</li>
+<li><strong>Scenarios</strong>: Real-world problems and use cases</li>
+</ol>
+<h3>The Relationship Triangle</h3>
+<ul>
+<li>
+<p><strong>Cloud Computing</strong>: The body (storage, compute)</p>
+</li>
+<li>
+<p><strong>Big Data</strong>: The memory (training material)</p>
+</li>
+<li>
+<p><strong>IoT</strong>: The nervous system (sensors, edge execution)</p>
+</li>
+<li>
+<p><strong>AI</strong>: The brain (processes and decides)</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. AI Hardware: The Compute Layer</h2>
+<h3>Why Not Just CPUs?</h3>
+<p>CPUs excel at sequential logic but are terrible at parallel matrix math required for Deep Learning.</p>
+<h3>The Specialists</h3>
+<p><strong>GPU (Graphics Processing Unit)</strong> - <em>The Labor Force</em>:</p>
+<ul>
+<li>
+<p>Thousands of simple cores</p>
+</li>
+<li>
+<p>Massive parallel processing</p>
+</li>
+<li>
+<p>Workhorse of AI revolution (NVIDIA A100)</p>
+</li>
+</ul>
+<p><strong>TPU (Tensor Processing Unit)</strong> - <em>Google's ASIC</em>:</p>
+<ul>
+<li>
+<p>Hardwired for TensorFlow</p>
+</li>
+<li>
+<p>Faster and more efficient than GPUs</p>
+</li>
+<li>
+<p>Application-specific, cannot be reprogrammed</p>
+</li>
+</ul>
+<p><strong>FPGA</strong> - <em>The Shape Shifter</em>:</p>
+<ul>
+<li>
+<p>Rewirable via software</p>
+</li>
+<li>
+<p>Updated hardware without replacing silicon</p>
+</li>
+<li>
+<p>Microsoft Azure uses extensively</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Final Checkpoint</h2>
+<h3>Week 1 Summary</h3>
+<ul>
+<li>
+<p><strong>AI</strong> creates systems performing tasks requiring human intelligence</p>
+</li>
+<li>
+<p>We are in the <strong>ANI era</strong>, powered by <strong>Connectionism (Deep Learning)</strong></p>
+</li>
+<li>
+<p><strong>History</strong>: Dartmouth (1956) → AI Winters → Expert Systems → Deep Learning (2010s)</p>
+</li>
+<li>
+<p><strong>Three Schools</strong>: Symbolism (logic), Connectionism (neural nets), Behaviorism (action)</p>
+</li>
+<li>
+<p><strong>Four Domains</strong>: ML, DL, NLP, Robotics</p>
+</li>
+<li>
+<p><strong>AI Triad</strong>: Data + Algorithms + Computing Power</p>
+</li>
+</ul>
+<h3>Real-World Impact</h3>
+<p>Healthcare (AlphaFold), Finance (fraud detection), Autonomous Vehicles (Tesla FSD), Creative AI (Midjourney, Sora)</p>
+</div>
+<div class="slide">
+<h2>Week 1 Lab</h2>
+<p>This week includes <strong>1 practical lab</strong> to get hands-on experience:</p>
+<p><strong>Lab 1: AI Tools &amp; Setup</strong></p>
+<ul>
+<li>
+<p><strong>Anaconda</strong>: Environment Management (<code>ai_env</code>)</p>
+</li>
+<li>
+<p><strong>IDEs</strong>: Jupyter Lab (Beginner) vs VS Code (Pro)</p>
+</li>
+<li>
+<p><strong>Cloud</strong>: Using Google Colab for free GPUs</p>
+</li>
+<li>
+<p><strong>GitHub</strong>: Storing your code safely</p>
+</li>
+</ul>
+<p><strong>Key Skills</strong>: You'll gain fundamental Python data manipulation skills essential for all AI work</p>
+</div>
+<div class="slide">
+<h2>Preparing for Week 2</h2>
+<p><strong>Next Week</strong>: Mathematics for AI</p>
+<p>We open the hood and explore the mathematics that powers modern AI:</p>
+<ul>
+<li>
+<p><strong>Linear Algebra</strong>: Vectors, matrices, transformations</p>
+</li>
+<li>
+<p><strong>Probability</strong>: Distributions, Bayes' theorem</p>
+</li>
+<li>
+<p><strong>Calculus</strong>: Derivatives and gradients (foundation of learning)</p>
+</li>
+</ul>
+<p><strong>Ready to dive into the math?</strong></p>
+</div>
+
+</body>
+</html>

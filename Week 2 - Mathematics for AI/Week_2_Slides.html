@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 2 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 2: Mathematics for AI</h1>
+<p><strong>Course</strong>: Artificial Intelligence Module 2026</p>
+</div>
+<div class="slide">
+<h2>Welcome to Week 2: Mathematics for AI!</h2>
+<p>Mathematics is not a barrier—it's the <em>engine</em> under the hood. This week, we demystify the equations you see in AI papers.<br />
+We adopt a <strong>"Math as Code"</strong> approach:<br />
+1. <strong>Concept</strong>: Understand the intuition (Geometric).<br />
+2. <strong>Formula</strong>: See the math equations.<br />
+3. <strong>Code</strong>: Implement it in Python.<br />
+4. <strong>Application</strong>: See exactly where it is used in modern AI (transformers, backprop, etc.).</p>
+</div>
+<div class="slide">
+<h2>1. Linear Algebra: The Structure of Data</h2>
+<h3>1. Vectors (The Building Block)</h3>
+<p><strong>1. The Concept (Intuition)</strong><br />
+A vector is just an <strong>Arrow</strong> in space.</p>
+<ul>
+<li>
+<p><strong>Direction</strong>: Where it points.</p>
+</li>
+<li>
+<p><strong>Magnitude</strong>: How long it is.</p>
+</li>
+</ul>
+<p><strong>2. The Formula &amp; Code</strong><br />
+$$ \mathbf{x} = [x_1, x_2, \dots, x_n] $$</p>
+<pre><code class="language-python">x = np.array([3, 2]) # Move 3 Right, 2 Up
+</code></pre>
+<p><strong>3. AI Application</strong><br />
+In AI, <strong>Everything is a Vector</strong>.</p>
+<ul>
+<li>
+<p><strong>NLP</strong>: "King" = <code>[0.91, 0.42, ...]</code>.</p>
+</li>
+<li>
+<p><strong>Recommender Systems</strong>: You = <code>[LikesAction, LikesRomance]</code>.<br />
+Finding similar movies is just finding vectors pointing in the same direction.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>2. Matrices (The Transformation Machine)</h2>
+<p><strong>1. The Concept (Intuition)</strong><br />
+A Matrix is NOT just a spreadsheet.<br />
+It is a <strong>Function that warps space</strong>.<br />
+It can Rotate, Scale, or Shear the entire grid.</p>
+<p><strong>2. The Formula &amp; Code</strong><br />
+$$ \mathbf{Ax} = \mathbf{b} $$</p>
+<pre><code class="language-python">A = np.array([[1, 1], [0, 1]]) # Shear Matrix
+new_vec = A @ vec
+</code></pre>
+<p><strong>3. AI Application</strong><br />
+<strong>Neural Networks</strong> are chains of matrix transformations.<br />
+100 layers = 100 consecutive warps of the input image until the answer becomes clear.</p>
+</div>
+<div class="slide">
+<h2>3. The Dot Product</h2>
+<p><strong>1. The Concept (Intuition)</strong><br />
+Measuring <strong>Alignment</strong>.</p>
+<ul>
+<li>
+<p>Parallel arrows? <strong>High Score</strong>.</p>
+</li>
+<li>
+<p>Perpendicular? <strong>Zero</strong>.</p>
+</li>
+<li>
+<p>Opposite? <strong>Negative</strong>.</p>
+</li>
+</ul>
+<p><strong>2. The Formula &amp; Code</strong><br />
+$$ \mathbf{a} \cdot \mathbf{b} = \sum a_i b_i $$</p>
+<pre><code class="language-python">score = np.dot(inputs, weights)
+</code></pre>
+<p><strong>3. AI Application</strong><br />
+This is the <strong>Attention Mechanism</strong> in Transformers (GPT).<br />
+It calculates similarity scores between your query ("Capital?") and the database ("Paris").</p>
+</div>
+<div class="slide">
+<h2>4. Eigenvectors (The Principal Axes)</h2>
+<p><strong>1. The Concept (Intuition)</strong><br />
+When a matrix spins the world, <strong>Eigenvectors</strong> are the axes that <em>stay still</em>. They define the shape of the data cloud.</p>
+<p><strong>2. The Formula</strong><br />
+$$ \mathbf{A}\mathbf{v} = \lambda \mathbf{v} $$</p>
+<p><strong>3. AI Application</strong><br />
+<strong>PCA (Principal Component Analysis)</strong>.<br />
+We find these axes to compress data (dimensionality reduction). Keeping the top 2 eigenvectors captures 90% of the information with 10% of the size.</p>
+</div>
+<div class="slide">
+<h2>Section 1 Checkpoint</h2>
+<h3>Summary</h3>
+<ul>
+<li>
+<p><strong>Vectors</strong>: Data points (Arrows).</p>
+</li>
+<li>
+<p><strong>Matrices</strong>: Functions that warp space.</p>
+</li>
+<li>
+<p><strong>Dot Product</strong>: Similarity score (Attention).</p>
+</li>
+<li>
+<p><strong>Eigenvectors</strong>: Principal axes (Compression).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>2. Calculus: The Engine of Learning</h2>
+<h3>1. The Gradient (The Compass)</h3>
+<p><strong>1. The Concept (Intuition)</strong><br />
+You are on a foggy mountain (Loss Function) at night.<br />
+You want to reach the valley (Minimum Error).<br />
+The <strong>Gradient</strong> tells you which way is Uphill. You walk Downhill.</p>
+<p><strong>2. The Formula &amp; Code</strong><br />
+$$ \theta_{new} = \theta_{old} - \alpha \nabla f $$</p>
+<pre><code class="language-python">grad = calculate_slope(x)
+x = x - learning_rate * grad
+</code></pre>
+<p><strong>3. AI Application</strong><br />
+<strong>Gradient Descent</strong>.<br />
+This is how <strong>ALL</strong> neural networks learn. They nudge weights downhill millions of times until they reach the bottom (Optimized Model).</p>
+</div>
+<div class="slide">
+<h2>2. The Chain Rule (The Ripple Effect)</h2>
+<p><strong>1. The Concept (Intuition)</strong><br />
+Networks are deep layers of functions: $f(g(h(x)))$.<br />
+If the output is wrong, who is to blame?<br />
+The Chain Rule ripples the blame backwards.</p>
+<p><strong>2. The Formula</strong><br />
+$$ \frac{dz}{dx} = \frac{dz}{dy} \times \frac{dy}{dx} $$</p>
+<p><strong>3. AI Application</strong><br />
+<strong>Backpropagation</strong>.<br />
+It allows us to train <em>Deep</em> networks. Without it, we couldn't assign error to the early layers of a deep, complex model.</p>
+</div>
+<div class="slide">
+<h2>3. Probability: The Logic of Uncertainty</h2>
+<h3>Bayes' Theorem</h3>
+<p><strong>1. The Concept (Intuition)</strong><br />
+Updating your beliefs based on new evidence.<br />
+Prior Belief + New Evidence = <strong>Posterior Belief</strong>.</p>
+<p><strong>2. The Formula</strong><br />
+$$ P(A|B) = \frac{P(B|A) P(A)}{P(B)} $$</p>
+<p><strong>3. AI Application</strong><br />
+<strong>Robotics &amp; Self-Driving Cars</strong>.<br />
+"I thought the road was clear (Prior), Lidar saw a blob (Evidence), now I believe it's a car (Posterior)."</p>
+</div>
+<div class="slide">
+<h2>Final Summary</h2>
+<p>We have rebuilt the foundation.</p>
+<ol>
+<li><strong>Linear Algebra</strong>: Structure (Transformations, Embeddings).</li>
+<li><strong>Calculus</strong>: Optimization (Learning, Backprop).</li>
+<li><strong>Probability</strong>: Uncertainty (Reasoning, Logic).</li>
+</ol>
+<p><strong>Next Week</strong>: We stop doing math by hand. We use <strong>NumPy</strong> to do it at scale.</p>
+</div>
+
+</body>
+</html>

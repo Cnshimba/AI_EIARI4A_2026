@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 3 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 3: Python for AI &amp; Data Handling</h1>
+<p><strong>Course</strong>: Artificial Intelligence Module 2026</p>
+</div>
+<div class="slide">
+<h2>Welcome to Week 3!</h2>
+<p>We are moving from <strong>Theory</strong> (Math) to <strong>Practice</strong> (Code).<br />
+This week, we master the <strong>Data Science Stack</strong>.<br />
+If you want to build AI, you must first learn to handle Data.</p>
+</div>
+<div class="slide">
+<h2>What You'll Learn This Week</h2>
+<h3>Learning Goals</h3>
+<p>By the end of this week, you will be able to:<br />
+1.  <strong>Explain</strong> why NumPy outperforms native Python (Vectorization)<br />
+2.  <strong>Use</strong> Pandas to load, clean, and filter massive datasets<br />
+3.  <strong>Visualize</strong> data patterns using Matplotlib and Seaborn<br />
+4.  <strong>Identify</strong> and fix common data quality issues (NaNs, outliers)</p>
+<h3>Week Goal</h3>
+<p>We move from theory to practice. We master the <strong>Data Science Stack</strong> (NumPy, Pandas, Matplotlib), giving you the practical engineering skills required to build real AI models in the upcoming weeks.</p>
+</div>
+<div class="slide">
+<h2>1. The Fuel of AI</h2>
+<ul>
+<li>
+<p><strong>AI = Data + Algorithms + Compute</strong></p>
+</li>
+<li>
+<p>Before we can build models, we must engineer the <strong>Data</strong>.</p>
+</li>
+<li>
+<p><strong>The Stack</strong>:</p>
+</li>
+<li>
+<p><strong>NumPy</strong>: Math &amp; Vectors (The Engine).</p>
+</li>
+<li>
+<p><strong>Pandas</strong>: Tables &amp; Cleaning (The Dashboard).</p>
+</li>
+<li>
+<p><strong>Matplotlib</strong>: Visualization (The Window).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>2. NumPy (Numerical Python)</h2>
+<ul>
+<li>
+<p><strong>The Array</strong>: A high-performance list (C-Contiguous).</p>
+</li>
+<li>
+<p><strong>Vectorization</strong>: Doing math on entire lists at once.</p>
+</li>
+<li>
+<p><code>[1, 2, 3] * 2</code> $\rightarrow$ <code>[2, 4, 6]</code> (No Loops!)</p>
+</li>
+<li>
+<p><strong>Speed</strong>: 50x-100x faster than standard Python loops.</p>
+</li>
+<li>
+<p><strong>Crucial for</strong>: Deep Learning matrix multiplications ($Wx + b$).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Section 1 Checkpoint</h2>
+<h3>Summary</h3>
+<ul>
+<li>
+<p><strong>NumPy</strong> replaces slow Python lists with fast C-contiguous arrays</p>
+</li>
+<li>
+<p><strong>Vectorization</strong> eliminates loops, speeding up math by 100x</p>
+</li>
+<li>
+<p><strong>Broadcasting</strong> allows math between different-shaped arrays</p>
+</li>
+</ul>
+<h3>Reflection</h3>
+<p>Why do we use <code>np.array</code> instead of lists?<br />
+<strong>Answer</strong>: Speed (SIMD) and Memory Efficiency.</p>
+</div>
+<div class="slide">
+<h2>3. Pandas (Dataframes)</h2>
+<ul>
+<li>
+<p><strong>The DataFrame</strong>: "Excel inside Python".</p>
+</li>
+<li>
+<p><strong>Loading</strong>: <code>df = pd.read_csv("file.csv")</code></p>
+</li>
+<li>
+<p><strong>Inspecting</strong>: <code>.head()</code>, <code>.info()</code>, <code>.describe()</code></p>
+</li>
+<li>
+<p><strong>Querying</strong>: <code>df[df["Age"] &gt; 25]</code> (Boolean Masking).</p>
+</li>
+<li>
+<p><strong>Grouping</strong>: <code>df.groupby('City')['Sales'].mean()</code> (Split-Apply-Combine).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. The 3 Deadly Sins of Data</h2>
+<ol>
+<li><strong>Missing Values</strong> (<code>NaN</code>):</li>
+</ol>
+<ul>
+<li>
+<p><strong>Fix</strong>: Drop rows OR Impute (fill with Average).<br />
+2.  <strong>Outliers</strong> (Anomalies):</p>
+</li>
+<li>
+<p><strong>Fix</strong>: Detect with Histograms/Boxplots and Remove/Clip.<br />
+3.  <strong>Bad Scaling</strong> (0-1 vs 0-1,000,000):</p>
+</li>
+<li>
+<p><strong>Fix</strong>: <strong>Normalization</strong> (Min-Max Scaling).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Final Checkpoint</h2>
+<h3>Week 3 Summary</h3>
+<ul>
+<li>
+<p><strong>AI = Data + Algorithms + Compute</strong></p>
+</li>
+<li>
+<p><strong>Pandas</strong> is our Dashboard for cleaning and querying data</p>
+</li>
+<li>
+<p><strong>NumPy</strong> is our Engine for high-performance math</p>
+</li>
+<li>
+<p><strong>Matplotlib</strong> is our Window into the data's soul</p>
+</li>
+</ul>
+<h3>Key Insight</h3>
+<p>Garbage In, <strong>Garbage Out</strong>. The quality of your AI model is capped by the quality of your data cleaning.</p>
+</div>
+<div class="slide">
+<h2>Week 3 Lab</h2>
+<p>This week includes <strong>1 practical lab</strong>:</p>
+<p><strong>Lab: Python Data Science</strong></p>
+<ul>
+<li>
+<p>Introduction to Jupyter Notebooks</p>
+</li>
+<li>
+<p>Mastering NumPy arrays and broadcasting</p>
+</li>
+<li>
+<p>Cleaning a "Dirty" Network Traffic dataset with Pandas</p>
+</li>
+<li>
+<p>Visualizing attack patterns with Matplotlib</p>
+</li>
+</ul>
+<p><strong>Key Skills</strong>: You will build the exact data pipeline used for the Midterm Project.</p>
+</div>
+<div class="slide">
+<h2>Preparing for Week 4</h2>
+<p><strong>Next Week</strong>: Machine Learning Foundations</p>
+<p>We finally ignite the engine. We will explore:</p>
+<ul>
+<li>
+<p><strong>Supervised vs Unsupervised Learning</strong></p>
+</li>
+<li>
+<p><strong>The 7-Step Machine Learning Workflow</strong></p>
+</li>
+<li>
+<p><strong>Linear Regression</strong>: The "Hello World" of AI</p>
+</li>
+<li>
+<p><strong>Overfitting</strong>: The arch-nemesis of a Data Scientist</p>
+</li>
+</ul>
+<p><strong>Ready to train your first model?</strong></p>
+</div>
+
+</body>
+</html>

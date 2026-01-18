@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 6 Midterm Project - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_6_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 6</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Unsupervised Learning</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Week 6 Midterm Project</span>
+    </div>
+</div>
+
+            
+            
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Project Goal</strong>: To build a complete <strong>Machine Learning Pipeline</strong> that detects malicious network traffic.<br />
+This project assesses your mastery of <strong>Weeks 1-5</strong> (Python, Data Analysis, Visualization, and Supervised Learning).</p></div></div>
+<!-- break -->
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Scenario</strong><br />
+You are a <strong>Junior AI Engineer</strong> at a Cybersecurity Firm.<br />
+Your Security Operations Center (SOC) has provided you with the same raw network logs you explored in Week 3 (<code>Week_3_Lab_Data.csv</code>).<br />
+Your Manager has tasked you with building a model to automatically flag <strong>Suspicious</strong> activity so analysts can focus on real threats.</p></div></div>
+<hr />
+<h2>1. Project Overview</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Topic</strong></th>
+<th style="text-align: left;"><strong>Description</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Data Source</strong></td>
+<td style="text-align: left;"><code>Week_3_Lab_Data.csv</code> (From Week 3 Lab)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Task</strong></td>
+<td style="text-align: left;">Binary Classification (Benign vs. Suspicious)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Deliverables</strong></td>
+<td style="text-align: left;">1. Jupyter Notebook (<code>.ipynb</code>)<br>2. Short PDF Report (2-3 Pages)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Weight</strong></td>
+<td style="text-align: left;"><strong>30%</strong> of Course Mark</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. The Dataset</h2>
+<p>The dataset represents <strong>extracted features</strong> from network packet captures (PCAPs).<br />
+Each row is a single "flow" (a communication between two computers).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>flow_duration</code></td>
+<td style="text-align: left;">How long the connection lasted (seconds).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>packet_count</code></td>
+<td style="text-align: left;">Total number of packets sent.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>byte_count</code></td>
+<td style="text-align: left;">Total amount of data transferred (bytes).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>protocol</code></td>
+<td style="text-align: left;">The protocol used (TCP, UDP, etc.).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>label</code></td>
+<td style="text-align: left;"><strong>Target</strong>: <code>benign</code> (Normal) or <code>suspicious</code> (Attack).</td>
+</tr>
+</tbody>
+</table>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Data is Dirty</strong>: Use the skills you learned in <strong>Week 3 Lab</strong> to clean this dataset. You will need to handle the same missing values, duplicates, and inconsistencies again to prepare it for Machine Learning.</p></div></div>
+<hr />
+<h2>3. Project Requirements (The Pipeline)</h2>
+<p>You must follow this exact engineering pipeline. Marks are awarded for each stage.</p>
+<h3>Part A: Data Loading &amp; Inspection (10%)</h3>
+<ol>
+<li><strong>Import Libraries</strong>: Pandas, NumPy, Matplotlib/Seaborn.</li>
+<li><strong>Load Data</strong>: Read the CSV file.</li>
+<li><strong>Inspect</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Show the first 5 rows (<code>head</code>).</p>
+</li>
+<li>
+<p>Show data types and missing values (<code>info</code>).</p>
+</li>
+<li>
+<p>Show statistical summary (<code>describe</code>).</p>
+</li>
+</ul>
+<h3>Part B: Data Cleaning (20%)</h3>
+<ol>
+<li><strong>Missing Values</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Impute missing numeric values (Mean/Median).</p>
+</li>
+<li>
+<p>drop or impute missing categorical values.<br />
+2.  <strong>Duplicates</strong>: Identify and remove duplicate rows.<br />
+3.  <strong>Standardization</strong>: Fix inconsistent naming (e.g., <code>tcp</code> vs <code>TCP</code>).<br />
+4.  <strong>Outliers</strong>:</p>
+</li>
+<li>
+<p>Identify physically impossible values (e.g., negative duration).</p>
+</li>
+<li>
+<p>Filter out extreme anomalies if justified.</p>
+</li>
+</ul>
+<h3>Part C: Exploratory Data Analysis (EDA) (15%)</h3>
+<p>Visualize the data to understand attack patterns.<br />
+1.  <strong>Class Balance</strong>: Bar chart of <code>label</code> (How many Benign vs Suspicious?).<br />
+2.  <strong>Feature Relationships</strong>: Scatter plot of <code>flow_duration</code> vs <code>byte_count</code>.<br />
+3.  <strong>Distributions</strong>: Histogram of <code>packet_count</code>.<br />
+4.  <strong>Analysis</strong>: Write 1-2 sentences interpreting each plot (e.g., "Attacks tend to have short duration but high packet counts").</p>
+<h3>Part D: Feature Engineering &amp; Preprocessing (15%)</h3>
+<ol>
+<li><strong>New Feature</strong>: Create <code>bytes_per_packet</code> = <code>byte_count</code> / <code>packet_count</code>.</li>
+<li><strong>Encoding</strong>: Convert <code>protocol</code> (text) into numbers (One-Hot Encoding).</li>
+<li><strong>Label Encoding</strong>: Convert <code>label</code> (<code>benign</code>/<code>suspicious</code>) to <code>0</code>/<code>1</code>.</li>
+<li><strong>Scaling</strong>: Normalize numeric features (Scale 0-1) so large numbers don't dominate the model.</li>
+</ol>
+<h3>Part E: Model Training (20%)</h3>
+<ol>
+<li><strong>Split Data</strong>: Use <code>train_test_split</code> (80% Training, 20% Testing).</li>
+<li><strong>Train Model</strong>: Train a <strong>Logistic Regression</strong> OR <strong>Decision Tree</strong> model.</li>
+<li><strong>Evaluate</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Calculate <strong>Accuracy</strong>.</p>
+</li>
+<li>
+<p>Display the <strong>Confusion Matrix</strong>.</p>
+</li>
+<li>
+<p><strong>Question</strong>: Which is worse for a bank: A False Positive (Flagging normal user as hacker) or False Negative (Missed hacker)?</p>
+</li>
+</ul>
+<h3>Part F: Report (20%)</h3>
+<p>Submit a short PDF report summarizing your findings.</p>
+<ul>
+<li>
+<p><strong>Introduction</strong>: What is the problem?</p>
+</li>
+<li>
+<p><strong>Methodology</strong>: How did you clean the data?</p>
+</li>
+<li>
+<p><strong>Results</strong>: How accurate was your model?</p>
+</li>
+<li>
+<p><strong>Conclusion</strong>: Would you deploy this model? Why/Why not?</p>
+</li>
+</ul>
+<hr />
+<h2>4. Marking Rubric</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Criteria</th>
+<th style="text-align: left;">Good (80-100%)</th>
+<th style="text-align: left;">Satisfactory (50-79%)</th>
+<th style="text-align: left;">Poor (0-49%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Code Quality</strong></td>
+<td style="text-align: left;">Clean, commented, efficient code.</td>
+<td style="text-align: left;">Working but messy code.</td>
+<td style="text-align: left;">Broken or buggy code.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Analysis</strong></td>
+<td style="text-align: left;">Deep insights, clear graphs with titles/labels.</td>
+<td style="text-align: left;">Basic graphs, weak interpretation.</td>
+<td style="text-align: left;">Missing graphs or no interpretation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Pipeline</strong></td>
+<td style="text-align: left;">All steps followed correctly.</td>
+<td style="text-align: left;">Missed one major step (e.g., scaling).</td>
+<td style="text-align: left;">Missed multiple steps.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Evaluation</strong></td>
+<td style="text-align: left;">Correct metrics &amp; security context understanding.</td>
+<td style="text-align: left;">Just printed accuracy.</td>
+<td style="text-align: left;">No evaluation.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>5. Submission Instructions</h2>
+<ol>
+<li><strong>Rename</strong> your notebook: <code>StudentName_StudentNumber_Midterm.ipynb</code>.</li>
+<li><strong>Export</strong> your Report as PDF.</li>
+<li><strong>Upload</strong> both files to the Blackboard Submission Portal.</li>
+</ol>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Cheat Sheet</strong>: Refer to <strong>Week 3 Lab</strong> (Pandas/Cleaning) and <strong>Week 5 Lab</strong> (Classification) for code examples.</p></div></div>
+
+            
+            
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 5</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%207%20-%20Neural%20Networks%20&%20Deep%20Learning%20Basics/Week_7_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 7</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

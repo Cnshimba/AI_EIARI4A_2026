@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 4: Machine Learning Foundations</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p><strong>By the end of this session, you will be able to:</strong><br />
+1.  <strong>Differentiate</strong> between Traditional Programming and Machine Learning.<br />
+2.  <strong>Classify</strong> problems as Supervised (Regression/Classification) or Unsupervised (Clustering).<br />
+3.  <strong>Implement</strong> the 3-Step Scikit-Learn Pattern (<code>Instantiate</code>, <code>Fit</code>, <code>Predict</code>).<br />
+4.  <strong>Split</strong> data into Training and Testing sets significantly.<br />
+5.  <strong>Diagnose</strong> Overfitting vs Underfitting.</p>
+<p><strong>Week Goal</strong>: Transition from "Writing Rules" to "Teaching Machines."</p>
+</div>
+<div class="slide">
+<h2>2. The Paradigm Shift</h2>
+<h3>Programming vs Learning</h3>
+<ul>
+<li>
+<p><strong>Traditional Programming</strong>: You give the <strong>Rules</strong> and <strong>Data</strong> -&gt; Computer gives <strong>Answers</strong>.</p>
+</li>
+<li>
+<p><em>Example</em>: Calculate tax (we know the formula).</p>
+</li>
+<li>
+<p><strong>Machine Learning</strong>: You give the <strong>Data</strong> and <strong>Answers</strong> -&gt; Computer figures out the <strong>Rules</strong>.</p>
+</li>
+<li>
+<p><em>Example</em>: Recognize a face (we don't know the math formula for a "nose").</p>
+</li>
+</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Insight</strong>: We don't code the solution. We code the pipeline that finds the solution.</p></div></div>
+</div>
+<div class="slide">
+<h2>3. Taxonomy of Machine Learning</h2>
+<h3>3.1 Supervised Learning (The Teacher)</h3>
+<ul>
+<li>
+<p><strong>Definition</strong>: The model learns from "Labeled Data" (Input + Correct Answer).</p>
+</li>
+<li>
+<p><strong>Types</strong>:</p>
+</li>
+<li>
+<p><strong>Regression</strong>: Predict a number (e.g., House Price).</p>
+</li>
+<li>
+<p><strong>Classification</strong>: Predict a category (e.g., Spam vs Not Spam).</p>
+</li>
+</ul>
+<h3>3.2 Unsupervised Learning (The Explorer)</h3>
+<ul>
+<li>
+<p><strong>Definition</strong>: The model looks for patterns in "Unlabeled Data" (Input only).</p>
+</li>
+<li>
+<p><strong>Types</strong>:</p>
+</li>
+<li>
+<p><strong>Clustering</strong>: Grouping similar items (e.g., Customer Segmentation).</p>
+</li>
+<li>
+<p><strong>Dimensionality Reduction</strong>: Simplifying complex data.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. The Engineering Workflow</h2>
+<h3>4.1 The Golden Rule: Train/Test Split</h3>
+<ul>
+<li>
+<p><strong>Problem</strong>: Models love to "memorize" (cheat).</p>
+</li>
+<li>
+<p><strong>Solution</strong>: Hide data from the model.</p>
+</li>
+<li>
+<p><strong>Training Set (80%)</strong>: The Homework (Model learns from this).</p>
+</li>
+<li>
+<p><strong>Test Set (20%)</strong>: The Final Exam (Model is evaluated on this).</p>
+</li>
+</ul>
+<h3>4.2 Scikit-Learn Pattern</h3>
+<p>The industry standard library <code>sklearn</code> uses a consistent 3-step process:<br />
+1.  <strong>Instantiate</strong>: <code>model = LinearRegression()</code><br />
+2.  <strong>Fit</strong>: <code>model.fit(X_train, y_train)</code> (The Learning)<br />
+3.  <strong>Predict</strong>: <code>model.predict(X_test)</code> (The Application)</p>
+</div>
+<div class="slide">
+<h2>5. How Learning Happens (Internals)</h2>
+<h3>Components of a Model</h3>
+<ol>
+<li><strong>Weights</strong>: How important an input is (Multipliers).</li>
+<li><strong>Biases</strong>: Baseline adjustments (Addition).</li>
+<li><strong>Loss Function</strong>: The "Score" (Measure of error).</li>
+<li><strong>Gradient Descent</strong>: The "Hike" (Adjusting weights to lower the error).</li>
+</ol>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base">Learning is simply finding the specific Weights and Biases that minimize the Loss Function.</p></div></div>
+</div>
+<div class="slide">
+<h2>6. Generalization</h2>
+<h3>Overfitting vs Underfitting</h3>
+<ul>
+<li>
+<p><strong>Underfitting (High Bias)</strong>: Model is too stupid.</p>
+</li>
+<li>
+<p><em>Analogy</em>: Using a straight ruler on a race track.</p>
+</li>
+<li>
+<p><em>Fix</em>: Make model more complex.</p>
+</li>
+<li>
+<p><strong>Overfitting (High Variance)</strong>: Model is memorizing noise.</p>
+</li>
+<li>
+<p><em>Analogy</em>: Memorizing exact exam answers but failing similar questions.</p>
+</li>
+<li>
+<p><em>Fix</em>: More data, simpler model, or Regularization.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>7. Section Checkpoint</h2>
+<ol>
+<li><strong>Scenario</strong>: You want to predict if a credit card transaction is fraudulent. Is this Regression, Classification, or Clustering?</li>
+<li><strong>Scenario</strong>: You want to group customers by shopping habits. Is this Supervised or Unsupervised?</li>
+<li><strong>True/False</strong>: We train the model on the Test Set to ensure it is accurate.</li>
+</ol>
+<details>
+<summary><strong>Answers</strong></summary>
+
+1.  **Classification** (Supervised: Fraud/Not Fraud).
+2.  **Unsupervised** (Clustering: No "correct" answer given).
+3.  **FALSE**! Never train on the Test Set. That is cheating (Data Leakage).
+</details>
+</div>
+<div class="slide">
+<h2>8. Summary</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Concept</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Paradigm</strong></td>
+<td style="text-align: left;">Data + Answers = Rules (Inductive Learning).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Supervised</strong></td>
+<td style="text-align: left;">Learning with Labels (Regression/Classification).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Unsupervised</strong></td>
+<td style="text-align: left;">Learning without Labels (Clustering).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Workflow</strong></td>
+<td style="text-align: left;">Split Data -&gt; Instantiate -&gt; Fit -&gt; Predict.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Goal</strong></td>
+<td style="text-align: left;">Generalization (Performance on Unseen Data).</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</body>
+</html>

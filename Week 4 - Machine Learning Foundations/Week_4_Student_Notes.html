@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 4 Student Notes - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_4_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 4</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Machine Learning Foundations</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
+    </div>
+</div>
+
+            
+            
+<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
+<strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
+<strong>Topic</strong>: The Paradigm Shift: From Programming to Learning<br />
+<strong>Reading Time</strong>: ~90 Minutes</p></div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+By the end of this chapter, you will be able to:<br />
+1.  <strong>Differentiate</strong> between Traditional Programming and Machine Learning.<br />
+2.  <strong>Classify</strong> problems as Supervised (Regression/Classification) or Unsupervised (Clustering).<br />
+3.  <strong>Implement</strong> the 3-Step Scikit-Learn Pattern (<code>Instantiate</code>, <code>Fit</code>, <code>Predict</code>).<br />
+4.  <strong>Split</strong> data into Training and Testing sets to simulate real-world performance.<br />
+5.  <strong>Diagnose</strong> Overfitting (High Variance) and Underfitting (High Bias).</p></div></div>
+<!-- break -->
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
+Up until now, you have been a <strong>Programmer</strong>: you wrote explicit rules (<code>if x &gt; 5: do y</code>). Today, you become a <strong>Teacher</strong>. You will stop writing rules and start feeding data to algorithms so <em>they</em> can figure out the rules. This is <strong>Machine Learning</strong>.</p></div></div>
+<h2>1. The Paradigm Shift</h2>
+<p>Traditional programming works well for logic we understand (e.g., "Calculate payroll tax"). It fails for tasks where the rules are intuitive but hard to define (e.g., "Is this picture a cat?").</p>
+<h3>1.1 Rules vs. Data</h3>
+<p>In <strong>Traditional Programming</strong>, the workflow is deductive inputs. You provide the <strong>Data</strong> and the explicit <strong>Rules</strong> (the logic), and the machine computes the <strong>Answers</strong>. For example, if you were writing a physics engine, you would explicitly code the equations of gravity (<code>Rules</code>) and input the ball's position (<code>Data</code>) to calculate where it lands (<code>Answer</code>).</p>
+<p><strong>Machine Learning</strong> flips this paradigm. It is an inductive process. You provide the <strong>Data</strong> and the expected <strong>Answers</strong> (often called Labels), and the machine figures out the <strong>Rules</strong> (the Model). Instead of coding the physics equations, you would show the computer 1,000 examples of balls falling, and the algorithm would approximate the law of gravity on its own.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Insight</strong>: In ML, the code you write is not the solution. The code is the <em>pipeline</em> that <em>generates</em> the solution.</p></div></div>
+<hr />
+<h2>2. Taxonomy of Machine Learning</h2>
+<p>Not all learning is the same. The style of learning depends on the data you have.</p>
+<h3>2.1 Supervised Learning (The "Teacher" Approach)</h3>
+<p>In Supervised Learning, the training process is guided by a teacher—the dataset itself. We have a set of <strong>Features</strong> ($X$) and corresponding correct <strong>Labels</strong> ($y$). The model makes predictions, compares them to the known labels, and adjusts its internal parameters to reduce the error.</p>
+<p>This domain is split into two main categories. <strong>Regression</strong> involves predicting a continuous number, such as forecasting house prices or stock values. <strong>Classification</strong>, on the other hand, involves predicting a discrete category, such as determining if an email is "Spam" or "Not Spam," or diagnosing a medical condition as "Positive" or "Negative."</p>
+<h3>2.2 Unsupervised Learning (The "Explorer" Approach)</h3>
+<p>In Unsupervised Learning, the system acts as an explorer. We provide it with <strong>Features</strong> ($X$) but <strong>No Labels</strong>. Without a teacher to provide correct answers, the model's goal becomes finding hidden structures or intrinsic patterns within the data.</p>
+<p>Common tasks include <strong>Clustering</strong>, which involves grouping similar items together (e.g., segmenting customers based on purchasing history without predefined segments). Another key area is <strong>Dimensionality Reduction</strong>, which simplifies complex, high-dimensional data into fewer components (like Principal Component Analysis) to make it easier to visualize and process.</p>
+<hr />
+<h2>3. The ML Workflow</h2>
+<p>Building a model is a standardized engineering process. We use the library <strong>Scikit-Learn</strong> (<code>sklearn</code>) for almost all classical ML tasks.</p>
+<h3>3.1 The "Exam" Analogy: Train/Test Split</h3>
+<p>Imagine a teacher who gives students the exact questions and answers to the final exam as study material. The students would simply memorize the answers (cheat) rather than learning the underlying concepts. AI models behave the same way; they are prone to memorization.</p>
+<p>To prevent this, we rigorously <strong>split</strong> our data into two distinct sets. The <strong>Training Set</strong> (typically 80%) acts as the "Homework"—the model sees this data, identifies patterns, and learns from it. The <strong>Testing Set</strong> (typically 20%) acts as the "Final Exam."Crucially, the model <em>never</em> sees this data during the training phase. We use it solely to evaluate how well the model generalizes to new, unseen information.</p>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+import numpy as np
+
+# Mock Data (X = Study Hours, y = Exam Score)
+X = np.arange(100).reshape(-1, 1)
+y = X * 2 + 5 # The secret rule: y = 2x + 5
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(f&quot;Training Shape: {X_train.shape}&quot;) # (80, 1)
+print(f&quot;Testing Shape:  {X_test.shape}&quot;)  # (20, 1)
+</code></pre>
+<h3>3.2 The Scikit-Learn API Pattern</h3>
+<p>The <code>scikit-learn</code> library is the industry standard for classical machine learning because of its consistent, object-oriented API design. Whether you are performing linear regression, support vector classification, or k-means clustering, the code structure remains virtually identical.</p>
+<p>This workflow follows a universal <strong>3-Step Pattern</strong>. First, you <strong>Instantiate</strong> the model class (e.g., <code>model = LinearRegression()</code>), configuring any hyperparameters. Second, you <strong>Fit</strong> the model to your training data (<code>model.fit(X_train, y_train)</code>), which is where the actual learning occurs. Finally, you <strong>Predict</strong> results on new data (<code>model.predict(X_test)</code>), applying the learned rules to generate outputs.</p>
+<pre><code class="language-python">from sklearn.linear_model import LinearRegression
+
+# 1. Instantiate
+model = LinearRegression()
+
+# 2. Fit (Train on the 'Homework' data)
+# The model tries to figure out that y = 2x + 5
+model.fit(X_train, y_train)
+
+# 3. Predict (Take the 'Final Exam')
+predictions = model.predict(X_test)
+
+# Check the first 5 predictions
+print(&quot;Predictions:&quot;, predictions[:5].flatten())
+print(&quot;Actuals:    &quot;, y_test[:5].flatten())
+</code></pre>
+<h3>3.3 How Learning Actually Happens: Weights, Biases, and Loss</h3>
+<p>When you call <code>.fit()</code> on a model, magic seems to happen—but what really occurs is mathematical optimization. Let’s break it down.</p>
+<h4>3.3.1 Weights and Biases: The Memory of the Model</h4>
+<p>Think of a neural network (or linear regression) as a giant math function. It takes inputs (features) and produces outputs (predictions). But how does it know what numbers to output for any input?<br />
+The answer: <strong>weights</strong> and <strong>biases</strong>.</p>
+<ul>
+<li>
+<p><strong>Weights</strong>: These are multipliers applied to each input. They determine how <em>important</em> each feature is.</p>
+</li>
+<li>
+<p><strong>Biases</strong>: These are extra numbers added to the calculation to allow the model to shift predictions up or down, like an adjustable baseline.</p>
+</li>
+</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Analogy</strong>: Imagine a chef adjusting a recipe. The <strong>weights</strong> are the amounts of each ingredient (sugar, salt), and the <strong>bias</strong> is adding a pinch of extra seasoning to balance the flavor. The combination of weights and biases is what the model "knows" about the data.</p></div></div>
+<h4>3.3.2 The Loss Function: Measuring Mistakes</h4>
+<p>How does the model know if it’s making good predictions? It uses a <strong>Loss Function</strong>.<br />
+The loss is a single number that tells us how far off our predictions are from the true answers.</p>
+<ul>
+<li>
+<p><strong>Mean Squared Error (MSE)</strong>: Common for regression (predicting prices).</p>
+</li>
+<li>
+<p><strong>Cross-Entropy</strong>: Common for classification (predicting Cat/Dog).</p>
+</li>
+</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Analogy</strong>: The loss is like a score in a golf game—lower is better. Your goal is to get it to zero.</p></div></div>
+<h4>3.3.3 Gradient Descent: Learning by Adjusting Weights</h4>
+<p>Training a model means adjusting the weights and biases to <strong>minimize the loss</strong>. This is done using <strong>Gradient Descent</strong>:<br />
+1.  Compute the loss on your current predictions.<br />
+2.  Calculate the <strong>gradient</strong>—the slope of the loss with respect to each weight.<br />
+3.  Update each weight slightly in the direction that <em>reduces</em> the loss.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Analogy</strong>: Imagine you are hiking in the fog and want to reach the bottom of a valley (minimum loss). You feel the slope under your feet and take a step downward. Step by step, you reach the lowest point.</p></div></div>
+<p>This process repeats over many iterations, called <strong>epochs</strong>, until the model performs well on the training data.</p>
+<h4>3.3.4 Hyperparameters: The Rules of Learning</h4>
+<p>Not all numbers are learned. <strong>Hyperparameters</strong> control the learning process itself, such as:</p>
+<ul>
+<li>
+<p><strong>Learning Rate</strong>: How big a step we take down the slope.</p>
+</li>
+<li>
+<p><strong>Number of Epochs</strong>: How many times we loop over the training data.</p>
+</li>
+<li>
+<p><strong>Model Complexity</strong>: Number of neurons/layers, regularization strength.</p>
+</li>
+</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Analogy</strong>: Hyperparameters are like the rules you set for cooking (temperature, time). They aren’t part of the dish ingredients, but they control <em>how</em> you cook.</p></div></div>
+<!-- break -->
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 3.3</strong><br />
+*   The model’s <strong>knowledge</strong> is stored in <strong>weights and biases</strong>.<br />
+*   The <strong>loss function</strong> tells the model how wrong it is.<br />
+*   <strong>Gradient descent</strong> adjusts weights to reduce loss.<br />
+*   <strong>Hyperparameters</strong> are the "knobs" that guide learning, but are not learned from data.</p></div></div>
+<hr />
+<h2>4. Generalization: Overfitting vs. Underfitting</h2>
+<p>The goal of ML is not to do well on the <em>Training</em> data. It is to do well on the <em>Testing</em> data. This ability to perform on new, unseen data is called <strong>Generalization</strong>.</p>
+<h3>4.1 Underfitting (High Bias)</h3>
+<p><strong>Underfitting</strong> occurs when the model is too simple to capture the underlying pattern in the data. Think of it like trying to use a straight ruler to trace a curved race track; the tool lacks the flexibility to follow the path. The primary symptom of underfitting is poor performance on <em>both</em> the Training Data and the Testing Data, indicating the model has failed to learn the signal. This is often solved by using a more complex model, such as adding polynomial features.</p>
+<h3>4.2 Overfitting (High Variance) "The Curse of Memorization"</h3>
+<p><strong>Overfitting</strong> is the opposite problem: the model is too complex and begins to memorize the noise rather than the signal. It’s analogous to a student who memorizes "Page 5, Line 3 is 'True'" without understanding the concept. The symptom of overfitting is deceptive: the model achieves amazing performance on the Training Data but performs terribly on the Testing Data. This indicates a failure to generalize. Common solutions include gathering more data, simplifying the model, or applying Regularization techniques (which we will cover in Week 5).</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Checkpoint</strong><br />
+1.  Why do we never train on the Test set?<br />
+2.  If your Training Accuracy is 99% but Test Accuracy is 50%, are you Overfitting or Underfitting?<br />
+3.  Which Scikit-Learn method do we call to train the model? (<code>.fit()</code> or <code>.predict()</code>?)</p></div></div>
+<hr />
+<h2>5. Summary</h2>
+<p>We have established the foundational philosophy of Machine Learning: it is a shift from hard-coded rules to data-driven learning. We distinguished between <strong>Supervised Learning</strong> (learning from labeled data like a teacher) and <strong>Unsupervised Learning</strong> (extracting patterns from unlabeled data like an explorer).</p>
+<p>We also introduced the critical engineering workflow: <strong>Splitting</strong> data into training and testing sets to prevent the "cheating" of <strong>Overfitting</strong>, and utilizing the standardized <strong>Scikit-Learn API</strong> (<code>fit</code> / <code>predict</code>) to build our models. This framework will be the template for every algorithm we implement going forward.</p>
+            
+            
+<div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's material? Take the interactive quiz now!</p>
+    <a href="Week_4_Quiz.html" class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+        Start Quiz
+    </a>
+</div>
+
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%203%20-%20Python%20for%20AI%20&%20Data%20Handling/Week_3_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 3</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%205%20-%20Supervised%20Learning%20Algorithms/Week_5_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 5</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

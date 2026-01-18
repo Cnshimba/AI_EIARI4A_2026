@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 3 Lab 1 Guide - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_3_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 3</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Python for AI & Data Handling</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab: Data Science Essentials</span>
+    </div>
+</div>
+
+            
+<div class="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700 flex items-center justify-between">
+    <div>
+        <h4 class="font-bold text-slate-800 dark:text-slate-200">Jupyter Notebook Available</h4>
+        <p class="text-sm text-slate-600 dark:text-slate-400 m-0">Download the interactive coding lab to run on your local machine.</p>
+    </div>
+    <a href="Week_3_Lab_1_Data_Science.ipynb" download target="_blank" class="ml-4 px-4 py-2 bg-secondary hover:bg-yellow-600 text-white font-medium rounded-md transition-colors shadow-sm no-underline whitespace-nowrap">
+        Download .ipynb
+    </a>
+</div>
+
+            
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong>: To master the fundamental Python libraries that power every AI model: <strong>NumPy</strong>, <strong>Pandas</strong>, and <strong>Matplotlib</strong>.</p></div></div>
+<!-- break -->
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this lab matters</strong>:<br />
+You cannot build a skyscraper without a foundation. Before we can train Neural Networks (Week 5) or analyze Network Traffic (Real World), we must know how to handle Data (Week 3).<br />
+-  <strong>NumPy</strong>: The math engine. Standard Python lists are too slow for AI. NumPy makes them fast.<br />
+-  <strong>Pandas</strong>: The excel-replacement. It allows us to load, filter, and clean massive datasets.<br />
+-  <strong>Matplotlib</strong>: The eyes. It allows us to visualize data to understand patterns before we model them.</p></div></div>
+<!-- break -->
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Structure</strong><br />
+In <strong>Parts 1-3</strong>, we will learn the generic concepts on simple data. In <strong>Part 4</strong>, we will apply all these skills to a real <strong>Network Traffic</strong> dataset, preparing you for real-world analysis.</p></div></div>
+<hr />
+<h2>Part 1: NumPy (The Math Engine)</h2>
+<p>In standard Python, if you want to multiply two lists of numbers, you have to write a slow <code>for</code> loop. In NumPy, you do it in parallel.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Official Documentation</strong>: <a href="https://numpy.org/doc/stable/user/absolute_beginners.html">NumPy User Guide</a></p></div></div>
+<h4>Theory: Why NumPy?</h4>
+<p>Python lists are <strong>linked lists</strong>, meaning each element is stored separately in memory. NumPy arrays are <strong>contiguous memory blocks</strong> (like C arrays).</p>
+<p><strong>Key Concept: Vectorization</strong><br />
+Instead of looping through elements one by one, NumPy applies operations to the entire array at once (SIMD).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Description</th>
+<th style="text-align: left;">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>np.array(list)</code></td>
+<td style="text-align: left;">Creates an array</td>
+<td style="text-align: left;"><code>np.array([1, 2, 3])</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>np.arange(n)</code></td>
+<td style="text-align: left;">Range from 0 to n-1</td>
+<td style="text-align: left;"><code>np.arange(10)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>np.zeros(n)</code></td>
+<td style="text-align: left;">Array of zeros</td>
+<td style="text-align: left;"><code>np.zeros(5)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>arr.shape</code></td>
+<td style="text-align: left;">Dimensions of array</td>
+<td style="text-align: left;"><code>(3, 3)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>arr.mean()</code></td>
+<td style="text-align: left;">Average value</td>
+<td style="text-align: left;"><code>np.mean(arr)</code></td>
+</tr>
+</tbody>
+</table>
+<h3>1.1 Installation &amp; Import</h3>
+<pre><code class="language-python">import numpy as np # The standard alias
+
+</code></pre>
+<h3>1.2 Vectors and Matrices</h3>
+<p>A <strong>Scalar</strong> is 0D (a single number).<br />
+A <strong>Vector</strong> is 1D (a row of numbers).<br />
+A <strong>Matrix</strong> is 2D (a grid of numbers).<br />
+A <strong>Tensor</strong> is nD (matrix with more dimensions).</p>
+<pre><code class="language-python"># Creating a Vector
+x = np.array([1, 2, 3])
+print(&quot;Vector:&quot;, x)
+
+# Creating a Matrix (2x3)
+A = np.array([
+[1, 2, 3],
+[4, 5, 6]
+])
+print(&quot;Matrix Shape:&quot;, A.shape) # Output: (2, 3)
+
+</code></pre>
+<h3>1.3 Broadcasting (The Power)</h3>
+<p>This is why we use Numpy. We can perform math on entire arrays at once.</p>
+<pre><code class="language-python"># Standard Python (The Slow Way)
+my_list = [1, 2, 3]
+new_list = []
+for item in my_list:
+new_list.append(item * 2)
+print(&quot;Python List:&quot;, new_list)
+
+# NumPy (The Fast Way)
+my_arr = np.array([1, 2, 3])
+new_arr = my_arr * 2 # Multiplies every element by 2 instantly!
+print(&quot;Numpy Array:&quot;, new_arr)
+
+</code></pre>
+<p><strong>Task 1</strong>: Create a NumPy array of numbers from 0 to 9. Multiply the entire array by 10 and subtract 5. Print the result.</p>
+<pre><code class="language-python"># Write your code here
+
+</code></pre>
+<details>
+<summary><strong> Click here for Solution (Try it yourself first!)</strong></summary>
+
+
+<pre><code class="language-python"># Create an array from 0-9
+x = np.arange(10)
+
+# Broadcast operation: Multiply by 10 and subtract 5
+result = (x * 10) - 5
+
+print(result)
+</code></pre>
+
+</details>
+
+<hr />
+<h2>Part 2: Pandas (Data Manipulation)</h2>
+<p>Real-world data is messy. It comes in CSVs, SQL databases, or Excel sheets. Pandas gives us the <strong>DataFrame</strong>, a powerful programmable spreadsheet.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Official Documentation</strong>: <a href="https://pandas.pydata.org/docs/getting_started/index.html">Pandas Getting Started</a></p></div></div>
+<h4>Cheat Sheet: Common Data Cleaning Functions</h4>
+<p>Here are the most essential functions you will use to clean datasets.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Purpose</th>
+<th style="text-align: left;">Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>df.head(n)</code></td>
+<td style="text-align: left;">View first n rows</td>
+<td style="text-align: left;"><code>df.head(5)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.info()</code></td>
+<td style="text-align: left;">Check data types &amp; non-nulls</td>
+<td style="text-align: left;"><code>df.info()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.describe()</code></td>
+<td style="text-align: left;">Statistical summary</td>
+<td style="text-align: left;"><code>df.describe()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.isnull().sum()</code></td>
+<td style="text-align: left;">Count missing values</td>
+<td style="text-align: left;"><code>df.isnull().sum()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.dropna()</code></td>
+<td style="text-align: left;">Remove rows with NaNs</td>
+<td style="text-align: left;"><code>df.dropna()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.fillna(value)</code></td>
+<td style="text-align: left;">Replace NaNs with value</td>
+<td style="text-align: left;"><code>df['col'].fillna(0)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.duplicated()</code></td>
+<td style="text-align: left;">specific rows are duplicates</td>
+<td style="text-align: left;"><code>df[df.duplicated()]</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df.drop_duplicates()</code></td>
+<td style="text-align: left;">Remove duplicate rows</td>
+<td style="text-align: left;"><code>df.drop_duplicates()</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df['col'].astype(type)</code></td>
+<td style="text-align: left;">Convert column type</td>
+<td style="text-align: left;"><code>df['price'].astype(float)</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>df['col'].value_counts()</code></td>
+<td style="text-align: left;">Count unique values</td>
+<td style="text-align: left;"><code>df['status'].value_counts()</code></td>
+</tr>
+</tbody>
+</table>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Pro Tip</strong>: Always run <code>.info()</code> first to spot missing values/wrong types.</p></div></div>
+<h3>2.1 Creating a DataFrame</h3>
+<pre><code class="language-python">import pandas as pd
+
+data = {
+&quot;Name&quot;: [&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;, &quot;David&quot;, &quot;Eve&quot;],
+&quot;Age&quot;: [24, 27, 22, 32, 29],
+&quot;Score&quot;: [85, 90, 88, 92, 95],
+&quot;City&quot;: [&quot;New York&quot;, &quot;Los Angeles&quot;, &quot;Chicago&quot;, &quot;Houston&quot;, &quot;Phoenix&quot;]
+}
+
+df = pd.DataFrame(data)
+print(df)
+
+</code></pre>
+<h3>2.2 Inspection &amp; Filtering</h3>
+<p>We rarely read the whole table. We inspect existing data.</p>
+<pre><code class="language-python"># See the first 5 rows
+print(&quot;--- Head ---&quot;)
+print(df.head())
+
+# Get statistical summary (Mean, Max, Min)
+print(&quot;\n--- Describe ---&quot;)
+print(df.describe())
+
+# Filter data: Who scored above 90?
+print(&quot;\n--- High Scorers ---&quot;)
+high_scorers = df[df[&quot;Score&quot;] &gt; 90]
+print(high_scorers)
+
+</code></pre>
+<h3>2.3 Handling Missing Data</h3>
+<p>Real data has holes (NaNs). AI models crash if you feed them NaNs. You must <strong>Clean</strong> your data.</p>
+<pre><code class="language-python"># Simulating missing data
+df.loc[2, &quot;Score&quot;] = np.nan # Charlie lost his score
+
+print(df)
+
+# Strategy 1: Drop the row (If you have lots of data)
+df_clean = df.dropna()
+print(&quot;\nDropped NaNs:\n&quot;, df_clean)
+
+# Strategy 2: Fill the hole (Imputation)
+# Fill with the average score of everyone else
+mean_score = df[&quot;Score&quot;].mean()
+df[&quot;Score&quot;] = df[&quot;Score&quot;].fillna(mean_score)
+print(&quot;\nFilled NaNs:\n&quot;, df)
+
+</code></pre>
+<p><strong>Task 2</strong>: Create a DataFrame with 5 students. Give one student a <code>NaN</code> grade. Use Pandas to fill that <code>NaN</code> with the class average.</p>
+<pre><code class="language-python"># Write your code here
+
+</code></pre>
+<details>
+<summary><strong> Click here for Solution (Try it yourself first!)</strong></summary>
+
+
+<pre><code class="language-python"># Create DataFrame with 5 students and 1 NaN
+data = {
+&quot;Name&quot;: [&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;, &quot;David&quot;, &quot;Eve&quot;],
+&quot;Grade&quot;: [85, 92, np.nan, 88, 95]
+}
+df_students = pd.DataFrame(data)
+
+# Calculate Mean Grade
+mean_grade = df_students[&quot;Grade&quot;].mean()
+
+# Fill NaN with Mean
+df_students[&quot;Grade&quot;] = df_students[&quot;Grade&quot;].fillna(mean_grade)
+
+print(df_students)
+</code></pre>
+
+</details>
+
+<hr />
+<h2>Part 3: Matplotlib (Visualization)</h2>
+<p>"A picture is worth a thousand numbers." Never train a model on data you haven't looked at.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Official Documentation</strong>: <a href="https://matplotlib.org/stable/tutorials/index.html">Matplotlib Tutorials</a></p></div></div>
+<h4>Theory: Which Plot to Use?</h4>
+<p>Choosing the right visualization is a skill. Don't just guess.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Plot Type</th>
+<th style="text-align: left;">Function</th>
+<th style="text-align: left;">Best Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Line Plot</strong></td>
+<td style="text-align: left;"><code>plt.plot()</code></td>
+<td style="text-align: left;">Trends over time (Time Series).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scatter Plot</strong></td>
+<td style="text-align: left;"><code>plt.scatter()</code></td>
+<td style="text-align: left;">Correlations between two variables.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Histogram</strong></td>
+<td style="text-align: left;"><code>plt.hist()</code></td>
+<td style="text-align: left;">Distribution of a single variable.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Bar Chart</strong></td>
+<td style="text-align: left;"><code>plt.bar()</code></td>
+<td style="text-align: left;">Comparing categories.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+x = np.linspace(0, 10, 100) # 100 numbers from 0 to 10
+y = np.sin(x)        # The Sine wave
+
+plt.figure(figsize=(10, 6))
+plt.plot(x, y, label='Sine Wave', color='blue')
+plt.title(&quot;My First AI Plot&quot;)
+plt.xlabel(&quot;Time&quot;)
+plt.ylabel(&quot;Amplitude&quot;)
+plt.grid(True)
+plt.legend()
+plt.show()
+
+</code></pre>
+<p><strong>Task 3</strong>: Create a scatter plot. Generate 50 random x and y numbers using <code>np.random.rand(50)</code>. Plot them as red dots.</p>
+<pre><code class="language-python"># Write your code here
+
+</code></pre>
+<details>
+<summary><strong> Click here for Solution (Try it yourself first!)</strong></summary>
+
+
+<pre><code class="language-python"># Generate random data
+x = np.random.rand(50)
+y = np.random.rand(50)
+
+# Create Scatter Plot
+plt.figure(figsize=(8, 5))
+plt.scatter(x, y, color='red', label='Random Points')
+plt.title(&quot;Random Scatter Plot&quot;)
+plt.xlabel(&quot;X Value&quot;)
+plt.ylabel(&quot;Y Value&quot;)
+plt.legend()
+plt.show()
+</code></pre>
+
+</details>
+
+<hr />
+<h2>Part 4: Real-World Data Cleaning (<strong>Network Traffic</strong>)</h2>
+<p>Now that we know the tools, we will apply them to a <strong>Real-World Network Dataset</strong>.<br />
+This dataset (<code>Week_3_Lab_Data.csv</code>) mirrors real-world data (PCAP structure).</p>
+<p><strong>Context</strong>:</p>
+<ul>
+<li>
+<p><code>flow_duration</code>: How long the connection lasted.</p>
+</li>
+<li>
+<p><code>packet_count</code>: Number of packets transferred.</p>
+</li>
+<li>
+<p><code>protocol</code>: The protocol used (TCP/UDP).</p>
+</li>
+</ul>
+<h3>4.1 Loading the Dirty Network Dataset</h3>
+<pre><code class="language-python">df = pd.read_csv(&quot;Week_3_Lab_Data.csv&quot;)
+print(&quot;--- Raw Data ---&quot;)
+print(df.head())
+print(df.info())
+
+</code></pre>
+<hr />
+<h3>4.2 Handling Missing Values (NaNs)</h3>
+<p><strong>Concept</strong>: In network monitoring, sensors might fail to record a specific metric during high load (e.g., passing <code>NaN</code> instead of a packet count). AI models cannot handle NaNs algebraically.</p>
+<p><strong>Solution</strong>: We usually <strong>Impute</strong> (fill) the missing values rather than dropping them, to preserve the rest of the flow's data.</p>
+<ul>
+<li>
+<p><strong>Mean/Median</strong>: Good for numerical data.</p>
+</li>
+<li>
+<p><strong>Mode</strong>: Good for categorical data.</p>
+</li>
+</ul>
+<pre><code class="language-python">print(&quot;Missing before clean:&quot;)
+print(df.isnull().sum())
+
+# Strategy: Fill missing flow_duration with Mean, packet_count with Median
+df['flow_duration'] = df['flow_duration'].fillna(df['flow_duration'].mean())
+df['packet_count'] = df['packet_count'].fillna(df['packet_count'].median())
+
+print(&quot;\nMissing after clean:&quot;)
+print(df.isnull().sum())
+
+</code></pre>
+<hr />
+<h3>4.3 Handling Duplicate Flows</h3>
+<p><strong>Concept</strong>: Duplicate rows might occur if two sensors record the same flow, or if the logging system retries an entry. Duplicates bias the AI model, making it memorize common fast flows rather than learning rare attacks.</p>
+<p><strong>Solution</strong>: Remove them completely.</p>
+<pre><code class="language-python">duplicates = df.duplicated().sum()
+print(f&quot;Duplicates detected: {duplicates}&quot;)
+
+df = df.drop_duplicates()
+
+</code></pre>
+<hr />
+<h3>4.4 Handling Structural Errors (Protocol Normalisation)</h3>
+<p><strong>Concept</strong>: Computers treat <code>TCP</code>, <code>tcp</code>, and <code>Tcp</code> as three mutually exclusive protocols. This fractures the data.</p>
+<p><strong>Solution</strong>: <strong>Standardization</strong>. We convert all text to a consistent case (usually Upper Case).</p>
+<pre><code class="language-python">print(&quot;Protocols before norm:&quot;, df['protocol'].unique())
+
+df['protocol'] = df['protocol'].str.upper()
+
+print(&quot;Protocols after norm:&quot;, df['protocol'].unique())
+
+</code></pre>
+<hr />
+<h3>4.5 Handling Outliers &amp; Invalid Traffic Data</h3>
+<p><strong>Concept</strong>: Real-world data describes physical impossibilities (e.g., negative time) or extreme anomalies (e.g., a flow lasting 10 years).</p>
+<p><strong>Solution</strong>:<br />
+1. <strong>Sanity Check</strong>: Take absolute value of negative numbers.<br />
+2. <strong>Clipping/Filtering</strong>: Remove values beyond a reasonable physical threshold.</p>
+<pre><code class="language-python"># Fix negative durations (Physical impossibility)
+df['flow_duration'] = df['flow_duration'].abs()
+
+# Remove extreme outliers (e.g., flows &gt; 10,000 seconds)
+# In a real IDS, long flows might be valid, but here we treat extreme values as noise.
+df = df[df['flow_duration'] &lt; 10000]
+
+</code></pre>
+<hr />
+<h3>4.6 Feature Engineering</h3>
+<p><strong>Concept</strong>: Sometimes the raw columns aren't enough. A DDoS attack might look like normal traffic if you only look at <code>byte_count</code>, but if you look at <code>bytes_per_packet</code>, you might see tiny empty packets.</p>
+<p><strong>Solution</strong>: Create <strong>Derived Features</strong> that combine existing columns to reveal hidden patterns.</p>
+<pre><code class="language-python">df['bytes_per_packet'] = df['byte_count'] / df['packet_count']
+
+print(df[['byte_count', 'packet_count', 'bytes_per_packet']].head())
+
+</code></pre>
+<p><strong>Task 4</strong><br />
+Fix protocol inconsistencies, fill missing <code>packet_count</code> with the median, and remove negative <code>flow_duration</code> values.</p>
+<pre><code class="language-python"># Write your code here
+
+</code></pre>
+<details>
+<summary><strong> Click here for Solution (Try it yourself first!)</strong></summary>
+
+
+<pre><code class="language-python"># Load Data
+df = pd.read_csv(&quot;Week_3_Lab_Data.csv&quot;)
+
+# 1. Fix Protocol (Standardize to Upper Case)
+df['protocol'] = df['protocol'].str.upper()
+
+# 2. Fill Missing Packet Count (Median)
+median_packets = df['packet_count'].median()
+df['packet_count'] = df['packet_count'].fillna(median_packets)
+
+# 3. Remove Negative Flow Duration
+df = df[df['flow_duration'] &gt;= 0]
+
+print(df.info())
+</code></pre>
+
+</details>
+
+<hr />
+<h3>4.7 Visualizing Traffic Patterns</h3>
+<p><strong>Concept</strong>: Before rigorous math (Normalization), use your eyes. Visualization confirms if our cleaning worked and reveals the data's shape.</p>
+<p><strong>Solution</strong>: Use a <strong>Scatter Plot</strong> to check the relationship between Packet Count and Byte Count.</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+plt.figure(figsize=(10, 5))
+plt.scatter(df['packet_count'], df['byte_count'], alpha=0.5, c='blue')
+plt.title(&quot;Packet Count vs Byte Count&quot;)
+plt.xlabel(&quot;Packet Count&quot;)
+plt.ylabel(&quot;Byte Count&quot;)
+plt.grid(True)
+plt.show()
+
+</code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Observation</strong>: A linear trend is expected. If we saw a cluster of points with High Packets but Zero Bytes, that would be an anomaly.</p></div></div>
+<hr />
+<h3>4.8 Preprocessing for AI Models</h3>
+<p>Before feeding data into an AI model, we must transform it into a format the model understands. The two most critical steps are <strong>Normalization</strong> and <strong>Encoding</strong>.</p>
+<h4>A. Normalization (Scaling)</h4>
+<p><strong>Concept</strong>: AI models are sensitive to the scale of numbers. If <code>packet_count</code> ranges from 0-1000 and <code>flow_duration</code> ranges from 0-1 (seconds), the model might think <code>packet_count</code> is 1000x more important.</p>
+<p><strong>Solution</strong>: We scale all numerical features to fall between <strong>0 and 1</strong>.<br />
+$$ X_{norm} = \frac{X - X_{min}}{X_{max} - X_{min}} $$</p>
+<pre><code class="language-python"># Example: Normalize 'flow_duration'
+min_val = df['flow_duration'].min()
+max_val = df['flow_duration'].max()
+
+df['flow_duration_norm'] = (df['flow_duration'] - min_val) / (max_val - min_val)
+
+print(df[['flow_duration', 'flow_duration_norm']].head())
+
+</code></pre>
+<h4>B. Encoding (Text to Numbers)</h4>
+<p><strong>Concept</strong>: AI models (like Neural Networks) cannot understand text like "TCP" or "UDP". They only understand numbers.</p>
+<p><strong>Solution</strong>: We use <strong>One-Hot Encoding</strong>. Instead of one column <code>protocol</code> with text, we create binary columns:</p>
+<ul>
+<li>
+<p><code>protocol_TCP</code>: 1 if TCP, 0 otherwise.</p>
+</li>
+<li>
+<p><code>protocol_UDP</code>: 1 if UDP, 0 otherwise.</p>
+</li>
+</ul>
+<pre><code class="language-python"># One-Hot Encoding using Pandas
+df_encoded = pd.get_dummies(df, columns=['protocol'], prefix='proto')
+
+print(df_encoded.head())
+# Notice the new columns: proto_TCP, proto_UDP
+
+</code></pre>
+<p><strong>Task 5</strong>: Normalize the <code>byte_count</code> column. Then, One-Hot Encode the <code>protocol</code> column (if you haven't already). print the new dataframe's columns.</p>
+<pre><code class="language-python"># Write your code here
+
+</code></pre>
+<details>
+<summary><strong> Click here for Solution (Try it yourself first!)</strong></summary>
+
+
+<pre><code class="language-python"># 1. Normalize Byte Count (Min-Max)
+df['byte_count_norm'] = (df['byte_count'] - df['byte_count'].min()) / (df['byte_count'].max() - df['byte_count'].min())
+
+# 2. One-Hot Encode Protocol (Pandas get_dummies)
+df = pd.get_dummies(df, columns=['protocol'], prefix='proto')
+
+print(df.head())
+print(&quot;Columns:&quot;, df.columns)
+</code></pre>
+
+</details>
+
+<hr />
+<h3>Reflection Question</h3>
+<p>Why is data cleaning and feature engineering <strong>even more critical</strong> when working with data extracted directly from <strong>PCAP files</strong>?</p>
+<hr />
+<h2>Summary</h2>
+<p>You now possess the <strong>Data Science Triad</strong>:<br />
+1. <strong>NumPy</strong> – Math.<br />
+2. <strong>Pandas</strong> – Data.<br />
+3. <strong>Matplotlib</strong> – Visualization.</p>
+<p>You have also successfully cleaned a <strong>Network Traffic Dataset</strong>, preparing you for <strong>real-world analysis</strong>.</p>
+            
+            
+        
+                         <div class="mt-8 flex justify-center">
+                            <a href="Week_3_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
+                                Back to Chapter Labs
+                            </a>
+                         </div>
+                         
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%202%20-%20Mathematics%20for%20AI/Week_2_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 2</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+                        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 4</span>
+                        </a>
+                        
+</div>
+
+</body>
+</html>

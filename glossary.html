@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glossary - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="./index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="./index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="./glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <div class="bg-white dark:bg-slate-800 p-8 rounded-xl shadow-md border border-gray-200 dark:border-gray-700">
+            <h1 class="text-3xl font-bold text-primary dark:text-sky-400 mb-6 border-b-2 border-secondary pb-4">Course Glossary</h1>
+            <div class="space-y-4">
+                
+        <div class="p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg border-l-4 border-secondary">
+            <h3 class="text-xl font-bold text-primary dark:text-sky-400">Artificial Intelligence</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">The simulation of human intelligence processes by machines.</p>
+        </div>
+        
+        <div class="p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg border-l-4 border-secondary">
+            <h3 class="text-xl font-bold text-primary dark:text-sky-400">Deep Learning</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">A type of machine learning based on artificial neural networks.</p>
+        </div>
+        
+        <div class="p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg border-l-4 border-secondary">
+            <h3 class="text-xl font-bold text-primary dark:text-sky-400">Machine Learning</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">A subset of AI that enables systems to learn from data.</p>
+        </div>
+        
+        <div class="p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg border-l-4 border-secondary">
+            <h3 class="text-xl font-bold text-primary dark:text-sky-400">Neural Network</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">Algorithms that mimic the human brain.</p>
+        </div>
+        
+        <div class="p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg border-l-4 border-secondary">
+            <h3 class="text-xl font-bold text-primary dark:text-sky-400">Supervised Learning</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">Learning from labelled data.</p>
+        </div>
+        
+        <div class="p-4 bg-gray-50 dark:bg-slate-900/50 rounded-lg border-l-4 border-secondary">
+            <h3 class="text-xl font-bold text-primary dark:text-sky-400">Unsupervised Learning</h3>
+            <p class="text-slate-600 dark:text-slate-300 mt-2">Learning from unlabelled data.</p>
+        </div>
+        
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 12 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<p><a href="../index.html">← Back to Course Index</a></p>
+<h1>Week 12: Final Project Launch</h1>
+<div class="title-slide">
+    <h1>Week 12</h1>
+    <h2>Final Capstone Project</h2>
+    <p>Building an Intrusion Detection System</p>
+</div>
+</div>
+<div class="slide">
+<div class="slide">
+    <h2>1. The Mission</h2>
+    <p>You have learned Regression, Classification, CNNs, NLP, and Ethics. Now, put it all together.</p>
+    <div class="goal-box">
+        <h3>Scenario</h3>
+        <p>A corporate network is under attack. You have been given a raw <strong>PCAP (Packet Capture)</strong> file. Your job is to build an AI that can distinguish between normal employees and malicious hackers.</p>
+    </div>
+</div>
+</div>
+<div class="slide">
+<div class="slide">
+    <h2>2. The Pipeline</h2>
+    <p>You will build the full Cybersecurity Data Science pipeline:</p>
+    <ol>
+        <li><strong>Data Ingestion</strong>: Raw PCAP (packets).</li>
+        <li><strong>Feature Extraction</strong>: Convert PCAP to CSV flows (using Zeek).</li>
+        <li><strong>Preprocessing</strong>: Cleaning, Normalizing, Encoding.</li>
+        <li><strong>Modeling</strong>: Training Deep Learning models (Supervised & Unsupervised).</li>
+        <li><strong>Evaluation</strong>: Detecting the attacks.</li>
+    </ol>
+</div>
+</div>
+<div class="slide">
+<div class="slide">
+    <h2>3. Techniques Required</h2>
+    <p>This project is worth 40% of your grade. Use professional tools.</p>
+    <ul>
+        <li><strong>Zeek / CICFlowMeter</strong>: To turn packets into data.</li>
+        <li><strong>Pandas</strong>: To clean the dirty data.</li>
+        <li><strong>PyTorch</strong>: To build the Brain.</li>
+        <li><strong>Autoencoders</strong>: To catch "Zero-Day" (unknown) attacks by learning what "Normal" looks like.</li>
+    </ul>
+</div>
+</div>
+<div class="slide">
+<div class="slide">
+    <h2>4. Deliverables</h2>
+    <div class="checkpoint-box">
+        <h3>What you must submit</h3>
+        <ol>
+            <li><strong>Jupyter Notebook</strong>: Working code, graphs, and logic.</li>
+            <li><strong>Technical Report</strong>: 4-6 pages explaining *why* you made your design choices.</li>
+        </ol>
+    </div>
+</div>
+</div>
+<div class="slide">
+<div class="slide">
+    <h2>5. Timeline</h2>
+    <ul>
+        <li><strong>Week 13</strong>: Data Extraction & Cleaning.</li>
+        <li><strong>Week 14</strong>: Model Training.</li>
+        <li><strong>Week 15</strong>: Evaluation & Report Writing.</li>
+        <li><strong>Deadline</strong>: End of Semester.</li>
+    </ul>
+</div>
+</div>
+<div class="slide">
+<div class="slide">
+    <h2>6. Good Luck!</h2>
+    <p>This is the bridge between being a Student and being an Engineer.</p>
+    <p><em>"The best way to predict the future is to invent it."</em></p>
+</div>
+
+<p><a href="../index.html">← Back to Course Index</a></p>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 7 Slides - Slides</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 40px 20px;
+        }
+        
+        .slide {
+            min-height: 100vh;
+            max-width: 1200px;
+            margin: 0 auto 40px auto;
+            padding: 80px 100px;
+            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .slide:nth-child(even) {
+            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide {
+            text-align: center;
+            align-items: center;
+            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+        }
+        
+        .title-slide h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            color: #c9984a;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .title-slide p {
+            font-size: 1.5em;
+            color: #ffffff;
+        }
+        
+        h2 {
+            font-size: 2.8em;
+            color: #c9984a;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #c9984a;
+            padding-bottom: 20px;
+        }
+        
+        h3 {
+            font-size: 2em;
+            color: #ffffff;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        
+        p {
+            font-size: 1.5em;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        ul, ol {
+            font-size: 1.5em;
+            margin-left: 50px;
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+        
+        li {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        li p {
+            font-size: inherit;
+            margin-bottom: 0;
+            line-height: inherit;
+        }
+        
+        blockquote {
+            background: rgba(201, 152, 74, 0.1);
+            border-left: 6px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            font-style: italic;
+            font-size: 1.2em;
+        }
+        
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        pre {
+            background: #0f0f0f;
+            border-left: 4px solid #c9984a;
+            padding: 25px;
+            margin: 25px 0;
+            overflow-x: auto;
+            border-radius: 8px;
+        }
+        
+        pre code {
+            background: transparent;
+            padding: 0;
+            color: inherit;
+        }
+        
+        img {
+            max-width: 80%;
+            height: auto;
+            margin: 25px auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        a {
+            color: #38bdf8;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+                min-height: 100vh;
+            }
+        }
+    </style>
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\(', '\)']],
+                displayMath: [['$$', '$$'], ['\[', '\]']],
+                processEscapes: true
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <div class="slide title-slide">
+<h1>Week 7 Slides: Neural Networks &amp; Deep Learning Basics</h1>
+</div>
+<div class="slide">
+<h2>1. Learning Outcomes</h2>
+<p>By the end of this week, you will be able to:</p>
+<ol>
+<li><strong>Explain</strong> the anatomy of a perceptron (weights, bias, activation).</li>
+<li><strong>Differentiate</strong> between Sigmoid and ReLU activation functions.</li>
+<li><strong>Design</strong> a Multi-Layer Perceptron (MLP) architecture.</li>
+<li><strong>Trace</strong> the flow of Backpropagation (Forward, Loss, Backward, Update).</li>
+<li><strong>Build</strong> a neural network forward pass using NumPy.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>2. Chapter Goal</h2>
+<p>We are leaving "Classical Machine Learning" behind. This week is arguably the hardest but most rewarding: we will deconstruct the internal mechanics of modern AI by building a Neural Network from <strong>scratch</strong>—using only raw mathematics and Python.</p>
+</div>
+<div class="slide">
+<h2>3. The Perceptron (Neuron)</h2>
+<h3>Anatomy</h3>
+<ul>
+<li>
+<p><strong>Analogy</strong>: Digital mimic of a brain cell.</p>
+</li>
+<li>
+<p><strong>Inputs</strong>: Electrical signals ($x$).</p>
+</li>
+<li>
+<p><strong>Weights</strong>: Connection strength ($w$).</p>
+</li>
+<li>
+<p><strong>Input Processing</strong>:<br />
+    $$z = \sum (x \cdot w) + b$$</p>
+</li>
+<li>
+<p><strong>Output</strong>: Firing rate (Activation).</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>4. Activation Functions</h2>
+<h3>Why Non-Linearity?</h3>
+<p>Linear layers stacked together are just one big linear layer ($y=mx+c$). We need non-linearity to learn curves and complex patterns.</p>
+<h3>Common Types</h3>
+<ol>
+<li><strong>Sigmoid</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Range: 0 to 1 (Probabilities).</p>
+</li>
+<li>
+<p>Issue: Vanishing Gradient.<br />
+2.  <strong>ReLU (Rectified Linear Unit)</strong>:</p>
+</li>
+<li>
+<p>Range: 0 to $\infty$.</p>
+</li>
+<li>
+<p>Rule: "If negative, set to 0."</p>
+</li>
+<li>
+<p>Benefit: Fast, solves vanishing gradient.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>5. MLP Architecture</h2>
+<h3>The Structure</h3>
+<ol>
+<li><strong>Input Layer</strong>: The raw data (e.g., 784 pixels).</li>
+<li><strong>Hidden Layers</strong>: The "Black Box" reasoning. Extracts features.</li>
+<li><strong>Output Layer</strong>: The final decision (e.g., 10 probabilities for digits 0-9).</li>
+</ol>
+<p><strong>Fully Connected</strong>: Every neuron in Layer 1 is connected to every neuron in Layer 2.</p>
+</div>
+<div class="slide">
+<h2>Section 1 Checkpoint</h2>
+<h3>Summary</h3>
+<ul>
+<li>
+<p><strong>Perceptron</strong>: Inputs * Weights + Bias.</p>
+</li>
+<li>
+<p><strong>Activation</strong>: Adds non-linearity (ReLU is king).</p>
+</li>
+<li>
+<p><strong>MLP</strong>: Stacking perceptrons into layers creates Deep Learning.</p>
+</li>
+</ul>
+<h3>Reflection</h3>
+<ul>
+<li>
+<p>Why does a network need an Activation Function?</p>
+</li>
+<li>
+<p>What happens if we remove the Bias term?</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>6. The Learning Cycle (Backpropagation)</h2>
+<h3>The Loop</h3>
+<ol>
+<li><strong>Forward Propagation</strong>: Guess the answer.</li>
+<li><strong>Loss Calculation</strong>: Compare guess to truth (Cross Entropy Error).</li>
+<li><strong>Backpropagation</strong>: Calculate <strong>Gradients</strong> (Calculus Chain Rule). Find out which weight caused the error.</li>
+<li><strong>Update</strong>: Nudge weights in opposite direction of gradient.</li>
+</ol>
+</div>
+<div class="slide">
+<h2>7. Week 7 Summary</h2>
+<h3>Core Concepts</h3>
+<ul>
+<li>
+<p><strong>Structure</strong>: Neurons, Layers, Weights, Biases.</p>
+</li>
+<li>
+<p><strong>Math</strong>: Dot Products, Derivatives, Chain Rule.</p>
+</li>
+<li>
+<p><strong>Code</strong>: We build <code>Affine</code> (Linear) layers and <code>ReLU</code> layers as Classes.</p>
+</li>
+</ul>
+<h3>Next Steps</h3>
+<ul>
+<li>
+<p><strong>Lab</strong>: Build this from scratch in Python + NumPy.</p>
+</li>
+<li>
+<p><strong>Next Week</strong>: Convolutional Neural Networks (CNNs) for Vision.</p>
+</li>
+</ul>
+</div>
+<div class="slide">
+<h2>Questions?</h2>
+<p><strong>Ready to code your first Neural Network?</strong></p>
+</div>
+
+</body>
+</html>

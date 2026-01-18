@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai V2 Course Structure - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
+                    },
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="./index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="./index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="./glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </div>
+    </div>
+</nav>
+
+    
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="./images/course_index_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest"></span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Artificial Intelligence Module - EIARI4A</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"><span style="color: #000080; font-size: 0.9em;">Course structure</span></span>
+    </div>
+</div>
+
+            
+            
+
+<hr />
+<h2>Course Overview</h2>
+<p>This course provides a comprehensive introduction to Artificial Intelligence, covering foundational mathematics, machine learning algorithms, neural networks, and modern AI applications including Generative AI and Large Language Models.</p>
+<p>It is offered as an introductory module to AI in the <strong>Computer Systems Engineering</strong> program, as part of the <strong>Advanced Diploma</strong> curriculum. This serves as a foundation course to prepare students for more advanced modules in the Advanced Diploma and later the <strong>PGDip</strong> course.</p>
+<h3>Module Roadmap</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Phase</th>
+<th style="text-align: left;">Weeks</th>
+<th style="text-align: left;">Focus Area</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>I</strong></td>
+<td style="text-align: left;">1-3</td>
+<td style="text-align: left;"><strong>Foundations</strong>: History, Math (Linear Algebra/Prob), Python Stack</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>II</strong></td>
+<td style="text-align: left;">4-6</td>
+<td style="text-align: left;"><strong>Classical ML</strong>: Supervised &amp; Unsupervised Learning</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>III</strong></td>
+<td style="text-align: left;">7-8</td>
+<td style="text-align: left;"><strong>Deep Learning</strong>: Neural Networks &amp; Computer Vision (CNNs)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>IV</strong></td>
+<td style="text-align: left;">9-10</td>
+<td style="text-align: left;"><strong>Language &amp; GenAI</strong>: NLP, Transformers, LLMs</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>V</strong></td>
+<td style="text-align: left;">11-12</td>
+<td style="text-align: left;"><strong>Society &amp; Projects</strong>: Ethics, Bias, Capstone Project</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>Week 1: Introduction to Artificial Intelligence</h2>
+<p><em>Setting the Stage: From Turing to Transformers</em></p>
+<h3>Key Concepts</h3>
+<ul>
+<li>
+<p><strong>Artificial Intelligence (AI)</strong>: The science of making machines perform tasks that typically require human intelligence (visual perception, speech recognition, decision-making).</p>
+</li>
+<li>
+<p><strong>Narrow AI vs. General AI</strong>:</p>
+</li>
+<li>
+<p><strong>Narrow AI (Weak)</strong>: Systems designed for specific tasks (e.g., Siri, AlphaGo). Current state of the art.</p>
+</li>
+<li>
+<p><strong>General AI (Strong)</strong>: Hypothetical machines with human-level cognitive abilities across any domain.</p>
+</li>
+<li>
+<p><strong>Schools of Thought</strong>:</p>
+</li>
+<li>
+<p><strong>Symbolism</strong>: Logic-based, rule-driven AI (e.g., Expert Systems). "Knowledge is represented by symbols."</p>
+</li>
+<li>
+<p><strong>Connectionism</strong>: Brain-inspired AI (e.g., Neural Networks). "Knowledge is distributed across weights."</p>
+</li>
+<li>
+<p><strong>The Turing Test</strong>: A measure of a machine's ability to exhibit intelligent behavior equivalent to, or indistinguishable from, that of a human.</p>
+</li>
+</ul>
+<h3>Lecture Content</h3>
+<ol>
+<li><strong>The Birth of AI (1956)</strong>: The Dartmouth Conference and the coining of the term by John McCarthy.</li>
+<li><strong>Cycles of Hope and Despair</strong>: The "AI Winters" caused by overpromising and underdelivering, followed by the "Deep Learning Boom" (2012-Present).</li>
+<li><strong>Modern AI Landscape</strong>:</li>
+</ol>
+<ul>
+<li>
+<p><strong>Machine Learning (ML)</strong>: Learning from data without explicit programming.</p>
+</li>
+<li>
+<p><strong>Deep Learning (DL)</strong>: Neural networks with many layers, enabling feature extraction.</p>
+</li>
+<li>
+<p><strong>Generative AI</strong>: Creating new content (text, images) rather than just analyzing existing data.<br />
+4.  <strong>Impact on Society</strong>: Automation, bias, and the ethical responsibility of AI practitioners.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base">By the end of this week, you will act as an "AI Historian" and "Futurist".</p></div></div>
+<ul>
+<li>
+<p><strong>Understand</strong> foundational AI concepts and the difference between Narrow and General AI.</p>
+</li>
+<li>
+<p><strong>Identify</strong> key AI application areas and their impact on industry.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_read.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Read</strong>: Introductory chapters (Russell & Norvig, Chapter 1).</span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Watch</strong>: Video lectures on AI History.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_quiz.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Short quiz</strong> on AI fundamentals.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=cNfHgk6F7pY">The History of AI (ColdFusion)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=ad79nYk2keg">What is Artificial Intelligence? (IBM)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 2: Mathematics for AI</h2>
+<p><em>The Engine Room: Linear Algebra and Probability</em></p>
+<h3>Key Concepts</h3>
+<ul>
+<li>
+<p><strong>Linear Algebra</strong>: The branch of mathematics concerning vector spaces and linear mappings between such spaces. It is the language of machine learning.</p>
+</li>
+<li>
+<p><strong>Vector</strong>: An object with magnitude and direction. Represents data points (e.g., [age, income]).</p>
+</li>
+<li>
+<p><strong>Matrix</strong>: A rectangular array of numbers. Represents datasets or transformations.</p>
+</li>
+<li>
+<p><strong>Dot Product</strong>: A measure of similarity between two vectors. Crucial for Neural Networks.</p>
+</li>
+<li>
+<p><strong>Probability Theory</strong>:</p>
+</li>
+<li>
+<p><strong>Conditional Probability</strong>: The likelihood of an event occurring given that another event has already occurred.</p>
+</li>
+<li>
+<p><strong>Bayes' Theorem</strong>: Describes the probability of an event, based on prior knowledge of conditions that might be related to the event. $P(A|B) = \frac{P(B|A)P(A)}{P(B)}$</p>
+</li>
+<li>
+<p><strong>Calculus in AI</strong>:</p>
+</li>
+<li>
+<p><strong>Gradient</strong>: The slope of a function. Points in the direction of steepest ascent. Used to optimize models (Gradient Descent).</p>
+</li>
+</ul>
+<h3>Lecture Content</h3>
+<ol>
+<li><strong>Vectors and Matrices in Python</strong>: How NumPy handles arrays, shapes, and broadcasting. avoiding loops with Vectorization.</li>
+<li><strong>Geometric Interpretation</strong>: Visualizing vectors as arrows, matrices as squishing/rotating space (Eigenvalues/Eigenvectors).</li>
+<li><strong>Probability Distributions</strong>:</li>
+</ol>
+<ul>
+<li><strong>Gaussian (Normal) Distribution</strong>: The "Bell Curve" that appears everywhere in nature and data.<br />
+4.  <strong>From Math to Machines</strong>: How a neural network is essentially a series of Matrix Multiplications followed by non-linear functions.</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Apply</strong> linear algebra concepts (Dot Product, Matrix Multiplication) to ML models.</p>
+</li>
+<li>
+<p><strong>Understand</strong> probability for modelling uncertainty in data.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Python exercises</strong> with NumPy (Vectorization).</span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_math.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Math worksheets</strong>: Solving matrix operations by hand.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_math.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Problem set</strong>: Matrix operations & Probability scenarios.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=fNk_zzaMoSs&list=PLZHQObOWTQDPD3MizzM2xVFitgF8hE_ab">Essence of Linear Algebra (3Blue1Brown)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=qBigTkBLU6g">Probability Basics (StatQuest)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 3: Python for AI &amp; Data Handling</h2>
+<p><em>The Tooling: NumPy, Pandas, and Data Wrangling</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Python Recap</strong>: Functions, Lists, Dictionaries (if needed).</p>
+</li>
+<li>
+<p><strong>Libraries</strong>: NumPy (Math), Pandas (Dataframes).</p>
+</li>
+<li>
+<p><strong>Data Cleaning</strong>: Preprocessing, handling missing values, normalization.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Write</strong> robust Python scripts for AI workflows.</p>
+</li>
+<li>
+<p><strong>Clean and Prepare</strong> real-world datasets for ingestion.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Jupyter Notebook Lab</strong>: Loading CSVs, filtering data.</span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_chart.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Exploration</strong>: Load and visualize a real dataset (e.g., Titanic or Iris).</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_project.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Mini-project</strong>: Data wrangling task (Clean a "dirty" dataset).</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=LHBE6Q9XlzI">Python for Data Science (FreeCodeCamp)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_read.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://pandas.pydata.org/docs/user_guide/10min.html">Pandas in 10 Minutes</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 4: Machine Learning Foundations</h2>
+<p><em>The Paradigm Shift: Learning from Data</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>ML Lifecycle</strong>: Data -&gt; Model -&gt; Evaluation.</p>
+</li>
+<li>
+<p><strong>Splitting</strong>: Training, Validation, Testing sets.</p>
+</li>
+<li>
+<p><strong>Generalization</strong>: Overfitting vs. Underfitting (Bias-Variance Tradeoff).</p>
+</li>
+<li>
+<p><strong>The Workflow</strong>: Scikit-Learn pipelines.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Understand</strong> the difference between Supervised and Unsupervised learning.</p>
+</li>
+<li>
+<p><strong>Build</strong> simple ML pipelines using Scikit-Learn.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Crash Course</strong>: Scikit-learn API (`.fit()`, `.predict()`).</span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_robot.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>First Model</strong>: Train a Linear Regression model from scratch.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_quiz.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Quiz</strong> + <strong>Hands-on Implementation</strong>.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=Gv9_4yMHFhI">Machine Learning Explained (StatQuest)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=1x4s7q6v5P8">Overfitting & Underfitting (Udacity)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 5: Supervised Learning Algorithms</h2>
+<p><em>The Toolbox: Classifiers and Regressors</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Regression</strong>: Linear, Polynomial (predicting numbers).</p>
+</li>
+<li>
+<p><strong>Classification</strong>: KNN, SVM, Decision Trees, Naïve Bayes (predicting categories).</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Implement and Compare</strong> common algorithms on standard datasets.</p>
+</li>
+<li>
+<p><strong>Evaluate</strong> model performance using Accuracy, Precision, Recall.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_experiment.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Experiment</strong>: Build multiple ML models on a single dataset.</span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_chart.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Metrics</strong>: Calculate RMSE and generate Confusion Matrices.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_assignment.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Assignment</strong>: "Model Fight" - Compare models and select the winner.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=efR1C6CvhmE">Support Vector Machines (StatQuest)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=7VeUPuFGJHk">Decision Trees (StatQuest)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 6: Unsupervised Learning</h2>
+<p><em>Finding Hidden Patterns</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Clustering</strong>: K-Means, Hierarchical Clustering.</p>
+</li>
+<li>
+<p><strong>Dimensionality Reduction</strong>: Principal Component Analysis (PCA).</p>
+</li>
+<li>
+<p><strong>Anomaly Detection</strong>: Finding outliers.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Understand</strong> algorithms that work without labels.</p>
+</li>
+<li>
+<p><strong>Perform</strong> dimensionality reduction to visualize high-dimensional data.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_case_study.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Case Study</strong>: Apply clustering on Customer Segmentation data.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_chart.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Lab Report</strong>: Analysis of clustering findings.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=4b5d3muPQmA">K-Means Clustering (StatQuest)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=FgakZw6K1QQ">PCA Step-by-Step (StatQuest)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 7: Neural Networks &amp; Deep Learning Basics</h2>
+<p><em>Biomimicry: Building the Artificial Brain</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Architecture</strong>: Biological vs. Artificial Neurons.</p>
+</li>
+<li>
+<p><strong>The Perceptron</strong>: Weights, Biases, and Activation Functions (ReLU, Sigmoid).</p>
+</li>
+<li>
+<p><strong>Learning</strong>: Feedforward networks and <strong>Backpropagation</strong>.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Understand</strong> the dense neural network architecture.</p>
+</li>
+<li>
+<p><strong>Train</strong> basic neural networks using <strong>PyTorch</strong>.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Lab</strong>: Train a small NN on the MNIST (Digit recognition) dataset.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Coding Test</strong> + <strong>Conceptual Quiz</strong>.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=aircAruvnKk">But what is a Neural Network? (3Blue1Brown)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=Ilg3gGewQ5U">Backpropagation Explained (AssemblyAI)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 8: Convolutional Neural Networks (CNNs)</h2>
+<p><em>Computer Vision: Machines that See</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Image Processing</strong>: Pixels as data.</p>
+</li>
+<li>
+<p><strong>The Convolution</strong>: Filters, pooling, feature maps.</p>
+</li>
+<li>
+<p><strong>Architectures</strong>: LeNet, AlexNet, VGG.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li><strong>Build and Train</strong> CNNs for image classification tasks.</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Lab</strong>: Train a CNN on CIFAR-10 or a custom image dataset.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_chart.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Model Performance Report</strong>.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=py5byOOHZM8">Convolutional Neural Networks (Computerphile)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_experiment.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://poloclub.github.io/cnn-explainer/">Visualizing CNNs (Polos)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 9: Natural Language Processing (NLP)</h2>
+<p><em>Language Understanding: Text as Data</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Preprocessing</strong>: Tokenization, Stopwords.</p>
+</li>
+<li>
+<p><strong>Feature Extraction</strong>: TF-IDF.</p>
+</li>
+<li>
+<p><strong>Embeddings</strong>: Word2Vec, GloVe (Semantic Vector Space).</p>
+</li>
+<li>
+<p><strong>Sequence Models</strong>: RNNs basics.</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Process</strong> raw text data for machine consumption.</p>
+</li>
+<li>
+<p><strong>Build</strong> models for Sentiment Analysis.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Lab</strong>: Train an NLP model using Scikit-Learn or spaCy.</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_project.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Mini-project</strong>: Sentiment Classifier for Movie Reviews.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_experiment.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://projector.tensorflow.org/">Word2Vec Visualization (Google)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_read.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://huggingface.co/learn/nlp-course/chapter1/1">NLP with Python (HuggingFace)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 10: Generative AI &amp; Large Language Models</h2>
+<p><em>The Modern Era: Transformers &amp; GPT</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>The Transformer</strong>: Attention Mechanisms ("Attention is All You Need").</p>
+</li>
+<li>
+<p><strong>Generative Models</strong>: GANs, VAEs.</p>
+</li>
+<li>
+<p><strong>LLMs</strong>: Introduction to GPT-type models (Generative Pre-trained Transformers).</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Understand</strong> modern sequence modeling and the specific "Attention" breakthrough.</p>
+</li>
+<li>
+<p><strong>Interact</strong> with LLMs programmatically.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Lab</strong>: Fine-tune a simple transformer or use a local LLM (Ollama).</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_quiz.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Short Technical Reflection</strong>.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_read.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://jalammar.github.io/illustrated-transformer/">The Illustrated Transformer (Jay Alammar)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=zjkBMFhNj_g">Intro to Large Language Models (Andrej Karpathy)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 11: AI Ethics, Bias, and Responsible AI</h2>
+<p><em>The Conscience: Power and Responsibility</em></p>
+<h3>Topics</h3>
+<ul>
+<li>
+<p><strong>Bias</strong>: Algorithmic bias in datasets (Gender, Race).</p>
+</li>
+<li>
+<p><strong>Fairness &amp; Accountability</strong>: FAT (Fairness, Accountability, Transparency).</p>
+</li>
+<li>
+<p><strong>Governance</strong>: AI Regulation (EU AI Act).</p>
+</li>
+</ul>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Recognize</strong> ethical implications of AI systems.</p>
+</li>
+<li>
+<p><strong>Audit</strong> models for potential harm.</p>
+</li>
+</ul>
+<h3>Activities</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_debate.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Debate</strong>: Ethical AI Case Study (e.g., Facial Recognition).</span>
+    </li>
+</ul>
+
+<h3>Assessment</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_assignment.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><strong>Written Assignment</strong>: Ethical Analysis of a deployed AI system.</span>
+    </li>
+</ul>
+
+<h3>Resources</h3>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_watch.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.youtube.com/watch?v=UG_X_7g63rY">Algorithmic Bias (Vox)</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_read.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://digital-strategy.ec.europa.eu/en/library/ethics-guidelines-trustworthy-ai">AI Ethics Guidelines (EU)</a></span>
+    </li>
+</ul>
+
+<hr />
+<h2>Week 12: Final Project &amp; Presentation</h2>
+<p><em>The Capstone: Putting it all together</em></p>
+<h3>Project Options</h3>
+<ul>
+<li>
+<p>Image Classifier (CNN).</p>
+</li>
+<li>
+<p>NLP Sentiment Analyzer.</p>
+</li>
+<li>
+<p>Recommender System.</p>
+</li>
+<li>
+<p>Time-Series Forecasting.</p>
+</li>
+<li>
+<p>Mini-Transformer Fine-tuning.</p>
+</li>
+</ul>
+<h3>Deliverables</h3>
+<ol>
+<li><strong>Code Notebook</strong>: Clean, commented, and runnable.</li>
+<li><strong>Project Report</strong>: Methdology, results, and conclusion.</li>
+<li><strong>Presentation</strong>: 5-minute defense of your work.</li>
+</ol>
+<h3>Learning Outcomes</h3>
+<ul>
+<li>
+<p><strong>Apply</strong> the full AI workflow end-to-end.</p>
+</li>
+<li>
+<p><strong>Communicate</strong> technical findings professionally.</p>
+</li>
+</ul>
+<hr />
+<h3>Bonus Resources</h3>
+<p><strong>Tools &amp; Frameworks</strong></p>
+<ul style="list-style: none; padding: 0; margin-left: 0;">
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.python.org/">Python.org</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://jupyter.org/">Jupyter Notebook</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://scikit-learn.org/">Scikit-Learn</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://pytorch.org/">PyTorch</a></span>
+    </li>
+    <li style="display: flex; align-items: start; margin-bottom: 10px;">
+        <img src="images/icon_code.png" height="30" width="30" style="width: 30px; height: 30px; margin-right: 15px; margin-top: 3px; flex-shrink: 0;">
+        <span style="flex: 1;"><a href="https://www.tensorflow.org/">TensorFlow</a></span>
+    </li>
+</ul>
+            
+            
+        </article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+    
+    <a href="./index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+</div>
+
+</body>
+</html>
