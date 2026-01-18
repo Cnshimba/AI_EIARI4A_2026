@@ -672,6 +672,8 @@
                     "question": "Create a dummy dataset 'X' with values `[1, 10, 20]` and print its mean using NumPy.",
                     "starter": "import numpy as np\nX = [1, 10, 20]\n",
                     "expectedOutput": "10.333333333333334",
+                    "requiredKeywords": ["np.mean", "print"],
+                    "points": 3,
                     "answer": "print(np.mean(X))",
                     "explanation": "Checking simple numpy usage."
                 },
@@ -680,6 +682,8 @@
                     "question": "Print 'Cluster 1' to simulate a label output.",
                     "starter": "# Output the label\n",
                     "expectedOutput": "Cluster 1",
+                    "requiredKeywords": ["print"],
+                    "points": 2,
                     "answer": "print('Cluster 1')",
                     "explanation": "Simple print check."
                 }
@@ -933,21 +937,49 @@
         function previousQuestion() { if (currentQuestion > 0) showQuestion(currentQuestion - 1); }
         function nextQuestion() { if (currentQuestion < questions.length - 1) showQuestion(currentQuestion + 1); }
 
-        function submitQuiz() {
-            calculateScore();
+        async function submitQuiz() {
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = "Grading...";
+
+            await calculateScoreAsync();
+
             document.getElementById('quizContainer').classList.remove('active');
             showResults();
+
+            btn.disabled = false;
+            btn.textContent = "✓ Submit Quiz";
         }
 
-        function calculateScore() {
+        let maxScore = 0;
+
+        async function calculateScoreAsync() {
             score = 0;
-            questions.forEach((q, i) => {
+            maxScore = 0;
+
+            // Ensure Pyodide is loaded for grading code questions
+            let pyodideInstance = null;
+            const hasCodeQuestions = questions.some(q => q.type === 'code');
+            if (hasCodeQuestions) {
+                try {
+                    pyodideInstance = await loadPyodideEngine();
+                } catch (e) {
+                    console.error("Using existing instance or failed load", e);
+                }
+            }
+
+            // We need to loop sequentially for async execution
+            for (let i = 0; i < questions.length; i++) {
+                const q = questions[i];
+                const points = q.points || 1;
+                maxScore += points;
+
                 let isCorrect = false;
                 const userAns = userAnswers[i];
 
                 if (q.type === 'scenario') {
                     isCorrect = (userAns === q.answer);
-                    // Visual feedback
+                    // Visual feedback output
                     const options = document.getElementById(`question-${i}`).querySelectorAll('.option');
                     options.forEach(opt => {
                         if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
@@ -973,25 +1005,52 @@
                     }
 
                 } else if (q.type === 'code') {
-                    // Basic check: does it contain the answer string?
-                    // Or regex match if we enhanced it. For now, simple containment or exact match is tricky.
-                    // Let's assume the 'answer' field in markdown contains the key snippet.
-                    if (userAns && q.answer) {
-                        // Normalize whitespace
+                    // Hybrid Grading: Output + Syntax
+                    if (q.expectedOutput && userAns) {
+                        try {
+                            // 1. Output Check
+                            let capturedOutput = "";
+                            pyodideInstance.setStdout({ batched: (msg) => { capturedOutput += msg + "\n"; } });
+                            pyodideInstance.setStderr({ batched: (msg) => { /* ignore */ } });
+
+                            await pyodideInstance.loadPackagesFromImports(userAns);
+                            await pyodideInstance.runPythonAsync(userAns);
+
+                            const normActual = capturedOutput.trim().replace(/\s+/g, ' ');
+                            const normExpected = q.expectedOutput.trim().replace(/\s+/g, ' ');
+                            isCorrect = (normActual === normExpected);
+
+                            // 2. Syntax Check (Keywords)
+                            if (isCorrect && q.requiredKeywords && q.requiredKeywords.length > 0) {
+                                const missing = q.requiredKeywords.filter(k => !userAns.includes(k));
+                                if (missing.length > 0) {
+                                    isCorrect = false;
+                                    console.log(`Missing keywords: ${missing.join(', ')}`);
+                                }
+                            }
+
+                        } catch (err) {
+                            console.log("Grading Error:", err);
+                            isCorrect = false;
+                        }
+                    } else if (q.answer && userAns) {
+                        // Fallback
                         const normUser = userAns.replace(/\s+/g, ' ').trim();
                         const normAns = q.answer.replace(/\s+/g, ' ').trim();
                         isCorrect = normUser.includes(normAns);
                     }
                 }
 
-                if (isCorrect) score++;
+                if (isCorrect) score += points;
                 document.getElementById(`explanation-${i}`).classList.add('show');
-            });
+            }
         }
 
         function showResults() {
-            const percentage = Math.round((score / questions.length) * 100);
-            document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
+            // Use maxScore if available, else fallback to questions count (for safety)
+            const total = (typeof maxScore !== 'undefined' && maxScore > 0) ? maxScore : questions.length;
+            const percentage = Math.round((score / total) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score}/${total}`;
 
             let grade = 'Keep Studying';
             if (percentage >= 90) grade = 'Excellent!';
