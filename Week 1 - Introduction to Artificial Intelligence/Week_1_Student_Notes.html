@@ -1,89 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 1 Student Notes - AI Course</title>
-    
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                fontFamily: { sans: ['Inter', 'sans-serif'] },
-                colors: {
-                    primary: '#002F6E', // VUT Midnight Blue
-                    secondary: '#c9984a', // Gold
-                    background: '#f8fafc',
-                    card: '#ffffff',
-                },
-                typography: {
-                    DEFAULT: {
-                        css: {
-                            color: '#334155',
-                            maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
-                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                            'code::before': { content: '""' },
-                            'code::after': { content: '""' }
-                        }
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E', // VUT Midnight Blue
+                        secondary: '#c9984a', // Gold
+                        background: '#f8fafc',
+                        card: '#ffffff',
                     },
-                    dark: {
-                        css: {
-                            color: '#cbd5e1',
-                            h1: { color: '#38bdf8' }, // Sky 400
-                            h2: { color: '#c9984a' },
-                            h3: { color: '#38bdf8' },
-                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                maxWidth: '100%',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                h3: { color: '#1e3a5f' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                                'code::before': { content: '""' },
+                                'code::after': { content: '""' }
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#cbd5e1',
+                                h1: { color: '#38bdf8' }, // Sky 400
+                                h2: { color: '#c9984a' },
+                                h3: { color: '#38bdf8' },
+                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
                         }
                     }
                 }
             }
         }
-    }
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const themeToggle = document.getElementById('theme-toggle');
-        const html = document.documentElement;
-        const iconSun = document.getElementById('icon-sun');
-        const iconMoon = document.getElementById('icon-moon');
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            iconSun.classList.remove('hidden');
-            iconMoon.classList.add('hidden');
-        } else {
-            html.classList.remove('dark');
-            iconSun.classList.add('hidden');
-            iconMoon.classList.remove('hidden');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.theme = 'light';
-                iconSun.classList.add('hidden');
-                iconMoon.classList.remove('hidden');
-            } else {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 html.classList.add('dark');
-                localStorage.theme = 'dark';
                 iconSun.classList.remove('hidden');
                 iconMoon.classList.add('hidden');
+            } else {
+                html.classList.remove('dark');
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
             }
-        });
-    });
-</script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+            themeToggle.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    iconSun.classList.add('hidden');
+                    iconMoon.classList.remove('hidden');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    iconSun.classList.remove('hidden');
+                    iconMoon.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -98,14 +100,27 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* Glossary Tooltip */
-        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
-        html.dark .glossary-term:hover { color: #ffffff; }
+        .glossary-term {
+            color: #c9984a;
+            border-bottom: 2px dotted #c9984a;
+            cursor: help;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .glossary-term:hover {
+            color: #1e3a5f;
+        }
+
+        html.dark .glossary-term:hover {
+            color: #ffffff;
+        }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
         pre {
             background: #0f0f0f !important;
-            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            border-left: 4px solid #c9984a !important;
+            /* VUT Gold */
             padding: 20px !important;
             margin: 20px 0 !important;
             border-radius: 5px !important;
@@ -114,9 +129,11 @@
             line-height: 1.5 !important;
             color: #e2e8f0 !important;
         }
+
         code {
             font-family: 'Courier New', monospace !important;
         }
+
         /* Override prose defaults */
         .prose pre {
             background-color: transparent;
@@ -125,130 +142,295 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
-    
-<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-            <div class="flex flex-col">
-                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
-                </span>
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="../index.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <div class="flex flex-col">
+                    <span
+                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
+                        Intelligence
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
+                            2026</span>
+                    </span>
+                </div>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
+                    Home</a>
+                <a href="../glossary.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+                <button id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </button>
             </div>
-        </a>
-        <div class="flex items-center space-x-6">
-            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
-            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            </button>
         </div>
-    </div>
-</nav>
+    </nav>
 
-    
+
     <main class="container mx-auto px-4 max-w-5xl mb-12">
-        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            
-<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
-    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
-        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
-            <img src="../images/week_1_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
-        </div>
-        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 1</span>
-    </div>
-    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-3xl font-bold text-secondary m-0">Introduction to Artificial Intelligence</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
-    </div>
-</div>
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
 
-            
-            
+            <div
+                class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+                <div
+                    class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+                    <div
+                        class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+                        <img src="../images/week_1_icon.png"
+                            class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+                    </div>
+                    <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 1</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                    <h1 class="text-3xl font-bold text-secondary m-0">Introduction to Artificial Intelligence</h1>
+                    <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
+                </div>
+            </div>
 
-<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
-<strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
-<strong>Topic</strong>: History, Domains &amp; Applications<br />
-<strong>Reading Time</strong>: ~15 Minutes</p></div></div>
-<hr />
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-By the end of this chapter, you will be able to:<br />
-1. <strong>Define</strong> what Artificial Intelligence is and understand the "AI Effect"<br />
-2. <strong>Differentiate</strong> between ANI, AGI, and ASI capability levels<br />
-3. <strong>Trace</strong> the history of AI from Dartmouth (1956) to the Deep Learning era<br />
-4. <strong>Compare</strong> the three schools of thought: Symbolism, Connectionism, and Behaviorism<br />
-5. <strong>Identify</strong> the four key AI domains: ML, DL, NLP, and Robotics<br />
-6. <strong>Understand</strong> the AI ecosystem (Data, Algorithms, Computing Power, Scenarios)</p></div></div>
-<!-- break -->
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week Goal</strong><br />
-Welcome to AI2026! This week, we strip away the hype and define what "Artificial Intelligence" actually is. We will explore its history, the three major "Schools of Thought," and the key domains that make up the modern AI landscape.</p></div></div>
-<hr />
-<h2>1. Defining Artificial Intelligence</h2>
-<p><strong>Artificial Intelligence (AI)</strong> is the branch of computer science dedicated to creating systems capable of performing tasks that typically require human intelligence. These tasks include recognizing speech, making decisions, translating languages, and identifying patterns.</p>
-<h3>1.1 The "AI Effect"</h3>
-<p>A fascinating and persistent phenomenon in the field is known as the "AI Effect." This describes the tendency for people to discount advancements in Artificial Intelligence as soon as they become practical and understood. In the 1980s, a computer capable of playing chess was considered the pinnacle of AI; today, we often dismiss it as mere "brute-force search." Similarly, Optical Character Recognition (OCR) was once viewed as magic in the 1990s, but now it is standard software included in every smartphone. As the axiom goes, "AI is whatever has not been done yet." This constant moving of the goalposts means that AI researchers are perpetually chasing a definition that evolves with their own success.</p>
-<h3>1.2 The Hierarchy of Intelligence</h3>
-<p>We categorize AI capabilities into three distinct levels of evolution. Currently, humanity is entirely within the realm of <strong>Artificial Narrow Intelligence (ANI)</strong>. These are systems that excel at a single, specific task—whether that is DeepBlue playing chess, Google Maps optimizing a route, or ChatGPT determining the next likely word in a sentence. Despite their impressive performance, these systems lack consciousness and versatility.</p>
-<p>The next theoretical step is <strong>Artificial General Intelligence (AGI)</strong>, a system that would possess the ability to learn any intellectual task that a human can, including reasoning, planning, and creativity across diverse domains. The final stage is <strong>Artificial Super Intelligence (ASI)</strong>, a hypothetical future where machines surpass human intellect in every possible field, from creativity to social skills, potentially solving problems that are currently beyond human comprehension.</p>
-<h2>2. A Brief History of AI</h2>
-<p>The field officially began at the <strong>Dartmouth Conference in 1956</strong>, where the term "Artificial Intelligence" was coined by John McCarthy.</p>
-<h3>Timeline</h3>
-<p>The history of AI is not a straight line of progress but a cyclical journey of hype and disappointment. It began with <strong>The Dawn &amp; Golden Age (1956-1970s)</strong>, often called the "Reasoning Period." Following the Dartmouth Conference, optimism reigned supreme. Researchers created programs like <em>Logic Theorist</em> that could prove mathematical theorems, leading to bold predictions that a machine would be "smarter than a man" within twenty years.</p>
-<p>However, this optimism crashed into the <strong>Gloomy Period (1974-1980)</strong>, known as the "First AI Winter." The early logic-based systems failed to handle the ambiguity and messiness of the real world. Funding dried up as promises were broken, and the field faced deep skepticism. AI returned in the <strong>1980s (The Knowledge Period)</strong> in the form of "Expert Systems"—corporate software designed to capture specific human expertise using varying "if-then" rule engines. While useful, these systems were brittle and expensive to maintain.</p>
-<p>We are currently living in <strong>The Prosperity Period (2010s-Present)</strong>, or the "Learning Period." The convergence of massive datasets (Big Data), elastic Cloud Computing, and the parallel processing power of GPUs ignited the Deep Learning revolution. Unlike previous eras, modern systems learn from data rather than being told rules, enabling breakthroughs in vision, language, and creativity that were previously thought impossible.</p>
-<h2>3. The Three Schools of Thought</h2>
-<p>The quest for AI has followed three competing philosophies:</p>
-<h3>3.1 Symbolism (Logic)</h3>
-<p><strong>"Thinking is Computing."</strong></p>
-<p>Symbolism, often referred to as "Good Old-Fashioned AI" (GOFAI), is built on the premise that human intelligence can be reduced to the manipulation of symbols according to explicit logical rules. In this view, the mind is essentially a physical symbol system. System designers explicitly program the knowledge and logic into the machine, using structures like <code>If Bird(x) then Fly(x)</code>. This approach excels in domains requiring high-level reasoning, mathematical problem solving, and planning, such as chess or theorem proving. However, it struggles significantly with perception and learning from raw data; it is notoriously difficult to write a rigid set of logical rules to recognize a fuzzy concept like a "cat" because visual variations are too vast to capture with static logic.</p>
-<h3>3.2 Connectionism (Neural Networks)</h3>
-<p><strong>"Thinking is Biological."</strong></p>
-<p>Connectionism connects intelligence not to symbols, but to biology. It posits that intelligence emerges from the parallel interaction of massive numbers of simple processing units, much like neurons in the human brain. Instead of being explicitly programmed with rules, these systems "learn" patterns from data by adjusting the connection strengths (weights) between neurons. This is the foundation of modern Deep Learning, including technologies like ChatGPT and Computer Vision systems. While Connectionism was historically sidelined due to a lack of computing power, it is today the dominant school of thought, unmatched in its ability to handle "messy" tasks like recognizing faces, understanding speech, and generating natural language.</p>
-<h3>3.3 Behaviorism (Evolution)</h3>
-<p><strong>"Thinking is Action."</strong></p>
-<p>Behaviorism shifts the focus from internal processing (symbols or neurons) to external action. It defines intelligence as the ability of an agent to adapt its behavior to survive and thrive in a dynamic environment. This school is strongly influenced by evolutionary biology and control theory. It argues that an intelligent system does not necessarily need a complete internal model of the world; it simply needs to react correctly to stimuli to achieve its goals. This philosophy underpins the fields of Robotics and Reinforcement Learning, where agents like those from Boston Dynamics learn to walk, run, and backflip by interacting with the physical world rather than by reading a manual on physics.</p>
-<h2>4. Key AI Domains</h2>
-<p>Modern AI is not one thing; it is a collection of fields:</p>
-<h3>4.1 Machine Learning (ML)</h3>
-<p>Machine Learning is the subset of AI that focuses on the ability of computers to <strong>learn</strong> from data from experience without being explicitly programmed. In traditional programming, a human writes specific rules (<code>if x &gt; 5 output y</code>). In Machine Learning, we feed the machine input data and the desired output, and the algorithm determines the rule that maps one to the other.</p>
-<h3>4.2 Deep Learning (DL)</h3>
-<p>Deep Learning is a specialized and powerful subset of Machine Learning inspired by the biological structure of the human brain. It uses multi-layered "Neural Networks" to learn hierarchical representations of data. While standard ML might learn to recognize a car by checking for wheels, Deep Learning learns by identifying lines, then curves, then shapes, and finally the concept of a car, making it exceptionally powerful for processing vast amounts of unstructured data like images and text.</p>
-<h3>4.3 Natural Language Processing (NLP)</h3>
-<p>Natural Language Processing is the field dedicated to the interaction between computers and human language. It bridges the gap between the binary world of machines and the nuanced, contextual world of human communication. Modern NLP powers technologies that can translate languages in real-time, analyze sentiment in social media, and generate human-like text via Large Language Models (LLMs) like GPT-4.</p>
-<h3>4.4 Robotics</h3>
-<p>Robotics is the physical manifestation of Artificial Intelligence. It involves the integration of AI control systems into physical machines that interact with the real world. A robot uses AI to <strong>perceive</strong> its environment through sensors (Computer Vision), <strong>plan</strong> a path or action, and <strong>actuate</strong> its motors to move. This field combines mechanical engineering with the most advanced behaviorist AI algorithms.</p>
-<h2>5. The AI Ecosystem</h2>
-<p>AI does not exist in a vacuum. It is the "brain" of a larger digital body. The textbook describes this relationship as an integrated layer cake of technologies:</p>
-<h3>5.1 The Four Elements of AI</h3>
-<p>For modern AI to function effectively, four critical pillars must be present. First is <strong>Data</strong>, the fuel of the system; without massive datasets, deep learning models cannot learn meaningful representations. Second are the <strong>Algorithms</strong>, the mathematical engines (such as CNNs or Transformers) that process this data. Third is <strong>Computing Power</strong>, the integrated circuits and specialized hardware required to execute the billions of matrix operations these algorithms demand. Finally, there must be <strong>Scenarios</strong>, specific real-world problems or use cases (like autonomous driving) that provide the context and goal for the intelligence.</p>
-<h3>5.2 The Relationship Triangle</h3>
-<p>The textbook conceptualizes the digital era as a relationship between three major forces. <strong>Cloud Computing</strong> acts as the body, providing the infinite storage and scalable compute resources needed to host massive models. <strong>Big Data</strong> serves as the memory, providing the raw material and training examples from every digital touchpoint. <strong>IoT (Internet of Things)</strong> functions as the nervous system or sensory network, collecting data from the edge and executing AI actions in the physical world. Together, they create an ecosystem where AI provides the "brain" that processes information collected by IoT, stored by Big Data, and powered by the Cloud.</p>
-<h2>6. AI Hardware: The Compute Layer</h2>
-<p>Traditional CPUs are great for sequential logic (running an OS), but they are terrible at AI. Deep Learning requires performing millions of simple multiplications in parallel. This need birthed the <strong>AI Processor</strong>.</p>
-<h3>6.1 CPU (Central Processing Unit)</h3>
-<p>The CPU is viewed as the "General Manager" of computing. Its architecture consists of a few, very powerful cores optimized for serial processing and complex logic control. While CPUs are excellent at running operating systems and handling sequential tasks, they are fundamentally inefficient for Deep Learning, which requires performing millions of simple mathematical operations simultaneously.</p>
-<h3>6.2 GPU (Graphics Processing Unit)</h3>
-<p>The GPU acts as the "Labor Force." Unlike a CPU, a GPU architecture is composed of thousands of smaller, simpler cores. These were originally designed for rendering pixels in video games—a task that involves massive parallel matrix mathematics. By a happy accident of history, training Neural Networks involves the exact same type of math. This has made the GPU the workhorse of the modern AI revolution, powering models like GPT-4 on hardware such as the NVIDIA A100.</p>
-<h3>6.3 ASIC (Application-Specific Integrated Circuit)</h3>
-<p>An ASIC is the "Specialist" of the hardware world. These are chips that are physically hardwired for one specific task and cannot be reprogrammed for general computing. The most famous example is Google's <strong>Tensor Processing Unit (TPU)</strong>. The TPU is designed specifically to run TensorFlow code, moving data through "systolic arrays" to perform matrix multiplication much faster and with significantly less energy than a general-purpose GPU.</p>
-<h3>6.4 FPGA (Field Programmable Gate Array)</h3>
-<p>The FPGA is known as the "Shape Shifter." It is a chip that offers the speed of hardware acceleration but can be rewired via software update. This allows engineers to update the hardware architecture itself as algorithms evolve, without needing to replace the physical silicon. Microsoft, for example, extensively uses FPGAs in its Azure cloud to accelerate AI tasks that may change over time.</p>
-<h2>7. Real-World Applications</h2>
-<p>AI has moved beyond theoretical research to become a critical component of the global economy. In <strong>Healthcare</strong>, systems like AlphaFold are predicting protein structures to accelerate drug discovery, while computer vision is analyzing X-rays to detect cancer earlier than human radiologists. In <strong>Finance</strong>, algorithms drive high-frequency trading and detect fraud in millions of credit card transactions per second. <strong>Autonomous Systems</strong> like Tesla's Full Self-Driving use advanced perception to navigate complex city streets. Meanwhile, in the <strong>Creative Arts</strong>, Generative AI tools like Midjourney and Sora are fundamentally changing how we create images and video, turning text prompts into high-fidelity media.</p>
-<h2>8. Summary</h2>
-<p>We have defined AI not as magic, but as a diverse field of computer science rooted in <strong>Symbolism</strong>, <strong>Connectionism</strong>, and <strong>Behaviorism</strong>. While we are currently in the era of <strong>Weak AI (ANI)</strong>, the rapid advancements in Deep Learning are pushing the boundaries of what machines can do.</p>
-<p><strong>Next Week</strong>: We open the hood and look at the mathematics that makes this possible—<strong>Linear Algebra and Probability</strong>.</p>
-            
-            
-<div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
-    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
-    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's material? Take the interactive quiz now!</p>
-    <a href="Week_1_Quiz.html" class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
-        Start Quiz
-    </a>
-</div>
+
+
+            <div
+                class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base [&>p]:!m-0">
+                    <p><strong>Course</strong>: Computer Systems Engineering<br />
+                        <strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
+                        <strong>Topic</strong>: History, Domains &amp; Applications<br />
+                        <strong>Reading Time</strong>: ~15 Minutes
+                    </p>
+                </div>
+            </div>
+            <hr />
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+                    By the end of this chapter, you will be able to:<br />
+                    1. <strong>Define</strong> what Artificial Intelligence is and understand the "AI Effect"<br />
+                    2. <strong>Differentiate</strong> between ANI, AGI, and ASI capability levels<br />
+                    3. <strong>Trace</strong> the history of AI from Dartmouth (1956) to the Deep Learning era<br />
+                    4. <strong>Compare</strong> the three schools of thought: Symbolism, Connectionism, and
+                    Behaviorism<br />
+                    5. <strong>Identify</strong> the four key AI domains: ML, DL, NLP, and Robotics<br />
+                    6. <strong>Understand</strong> the AI ecosystem (Data, Algorithms, Computing Power, Scenarios)</p>
+                </div>
+            </div>
+            <!-- break -->
+
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
+                    Welcome to AI2026! This week, we strip away the hype and define what "Artificial Intelligence"
+                    actually is. We will explore its history, the three major "Schools of Thought," and the key domains
+                    that make up the modern AI landscape.</p>
+                </div>
+            </div>
+            <hr />
+            <h2>1. Defining Artificial Intelligence</h2>
+            <p><strong>Artificial Intelligence (AI)</strong> is the branch of computer science dedicated to creating
+                systems capable of performing tasks that typically require human intelligence. These tasks include
+                recognizing speech, making decisions, translating languages, and identifying patterns.</p>
+            <h3>1.1 The "AI Effect"</h3>
+            <p>A fascinating and persistent phenomenon in the field is known as the "AI Effect." This describes the
+                tendency for people to discount advancements in Artificial Intelligence as soon as they become practical
+                and understood. In the 1980s, a computer capable of playing chess was considered the pinnacle of AI;
+                today, we often dismiss it as mere "brute-force search." Similarly, Optical Character Recognition (OCR)
+                was once viewed as magic in the 1990s, but now it is standard software included in every smartphone. As
+                the axiom goes, "AI is whatever has not been done yet." This constant moving of the goalposts means that
+                AI researchers are perpetually chasing a definition that evolves with their own success.</p>
+            <h3>1.2 The Hierarchy of Intelligence</h3>
+            <p>We categorize AI capabilities into three distinct levels of evolution. Currently, humanity is entirely
+                within the realm of <strong>Artificial Narrow Intelligence (ANI)</strong>. These are systems that excel
+                at a single, specific task—whether that is DeepBlue playing chess, Google Maps optimizing a route, or
+                ChatGPT determining the next likely word in a sentence. Despite their impressive performance, these
+                systems lack consciousness and versatility.</p>
+            <p>The next theoretical step is <strong>Artificial General Intelligence (AGI)</strong>, a system that would
+                possess the ability to learn any intellectual task that a human can, including reasoning, planning, and
+                creativity across diverse domains. The final stage is <strong>Artificial Super Intelligence
+                    (ASI)</strong>, a hypothetical future where machines surpass human intellect in every possible
+                field, from creativity to social skills, potentially solving problems that are currently beyond human
+                comprehension.</p>
+            <h2>2. A Brief History of AI</h2>
+            <p>The field officially began at the <strong>Dartmouth Conference in 1956</strong>, where the term
+                "Artificial Intelligence" was coined by John McCarthy.</p>
+            <h3>Timeline</h3>
+            <p>The history of AI is not a straight line of progress but a cyclical journey of hype and disappointment.
+                It began with <strong>The Dawn &amp; Golden Age (1956-1970s)</strong>, often called the "Reasoning
+                Period." Following the Dartmouth Conference, optimism reigned supreme. Researchers created programs like
+                <em>Logic Theorist</em> that could prove mathematical theorems, leading to bold predictions that a
+                machine would be "smarter than a man" within twenty years.</p>
+            <p>However, this optimism crashed into the <strong>Gloomy Period (1974-1980)</strong>, known as the "First
+                AI Winter." The early logic-based systems failed to handle the ambiguity and messiness of the real
+                world. Funding dried up as promises were broken, and the field faced deep skepticism. AI returned in the
+                <strong>1980s (The Knowledge Period)</strong> in the form of "Expert Systems"—corporate software
+                designed to capture specific human expertise using varying "if-then" rule engines. While useful, these
+                systems were brittle and expensive to maintain.</p>
+            <p>We are currently living in <strong>The Prosperity Period (2010s-Present)</strong>, or the "Learning
+                Period." The convergence of massive datasets (Big Data), elastic Cloud Computing, and the parallel
+                processing power of GPUs ignited the Deep Learning revolution. Unlike previous eras, modern systems
+                learn from data rather than being told rules, enabling breakthroughs in vision, language, and creativity
+                that were previously thought impossible.</p>
+            <h2>3. The Three Schools of Thought</h2>
+            <p>The quest for AI has followed three competing philosophies:</p>
+            <h3>3.1 Symbolism (Logic)</h3>
+            <p><strong>"Thinking is Computing."</strong></p>
+            <p>Symbolism, often referred to as "Good Old-Fashioned AI" (GOFAI), is built on the premise that human
+                intelligence can be reduced to the manipulation of symbols according to explicit logical rules. In this
+                view, the mind is essentially a physical symbol system. System designers explicitly program the
+                knowledge and logic into the machine, using structures like <code>If Bird(x) then Fly(x)</code>. This
+                approach excels in domains requiring high-level reasoning, mathematical problem solving, and planning,
+                such as chess or theorem proving. However, it struggles significantly with perception and learning from
+                raw data; it is notoriously difficult to write a rigid set of logical rules to recognize a fuzzy concept
+                like a "cat" because visual variations are too vast to capture with static logic.</p>
+            <h3>3.2 Connectionism (Neural Networks)</h3>
+            <p><strong>"Thinking is Biological."</strong></p>
+            <p>Connectionism connects intelligence not to symbols, but to biology. It posits that intelligence emerges
+                from the parallel interaction of massive numbers of simple processing units, much like neurons in the
+                human brain. Instead of being explicitly programmed with rules, these systems "learn" patterns from data
+                by adjusting the connection strengths (weights) between neurons. This is the foundation of modern Deep
+                Learning, including technologies like ChatGPT and Computer Vision systems. While Connectionism was
+                historically sidelined due to a lack of computing power, it is today the dominant school of thought,
+                unmatched in its ability to handle "messy" tasks like recognizing faces, understanding speech, and
+                generating natural language.</p>
+            <h3>3.3 Behaviorism (Evolution)</h3>
+            <p><strong>"Thinking is Action."</strong></p>
+            <p>Behaviorism shifts the focus from internal processing (symbols or neurons) to external action. It defines
+                intelligence as the ability of an agent to adapt its behavior to survive and thrive in a dynamic
+                environment. This school is strongly influenced by evolutionary biology and control theory. It argues
+                that an intelligent system does not necessarily need a complete internal model of the world; it simply
+                needs to react correctly to stimuli to achieve its goals. This philosophy underpins the fields of
+                Robotics and Reinforcement Learning, where agents like those from Boston Dynamics learn to walk, run,
+                and backflip by interacting with the physical world rather than by reading a manual on physics.</p>
+            <h2>4. Key AI Domains</h2>
+            <p>Modern AI is not one thing; it is a collection of fields:</p>
+            <h3>4.1 Machine Learning (ML)</h3>
+            <p>Machine Learning is the subset of AI that focuses on the ability of computers to <strong>learn</strong>
+                from data from experience without being explicitly programmed. In traditional programming, a human
+                writes specific rules (<code>if x &gt; 5 output y</code>). In Machine Learning, we feed the machine
+                input data and the desired output, and the algorithm determines the rule that maps one to the other.</p>
+            <h3>4.2 Deep Learning (DL)</h3>
+            <p>Deep Learning is a specialized and powerful subset of Machine Learning inspired by the biological
+                structure of the human brain. It uses multi-layered "Neural Networks" to learn hierarchical
+                representations of data. While standard ML might learn to recognize a car by checking for wheels, Deep
+                Learning learns by identifying lines, then curves, then shapes, and finally the concept of a car, making
+                it exceptionally powerful for processing vast amounts of unstructured data like images and text.</p>
+            <h3>4.3 Natural Language Processing (NLP)</h3>
+            <p>Natural Language Processing is the field dedicated to the interaction between computers and human
+                language. It bridges the gap between the binary world of machines and the nuanced, contextual world of
+                human communication. Modern NLP powers technologies that can translate languages in real-time, analyze
+                sentiment in social media, and generate human-like text via Large Language Models (LLMs) like GPT-4.</p>
+            <h3>4.4 Robotics</h3>
+            <p>Robotics is the physical manifestation of Artificial Intelligence. It involves the integration of AI
+                control systems into physical machines that interact with the real world. A robot uses AI to
+                <strong>perceive</strong> its environment through sensors (Computer Vision), <strong>plan</strong> a
+                path or action, and <strong>actuate</strong> its motors to move. This field combines mechanical
+                engineering with the most advanced behaviorist AI algorithms.</p>
+            <h2>5. The AI Ecosystem</h2>
+            <p>AI does not exist in a vacuum. It is the "brain" of a larger digital body. The textbook describes this
+                relationship as an integrated layer cake of technologies:</p>
+            <h3>5.1 The Four Elements of AI</h3>
+            <p>For modern AI to function effectively, four critical pillars must be present. First is
+                <strong>Data</strong>, the fuel of the system; without massive datasets, deep learning models cannot
+                learn meaningful representations. Second are the <strong>Algorithms</strong>, the mathematical engines
+                (such as CNNs or Transformers) that process this data. Third is <strong>Computing Power</strong>, the
+                integrated circuits and specialized hardware required to execute the billions of matrix operations these
+                algorithms demand. Finally, there must be <strong>Scenarios</strong>, specific real-world problems or
+                use cases (like autonomous driving) that provide the context and goal for the intelligence.</p>
+            <h3>5.2 The Relationship Triangle</h3>
+            <p>The textbook conceptualizes the digital era as a relationship between three major forces. <strong>Cloud
+                    Computing</strong> acts as the body, providing the infinite storage and scalable compute resources
+                needed to host massive models. <strong>Big Data</strong> serves as the memory, providing the raw
+                material and training examples from every digital touchpoint. <strong>IoT (Internet of Things)</strong>
+                functions as the nervous system or sensory network, collecting data from the edge and executing AI
+                actions in the physical world. Together, they create an ecosystem where AI provides the "brain" that
+                processes information collected by IoT, stored by Big Data, and powered by the Cloud.</p>
+            <h2>6. AI Hardware: The Compute Layer</h2>
+            <p>Traditional CPUs are great for sequential logic (running an OS), but they are terrible at AI. Deep
+                Learning requires performing millions of simple multiplications in parallel. This need birthed the
+                <strong>AI Processor</strong>.</p>
+            <h3>6.1 CPU (Central Processing Unit)</h3>
+            <p>The CPU is viewed as the "General Manager" of computing. Its architecture consists of a few, very
+                powerful cores optimized for serial processing and complex logic control. While CPUs are excellent at
+                running operating systems and handling sequential tasks, they are fundamentally inefficient for Deep
+                Learning, which requires performing millions of simple mathematical operations simultaneously.</p>
+            <h3>6.2 GPU (Graphics Processing Unit)</h3>
+            <p>The GPU acts as the "Labor Force." Unlike a CPU, a GPU architecture is composed of thousands of smaller,
+                simpler cores. These were originally designed for rendering pixels in video games—a task that involves
+                massive parallel matrix mathematics. By a happy accident of history, training Neural Networks involves
+                the exact same type of math. This has made the GPU the workhorse of the modern AI revolution, powering
+                models like GPT-4 on hardware such as the NVIDIA A100.</p>
+            <h3>6.3 ASIC (Application-Specific Integrated Circuit)</h3>
+            <p>An ASIC is the "Specialist" of the hardware world. These are chips that are physically hardwired for one
+                specific task and cannot be reprogrammed for general computing. The most famous example is Google's
+                <strong>Tensor Processing Unit (TPU)</strong>. The TPU is designed specifically to run TensorFlow code,
+                moving data through "systolic arrays" to perform matrix multiplication much faster and with
+                significantly less energy than a general-purpose GPU.</p>
+            <h3>6.4 FPGA (Field Programmable Gate Array)</h3>
+            <p>The FPGA is known as the "Shape Shifter." It is a chip that offers the speed of hardware acceleration but
+                can be rewired via software update. This allows engineers to update the hardware architecture itself as
+                algorithms evolve, without needing to replace the physical silicon. Microsoft, for example, extensively
+                uses FPGAs in its Azure cloud to accelerate AI tasks that may change over time.</p>
+            <h2>7. Real-World Applications</h2>
+            <p>AI has moved beyond theoretical research to become a critical component of the global economy. In
+                <strong>Healthcare</strong>, systems like AlphaFold are predicting protein structures to accelerate drug
+                discovery, while computer vision is analyzing X-rays to detect cancer earlier than human radiologists.
+                In <strong>Finance</strong>, algorithms drive high-frequency trading and detect fraud in millions of
+                credit card transactions per second. <strong>Autonomous Systems</strong> like Tesla's Full Self-Driving
+                use advanced perception to navigate complex city streets. Meanwhile, in the <strong>Creative
+                    Arts</strong>, Generative AI tools like Midjourney and Sora are fundamentally changing how we create
+                images and video, turning text prompts into high-fidelity media.</p>
+            <h2>8. Summary</h2>
+            <p>We have defined AI not as magic, but as a diverse field of computer science rooted in
+                <strong>Symbolism</strong>, <strong>Connectionism</strong>, and <strong>Behaviorism</strong>. While we
+                are currently in the era of <strong>Weak AI (ANI)</strong>, the rapid advancements in Deep Learning are
+                pushing the boundaries of what machines can do.</p>
+            <p><strong>Next Week</strong>: We open the hood and look at the mathematics that makes this
+                possible—<strong>Linear Algebra and Probability</strong>.</p>
+
+
+            <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+                <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
+                    material? Take the interactive quiz now!</p>
+                <a href="Week_1_Quiz.html"
+                    class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+                    Start Quiz
+                </a>
+            </div>
 
         </article>
     </main>
@@ -257,26 +439,42 @@ Welcome to AI2026! This week, we strip away the hype and define what "Artificial
         Vaal University of Technology - AI Module 2026
     </footer>
 
-    
-<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
-    
-    
-    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
-             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-        </div>
-        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
-    </a>
 
-    
-                        <a href="../Week%202%20-%20Mathematics%20for%20AI/Week_2_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 2</span>
-                        </a>
-                        
-</div>
+    <div
+        class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+
+
+        <a href="../index.html"
+            class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                    </path>
+                </svg>
+            </div>
+            <span
+                class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course
+                Index</span>
+        </a>
+
+
+        <a href="../Week%202%20-%20Mathematics%20for%20AI/Week_2_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                2</span>
+        </a>
+
+    </div>
 
 </body>
+
 </html>
