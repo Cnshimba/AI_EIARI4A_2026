@@ -233,11 +233,11 @@
             </div>
             <!-- break -->
             <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                 </svg>
                 <div class="flex-1 text-sm md:text-base"><strong>Week 10 Goal:</strong><br />
                     Earlier in the course, we trained a small custom model on 20 sentences—an educational exercise, but
@@ -253,7 +253,8 @@
             <h2>1. The Transformer Revolution</h2>
             <p>Before 2017, sequence models like Recurrent Neural Networks (RNNs) and LSTMs processed text
                 <strong>sequentially</strong>—word by word. This was slow (no parallelization across time steps) and
-                suffered from vanishing gradients, making it hard to capture long-range dependencies.</p>
+                suffered from vanishing gradients, making it hard to capture long-range dependencies.
+            </p>
             <p>In 2017, Google researchers published the groundbreaking paper <strong>"Attention Is All You
                     Need"</strong>, introducing the <strong>Transformer</strong> architecture—which ditched recurrence
                 entirely in favor of attention mechanisms.</p>
@@ -336,7 +337,8 @@
             <hr />
             <h2>2. Large Language Models (LLMs)</h2>
             <p>Modern LLMs follow a two-stage process: <strong>pre-training</strong> (expensive) +
-                <strong>post-training</strong> (alignment).</p>
+                <strong>post-training</strong> (alignment).
+            </p>
             <h3>2.1 Pre-training: Next-Token Prediction</h3>
             <p>The model predicts the next token in massive text corpora. This simple objective accidentally teaches
                 grammar, facts, reasoning, and code.</p>
@@ -363,7 +365,8 @@
                 with humans ranking model responses from best to worst. A "Reward Model" is then trained to learn these
                 human preferences, essentially understanding what a "good" answer looks like. Finally, the main LLM is
                 optimized against this reward model, learning to maximize its score by producing responses that are
-                helpful, honest, and harmless.</p>
+                helpful, honest, and harmless.
+            </p>
             <p><strong>Example</strong>:</p>
             <ul>
                 <li>
