@@ -71,7 +71,7 @@
             class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
 
             <div class="flex items-center space-x-4 mb-8">
-                <div class="p-3 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400">
+                <div class="p-3 rounded-full bg-secondary/10 text-secondary">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -122,7 +122,8 @@
 
             <h3>Step 1: Data Preparation (Windowing)</h3>
             <p>Time series data is sequential. You need to convert it into supervised learning pairs
-                <code>(X, y)</code>.</p>
+                <code>(X, y)</code>.
+            </p>
             <pre><code class="language-python"># Example: Window Size 30
 # Input (X): Days 1-30
 # Label (y): Day 31
