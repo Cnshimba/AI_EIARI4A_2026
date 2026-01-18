@@ -1,89 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 5 Student Notes - AI Course</title>
-    
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                fontFamily: { sans: ['Inter', 'sans-serif'] },
-                colors: {
-                    primary: '#002F6E', // VUT Midnight Blue
-                    secondary: '#c9984a', // Gold
-                    background: '#f8fafc',
-                    card: '#ffffff',
-                },
-                typography: {
-                    DEFAULT: {
-                        css: {
-                            color: '#334155',
-                            maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
-                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                            'code::before': { content: '""' },
-                            'code::after': { content: '""' }
-                        }
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E', // VUT Midnight Blue
+                        secondary: '#c9984a', // Gold
+                        background: '#f8fafc',
+                        card: '#ffffff',
                     },
-                    dark: {
-                        css: {
-                            color: '#cbd5e1',
-                            h1: { color: '#38bdf8' }, // Sky 400
-                            h2: { color: '#c9984a' },
-                            h3: { color: '#38bdf8' },
-                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                maxWidth: '100%',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                h3: { color: '#1e3a5f' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                                'code::before': { content: '""' },
+                                'code::after': { content: '""' }
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#cbd5e1',
+                                h1: { color: '#38bdf8' }, // Sky 400
+                                h2: { color: '#c9984a' },
+                                h3: { color: '#38bdf8' },
+                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
                         }
                     }
                 }
             }
         }
-    }
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const themeToggle = document.getElementById('theme-toggle');
-        const html = document.documentElement;
-        const iconSun = document.getElementById('icon-sun');
-        const iconMoon = document.getElementById('icon-moon');
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            iconSun.classList.remove('hidden');
-            iconMoon.classList.add('hidden');
-        } else {
-            html.classList.remove('dark');
-            iconSun.classList.add('hidden');
-            iconMoon.classList.remove('hidden');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.theme = 'light';
-                iconSun.classList.add('hidden');
-                iconMoon.classList.remove('hidden');
-            } else {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 html.classList.add('dark');
-                localStorage.theme = 'dark';
                 iconSun.classList.remove('hidden');
                 iconMoon.classList.add('hidden');
+            } else {
+                html.classList.remove('dark');
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
             }
-        });
-    });
-</script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+            themeToggle.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    iconSun.classList.add('hidden');
+                    iconMoon.classList.remove('hidden');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    iconSun.classList.remove('hidden');
+                    iconMoon.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -98,14 +100,27 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* Glossary Tooltip */
-        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
-        html.dark .glossary-term:hover { color: #ffffff; }
+        .glossary-term {
+            color: #c9984a;
+            border-bottom: 2px dotted #c9984a;
+            cursor: help;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .glossary-term:hover {
+            color: #1e3a5f;
+        }
+
+        html.dark .glossary-term:hover {
+            color: #ffffff;
+        }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
         pre {
             background: #0f0f0f !important;
-            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            border-left: 4px solid #c9984a !important;
+            /* VUT Gold */
             padding: 20px !important;
             margin: 20px 0 !important;
             border-radius: 5px !important;
@@ -114,9 +129,11 @@
             line-height: 1.5 !important;
             color: #e2e8f0 !important;
         }
+
         code {
             font-family: 'Courier New', monospace !important;
         }
+
         /* Override prose defaults */
         .prose pre {
             background-color: transparent;
@@ -125,360 +142,662 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
-    
-<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-            <div class="flex flex-col">
-                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
-                </span>
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="../index.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <div class="flex flex-col">
+                    <span
+                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
+                        Intelligence
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
+                            2026</span>
+                    </span>
+                </div>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
+                    Home</a>
+                <a href="../glossary.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+                <button id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </button>
             </div>
-        </a>
-        <div class="flex items-center space-x-6">
-            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
-            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            </button>
         </div>
-    </div>
-</nav>
+    </nav>
 
-    
+
     <main class="container mx-auto px-4 max-w-5xl mb-12">
-        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            
-<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
-    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
-        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
-            <img src="../images/week_5_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
-        </div>
-        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 5</span>
-    </div>
-    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-3xl font-bold text-secondary m-0">Supervised Learning Algorithms</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
-    </div>
-</div>
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
 
-            
-            
+            <div
+                class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+                <div
+                    class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+                    <div
+                        class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+                        <img src="../images/week_5_icon.png"
+                            class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+                    </div>
+                    <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 5</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                    <h1 class="text-3xl font-bold text-secondary m-0">Supervised Learning Algorithms</h1>
+                    <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
+                </div>
+            </div>
 
-<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
-<strong>Module</strong>: Artificial Intelligence (AI)<br />
-<strong>Topic</strong>: Supervised Learning (Regression &amp; Classification)<br />
-<strong>Estimated Reading Time</strong>: 60 Minutes</p></div></div>
-<hr />
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-By the end of this chapter, you will be able to:<br />
-1.  <strong>Differentiate</strong> between Linear Regression (Continuous) and Logistic Regression (Categorical).<br />
-2.  <strong>Calculate</strong> the Mean Squared Error (MSE) loss function for regression tasks.<br />
-3.  <strong>Implement</strong> Gradient Descent from scratch to optimize model weights.<br />
-4.  <strong>Construct</strong> a Decision Tree to classify data based on entropy and information gain.<br />
-5.  <strong>Apply</strong> the Sigmoid activation function to transform linear outputs into probabilities.</p></div></div>
-<!-- break -->
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
-Weeks 1-4 laid the foundation (Python, Math, Data). Now, we begin the core of AI: <strong>Machine Learning Models</strong>. In this chapter, we master the three "Workhorse" algorithms of industry: <strong>Linear Regression</strong> (Predicting Numbers), <strong>Logistic Regression</strong> (Predicting Categories), and <strong>Decision Trees</strong> (Making Rule-Based Decisions). We will build them from scratch to understand the math, then implement them in Scikit-Learn.</p></div></div>
-<!-- break -->
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
-This section bridges the gap between pure theory and practical application. We demystify the mathematics of <strong>Linear Regression</strong>, showing that "learning" is often just finding the line of best fit ($y=mx+c$). We will explore the core loop of all ML systems: Model, Loss Function, and Optimizer (Gradient Descent), and implement these from scratch in Python to understand the mechanics under the hood.</p></div></div>
-<hr />
-<h2>1. Introduction to Machine Learning</h2>
-<p>In Part 1, we learned the history and philosophy of AI. Now, we begin building it. We enter the domain of <strong>Machine Learning (ML)</strong>, a subset of AI where computers learn to perform tasks without being explicitly programmed for every edge case.</p>
-<p>In traditional programming, you write the rules: <code>If variable &gt; 5, Then return True</code>. The logic is hard-coded by the human.<br />
-In Machine Learning, we flip this paradigm. You provide the machine with the <em>Answers</em> (Data), and the machine figures out the <em>Rules</em>. This allows us to solve problems where the rules are too complex for humans to write down, such as recognizing a face or translating a language.</p>
-<h3>1.1 The Paradigms</h3>
-<p>Tom Mitchell (1998) famously defined ML as a program that improves its performance on a task through experience. We generally categorize this learning into three paradigms:</p>
-<ol>
-<li>
-<p><strong>Supervised Learning</strong>: This is the most common form of ML and our focus for this week. In this paradigm, we act as a teacher. We provide the model with a dataset containing both the Inputs ($X$) and the Correct Answers ($y$). The goal of the model is to learn a mapping function ($f(x) \approx y$) so that it can predict the answer for new, unseen inputs.</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Dataset Structure</strong>:<br />
--   <strong>Features ($X$)</strong>: The input data (matrix of shape $m \times n$).<br />
--   <strong>Labels ($y$)</strong>: The target answer (vector of shape $m \times 1$).<br />
--   <strong>Train/Test Split</strong>: Crucially, we split this data into two parts. We <strong>Train</strong> on one set and <strong>Test</strong> on a completely unseen set to ensure the model isn't just memorizing.</p></div></div>
-<p>There are two main types of Supervised Learning (see <strong>Figure 1</strong> below):</p>
-</li>
-</ol>
-<ul>
-<li>
-<p><strong>Regression</strong>: Predicting a <strong>continuous number</strong> (e.g., Price, Temperature, Speed).</p>
-</li>
-<li>
-<p><strong>Classification</strong>: Predicting a <strong>discrete class</strong> (e.g., Spam/Not Spam, Cat/Dog).</p>
-<p><img alt="Regression vs Classification Comparison" src="images/regression_vs_classification.png" /><br />
-<em>Figure 1: Comparison between Regression (predicting values) and Classification (predicting categories).</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
--   <strong>Left (Regression)</strong>: Notice the points following a <strong>continuous line</strong> (Predicting a number).<br />
--   <strong>Right (Classification)</strong>: Notice the <strong>color boundary</strong> separating the red and white points (Predicting a category).</p></div></div>
-<!-- break -->
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Example 1: Medical Diagnosis</strong></p>
-<p>Imagine we are building an AI assistant for radiologists to analyze X-rays. Our goal is to automate the difficult task of disease detection to assist doctors in making faster decisions.</p>
-<ul>
-<li><strong>Regression</strong>: If we ask the AI to calculate the <em>estimated time left</em> to recover (e.g., 14.5 days), this is a Regression problem because the answer is a continuous number.</li>
-<li><strong>Classification</strong>: If we ask the AI to decide if the tumor is <strong>Benign</strong> or <strong>Malignant</strong>, this is a Classification problem because the answer is a distinct category (A or B).</li>
-</ul></div></div>
-</li>
-</ul>
-<ol start="2">
-<li>
-<p><strong>Unsupervised Learning</strong>: Here, there is no teacher. The model is given only the Input data ($X$) without any labels. Its goal is to explore the data and find hidden structures or patterns on its own. A common application is Customer Segmentation (Clustering), where an algorithm groups customers with similar buying habits.</p>
-</li>
-<li>
-<p><strong>Reinforcement Learning</strong>: This is learning by trial and error. An agent interacts with an environment and receives feedback in the form of <strong>Rewards</strong> (for good actions) or <strong>Penalties</strong> (for bad ones). Over time, it learns a policy to maximize its total reward. This is how DeepMind's AlphaGo learned to play Go and how robots learn to walk.</p>
-</li>
-</ol>
-<hr />
-<h2>2. Linear Regression: The "Hello World" of AI</h2>
-<p>We will start our journey with <strong>Linear Regression</strong>. While it is conceptually simple—often taught in high school statistics—it contains all the essential components of a modern Deep Learning system: a Model, a Loss Function, and an Optimization Algorithm.</p>
-<h3>2.1 The Model</h3>
-<p>The core idea is to find a relationship between an input variable ($x$) and an output variable ($y$). In its simplest form, we assume this relationship is a straight line. Mathematically, this is expressed as:</p>
-<p>$$y = wx + b$$</p>
-<ul>
-<li>
-<p><strong>$y$ (Prediction)</strong>: The value we want to guess (e.g., House Price).</p>
-</li>
-<li>
-<p><strong>$x$ (Input)</strong>: The feature we know (e.g., House Size in square meters).</p>
-</li>
-<li>
-<p><strong>$w$ (Weight)</strong>: Also known as the slope or coefficient. This represents the <em>importance</em> of the input. A high weight means the House Size drastically affects the Price.</p>
-</li>
-<li>
-<p><strong>$b$ (Bias)</strong>: Also known as the intercept. This allows the line to shift up or down, representing the base price of a house even if the size was zero.</p>
-</li>
-</ul>
-<p><img alt="Linear Model Components: Slope and Bias" src="images/linear_model_components.png" /><br />
-<em>Figure 2: The geometric interpretation of Slope (w) and Bias (b). Notice how the Slope controls the angle, and the Bias controls the starting height on the y-axis.</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Example 2: The "Uber" Analogy</strong></p>
-<p>Imagine you are a developer coding the pricing algorithm for a ride-sharing app like Uber or Bolt. Your goal is to show the user an estimated price <em>before</em> they book the ride so they know exactly what to pay.</p>
-<p><strong>The Calculation</strong>:<br />
-We can think of the Linear Regression equation ($y = wx + b$) as the fare calculator. To find the weight ($w$), ask the question: "What changes?" To find the bias ($b$), ask: "What stays the same?"</p>
-<ul>
-<li><strong>$w$ is the Slope (Variable Cost)</strong>: This is the <strong>Price per KM</strong> (e.g., R15). We call it the slope because it determines how fast the price rises as you drive further. It is multiplied by the distance ($x$).</li>
-<li><strong>$b$ is the Bias (Fixed Cost)</strong>: This is the <strong>Base Booking Fee</strong> (e.g., R20). We call it the bias (or intercept) because you pay this amount even if the car doesn't move ($x=0$). It is the starting point.</li>
-</ul>
-<p>$$ \text{Price} = \underbrace{15}_{\text{Slope}(w)} \times \underbrace{(10)}_{\text{Dist}(x)} + \underbrace{20}_{\text{Bias}(b)} = \text{R170} $$</p></div></div>
-<p><strong>The Goal</strong>: The entire "Learning" process is simply the computer trying to find the optimal specific numbers for $w$ and $b$ so that the line passes as close as possible to our data points.</p>
-<h3>2.2 The Cost Function (Loss)</h3>
-<p>How does the computer know if its current line is "good" or "bad"? We need a mathematical way to measure error. We typically use the <strong>Mean Squared Error (MSE)</strong>, often called the <strong>Loss Function</strong> $J(w,b)$.</p>
-<p>$$J(w,b) = \frac{1}{2m} \sum_{i=1}^{m} (\underbrace{wx^{(i)} + b}_{\text{Prediction}} - \underbrace{y^{(i)}}_{\text{Actual}})^2$$</p>
-<p>In plain English: For every data point, we take the difference between the computer's prediction and the actual true price. We square this difference (making negative errors positive and penalizing large errors more heavily) and average it across all data points.</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Example 3: Why do we square the Error?</strong></p>
-<p>Continuing with our Uber app, suppose our algorithm predicted a fare of <strong>R170</strong>, but the actual trip cost ended up being <strong>R200</strong> (perhaps due to traffic). We need a way to measure exactly how "wrong" our algorithm was so we can improve it.</p>
-<p><strong>The Calculation</strong>:<br />
-Let's apply the <strong>Full Loss Formula</strong>: $J(w,b) = \frac{1}{2m} \sum (\text{Pred} - \text{Actual})^2$.</p>
-<ol>
-<li><strong>Calculate Difference</strong>: $(170 - 200) = -30$.</li>
-<li><strong>Square Difference</strong>: $(-30)^2 = 900$.</li>
-<li><strong>Average it (The $\frac{1}{2m}$ part)</strong>:<br />
-    Assuming this is our only trip ($m=1$), we finish the math:<br />
-    $$ J = \frac{1}{2(1)} \times 900 = \frac{900}{2} = 450 $$<br />
-<strong>The final Cost ($J$) is 450.</strong></li>
-</ol>
-<p><strong>The Interpretation</strong>:<br />
-Why did we divide by 2? It's a mathematical trick to make the derivative (calculus) cleaner later on. But the message is the same: <strong>450</strong> is the penalty score for this model.<br />
--   <strong>High Loss</strong>: The line is far from the dots. The model is bad.<br />
--   <strong>Low Loss</strong>: The line is close to the dots. The model is good.</p></div></div>
-<p><img alt="Visualizing Mean Squared Error Residuals" src="images/mse_residuals.png" /><br />
-<em>Figure 3: Visualizing the Error. The Red Lines are the residuals (Equation 1), and the Red Squares represent the Squared Error (Equation 2).</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
--   <strong>Red Lines</strong>: Represent the raw distance ($y - \hat{y}$).<br />
--   <strong>Red Squares</strong>: Visually show the effect of squaring. Notice how a slightly longer line creates a <strong>massive square</strong>. This visually demonstrates why large errors are penalized so heavily.</p></div></div>
-<h3>2.3 Gradient Descent (The Optimization)</h3>
-<p>This is the "power" behind AI training. How does the computer find the best $w$ and $b$ without randomly guessing millions of combinations? It uses an algorithm called <strong>Gradient Descent</strong>.</p>
-<p>Imagine you are standing on top of a mountain at night in dense fog. You cannot see the bottom of the valley (the point of Minimum Loss). However, you can feel the slope of the ground under your feet. The strategy is simple:<br />
-1.  Feel the slope (Calculate the Gradient).<br />
-2.  Take a small step downhill (Update Weights).<br />
-3.  Repeat until the slope is zero (Convergence), as shown in <strong>Figure 4</strong>.</p>
-<p><img alt="Gradient Descent Optimization Landscape" src="images/gradient_descent_bowl.png" /><br />
-<em>Figure 4: The 'Loss Landscape'. This 3D bowl represents all possible errors. The red path shows the algorithm 'walking' down to the bottom (minimum error).</em></p>
-<p>Mathematically, we update each weight by subtracting the gradient multiplied by a <strong>Learning Rate</strong> ($\alpha$). The Learning Rate determines the size of the step. If it's too big, you might overshoot the valley. If it's too small, it might take forever to reach the bottom.</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why "Descent"?</strong><br />
-We call it "Descent" because we are trying to travel <em>down</em> the error surface to find the lowest possible error.</p>
-<p><strong>Systems Thinking</strong>:<br />
-Think of each step of Gradient Descent as a computed cycle. A complex model needs millions of steps.<br />
--   <strong>Learning Rate</strong>: Determines how fast we move. Too fast = unstable system; Too slow = wasted compute cycles.<br />
--   <strong>Memory</strong>: Storing the gradients for millions of parameters requires massive RAM (which is why we need GPUs).</p></div></div>
-<hr />
-<h2>3. Regression vs. Classification</h2>
-<p>In Part 1, we learned <strong>Linear Regression</strong>, where the goal was to predict a continuous numerical output ($y$), such as a house price of R350,000.  However, many real-world problems aren't about "how much," but about "which one."</p>
-<p>In <strong>Classification</strong>, we predict a categorical label. Instead of an infinite range of numbers, the output is limited to a discrete set of classes.</p>
-<ul>
-<li>
-<p><strong>Binary Classification</strong>: Two possible classes (0 or 1). Example: Is this transaction Fraud (1) or Legal (0)?</p>
-</li>
-<li>
-<p><strong>Multi-Class Classification</strong>: More than two classes. Example: Is this image a Cat, a Dog, or a Bird?</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Feature</th>
-<th style="text-align: left;">Regression</th>
-<th style="text-align: left;">Classification</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Output Type</strong></td>
-<td style="text-align: left;">Continuous Number</td>
-<td style="text-align: left;">Discrete Label/Category</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Example</strong></td>
-<td style="text-align: left;">Temperature ($23.5^\circ C$)</td>
-<td style="text-align: left;">Weather (Sunny/Rainy)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Key Algo</strong></td>
-<td style="text-align: left;">Linear Regression</td>
-<td style="text-align: left;">Logistic Regression, Decision Trees</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2>4. Logistic Regression</h2>
-<p>Despite its confusing name, <strong>Logistic Regression</strong> is a classification algorithm, not a regression one. It gets its name because it starts with the same underlying math as Linear Regression but adds a critical twist to make it suitable for categories.</p>
-<h3>4.1 The Problem with Lines</h3>
-<p>There are two main reasons why we cannot simply use a straight line (Linear Regression) for classification:</p>
-<ol>
-<li><strong>Unbounded Output</strong>: A straight line continues forever. For a very large feature input (e.g., a huge tumor), the linear equation might output a value like <strong>5.7</strong>. What does "5.7 Malignant" mean? It's confusing. We need a probability between 0 and 1.</li>
-<li><strong>Sensitivity to Outliers</strong>: Linear regression tries to minimize the distance to <em>all</em> points. If you add just one extreme outlier far to the right, the entire line tilts to accommodate it. This shifting angle ruins the threshold point, causing the model to misclassify normal data points.</li>
-</ol>
-<p><img alt="Linear vs Logistic Regression" src="images/linear_vs_logistic.png" /><br />
-<em>Figure 5: Why Linear Regression fails for classification. The straight line (Left) overshoots 0 and 1, whereas the Logistic Curve (Right) fits the binary data perfectly.</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Example 1: The "Tumor" Probability</strong></p>
-<p>Imagine predicting if a tumor is malignant based on size. A linear line might output <strong>5.7</strong>, which makes no sense as a probability. We need a value between <strong>0</strong> (0%) and <strong>1</strong> (100%).</p></div></div>
-<h3>4.2 The Sigmoid Function</h3>
-<p>To address the limitations shown in Figure 5, we do not discard the linear model; instead, we transform its output using a special activation function. We take the linear result ($z = wx + b$) and pass it through the <strong>Sigmoid Activation Function</strong>:</p>
-<p>$$g(z) = \frac{1}{1 + e^{-z}}$$</p>
-<p><strong>Breaking down the Math</strong>:</p>
-<ul>
-<li>
-<p><strong>$z$ (The Linear Score)</strong>: This is just our familiar equation $wx + b$. It represents the raw "confidence score" before we turn it into a probability.</p>
-</li>
-<li>
-<p><strong>$e$ (Euler's Number)</strong>: A mathematical constant approximately equal to <strong>2.718</strong>.</p>
-</li>
-<li>
-<p><strong>The Effect</strong>: This formula mathematically forces any input ($z$)—from negative infinity to positive infinity—to "squash" strictly into the range <strong>0 to 1</strong>.</p>
-</li>
-</ul>
-<p><img alt="The Sigmoid Function" src="images/sigmoid_function.png" /><br />
-<em>Figure 6: The Sigmoid Function. It "squashes" any number into the 0 to 1 range.</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
--   <strong>High Input ($z$)</strong>: The curve flattens near top <strong>1</strong> (Yes).<br />
--   <strong>Low Input ($-z$)</strong>: The curve flattens near bottom <strong>0</strong> (No).<br />
--   <strong>Zero Input</strong>: The curve passes exactly through <strong>0.5</strong>.</p></div></div>
-<h3>4.3 The Decision Boundary</h3>
-<p>The model outputs a probability (e.g., 0.85). To get a final "Class", we need to make a decision. We apply a <strong>Threshold</strong>, typically 0.5.</p>
-<ul>
-<li>
-<p>If Probability $\geq$ 0.5 $\rightarrow$ Predict <strong>Class 1</strong>.</p>
-</li>
-<li>
-<p>If Probability $&lt;$ 0.5 $\rightarrow$ Predict <strong>Class 0</strong>.</p>
-</li>
-</ul>
-<p><img alt="Decision Boundary Visualization" src="images/decision_boundary.png" /><br />
-<em>Figure 7: All points above the white line are classified as Red Squares (Class B), and all below are White Circles (Class A).</em></p>
-<p>The line where the probability is exactly 0.5 is called the <strong>Decision Boundary</strong>.</p>
-<p><strong>The Line in the Sand</strong>:<br />
-Think of the Decision Boundary as the crossover point where the model stops being "more likely No" and starts being "more likely Yes".</p>
-<ul>
-<li>
-<p>In a 1D problem (like Tumor Size), the boundary is a single <strong>Point</strong> (e.g., "Size &gt; 4cm").</p>
-</li>
-<li>
-<p>In a 2D problem (like Exam Score 1 vs Exam Score 2), the boundary is a <strong>Line</strong>.</p>
-</li>
-<li>
-<p>In a 3D problem, it becomes a <strong>Plane</strong>.</p>
-</li>
-</ul>
-<p>Crucially, even though the Sigmoid function is curvy (S-shape), the decision boundary created by Logistic Regression is always a <strong>Straight Line</strong> (Linear).</p>
-<hr />
-<h2>5. Decision Trees</h2>
-<p>While Logistic Regression behaves like a mathematician trying to draw a single, smooth dividing line through the data, <strong>Decision Trees</strong> take a completely different approach. They behave like a human playing the game "<strong>20 Questions</strong>".</p>
-<p>Instead of using complex calculus to find a curve, a Decision Tree solves the problem by breaking it down into a series of simple, logical rules. It asks a sequence of <strong>Yes/No questions</strong> to progressively narrow down the possibilities until it reaches a confident answer. This makes the model extremely easy to understand and visualize.</p>
-<p><img alt="Decision Tree Logic" src="images/decision_tree_logic_tennis.png" /><br />
-<em>Figure 8: A Decision Tree determining if we should play tennis based on weather conditions.</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Example 2: The "Tennis" Logic</strong></p>
-<p><strong>The Process</strong>:<br />
-1.  <strong>Is it Raining?</strong><br />
-    -   If <strong>Yes</strong> $\rightarrow$ Check Wind.<br />
-    -   If <strong>No</strong> (Sunny/Overcast) $\rightarrow$ <strong>Play</strong>.<br />
-2.  <strong>Is it Windy?</strong> (Only if raining)<br />
-    -   <strong>Strong Wind</strong> $\rightarrow$ <strong>Don't Play</strong>.<br />
-    -   <strong>Weak Wind</strong> $\rightarrow$ <strong>Play</strong>.</p></div></div>
-<h3>5.1 Measuring Purity (Entropy)</h3>
-<p>The "Learning" part of a Decision Tree involves figuring out <strong>which question to ask first</strong>. Should we ask about the Wind or the Rain?</p>
-<p>To decide, the algorithm uses a metric called <strong>Entropy</strong>, which measures the chaos or impurity of a group.</p>
-<ul>
-<li>
-<p><strong>High Entropy (High Chaos)</strong>: A group mixed with 50% "Play" and 50% "Don't Play." It's hard to make a prediction here.</p>
-</li>
-<li>
-<p><strong>Low Entropy (Low Chaos)</strong>: A group with 100% "Play." The decision is obvious.</p>
-</li>
-</ul>
-<p>The algorithm (such as ID3 or CART) calculates <strong>Information Gain</strong>. It looks at every possible feature (Wind, Temp, Humidity) and picks the one that reduces Entropy the most—effectively splitting the messy mixed groups into cleaner, purer subgroups.</p>
-<hr />
-<h2>6. Summary</h2>
-<p>We have expanded our toolkit from identifying relationships (Regression) to making choices (Classification).</p>
-<ul>
-<li>
-<p><strong>Logistic Regression</strong> uses the <strong>Sigmoid</strong> function to output probabilities.</p>
-</li>
-<li>
-<p><strong>Decision Trees</strong> use hierarchical questions based on <strong>Information Gain</strong> to split data.</p>
-</li>
-</ul>
-<p>Next week, we will tackle the final paradigm of classical Machine Learning: <strong>Unsupervised Learning</strong>. What happens when we have data but no labels at all?</p>
-<hr />
-<h2>7. Lab Review</h2>
-<p>We have prepared four practical experiments to solidify these concepts.</p>
-<h3>7.1 Lab 1 &amp; 2: Linear Regression (House Prices)</h3>
-<p>We tackle the classic problem of House Price Prediction in two ways:</p>
-<ul>
-<li>
-<p><strong>The "Easy" Way (Scikit-Learn)</strong>: Implementing a full pipeline in just 3 lines of code.</p>
-</li>
-<li>
-<p><strong>The "Hard" Way (NumPy)</strong>: Implementing the Forward Pass, Loss Function, and Gradient Descent from scratch to understand the math.</p>
-</li>
-<li>
-<p><strong>Interactive Visualization</strong>: We generate a 3D plot of weights vs. loss to watch Gradient Descent "walk" down the valley in real-time.</p>
-</li>
-</ul>
-<h3>7.2 Lab 3: Logistic Regression (Rent vs. Area)</h3>
-<p>We revisit housing data but ask a classification question: "Is this apartment affordable?" (Yes/No). You will see how the Logistic curve fits the data differently than the straight line of regression.</p>
-<h3>7.3 Lab 4: Decision Trees (Play Tennis?)</h3>
-<p>We use the classic "Play Tennis" dataset to train a Decision Tree. The highlight is using <code>graphviz</code> to visualize the tree and trace the AI's logic branch by branch.</p>
-<p><a id="labs"></a></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Hands-On Available</strong><br />
-Ready to code? Access the step-by-step lab guides here:</p>
-<ul>
-<li><a href="Week_5_Lab_1_Linear_Regression.html">Lab 1: Linear Regression Basics</a></li>
-<li><a href="Week_5_Lab_2_Linear_Regression_Expansion.html">Lab 2: Polynomial Regression</a></li>
-<li><a href="Week_5_Lab_3_Logistic_Regression.html">Lab 3: Logistic Regression</a></li>
-<li><a href="Week_5_Lab_4_Decision_Trees.html">Lab 4: Decision Trees</a></li>
-</ul></div></div>
-            
-            
-<div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
-    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
-    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's material? Take the interactive quiz now!</p>
-    <a href="Week_5_Quiz.html" class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
-        Start Quiz
-    </a>
-</div>
+
+            <div
+                class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base [&>p]:!m-0">
+                    <p><strong>Course</strong>: Computer Systems Engineering<br />
+                        <strong>Module</strong>: Artificial Intelligence (AI)<br />
+                        <strong>Topic</strong>: Supervised Learning (Regression &amp; Classification)<br />
+                        <strong>Estimated Reading Time</strong>: 60 Minutes
+                    </p>
+                </div>
+            </div>
+            <hr />
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+                    By the end of this chapter, you will be able to:<br />
+                    1. <strong>Differentiate</strong> between Linear Regression (Continuous) and Logistic Regression
+                    (Categorical).<br />
+                    2. <strong>Calculate</strong> the Mean Squared Error (MSE) loss function for regression tasks.<br />
+                    3. <strong>Implement</strong> Gradient Descent from scratch to optimize model weights.<br />
+                    4. <strong>Construct</strong> a Decision Tree to classify data based on entropy and information
+                    gain.<br />
+                    5. <strong>Apply</strong> the Sigmoid activation function to transform linear outputs into
+                    probabilities.</p>
+                </div>
+            </div>
+            <!-- break -->
+
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
+                    Weeks 1-4 laid the foundation (Python, Math, Data). Now, we begin the core of AI: <strong>Machine
+                        Learning Models</strong>. In this chapter, we master the three "Workhorse" algorithms of
+                    industry: <strong>Linear Regression</strong> (Predicting Numbers), <strong>Logistic
+                        Regression</strong> (Predicting Categories), and <strong>Decision Trees</strong> (Making
+                    Rule-Based Decisions). We will build them from scratch to understand the math, then implement them
+                    in Scikit-Learn.</p>
+                </div>
+            </div>
+
+            <hr />
+            <h2>1. Introduction to Machine Learning</h2>
+            <p>In Part 1, we learned the history and philosophy of AI. Now, we begin building it. We enter the domain of
+                <strong>Machine Learning (ML)</strong>, a subset of AI where computers learn to perform tasks without
+                being explicitly programmed for every edge case.
+            </p>
+            <p>In traditional programming, you write the rules: <code>If variable &gt; 5, Then return True</code>. The
+                logic is hard-coded by the human.<br />
+                In Machine Learning, we flip this paradigm. You provide the machine with the <em>Answers</em> (Data),
+                and the machine figures out the <em>Rules</em>. This allows us to solve problems where the rules are too
+                complex for humans to write down, such as recognizing a face or translating a language.</p>
+            <h3>1.1 The Paradigms</h3>
+            <p>Tom Mitchell (1998) famously defined ML as a program that improves its performance on a task through
+                experience. We generally categorize this learning into three paradigms:</p>
+            <ol>
+                <li>
+                    <p><strong>Supervised Learning</strong>: This is the most common form of ML and our focus for this
+                        week. In this paradigm, we act as a teacher. We provide the model with a dataset containing both
+                        the Inputs ($X$) and the Correct Answers ($y$). The goal of the model is to learn a mapping
+                        function ($f(x) \approx y$) so that it can predict the answer for new, unseen inputs.</p>
+                    <div
+                        class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                        <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                            </path>
+                        </svg>
+                        <div class="flex-1 text-sm md:text-base"><strong>Dataset Structure</strong>:<br />
+                            - <strong>Features ($X$)</strong>: The input data (matrix of shape $m \times n$).<br />
+                            - <strong>Labels ($y$)</strong>: The target answer (vector of shape $m \times 1$).<br />
+                            - <strong>Train/Test Split</strong>: Crucially, we split this data into two parts. We
+                            <strong>Train</strong> on one set and <strong>Test</strong> on a completely unseen set to
+                            ensure the model isn't just memorizing.</p>
+                        </div>
+                    </div>
+                    <p>There are two main types of Supervised Learning (see <strong>Figure 1</strong> below):</p>
+                </li>
+            </ol>
+            <ul>
+                <li>
+                    <p><strong>Regression</strong>: Predicting a <strong>continuous number</strong> (e.g., Price,
+                        Temperature, Speed).</p>
+                </li>
+                <li>
+                    <p><strong>Classification</strong>: Predicting a <strong>discrete class</strong> (e.g., Spam/Not
+                        Spam, Cat/Dog).</p>
+                    <p><img alt="Regression vs Classification Comparison"
+                            src="images/regression_vs_classification.png" /><br />
+                        <em>Figure 1: Comparison between Regression (predicting values) and Classification (predicting
+                            categories).</em>
+                    </p>
+                    <div
+                        class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                        <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        <div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
+                            - <strong>Left (Regression)</strong>: Notice the points following a <strong>continuous
+                                line</strong> (Predicting a number).<br />
+                            - <strong>Right (Classification)</strong>: Notice the <strong>color boundary</strong>
+                            separating the red and white points (Predicting a category).</p>
+                        </div>
+                    </div>
+                    <!-- break -->
+                    <div
+                        class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                        <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                            </path>
+                        </svg>
+                        <div class="flex-1 text-sm md:text-base"><strong>Example 1: Medical Diagnosis</strong></p>
+                            <p>Imagine we are building an AI assistant for radiologists to analyze X-rays. Our goal is
+                                to automate the difficult task of disease detection to assist doctors in making faster
+                                decisions.</p>
+                            <ul>
+                                <li><strong>Regression</strong>: If we ask the AI to calculate the <em>estimated time
+                                        left</em> to recover (e.g., 14.5 days), this is a Regression problem because the
+                                    answer is a continuous number.</li>
+                                <li><strong>Classification</strong>: If we ask the AI to decide if the tumor is
+                                    <strong>Benign</strong> or <strong>Malignant</strong>, this is a Classification
+                                    problem because the answer is a distinct category (A or B).
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <ol start="2">
+                <li>
+                    <p><strong>Unsupervised Learning</strong>: Here, there is no teacher. The model is given only the
+                        Input data ($X$) without any labels. Its goal is to explore the data and find hidden structures
+                        or patterns on its own. A common application is Customer Segmentation (Clustering), where an
+                        algorithm groups customers with similar buying habits.</p>
+                </li>
+                <li>
+                    <p><strong>Reinforcement Learning</strong>: This is learning by trial and error. An agent interacts
+                        with an environment and receives feedback in the form of <strong>Rewards</strong> (for good
+                        actions) or <strong>Penalties</strong> (for bad ones). Over time, it learns a policy to maximize
+                        its total reward. This is how DeepMind's AlphaGo learned to play Go and how robots learn to
+                        walk.</p>
+                </li>
+            </ol>
+            <hr />
+            <h2>2. Linear Regression: The "Hello World" of AI</h2>
+            <p>We will start our journey with <strong>Linear Regression</strong>. While it is conceptually simple—often
+                taught in high school statistics—it contains all the essential components of a modern Deep Learning
+                system: a Model, a Loss Function, and an Optimization Algorithm.</p>
+            <h3>2.1 The Model</h3>
+            <p>The core idea is to find a relationship between an input variable ($x$) and an output variable ($y$). In
+                its simplest form, we assume this relationship is a straight line. Mathematically, this is expressed as:
+            </p>
+            <p>$$y = wx + b$$</p>
+            <ul>
+                <li>
+                    <p><strong>$y$ (Prediction)</strong>: The value we want to guess (e.g., House Price).</p>
+                </li>
+                <li>
+                    <p><strong>$x$ (Input)</strong>: The feature we know (e.g., House Size in square meters).</p>
+                </li>
+                <li>
+                    <p><strong>$w$ (Weight)</strong>: Also known as the slope or coefficient. This represents the
+                        <em>importance</em> of the input. A high weight means the House Size drastically affects the
+                        Price.
+                    </p>
+                </li>
+                <li>
+                    <p><strong>$b$ (Bias)</strong>: Also known as the intercept. This allows the line to shift up or
+                        down, representing the base price of a house even if the size was zero.</p>
+                </li>
+            </ul>
+            <p><img alt="Linear Model Components: Slope and Bias" src="images/linear_model_components.png" /><br />
+                <em>Figure 2: The geometric interpretation of Slope (w) and Bias (b). Notice how the Slope controls the
+                    angle, and the Bias controls the starting height on the y-axis.</em>
+            </p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Example 2: The "Uber" Analogy</strong></p>
+                    <p>Imagine you are a developer coding the pricing algorithm for a ride-sharing app like Uber or
+                        Bolt. Your goal is to show the user an estimated price <em>before</em> they book the ride so
+                        they know exactly what to pay.</p>
+                    <p><strong>The Calculation</strong>:<br />
+                        We can think of the Linear Regression equation ($y = wx + b$) as the fare calculator. To find
+                        the weight ($w$), ask the question: "What changes?" To find the bias ($b$), ask: "What stays the
+                        same?"</p>
+                    <ul>
+                        <li><strong>$w$ is the Slope (Variable Cost)</strong>: This is the <strong>Price per KM</strong>
+                            (e.g., R15). We call it the slope because it determines how fast the price rises as you
+                            drive further. It is multiplied by the distance ($x$).</li>
+                        <li><strong>$b$ is the Bias (Fixed Cost)</strong>: This is the <strong>Base Booking Fee</strong>
+                            (e.g., R20). We call it the bias (or intercept) because you pay this amount even if the car
+                            doesn't move ($x=0$). It is the starting point.</li>
+                    </ul>
+                    <p>$$ \text{Price} = \underbrace{15}_{\text{Slope}(w)} \times \underbrace{(10)}_{\text{Dist}(x)} +
+                        \underbrace{20}_{\text{Bias}(b)} = \text{R170} $$</p>
+                </div>
+            </div>
+            <p><strong>The Goal</strong>: The entire "Learning" process is simply the computer trying to find the
+                optimal specific numbers for $w$ and $b$ so that the line passes as close as possible to our data
+                points.</p>
+            <h3>2.2 The Cost Function (Loss)</h3>
+            <p>How does the computer know if its current line is "good" or "bad"? We need a mathematical way to measure
+                error. We typically use the <strong>Mean Squared Error (MSE)</strong>, often called the <strong>Loss
+                    Function</strong> $J(w,b)$.</p>
+            <p>$$J(w,b) = \frac{1}{2m} \sum_{i=1}^{m} (\underbrace{wx^{(i)} + b}_{\text{Prediction}} -
+                \underbrace{y^{(i)}}_{\text{Actual}})^2$$</p>
+            <p>In plain English: For every data point, we take the difference between the computer's prediction and the
+                actual true price. We square this difference (making negative errors positive and penalizing large
+                errors more heavily) and average it across all data points.</p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Example 3: Why do we square the Error?</strong></p>
+                    <p>Continuing with our Uber app, suppose our algorithm predicted a fare of <strong>R170</strong>,
+                        but the actual trip cost ended up being <strong>R200</strong> (perhaps due to traffic). We need
+                        a way to measure exactly how "wrong" our algorithm was so we can improve it.</p>
+                    <p><strong>The Calculation</strong>:<br />
+                        Let's apply the <strong>Full Loss Formula</strong>: $J(w,b) = \frac{1}{2m} \sum (\text{Pred} -
+                        \text{Actual})^2$.</p>
+                    <ol>
+                        <li><strong>Calculate Difference</strong>: $(170 - 200) = -30$.</li>
+                        <li><strong>Square Difference</strong>: $(-30)^2 = 900$.</li>
+                        <li><strong>Average it (The $\frac{1}{2m}$ part)</strong>:<br />
+                            Assuming this is our only trip ($m=1$), we finish the math:<br />
+                            $$ J = \frac{1}{2(1)} \times 900 = \frac{900}{2} = 450 $$<br />
+                            <strong>The final Cost ($J$) is 450.</strong>
+                        </li>
+                    </ol>
+                    <p><strong>The Interpretation</strong>:<br />
+                        Why did we divide by 2? It's a mathematical trick to make the derivative (calculus) cleaner
+                        later on. But the message is the same: <strong>450</strong> is the penalty score for this
+                        model.<br />
+                        - <strong>High Loss</strong>: The line is far from the dots. The model is bad.<br />
+                        - <strong>Low Loss</strong>: The line is close to the dots. The model is good.</p>
+                </div>
+            </div>
+            <p><img alt="Visualizing Mean Squared Error Residuals" src="images/mse_residuals.png" /><br />
+                <em>Figure 3: Visualizing the Error. The Red Lines are the residuals (Equation 1), and the Red Squares
+                    represent the Squared Error (Equation 2).</em>
+            </p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
+                    - <strong>Red Lines</strong>: Represent the raw distance ($y - \hat{y}$).<br />
+                    - <strong>Red Squares</strong>: Visually show the effect of squaring. Notice how a slightly longer
+                    line creates a <strong>massive square</strong>. This visually demonstrates why large errors are
+                    penalized so heavily.</p>
+                </div>
+            </div>
+            <h3>2.3 Gradient Descent (The Optimization)</h3>
+            <p>This is the "power" behind AI training. How does the computer find the best $w$ and $b$ without randomly
+                guessing millions of combinations? It uses an algorithm called <strong>Gradient Descent</strong>.</p>
+            <p>Imagine you are standing on top of a mountain at night in dense fog. You cannot see the bottom of the
+                valley (the point of Minimum Loss). However, you can feel the slope of the ground under your feet. The
+                strategy is simple:<br />
+                1. Feel the slope (Calculate the Gradient).<br />
+                2. Take a small step downhill (Update Weights).<br />
+                3. Repeat until the slope is zero (Convergence), as shown in <strong>Figure 4</strong>.</p>
+            <p><img alt="Gradient Descent Optimization Landscape" src="images/gradient_descent_bowl.png" /><br />
+                <em>Figure 4: The 'Loss Landscape'. This 3D bowl represents all possible errors. The red path shows the
+                    algorithm 'walking' down to the bottom (minimum error).</em>
+            </p>
+            <p>Mathematically, we update each weight by subtracting the gradient multiplied by a <strong>Learning
+                    Rate</strong> ($\alpha$). The Learning Rate determines the size of the step. If it's too big, you
+                might overshoot the valley. If it's too small, it might take forever to reach the bottom.</p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Why "Descent"?</strong><br />
+                    We call it "Descent" because we are trying to travel <em>down</em> the error surface to find the
+                    lowest possible error.</p>
+                    <p><strong>Systems Thinking</strong>:<br />
+                        Think of each step of Gradient Descent as a computed cycle. A complex model needs millions of
+                        steps.<br />
+                        - <strong>Learning Rate</strong>: Determines how fast we move. Too fast = unstable system; Too
+                        slow = wasted compute cycles.<br />
+                        - <strong>Memory</strong>: Storing the gradients for millions of parameters requires massive RAM
+                        (which is why we need GPUs).</p>
+                </div>
+            </div>
+            <hr />
+            <h2>3. Regression vs. Classification</h2>
+            <p>In Part 1, we learned <strong>Linear Regression</strong>, where the goal was to predict a continuous
+                numerical output ($y$), such as a house price of R350,000. However, many real-world problems aren't
+                about "how much," but about "which one."</p>
+            <p>In <strong>Classification</strong>, we predict a categorical label. Instead of an infinite range of
+                numbers, the output is limited to a discrete set of classes.</p>
+            <ul>
+                <li>
+                    <p><strong>Binary Classification</strong>: Two possible classes (0 or 1). Example: Is this
+                        transaction Fraud (1) or Legal (0)?</p>
+                </li>
+                <li>
+                    <p><strong>Multi-Class Classification</strong>: More than two classes. Example: Is this image a Cat,
+                        a Dog, or a Bird?</p>
+                </li>
+            </ul>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: left;">Feature</th>
+                        <th style="text-align: left;">Regression</th>
+                        <th style="text-align: left;">Classification</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="text-align: left;"><strong>Output Type</strong></td>
+                        <td style="text-align: left;">Continuous Number</td>
+                        <td style="text-align: left;">Discrete Label/Category</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Example</strong></td>
+                        <td style="text-align: left;">Temperature ($23.5^\circ C$)</td>
+                        <td style="text-align: left;">Weather (Sunny/Rainy)</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left;"><strong>Key Algo</strong></td>
+                        <td style="text-align: left;">Linear Regression</td>
+                        <td style="text-align: left;">Logistic Regression, Decision Trees</td>
+                    </tr>
+                </tbody>
+            </table>
+            <hr />
+            <h2>4. Logistic Regression</h2>
+            <p>Despite its confusing name, <strong>Logistic Regression</strong> is a classification algorithm, not a
+                regression one. It gets its name because it starts with the same underlying math as Linear Regression
+                but adds a critical twist to make it suitable for categories.</p>
+            <h3>4.1 The Problem with Lines</h3>
+            <p>There are two main reasons why we cannot simply use a straight line (Linear Regression) for
+                classification:</p>
+            <ol>
+                <li><strong>Unbounded Output</strong>: A straight line continues forever. For a very large feature input
+                    (e.g., a huge tumor), the linear equation might output a value like <strong>5.7</strong>. What does
+                    "5.7 Malignant" mean? It's confusing. We need a probability between 0 and 1.</li>
+                <li><strong>Sensitivity to Outliers</strong>: Linear regression tries to minimize the distance to
+                    <em>all</em> points. If you add just one extreme outlier far to the right, the entire line tilts to
+                    accommodate it. This shifting angle ruins the threshold point, causing the model to misclassify
+                    normal data points.
+                </li>
+            </ol>
+            <p><img alt="Linear vs Logistic Regression" src="images/linear_vs_logistic.png" /><br />
+                <em>Figure 5: Why Linear Regression fails for classification. The straight line (Left) overshoots 0 and
+                    1, whereas the Logistic Curve (Right) fits the binary data perfectly.</em>
+            </p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Example 1: The "Tumor" Probability</strong></p>
+                    <p>Imagine predicting if a tumor is malignant based on size. A linear line might output
+                        <strong>5.7</strong>, which makes no sense as a probability. We need a value between
+                        <strong>0</strong> (0%) and <strong>1</strong> (100%).
+                    </p>
+                </div>
+            </div>
+            <h3>4.2 The Sigmoid Function</h3>
+            <p>To address the limitations shown in Figure 5, we do not discard the linear model; instead, we transform
+                its output using a special activation function. We take the linear result ($z = wx + b$) and pass it
+                through the <strong>Sigmoid Activation Function</strong>:</p>
+            <p>$$g(z) = \frac{1}{1 + e^{-z}}$$</p>
+            <p><strong>Breaking down the Math</strong>:</p>
+            <ul>
+                <li>
+                    <p><strong>$z$ (The Linear Score)</strong>: This is just our familiar equation $wx + b$. It
+                        represents the raw "confidence score" before we turn it into a probability.</p>
+                </li>
+                <li>
+                    <p><strong>$e$ (Euler's Number)</strong>: A mathematical constant approximately equal to
+                        <strong>2.718</strong>.
+                    </p>
+                </li>
+                <li>
+                    <p><strong>The Effect</strong>: This formula mathematically forces any input ($z$)—from negative
+                        infinity to positive infinity—to "squash" strictly into the range <strong>0 to 1</strong>.</p>
+                </li>
+            </ul>
+            <p><img alt="The Sigmoid Function" src="images/sigmoid_function.png" /><br />
+                <em>Figure 6: The Sigmoid Function. It "squashes" any number into the 0 to 1 range.</em>
+            </p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
+                    - <strong>High Input ($z$)</strong>: The curve flattens near top <strong>1</strong> (Yes).<br />
+                    - <strong>Low Input ($-z$)</strong>: The curve flattens near bottom <strong>0</strong> (No).<br />
+                    - <strong>Zero Input</strong>: The curve passes exactly through <strong>0.5</strong>.</p>
+                </div>
+            </div>
+            <h3>4.3 The Decision Boundary</h3>
+            <p>The model outputs a probability (e.g., 0.85). To get a final "Class", we need to make a decision. We
+                apply a <strong>Threshold</strong>, typically 0.5.</p>
+            <ul>
+                <li>
+                    <p>If Probability $\geq$ 0.5 $\rightarrow$ Predict <strong>Class 1</strong>.</p>
+                </li>
+                <li>
+                    <p>If Probability $&lt;$ 0.5 $\rightarrow$ Predict <strong>Class 0</strong>.</p>
+                </li>
+            </ul>
+            <p><img alt="Decision Boundary Visualization" src="images/decision_boundary.png" /><br />
+                <em>Figure 7: All points above the white line are classified as Red Squares (Class B), and all below are
+                    White Circles (Class A).</em>
+            </p>
+            <p>The line where the probability is exactly 0.5 is called the <strong>Decision Boundary</strong>.</p>
+            <p><strong>The Line in the Sand</strong>:<br />
+                Think of the Decision Boundary as the crossover point where the model stops being "more likely No" and
+                starts being "more likely Yes".</p>
+            <ul>
+                <li>
+                    <p>In a 1D problem (like Tumor Size), the boundary is a single <strong>Point</strong> (e.g., "Size
+                        &gt; 4cm").</p>
+                </li>
+                <li>
+                    <p>In a 2D problem (like Exam Score 1 vs Exam Score 2), the boundary is a <strong>Line</strong>.</p>
+                </li>
+                <li>
+                    <p>In a 3D problem, it becomes a <strong>Plane</strong>.</p>
+                </li>
+            </ul>
+            <p>Crucially, even though the Sigmoid function is curvy (S-shape), the decision boundary created by Logistic
+                Regression is always a <strong>Straight Line</strong> (Linear).</p>
+            <hr />
+            <h2>5. Decision Trees</h2>
+            <p>While Logistic Regression behaves like a mathematician trying to draw a single, smooth dividing line
+                through the data, <strong>Decision Trees</strong> take a completely different approach. They behave like
+                a human playing the game "<strong>20 Questions</strong>".</p>
+            <p>Instead of using complex calculus to find a curve, a Decision Tree solves the problem by breaking it down
+                into a series of simple, logical rules. It asks a sequence of <strong>Yes/No questions</strong> to
+                progressively narrow down the possibilities until it reaches a confident answer. This makes the model
+                extremely easy to understand and visualize.</p>
+            <p><img alt="Decision Tree Logic" src="images/decision_tree_logic_tennis.png" /><br />
+                <em>Figure 8: A Decision Tree determining if we should play tennis based on weather conditions.</em>
+            </p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Example 2: The "Tennis" Logic</strong></p>
+                    <p><strong>The Process</strong>:<br />
+                        1. <strong>Is it Raining?</strong><br />
+                        - If <strong>Yes</strong> $\rightarrow$ Check Wind.<br />
+                        - If <strong>No</strong> (Sunny/Overcast) $\rightarrow$ <strong>Play</strong>.<br />
+                        2. <strong>Is it Windy?</strong> (Only if raining)<br />
+                        - <strong>Strong Wind</strong> $\rightarrow$ <strong>Don't Play</strong>.<br />
+                        - <strong>Weak Wind</strong> $\rightarrow$ <strong>Play</strong>.</p>
+                </div>
+            </div>
+            <h3>5.1 Measuring Purity (Entropy)</h3>
+            <p>The "Learning" part of a Decision Tree involves figuring out <strong>which question to ask
+                    first</strong>. Should we ask about the Wind or the Rain?</p>
+            <p>To decide, the algorithm uses a metric called <strong>Entropy</strong>, which measures the chaos or
+                impurity of a group.</p>
+            <ul>
+                <li>
+                    <p><strong>High Entropy (High Chaos)</strong>: A group mixed with 50% "Play" and 50% "Don't Play."
+                        It's hard to make a prediction here.</p>
+                </li>
+                <li>
+                    <p><strong>Low Entropy (Low Chaos)</strong>: A group with 100% "Play." The decision is obvious.</p>
+                </li>
+            </ul>
+            <p>The algorithm (such as ID3 or CART) calculates <strong>Information Gain</strong>. It looks at every
+                possible feature (Wind, Temp, Humidity) and picks the one that reduces Entropy the most—effectively
+                splitting the messy mixed groups into cleaner, purer subgroups.</p>
+            <hr />
+            <h2>6. Summary</h2>
+            <p>We have expanded our toolkit from identifying relationships (Regression) to making choices
+                (Classification).</p>
+            <ul>
+                <li>
+                    <p><strong>Logistic Regression</strong> uses the <strong>Sigmoid</strong> function to output
+                        probabilities.</p>
+                </li>
+                <li>
+                    <p><strong>Decision Trees</strong> use hierarchical questions based on <strong>Information
+                            Gain</strong> to split data.</p>
+                </li>
+            </ul>
+            <p>Next week, we will tackle the final paradigm of classical Machine Learning: <strong>Unsupervised
+                    Learning</strong>. What happens when we have data but no labels at all?</p>
+            <hr />
+            <h2>7. Lab Review</h2>
+            <p>We have prepared four practical experiments to solidify these concepts.</p>
+            <h3>7.1 Lab 1 &amp; 2: Linear Regression (House Prices)</h3>
+            <p>We tackle the classic problem of House Price Prediction in two ways:</p>
+            <ul>
+                <li>
+                    <p><strong>The "Easy" Way (Scikit-Learn)</strong>: Implementing a full pipeline in just 3 lines of
+                        code.</p>
+                </li>
+                <li>
+                    <p><strong>The "Hard" Way (NumPy)</strong>: Implementing the Forward Pass, Loss Function, and
+                        Gradient Descent from scratch to understand the math.</p>
+                </li>
+                <li>
+                    <p><strong>Interactive Visualization</strong>: We generate a 3D plot of weights vs. loss to watch
+                        Gradient Descent "walk" down the valley in real-time.</p>
+                </li>
+            </ul>
+            <h3>7.2 Lab 3: Logistic Regression (Rent vs. Area)</h3>
+            <p>We revisit housing data but ask a classification question: "Is this apartment affordable?" (Yes/No). You
+                will see how the Logistic curve fits the data differently than the straight line of regression.</p>
+            <h3>7.3 Lab 4: Decision Trees (Play Tennis?)</h3>
+            <p>We use the classic "Play Tennis" dataset to train a Decision Tree. The highlight is using
+                <code>graphviz</code> to visualize the tree and trace the AI's logic branch by branch.
+            </p>
+            <p><a id="labs"></a></p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Hands-On Available</strong><br />
+                    Ready to code? Access the step-by-step lab guides here:</p>
+                    <ul>
+                        <li><a href="Week_5_Lab_1_Linear_Regression.html">Lab 1: Linear Regression Basics</a></li>
+                        <li><a href="Week_5_Lab_2_Linear_Regression_Expansion.html">Lab 2: Polynomial Regression</a>
+                        </li>
+                        <li><a href="Week_5_Lab_3_Logistic_Regression.html">Lab 3: Logistic Regression</a></li>
+                        <li><a href="Week_5_Lab_4_Decision_Trees.html">Lab 4: Decision Trees</a></li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+                <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
+                    material? Take the interactive quiz now!</p>
+                <a href="Week_5_Quiz.html"
+                    class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+                    Start Quiz
+                </a>
+            </div>
 
         </article>
     </main>
@@ -487,33 +806,55 @@ Ready to code? Access the step-by-step lab guides here:</p>
         Vaal University of Technology - AI Module 2026
     </footer>
 
-    
-<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
-    
-                        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 4</span>
-                        </a>
-                        
-    
-    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
-             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-        </div>
-        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
-    </a>
 
-    
-                        <a href="../Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 6</span>
-                        </a>
-                        
-</div>
+    <div
+        class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+
+        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                4</span>
+        </a>
+
+
+        <a href="../index.html"
+            class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                    </path>
+                </svg>
+            </div>
+            <span
+                class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course
+                Index</span>
+        </a>
+
+
+        <a href="../Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                6</span>
+        </a>
+
+    </div>
 
 </body>
+
 </html>

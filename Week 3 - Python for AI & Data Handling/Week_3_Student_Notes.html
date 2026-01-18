@@ -1,89 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 3 Student Notes - AI Course</title>
-    
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script>
-    tailwind.config = {
-        darkMode: 'class',
-        theme: {
-            extend: {
-                fontFamily: { sans: ['Inter', 'sans-serif'] },
-                colors: {
-                    primary: '#002F6E', // VUT Midnight Blue
-                    secondary: '#c9984a', // Gold
-                    background: '#f8fafc',
-                    card: '#ffffff',
-                },
-                typography: {
-                    DEFAULT: {
-                        css: {
-                            color: '#334155',
-                            maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
-                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                            'code::before': { content: '""' },
-                            'code::after': { content: '""' }
-                        }
+
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#002F6E', // VUT Midnight Blue
+                        secondary: '#c9984a', // Gold
+                        background: '#f8fafc',
+                        card: '#ffffff',
                     },
-                    dark: {
-                        css: {
-                            color: '#cbd5e1',
-                            h1: { color: '#38bdf8' }, // Sky 400
-                            h2: { color: '#c9984a' },
-                            h3: { color: '#38bdf8' },
-                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                    typography: {
+                        DEFAULT: {
+                            css: {
+                                color: '#334155',
+                                maxWidth: '100%',
+                                h1: { color: '#1e3a5f' },
+                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                                h3: { color: '#1e3a5f' },
+                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                                'code::before': { content: '""' },
+                                'code::after': { content: '""' }
+                            }
+                        },
+                        dark: {
+                            css: {
+                                color: '#cbd5e1',
+                                h1: { color: '#38bdf8' }, // Sky 400
+                                h2: { color: '#c9984a' },
+                                h3: { color: '#38bdf8' },
+                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
+                            }
                         }
                     }
                 }
             }
         }
-    }
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const themeToggle = document.getElementById('theme-toggle');
-        const html = document.documentElement;
-        const iconSun = document.getElementById('icon-sun');
-        const iconMoon = document.getElementById('icon-moon');
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('theme-toggle');
+            const html = document.documentElement;
+            const iconSun = document.getElementById('icon-sun');
+            const iconMoon = document.getElementById('icon-moon');
 
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            html.classList.add('dark');
-            iconSun.classList.remove('hidden');
-            iconMoon.classList.add('hidden');
-        } else {
-            html.classList.remove('dark');
-            iconSun.classList.add('hidden');
-            iconMoon.classList.remove('hidden');
-        }
-
-        themeToggle.addEventListener('click', () => {
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                localStorage.theme = 'light';
-                iconSun.classList.add('hidden');
-                iconMoon.classList.remove('hidden');
-            } else {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 html.classList.add('dark');
-                localStorage.theme = 'dark';
                 iconSun.classList.remove('hidden');
                 iconMoon.classList.add('hidden');
+            } else {
+                html.classList.remove('dark');
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
             }
-        });
-    });
-</script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+            themeToggle.addEventListener('click', () => {
+                if (html.classList.contains('dark')) {
+                    html.classList.remove('dark');
+                    localStorage.theme = 'light';
+                    iconSun.classList.add('hidden');
+                    iconMoon.classList.remove('hidden');
+                } else {
+                    html.classList.add('dark');
+                    localStorage.theme = 'dark';
+                    iconSun.classList.remove('hidden');
+                    iconMoon.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
@@ -98,14 +100,27 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* Glossary Tooltip */
-        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
-        html.dark .glossary-term:hover { color: #ffffff; }
+        .glossary-term {
+            color: #c9984a;
+            border-bottom: 2px dotted #c9984a;
+            cursor: help;
+            position: relative;
+            text-decoration: none;
+        }
+
+        .glossary-term:hover {
+            color: #1e3a5f;
+        }
+
+        html.dark .glossary-term:hover {
+            color: #ffffff;
+        }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
         pre {
             background: #0f0f0f !important;
-            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            border-left: 4px solid #c9984a !important;
+            /* VUT Gold */
             padding: 20px !important;
             margin: 20px 0 !important;
             border-radius: 5px !important;
@@ -114,9 +129,11 @@
             line-height: 1.5 !important;
             color: #e2e8f0 !important;
         }
+
         code {
             font-family: 'Courier New', monospace !important;
         }
+
         /* Override prose defaults */
         .prose pre {
             background-color: transparent;
@@ -125,75 +142,158 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
-    
-<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-            <div class="flex flex-col">
-                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
-                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
-                </span>
+
+    <nav
+        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+            <a href="../index.html"
+                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+                <div class="flex flex-col">
+                    <span
+                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
+                        Intelligence
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
+                            2026</span>
+                    </span>
+                </div>
+            </a>
+            <div class="flex items-center space-x-6">
+                <a href="../index.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
+                    Home</a>
+                <a href="../glossary.html"
+                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+                <button id="theme-toggle"
+                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
+                        </path>
+                    </svg>
+                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                        </path>
+                    </svg>
+                </button>
             </div>
-        </a>
-        <div class="flex items-center space-x-6">
-            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
-            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
-            </button>
         </div>
-    </div>
-</nav>
+    </nav>
 
-    
+
     <main class="container mx-auto px-4 max-w-5xl mb-12">
-        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
-            
-<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
-    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
-        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
-            <img src="../images/week_3_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
-        </div>
-        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 3</span>
-    </div>
-    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-3xl font-bold text-secondary m-0">Python for AI & Data Handling</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
-    </div>
-</div>
+        <article
+            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
 
-            
-            
+            <div
+                class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+                <div
+                    class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+                    <div
+                        class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+                        <img src="../images/week_3_icon.png"
+                            class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+                    </div>
+                    <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 3</span>
+                </div>
+                <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                    <h1 class="text-3xl font-bold text-secondary m-0">Python for AI & Data Handling</h1>
+                    <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
+                </div>
+            </div>
 
-<div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
-<strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
-<strong>Topic</strong>: The Data Science Stack (NumPy, Pandas, Visualization)<br />
-<strong>Topic</strong>: The Data Science Stack (NumPy, Pandas, Visualization)<br />
-<strong>Reading Time</strong>: ~60 Minutes</p></div></div>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-By the end of this chapter, you will be able to:<br />
-1.  <strong>Explain</strong> why NumPy outperforms native Python using concepts like Vectorization and C-Contiguity.<br />
-2.  <strong>Use</strong> NumPy broadcasting to perform complex matrix arithmetic without explicit loops.<br />
-3.  <strong>Clean</strong> and aggregate structured datasets using Pandas DataFrames.<br />
-4.  <strong>Apply</strong> the Split-Apply-Combine strategy to extract meaningful insights from raw log data.<br />
-5.  <strong>Visualize</strong> multivariate relationships using Matplotlib and Seaborn to identify potential AI features.<br />
-6.  <strong>Interpret</strong> plotted results to distinguish between benign and malicious network traffic.</p></div></div>
-<!-- break -->
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
-As we transition from AI theory to practice, we must master the tools of the trade. This chapter is not just a syntax reference; it is a deep dive into the <strong>Data Science Stack</strong>. We will explore <em>why</em> standard Python is too slow for AI, how <strong>NumPy</strong> tricks the CPU into doing matrix math orders of magnitude faster, and how <strong>Pandas</strong> allows us to manipulate millions of records with the ease of a SQL query.</p></div></div>
-<h2>1. The Python Ecosystem for AI</h2>
-<p>Python is the lingua franca of AI, but not because it is fast. In fact, raw Python is famously slow compared to C++ or Rust. It wins because it acts as a "glue" language. When you run a command in <code>PyTorch</code> or <code>NumPy</code>, you are writing simple Python code, but triggering highly optimized C/C++/CUDA kernels that run on the metal of your CPU or GPU.</p>
-<h3>1.1 The Necessity of Virtual Environments</h3>
-<p>Before writing a single line of code, we must address the environment. AI libraries are heavy, complex, and updated frequently. A project built on <code>TensorFlow 2.1</code> might break completely on <code>TensorFlow 2.5</code>.</p>
-<p>If you install everything into your global Python environment, you will eventually encounter <strong>Dependency Conflicts</strong>—where Project A needs <code>numpy 1.18</code> and Project B needs <code>numpy 1.21</code>, making it impossible to run both.</p>
-<p><strong>The Solution: Virtual Environments</strong><br />
-A Virtual Environment (<code>venv</code> or <code>conda</code>) is a self-contained directory that contains a specific Python installation and a specific set of libraries. Every AI project should get its own environment.</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Command: Option A (Using venv)</strong><br />
-This is the standard Python method. It is lightweight and comes pre-installed.</p></div></div>
-<pre><code class="language-bash"># 1. Create the environment
+
+
+            <div
+                class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base [&>p]:!m-0">
+                    <p><strong>Course</strong>: Computer Systems Engineering<br />
+                        <strong>Module</strong>: Artificial Intelligence (EIARI4A)<br />
+                        <strong>Topic</strong>: The Data Science Stack (NumPy, Pandas, Visualization)<br />
+                        <strong>Topic</strong>: The Data Science Stack (NumPy, Pandas, Visualization)<br />
+                        <strong>Reading Time</strong>: ~60 Minutes
+                    </p>
+                </div>
+            </div>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+                    By the end of this chapter, you will be able to:<br />
+                    1. <strong>Explain</strong> why NumPy outperforms native Python using concepts like Vectorization
+                    and C-Contiguity.<br />
+                    2. <strong>Use</strong> NumPy broadcasting to perform complex matrix arithmetic without explicit
+                    loops.<br />
+                    3. <strong>Clean</strong> and aggregate structured datasets using Pandas DataFrames.<br />
+                    4. <strong>Apply</strong> the Split-Apply-Combine strategy to extract meaningful insights from raw
+                    log data.<br />
+                    5. <strong>Visualize</strong> multivariate relationships using Matplotlib and Seaborn to identify
+                    potential AI features.<br />
+                    6. <strong>Interpret</strong> plotted results to distinguish between benign and malicious network
+                    traffic.</p>
+                </div>
+            </div>
+            <!-- break -->
+
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Chapter Goal</strong><br />
+                    As we transition from AI theory to practice, we must master the tools of the trade. This chapter is
+                    not just a syntax reference; it is a deep dive into the <strong>Data Science Stack</strong>. We will
+                    explore <em>why</em> standard Python is too slow for AI, how <strong>NumPy</strong> tricks the CPU
+                    into doing matrix math orders of magnitude faster, and how <strong>Pandas</strong> allows us to
+                    manipulate millions of records with the ease of a SQL query.</p>
+                </div>
+            </div>
+            <h2>1. The Python Ecosystem for AI</h2>
+            <p>Python is the lingua franca of AI, but not because it is fast. In fact, raw Python is famously slow
+                compared to C++ or Rust. It wins because it acts as a "glue" language. When you run a command in
+                <code>PyTorch</code> or <code>NumPy</code>, you are writing simple Python code, but triggering highly
+                optimized C/C++/CUDA kernels that run on the metal of your CPU or GPU.</p>
+            <h3>1.1 The Necessity of Virtual Environments</h3>
+            <p>Before writing a single line of code, we must address the environment. AI libraries are heavy, complex,
+                and updated frequently. A project built on <code>TensorFlow 2.1</code> might break completely on
+                <code>TensorFlow 2.5</code>.</p>
+            <p>If you install everything into your global Python environment, you will eventually encounter
+                <strong>Dependency Conflicts</strong>—where Project A needs <code>numpy 1.18</code> and Project B needs
+                <code>numpy 1.21</code>, making it impossible to run both.</p>
+            <p><strong>The Solution: Virtual Environments</strong><br />
+                A Virtual Environment (<code>venv</code> or <code>conda</code>) is a self-contained directory that
+                contains a specific Python installation and a specific set of libraries. Every AI project should get its
+                own environment.</p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Command: Option A (Using venv)</strong><br />
+                    This is the standard Python method. It is lightweight and comes pre-installed.</p>
+                </div>
+            </div>
+            <pre><code class="language-bash"># 1. Create the environment
 python -m venv my_env
 
 # 2. Activate it
@@ -206,11 +306,20 @@ pip install numpy pandas matplotlib seaborn jupyter
 # 4. Check installed packages
 pip list
 </code></pre>
-<!-- break -->
+            <!-- break -->
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Command: Option B (Using Conda)</strong><br />
-Recommended for Data Science as it handles non-Python dependencies (like CUDA for GPU) better.</p></div></div>
-<pre><code class="language-bash"># 1. Create the environment
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Command: Option B (Using Conda)</strong><br />
+                    Recommended for Data Science as it handles non-Python dependencies (like CUDA for GPU) better.</p>
+                </div>
+            </div>
+            <pre><code class="language-bash"># 1. Create the environment
 conda create --name my_env python=3.9
 
 # 2. Activate it
@@ -222,154 +331,217 @@ conda install numpy pandas matplotlib seaborn jupyter
 # 4. Check installed packages
 conda list
 </code></pre>
-<h3>1.2 Alternative: Google Colab</h3>
-<p>If you cannot set up a local environment, you can use <strong>Google Colab</strong> (colab.research.google.com). It is a free, browser-based Jupyter Notebook environment that runs in the cloud. It comes with Python, NumPy, Pandas, and PyTorch <strong>pre-installed</strong>.</p>
-<ul>
-<li>
-<p><strong>Pros</strong>: No setup, free access to GPUs, easy sharing.</p>
-</li>
-<li>
-<p><strong>Cons</strong>: Requires internet, sessions time out after inactivity, difficult to use with local files.</p>
-</li>
-</ul>
-<h3>1.3 Pythonic Thinking: List Comprehensions</h3>
-<p>In C or Java, you are trained to write loops. In Python, specifically for Data Science, explicit loops are often a "code smell" (an indicator of poor design). They are verbose and often slower.</p>
-<p><strong>The Old Way (Loop):</strong></p>
-<pre><code class="language-python">squares = []
+            <h3>1.2 Alternative: Google Colab</h3>
+            <p>If you cannot set up a local environment, you can use <strong>Google Colab</strong>
+                (colab.research.google.com). It is a free, browser-based Jupyter Notebook environment that runs in the
+                cloud. It comes with Python, NumPy, Pandas, and PyTorch <strong>pre-installed</strong>.</p>
+            <ul>
+                <li>
+                    <p><strong>Pros</strong>: No setup, free access to GPUs, easy sharing.</p>
+                </li>
+                <li>
+                    <p><strong>Cons</strong>: Requires internet, sessions time out after inactivity, difficult to use
+                        with local files.</p>
+                </li>
+            </ul>
+            <h3>1.3 Pythonic Thinking: List Comprehensions</h3>
+            <p>In C or Java, you are trained to write loops. In Python, specifically for Data Science, explicit loops
+                are often a "code smell" (an indicator of poor design). They are verbose and often slower.</p>
+            <p><strong>The Old Way (Loop):</strong></p>
+            <pre><code class="language-python">squares = []
 for x in range(10):
     squares.append(x**2)
 </code></pre>
-<p><strong>The Pythonic Way (List Comprehension):</strong></p>
-<pre><code class="language-python">squares = [x**2 for x in range(10)]
+            <p><strong>The Pythonic Way (List Comprehension):</strong></p>
+            <pre><code class="language-python">squares = [x**2 for x in range(10)]
 </code></pre>
-<p>This is not just syntactic sugar; it is often faster because the iteration logic is handled in C rather than Python byte-code.</p>
-<h2>2. Data Fundamentals</h2>
-<p>Tools like NumPy and Pandas are powerful engines, but an engine is useless without fuel. In the context of Artificial Intelligence, that <strong>fuel is Data</strong>. Before we learn to process it, we must first understand its fundamental nature and structure.</p>
-<h3>2.1 The Three Types of Data</h3>
-<p>Models treat numbers very different from words. To build effective systems, we must strictly categorize our variables into two primary families.</p>
-<h4>2.1.1 Numerical Data</h4>
-<p>This refers to quantitative metadata—things that can be measured or counted with arithmetic logic. Before feeding this into a model, we must distinguish between values that flow smoothly on a scale and values that jump in discrete steps. It comes in two flavors:</p>
-<ul>
-<li>
-<p><strong>Continuous Data</strong>: This represents measurements with infinite precision. Examples include <strong>Temperature</strong> ($23.5^\circ C$), <strong>Height</strong> ($1.75m$), or <strong>Price</strong> ($R199.99$). In Python, these are typically stored as <code>float</code>.</p>
-</li>
-<li>
-<p><strong>Discrete Data</strong>: This represents whole-number counts that cannot be subdivided. You can have <strong>3 Children</strong> or <strong>5 Packets</strong>, but never "2.5 children". In Python, these are stored as <code>int</code>.</p>
-</li>
-</ul>
-<h4>2.1.2 Categorical Data</h4>
-<p>This refers to <strong>qualitative descriptors</strong>—labels that classify data into distinct groups or attributes (like "Color" or "City"), rather than measuring a quantity. It distinguishes the <em>kind</em> of thing something is, rather than <em>how much</em> of it exists.</p>
-<ul>
-<li>
-<p><strong>Nominal Data</strong>: Categories with no inherent order. A car’s color can be <strong>Red</strong>, <strong>Blue</strong>, or <strong>Green</strong>, but Red is not "greater than" Blue.</p>
-</li>
-<li>
-<p><strong>Ordinal Data</strong>: Categories with a strict rank. A T-Shirt size of <strong>Large</strong> is definitively bigger than <strong>Medium</strong>, which is bigger than <strong>Small</strong>. Preserving this order during encoding is critical for the model to understand the relationship.</p>
-</li>
-</ul>
-<h3>2.2 The Principle of "Garbage In, Garbage Out"</h3>
-<p>This is the golden rule of Machine Learning, handed down from the earliest days of computing. It states that the quality of your output is determined by the quality of your input, not just the sophistication of your algorithm. If you train a model on inconsistent or erroneous data, you will get a bad model, no matter how powerful your GPUs are or how complex your neural network architecture is. Common data quality issues include:</p>
-<ul>
-<li>
-<p><strong>Missing Data</strong>: Sensors fail. Users skip questions. We must <strong>Impute</strong> (fill) or <strong>Drop</strong> these.</p>
-</li>
-<li>
-<p><strong>Outliers</strong>: Anomalies (like a house costing R100 Billion) will skew the model.</p>
-</li>
-<li>
-<p><strong>Normalization</strong>: Scales matter. "Age" (0-100) and "Salary" (0-1,000,000) must be scaled to the same range (0-1) so the model treats them equally.</p>
-</li>
-</ul>
-<h2>3. NumPy: The Engine of AI</h2>
-<p>Standard Python lists are flexible—they can hold integers, strings, and objects in the same list. But this flexibility comes at a cost: memory and speed. Every element in a Python list is a full object with a pointer/reference.</p>
-<p><strong>NumPy</strong> (Numerical Python) introduces the <code>ndarray</code>. These are dense, fixed-type arrays (e.g., a block of 1,000,000 <code>int32</code> numbers packed next to each other in memory).</p>
-<h3>3.1 Memory Layout &amp; Performance</h3>
-<p>Because NumPy arrays are <strong>C-Contiguous</strong> (stored sequentially in RAM), the CPU can fetch them efficiently into its cache. More importantly, it allows for <strong>SIMD (Single Instruction, Multiple Data)</strong>.</p>
-<ul>
-<li>
-<p><strong>Scalar Math</strong>: "Load A, Load B, Add, Store". Repeat 1 million times.</p>
-</li>
-<li>
-<p><strong>Vector Math (SIMD)</strong>: "Load 8 numbers from A, Load 8 from B, Add them all at once".</p>
-</li>
-</ul>
-<p>This is why NumPy is often <strong>50x to 100x faster</strong> than pure Python loops. It leverages CPU vectorization and cache-friendly memory layouts to process data in blocks rather than individually.</p>
-<h3>3.2 Broadcasting rules</h3>
-<p>One of NumPy's most powerful (and confusing) features is <strong>Broadcasting</strong>. It allows you to perform arithmetic on arrays of different shapes, provided they are compatible.</p>
-<p><strong>The Rules:</strong><br />
-1.  If dimensions differ, left-pad the smaller shape with 1s.<br />
-2.  If any dimension does not match, but one of them is equal to 1, stretch (broadcast) that dimension to match.<br />
-3.  If dimensions don't match and neither is 1, raise an error.</p>
-<p><strong>Visualizing Broadcasting</strong>:<br />
-Imagine keeping a matrix of student scores <code>(Shape: 100 students x 3 exams)</code>. You want to curve the grades by adding <code>[5, 10, 0]</code> points to the three exams respectively.</p>
-<ul>
-<li>
-<p>Matrix: <code>(100, 3)</code></p>
-</li>
-<li>
-<p>Update Vector: <code>(3,)</code></p>
-</li>
-<li>
-<p>NumPy implicitly stretches the Vector to <code>(100, 3)</code> by repeating it 100 times, then adds them.</p>
-</li>
-</ul>
-<pre><code class="language-python">import numpy as np
+            <p>This is not just syntactic sugar; it is often faster because the iteration logic is handled in C rather
+                than Python byte-code.</p>
+            <h2>2. Data Fundamentals</h2>
+            <p>Tools like NumPy and Pandas are powerful engines, but an engine is useless without fuel. In the context
+                of Artificial Intelligence, that <strong>fuel is Data</strong>. Before we learn to process it, we must
+                first understand its fundamental nature and structure.</p>
+            <h3>2.1 The Three Types of Data</h3>
+            <p>Models treat numbers very different from words. To build effective systems, we must strictly categorize
+                our variables into two primary families.</p>
+            <h4>2.1.1 Numerical Data</h4>
+            <p>This refers to quantitative metadata—things that can be measured or counted with arithmetic logic. Before
+                feeding this into a model, we must distinguish between values that flow smoothly on a scale and values
+                that jump in discrete steps. It comes in two flavors:</p>
+            <ul>
+                <li>
+                    <p><strong>Continuous Data</strong>: This represents measurements with infinite precision. Examples
+                        include <strong>Temperature</strong> ($23.5^\circ C$), <strong>Height</strong> ($1.75m$), or
+                        <strong>Price</strong> ($R199.99$). In Python, these are typically stored as <code>float</code>.
+                    </p>
+                </li>
+                <li>
+                    <p><strong>Discrete Data</strong>: This represents whole-number counts that cannot be subdivided.
+                        You can have <strong>3 Children</strong> or <strong>5 Packets</strong>, but never "2.5
+                        children". In Python, these are stored as <code>int</code>.</p>
+                </li>
+            </ul>
+            <h4>2.1.2 Categorical Data</h4>
+            <p>This refers to <strong>qualitative descriptors</strong>—labels that classify data into distinct groups or
+                attributes (like "Color" or "City"), rather than measuring a quantity. It distinguishes the
+                <em>kind</em> of thing something is, rather than <em>how much</em> of it exists.</p>
+            <ul>
+                <li>
+                    <p><strong>Nominal Data</strong>: Categories with no inherent order. A car’s color can be
+                        <strong>Red</strong>, <strong>Blue</strong>, or <strong>Green</strong>, but Red is not "greater
+                        than" Blue.</p>
+                </li>
+                <li>
+                    <p><strong>Ordinal Data</strong>: Categories with a strict rank. A T-Shirt size of
+                        <strong>Large</strong> is definitively bigger than <strong>Medium</strong>, which is bigger than
+                        <strong>Small</strong>. Preserving this order during encoding is critical for the model to
+                        understand the relationship.</p>
+                </li>
+            </ul>
+            <h3>2.2 The Principle of "Garbage In, Garbage Out"</h3>
+            <p>This is the golden rule of Machine Learning, handed down from the earliest days of computing. It states
+                that the quality of your output is determined by the quality of your input, not just the sophistication
+                of your algorithm. If you train a model on inconsistent or erroneous data, you will get a bad model, no
+                matter how powerful your GPUs are or how complex your neural network architecture is. Common data
+                quality issues include:</p>
+            <ul>
+                <li>
+                    <p><strong>Missing Data</strong>: Sensors fail. Users skip questions. We must
+                        <strong>Impute</strong> (fill) or <strong>Drop</strong> these.</p>
+                </li>
+                <li>
+                    <p><strong>Outliers</strong>: Anomalies (like a house costing R100 Billion) will skew the model.</p>
+                </li>
+                <li>
+                    <p><strong>Normalization</strong>: Scales matter. "Age" (0-100) and "Salary" (0-1,000,000) must be
+                        scaled to the same range (0-1) so the model treats them equally.</p>
+                </li>
+            </ul>
+            <h2>3. NumPy: The Engine of AI</h2>
+            <p>Standard Python lists are flexible—they can hold integers, strings, and objects in the same list. But
+                this flexibility comes at a cost: memory and speed. Every element in a Python list is a full object with
+                a pointer/reference.</p>
+            <p><strong>NumPy</strong> (Numerical Python) introduces the <code>ndarray</code>. These are dense,
+                fixed-type arrays (e.g., a block of 1,000,000 <code>int32</code> numbers packed next to each other in
+                memory).</p>
+            <h3>3.1 Memory Layout &amp; Performance</h3>
+            <p>Because NumPy arrays are <strong>C-Contiguous</strong> (stored sequentially in RAM), the CPU can fetch
+                them efficiently into its cache. More importantly, it allows for <strong>SIMD (Single Instruction,
+                    Multiple Data)</strong>.</p>
+            <ul>
+                <li>
+                    <p><strong>Scalar Math</strong>: "Load A, Load B, Add, Store". Repeat 1 million times.</p>
+                </li>
+                <li>
+                    <p><strong>Vector Math (SIMD)</strong>: "Load 8 numbers from A, Load 8 from B, Add them all at
+                        once".</p>
+                </li>
+            </ul>
+            <p>This is why NumPy is often <strong>50x to 100x faster</strong> than pure Python loops. It leverages CPU
+                vectorization and cache-friendly memory layouts to process data in blocks rather than individually.</p>
+            <h3>3.2 Broadcasting rules</h3>
+            <p>One of NumPy's most powerful (and confusing) features is <strong>Broadcasting</strong>. It allows you to
+                perform arithmetic on arrays of different shapes, provided they are compatible.</p>
+            <p><strong>The Rules:</strong><br />
+                1. If dimensions differ, left-pad the smaller shape with 1s.<br />
+                2. If any dimension does not match, but one of them is equal to 1, stretch (broadcast) that dimension to
+                match.<br />
+                3. If dimensions don't match and neither is 1, raise an error.</p>
+            <p><strong>Visualizing Broadcasting</strong>:<br />
+                Imagine keeping a matrix of student scores <code>(Shape: 100 students x 3 exams)</code>. You want to
+                curve the grades by adding <code>[5, 10, 0]</code> points to the three exams respectively.</p>
+            <ul>
+                <li>
+                    <p>Matrix: <code>(100, 3)</code></p>
+                </li>
+                <li>
+                    <p>Update Vector: <code>(3,)</code></p>
+                </li>
+                <li>
+                    <p>NumPy implicitly stretches the Vector to <code>(100, 3)</code> by repeating it 100 times, then
+                        adds them.</p>
+                </li>
+            </ul>
+            <pre><code class="language-python">import numpy as np
 scores = np.zeros((100, 3))  # 100 students, 3 exams
 curve  = np.array([5, 10, 0])
 # Broadcasting involves no loops!
 final_scores = scores + curve 
 </code></pre>
-<h3>3.3 Essential NumPy Operations</h3>
-<p>To harness the full power of NumPy, you must master the following five core pillars:</p>
-<h4>3.3.1 Array Creation</h4>
-<p>While <code>np.array()</code> converts existing lists, we rarely type data by hand in deep learning. Instead, we generate it.</p>
-<h5>3.3.1.1 Placeholders (<code>zeros</code> / <code>ones</code>)</h5>
-<p>When you build a Neural Network from scratch, you often need to initialize weights. <code>np.zeros((3,3))</code> creates a 3x3 matrix of pure zeros (useful for biases), while <code>np.ones((2,2))</code> creates a matrix of ones. This pre-allocates memory, which is faster than appending to a growing list.</p>
-<pre><code class="language-python"># Create a 2x3 matrix of zeros
+            <h3>3.3 Essential NumPy Operations</h3>
+            <p>To harness the full power of NumPy, you must master the following five core pillars:</p>
+            <h4>3.3.1 Array Creation</h4>
+            <p>While <code>np.array()</code> converts existing lists, we rarely type data by hand in deep learning.
+                Instead, we generate it.</p>
+            <h5>3.3.1.1 Placeholders (<code>zeros</code> / <code>ones</code>)</h5>
+            <p>When you build a Neural Network from scratch, you often need to initialize weights.
+                <code>np.zeros((3,3))</code> creates a 3x3 matrix of pure zeros (useful for biases), while
+                <code>np.ones((2,2))</code> creates a matrix of ones. This pre-allocates memory, which is faster than
+                appending to a growing list.</p>
+            <pre><code class="language-python"># Create a 2x3 matrix of zeros
 biases = np.zeros((2, 3)) 
 # Create a 2x2 matrix of ones
 mask = np.ones((2, 2))
 </code></pre>
-<h5>3.3.1.2 Integer Sequences (<code>arange</code>)</h5>
-<p><code>np.arange(start, stop, step)</code> is the list-generating cousin of Python's <code>range()</code>. Use this when you need disjoint integer steps, such as iterating over loop indices or creating time-steps for a discrete simulation.</p>
-<pre><code class="language-python"># Generate even numbers from 0 to 18
+            <h5>3.3.1.2 Integer Sequences (<code>arange</code>)</h5>
+            <p><code>np.arange(start, stop, step)</code> is the list-generating cousin of Python's <code>range()</code>.
+                Use this when you need disjoint integer steps, such as iterating over loop indices or creating
+                time-steps for a discrete simulation.</p>
+            <pre><code class="language-python"># Generate even numbers from 0 to 18
 steps = np.arange(0, 20, 2) 
 # Result: [ 0,  2,  4,  6,  8, 10, 12, 14, 16, 18]
 </code></pre>
-<h5>3.3.1.3 Continuous Data (<code>linspace</code>)</h5>
-<p>This is the champion of plotting. Unlike <code>arange</code> (which steps by a fixed amount), <code>np.linspace(start, stop, num_points)</code> guarantees perfectly aligned data points. Use this when plotting smooth functions (like Sine waves) to ensure you have enough resolution.</p>
-<pre><code class="language-python"># Generate 5,000 points between 0 and 1 for a smooth graph
+            <h5>3.3.1.3 Continuous Data (<code>linspace</code>)</h5>
+            <p>This is the champion of plotting. Unlike <code>arange</code> (which steps by a fixed amount),
+                <code>np.linspace(start, stop, num_points)</code> guarantees perfectly aligned data points. Use this
+                when plotting smooth functions (like Sine waves) to ensure you have enough resolution.</p>
+            <pre><code class="language-python"># Generate 5,000 points between 0 and 1 for a smooth graph
 x_axis = np.linspace(0, 1, 5000)
 # Result: [0.0000, 0.0002, ... , 1.0000]
 </code></pre>
-<h4>3.3.2 Inspection (Attributes)</h4>
-<p>In standard Python, you often have to print a list to guess its structure. In NumPy, the array object carries its metadata with it.</p>
-<h5>3.3.2.1 The Shape (<code>.shape</code>)</h5>
-<p>This is arguably the most important attribute. It returns a tuple representing the dimensions (e.g., <code>(100, 3)</code> means 100 rows, 3 columns). Deep Learning debugging is 90% checking if your matrix shapes match. If you try to multiply a <code>(3, 4)</code> matrix by a <code>(5, 2)</code> matrix, <code>.shape</code> is how you diagnose the error.</p>
-<h5>3.3.2.2 Data Type (<code>.dtype</code>)</h5>
-<p>Unlike Python lists which can hold integers and strings mixed together, NumPy arrays are homogeneous. <code>.dtype</code> tells you exactly what is inside (e.g., <code>float32</code>, <code>int64</code>, <code>uint8</code>). Knowing this is critical for memory management; an image storing pixels as <code>float64</code> takes 8x more RAM than one using <code>uint8</code>.</p>
-<h5>3.3.2.3 Dimensions (<code>.ndim</code>)</h5>
-<p>This tells you the rank of the tensor: 1 for a Vector (list of numbers), 2 for a Matrix (spreadsheet), 3 for a Volume (cube of data like an RGB image).</p>
-<pre><code class="language-python">img = np.zeros((1080, 1920, 3)) # HD Image container
+            <h4>3.3.2 Inspection (Attributes)</h4>
+            <p>In standard Python, you often have to print a list to guess its structure. In NumPy, the array object
+                carries its metadata with it.</p>
+            <h5>3.3.2.1 The Shape (<code>.shape</code>)</h5>
+            <p>This is arguably the most important attribute. It returns a tuple representing the dimensions (e.g.,
+                <code>(100, 3)</code> means 100 rows, 3 columns). Deep Learning debugging is 90% checking if your matrix
+                shapes match. If you try to multiply a <code>(3, 4)</code> matrix by a <code>(5, 2)</code> matrix,
+                <code>.shape</code> is how you diagnose the error.</p>
+            <h5>3.3.2.2 Data Type (<code>.dtype</code>)</h5>
+            <p>Unlike Python lists which can hold integers and strings mixed together, NumPy arrays are homogeneous.
+                <code>.dtype</code> tells you exactly what is inside (e.g., <code>float32</code>, <code>int64</code>,
+                <code>uint8</code>). Knowing this is critical for memory management; an image storing pixels as
+                <code>float64</code> takes 8x more RAM than one using <code>uint8</code>.</p>
+            <h5>3.3.2.3 Dimensions (<code>.ndim</code>)</h5>
+            <p>This tells you the rank of the tensor: 1 for a Vector (list of numbers), 2 for a Matrix (spreadsheet), 3
+                for a Volume (cube of data like an RGB image).</p>
+            <pre><code class="language-python">img = np.zeros((1080, 1920, 3)) # HD Image container
 
 print(img.shape)  # Output: (1080, 1920, 3)
 print(img.ndim)   # Output: 3 (Volume/Tensor)
 print(img.dtype)  # Output: float64 (Default)
 </code></pre>
-<h4>3.3.3 Indexing &amp; Slicing</h4>
-<p>Accessing data in NumPy is both familiar and unexpectedly powerful.</p>
-<h5>3.3.3.1 Coordinate Access</h5>
-<p>You can access specific elements using <code>[row, col]</code> syntax. Unlike Python lists where you might do <code>matrix[row][col]</code>, NumPy allows the cleaner <code>arr[0, 5]</code> to select specific data points.</p>
-<h5>3.3.3.2 Slicing (Views)</h5>
-<p>You can extract sub-sections of matrices using the colon operator. <code>arr[0:5, :]</code> says "Give me rows 0 to 4, and ALL columns". Crucially, in NumPy, slicing usually returns a <strong>View</strong>, not a copy. This means if you change the slice, you change the original array—perfect for manipulating patches of an image without duplicating memory.</p>
-<h5>3.3.3.3 Boolean Masks (Querying)</h5>
-<p>This feature allows you to select data based on conditions rather than position. It acts like a SQL <code>WHERE</code> clause.</p>
-<pre><code class="language-python">data = np.array([1, 10, 3, 20])
+            <h4>3.3.3 Indexing &amp; Slicing</h4>
+            <p>Accessing data in NumPy is both familiar and unexpectedly powerful.</p>
+            <h5>3.3.3.1 Coordinate Access</h5>
+            <p>You can access specific elements using <code>[row, col]</code> syntax. Unlike Python lists where you
+                might do <code>matrix[row][col]</code>, NumPy allows the cleaner <code>arr[0, 5]</code> to select
+                specific data points.</p>
+            <h5>3.3.3.2 Slicing (Views)</h5>
+            <p>You can extract sub-sections of matrices using the colon operator. <code>arr[0:5, :]</code> says "Give me
+                rows 0 to 4, and ALL columns". Crucially, in NumPy, slicing usually returns a <strong>View</strong>, not
+                a copy. This means if you change the slice, you change the original array—perfect for manipulating
+                patches of an image without duplicating memory.</p>
+            <h5>3.3.3.3 Boolean Masks (Querying)</h5>
+            <p>This feature allows you to select data based on conditions rather than position. It acts like a SQL
+                <code>WHERE</code> clause.</p>
+            <pre><code class="language-python">data = np.array([1, 10, 3, 20])
 mask = data &gt; 5            # Creates [False, True, False, True]
 filtered = data[mask]      # Returns [10, 20]
 </code></pre>
-<p>We use this constantly for cleaning data, such as removing outliers: <code>data[data &lt; 0] = 0</code> (ReLU functionality).</p>
-<pre><code class="language-python">arr = np.array([[10, 20, 30], [40, 50, 60]])
+            <p>We use this constantly for cleaning data, such as removing outliers: <code>data[data &lt; 0] = 0</code>
+                (ReLU functionality).</p>
+            <pre><code class="language-python">arr = np.array([[10, 20, 30], [40, 50, 60]])
 
 # 1. Coordinate: Get Row 1, Col 2 (Value: 60)
 val = arr[1, 2] 
@@ -380,26 +552,31 @@ row_0 = arr[0, :]
 # 3. Masking: Get everything above 35
 big_vals = arr[arr &gt; 35] # [40, 50, 60]
 </code></pre>
-<h4>3.3.4 Math &amp; Aggregation</h4>
-<p>We don't use NumPy just to store numbers; we use it to crunch them.</p>
-<h5>3.3.4.1 Element-wise Operations</h5>
-<p>If you write <code>A + B</code> or <code>A * B</code>, NumPy assumes you want to perform the operation on each corresponding cell. This is useful for scaling data (e.g., <code>image * 1.2</code> to increase brightness by 20%).</p>
-<h5>3.3.4.2 Matrix Multiplication (Linear Algebra)</h5>
-<p>When you need "Row times Column" dot products—the fundamental operation of neural networks—you use the <code>@</code> operator or <code>np.dot(A, B)</code>.</p>
-<h5>3.3.4.3 Aggregations (Collapsing Dimensions)</h5>
-<p>Often we want to summarize data.</p>
-<ul>
-<li>
-<p><code>arr.sum()</code> collapses everything into a single number.</p>
-</li>
-<li>
-<p><code>arr.mean(axis=0)</code> collapses the rows, giving you the average <em>for each column</em>. This is standard for normalizing features in a dataset.</p>
-</li>
-<li>
-<p><code>arr.max(axis=1)</code> collapses the columns, finding the best score <em>for each row</em> (e.g., best exam score for each student).</p>
-</li>
-</ul>
-<pre><code class="language-python">scores = np.array([[80, 90], [70, 60]])
+            <h4>3.3.4 Math &amp; Aggregation</h4>
+            <p>We don't use NumPy just to store numbers; we use it to crunch them.</p>
+            <h5>3.3.4.1 Element-wise Operations</h5>
+            <p>If you write <code>A + B</code> or <code>A * B</code>, NumPy assumes you want to perform the operation on
+                each corresponding cell. This is useful for scaling data (e.g., <code>image * 1.2</code> to increase
+                brightness by 20%).</p>
+            <h5>3.3.4.2 Matrix Multiplication (Linear Algebra)</h5>
+            <p>When you need "Row times Column" dot products—the fundamental operation of neural networks—you use the
+                <code>@</code> operator or <code>np.dot(A, B)</code>.</p>
+            <h5>3.3.4.3 Aggregations (Collapsing Dimensions)</h5>
+            <p>Often we want to summarize data.</p>
+            <ul>
+                <li>
+                    <p><code>arr.sum()</code> collapses everything into a single number.</p>
+                </li>
+                <li>
+                    <p><code>arr.mean(axis=0)</code> collapses the rows, giving you the average <em>for each
+                            column</em>. This is standard for normalizing features in a dataset.</p>
+                </li>
+                <li>
+                    <p><code>arr.max(axis=1)</code> collapses the columns, finding the best score <em>for each row</em>
+                        (e.g., best exam score for each student).</p>
+                </li>
+            </ul>
+            <pre><code class="language-python">scores = np.array([[80, 90], [70, 60]])
 
 # Element-wise boost (Curving)
 curved = scores * 1.05 
@@ -411,15 +588,19 @@ final_grades = np.dot(scores, weights)
 # Aggregation: Average score for each student (Row-wise)
 student_avgs = scores.mean(axis=1) 
 </code></pre>
-<h4>3.3.5 Reshaping</h4>
-<p>Neural Networks represent data as tensors of specific shapes. A dense layer might expect a flat vector, while a Convolutional layer expects a grid.</p>
-<h5>3.3.5.1 Molding Data (<code>reshape</code>)</h5>
-<p><code>arr.reshape(rows, cols)</code> allows you to re-interpret the same raw data in a new configuration. It doesn't move memory; it just changes how NumPy reads it.</p>
-<h5>3.3.5.2 Flattening</h5>
-<p><code>arr.flatten()</code> is the standard tool for transitioning from a 2D image (processed by a CNN) to a 1D vector (fed into a classifier).</p>
-<h5>3.3.5.3 Transposing (<code>arr.T</code>)</h5>
-<p>Sometimes your data is "sideways". You might have rows of features and columns of samples, but your library expects the reverse. <code>arr.T</code> swaps the axes instantly.</p>
-<pre><code class="language-python"># Create a flat array of 12 numbers
+            <h4>3.3.5 Reshaping</h4>
+            <p>Neural Networks represent data as tensors of specific shapes. A dense layer might expect a flat vector,
+                while a Convolutional layer expects a grid.</p>
+            <h5>3.3.5.1 Molding Data (<code>reshape</code>)</h5>
+            <p><code>arr.reshape(rows, cols)</code> allows you to re-interpret the same raw data in a new configuration.
+                It doesn't move memory; it just changes how NumPy reads it.</p>
+            <h5>3.3.5.2 Flattening</h5>
+            <p><code>arr.flatten()</code> is the standard tool for transitioning from a 2D image (processed by a CNN) to
+                a 1D vector (fed into a classifier).</p>
+            <h5>3.3.5.3 Transposing (<code>arr.T</code>)</h5>
+            <p>Sometimes your data is "sideways". You might have rows of features and columns of samples, but your
+                library expects the reverse. <code>arr.T</code> swaps the axes instantly.</p>
+            <pre><code class="language-python"># Create a flat array of 12 numbers
 flat = np.arange(12) 
 
 # Reshape into a grid (3 rows, 4 cols)
@@ -431,35 +612,55 @@ swapped = grid.T
 # Flatten back to 1D
 flat_again = swapped.flatten()
 </code></pre>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><br />
-<strong>Checkpoint: NumPy Mastery</strong><br />
-1.  <strong>Why does broadcasting not duplicate memory?</strong> (Hint: It uses strides to re-interpret the same memory block).<br />
-2.  <strong>What error occurs if dimensions are incompatible?</strong> (Try adding a <code>(3,3)</code> matrix to a <code>(1,2)</code> vector).</p></div></div>
-<h2>4. Pandas: Structured Data Analysis</h2>
-<p>If NumPy is the engine, <strong>Pandas</strong> is the dashboard. It is built on top of NumPy but adds <strong>Labels</strong>. In NumPy, you access data by index <code>[0, 1]</code>. In Pandas, you access it by meaning <code>["Age", "Salary"]</code>.</p>
-<h3>4.1 Advanced Indexing: <code>loc</code> vs <code>iloc</code></h3>
-<p>One of the most confusing hurdles for Pandas beginners is accessing specific rows. Unlike Python lists, which always use integer positions (<code>list[0]</code>), a DataFrame has both an <strong>Integer Position</strong> (where it is) and a <strong>Label Index</strong> (what it is named). Confusing the two leads to subtle bugs. To resolve this ambiguity, Pandas provides two explicit accessors:</p>
-<h5>4.1.1.1 Label-based Access (<code>loc</code>)</h5>
-<p>This is the "human-readable" way. You ask for rows and columns by their name. If your index is customer names, you ask for <code>loc['Alice']</code>.</p>
-<ul>
-<li>
-<p><strong>Syntax</strong>: <code>df.loc[row_label, col_label]</code></p>
-</li>
-<li>
-<p><strong>Key Feature</strong>: Includes the last element in slices (unlike Python/NumPy slicing).</p>
-</li>
-</ul>
-<h5>4.1.1.2 Position-based Access (<code>iloc</code>)</h5>
-<p>This is the "computer-readable" way. You ask for rows and columns by their integer position (0, 1, 2...). It doesn't care what the index names are.</p>
-<ul>
-<li>
-<p><strong>Syntax</strong>: <code>df.iloc[row_idx, col_idx]</code></p>
-</li>
-<li>
-<p><strong>Key Feature</strong>: Exclusive of the last element (standard Python slicing).</p>
-</li>
-</ul>
-<pre><code class="language-python"># Create sample data
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><br />
+                    <strong>Checkpoint: NumPy Mastery</strong><br />
+                    1. <strong>Why does broadcasting not duplicate memory?</strong> (Hint: It uses strides to
+                    re-interpret the same memory block).<br />
+                    2. <strong>What error occurs if dimensions are incompatible?</strong> (Try adding a
+                    <code>(3,3)</code> matrix to a <code>(1,2)</code> vector).</p>
+                </div>
+            </div>
+            <h2>4. Pandas: Structured Data Analysis</h2>
+            <p>If NumPy is the engine, <strong>Pandas</strong> is the dashboard. It is built on top of NumPy but adds
+                <strong>Labels</strong>. In NumPy, you access data by index <code>[0, 1]</code>. In Pandas, you access
+                it by meaning <code>["Age", "Salary"]</code>.</p>
+            <h3>4.1 Advanced Indexing: <code>loc</code> vs <code>iloc</code></h3>
+            <p>One of the most confusing hurdles for Pandas beginners is accessing specific rows. Unlike Python lists,
+                which always use integer positions (<code>list[0]</code>), a DataFrame has both an <strong>Integer
+                    Position</strong> (where it is) and a <strong>Label Index</strong> (what it is named). Confusing the
+                two leads to subtle bugs. To resolve this ambiguity, Pandas provides two explicit accessors:</p>
+            <h5>4.1.1.1 Label-based Access (<code>loc</code>)</h5>
+            <p>This is the "human-readable" way. You ask for rows and columns by their name. If your index is customer
+                names, you ask for <code>loc['Alice']</code>.</p>
+            <ul>
+                <li>
+                    <p><strong>Syntax</strong>: <code>df.loc[row_label, col_label]</code></p>
+                </li>
+                <li>
+                    <p><strong>Key Feature</strong>: Includes the last element in slices (unlike Python/NumPy slicing).
+                    </p>
+                </li>
+            </ul>
+            <h5>4.1.1.2 Position-based Access (<code>iloc</code>)</h5>
+            <p>This is the "computer-readable" way. You ask for rows and columns by their integer position (0, 1, 2...).
+                It doesn't care what the index names are.</p>
+            <ul>
+                <li>
+                    <p><strong>Syntax</strong>: <code>df.iloc[row_idx, col_idx]</code></p>
+                </li>
+                <li>
+                    <p><strong>Key Feature</strong>: Exclusive of the last element (standard Python slicing).</p>
+                </li>
+            </ul>
+            <pre><code class="language-python"># Create sample data
 data = {'Name': ['Alice', 'Bob'], 'Age': [25, 30]}
 df = pd.DataFrame(data, index=['A101', 'B202'])
 
@@ -469,24 +670,29 @@ alice_age = df.loc['A101', 'Age']  # Returns 25
 # 2. iloc (Using Integer Positions)
 bob_data = df.iloc[1, :]       # Returns 2nd row (Bob)
 </code></pre>
-<h3>4.2 The Split-Apply-Combine Pattern</h3>
-<p>Raw data is often too granular to be useful. To find trends, we need to aggregate it—turning a million transactions into a single "Monthly Revenue" figure. In Pandas, this process is formalized by the <strong>Split-Apply-Combine</strong> strategy, a term coined by Hadley Wickham to describe the essential workflow of data analysis.</p>
-<h5>4.2.1.1 The Logic of Split-Apply-Combine</h5>
-<p>In SQL, you write <code>GROUP BY</code>. In Pandas, this concept is broken down:<br />
-1.  <strong>Split</strong>: Divide the Big Dataframe into tiny Dataframes based on a key (e.g., "City").<br />
-2.  <strong>Apply</strong>: Compute a single number for each tiny dataframe (e.g., "Average Temperature").<br />
-3.  <strong>Combine</strong>: Paste these numbers back together into a new Summary Table.</p>
-<h5>4.2.1.2 Aggregation Functions</h5>
-<p>You typically chain specific math functions to the group object:</p>
-<ul>
-<li>
-<p><code>.mean()</code> / <code>.sum()</code> / <code>.count()</code></p>
-</li>
-<li>
-<p><code>.agg(['min', 'max'])</code>: Compute multiple statistics at once.</p>
-</li>
-</ul>
-<pre><code class="language-python">df = pd.DataFrame({
+            <h3>4.2 The Split-Apply-Combine Pattern</h3>
+            <p>Raw data is often too granular to be useful. To find trends, we need to aggregate it—turning a million
+                transactions into a single "Monthly Revenue" figure. In Pandas, this process is formalized by the
+                <strong>Split-Apply-Combine</strong> strategy, a term coined by Hadley Wickham to describe the essential
+                workflow of data analysis.</p>
+            <h5>4.2.1.1 The Logic of Split-Apply-Combine</h5>
+            <p>In SQL, you write <code>GROUP BY</code>. In Pandas, this concept is broken down:<br />
+                1. <strong>Split</strong>: Divide the Big Dataframe into tiny Dataframes based on a key (e.g.,
+                "City").<br />
+                2. <strong>Apply</strong>: Compute a single number for each tiny dataframe (e.g., "Average
+                Temperature").<br />
+                3. <strong>Combine</strong>: Paste these numbers back together into a new Summary Table.</p>
+            <h5>4.2.1.2 Aggregation Functions</h5>
+            <p>You typically chain specific math functions to the group object:</p>
+            <ul>
+                <li>
+                    <p><code>.mean()</code> / <code>.sum()</code> / <code>.count()</code></p>
+                </li>
+                <li>
+                    <p><code>.agg(['min', 'max'])</code>: Compute multiple statistics at once.</p>
+                </li>
+            </ul>
+            <pre><code class="language-python">df = pd.DataFrame({
     'Dept': ['Sales', 'Sales', 'HR', 'HR'],
     'Salary': [50000, 60000, 45000, 48000]
 })
@@ -501,25 +707,30 @@ print(df.groupby('Dept')['Salary'].mean())
 # Multiple aggregations
 stats = df.groupby('Dept')['Salary'].agg(['min', 'max'])
 </code></pre>
-<p>Under the hood, Pandas optimizes this to avoid creating millions of tiny temporary dataframes.</p>
-<h3>4.3 Merging DataFrames</h3>
-<p>In the real world, data is rarely tidy. It is often scattered across multiple CSVs or database tables—Customer details in one file, Transactions in another. This separation is good for storage (Normalization) but bad for analysis. To find patterns, we must reconstruct the full picture using <strong>Joins</strong>, identical to those used in SQL.</p>
-<h5>4.3.1.1 Inner vs Outer Joins</h5>
-<p>Just like SQL, we often need to combine datasets.</p>
-<ul>
-<li>
-<p><strong>Inner Join</strong>: The intersection. Only keeps rows where keys exist in <em>both</em> tables. (Default).</p>
-</li>
-<li>
-<p><strong>Left Join</strong>: Keeps all rows from the Left table. Missing data in the Right table becomes <code>NaN</code>.</p>
-</li>
-<li>
-<p><strong>Outer Join</strong>: The Union. Keeps everything.</p>
-</li>
-</ul>
-<h5>4.3.1.2 Merging Syntax</h5>
-<p><code>pd.merge(left, right, on='key', how='inner')</code> is the standard command.</p>
-<pre><code class="language-python">users = pd.DataFrame({'id': [1, 2], 'name': ['Ali', 'Bea']})
+            <p>Under the hood, Pandas optimizes this to avoid creating millions of tiny temporary dataframes.</p>
+            <h3>4.3 Merging DataFrames</h3>
+            <p>In the real world, data is rarely tidy. It is often scattered across multiple CSVs or database
+                tables—Customer details in one file, Transactions in another. This separation is good for storage
+                (Normalization) but bad for analysis. To find patterns, we must reconstruct the full picture using
+                <strong>Joins</strong>, identical to those used in SQL.</p>
+            <h5>4.3.1.1 Inner vs Outer Joins</h5>
+            <p>Just like SQL, we often need to combine datasets.</p>
+            <ul>
+                <li>
+                    <p><strong>Inner Join</strong>: The intersection. Only keeps rows where keys exist in <em>both</em>
+                        tables. (Default).</p>
+                </li>
+                <li>
+                    <p><strong>Left Join</strong>: Keeps all rows from the Left table. Missing data in the Right table
+                        becomes <code>NaN</code>.</p>
+                </li>
+                <li>
+                    <p><strong>Outer Join</strong>: The Union. Keeps everything.</p>
+                </li>
+            </ul>
+            <h5>4.3.1.2 Merging Syntax</h5>
+            <p><code>pd.merge(left, right, on='key', how='inner')</code> is the standard command.</p>
+            <pre><code class="language-python">users = pd.DataFrame({'id': [1, 2], 'name': ['Ali', 'Bea']})
 logs  = pd.DataFrame({'id': [1, 1, 3], 'action': ['login', 'logout', 'click']})
 
 # Left Join: Keep all logs, attach user names where possible
@@ -530,23 +741,40 @@ merged = pd.merge(logs, users, on='id', how='left')
 # 1   logout   Ali
 # 3   click    NaN  &lt;-- User 3 doesn't exist in 'users' table
 </code></pre>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><br />
-<strong>Checkpoint: Pandas Mastery</strong><br />
-1.  <strong>How is <code>groupby()</code> different from basic filtering?</strong> (Think about "summarizing" vs "selecting").<br />
-2.  <strong>Why is aggregation essential before ML training?</strong> (Can a model predict "Monthly Sales" if fed 10,000 individual transactions?).</p></div></div>
-<h2>5. Visualization: The Grammar of Graphics</h2>
-<p>Visualization is not an afterthought; it is a critical part of the analysis loop. We use the <strong>Matplotlib</strong> library, often wrapped by <strong>Seaborn</strong> for beauty.</p>
-<h3>5.1 Figures and Axes</h3>
-<p>Matplotlib is the grandfather of Python plotting, but it suffers from a split personality. It has two interfaces: a simple "Matlab-style" state-machine (which beginners use) and a powerful <strong>Object-Oriented Interface</strong> (which pros use). We will focus exclusively on the OO-style because it gives you control over every pixel.</p>
-<ul>
-<li>
-<p><strong>Figure</strong>: The blank canvas or window.</p>
-</li>
-<li>
-<p><strong>Axes</strong>: The actual plot/graph drawn on the canvas. A Figure can have multiple Axes (subplots).</p>
-</li>
-</ul>
-<pre><code class="language-python">import matplotlib.pyplot as plt
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><br />
+                    <strong>Checkpoint: Pandas Mastery</strong><br />
+                    1. <strong>How is <code>groupby()</code> different from basic filtering?</strong> (Think about
+                    "summarizing" vs "selecting").<br />
+                    2. <strong>Why is aggregation essential before ML training?</strong> (Can a model predict "Monthly
+                    Sales" if fed 10,000 individual transactions?).</p>
+                </div>
+            </div>
+            <h2>5. Visualization: The Grammar of Graphics</h2>
+            <p>Visualization is not an afterthought; it is a critical part of the analysis loop. We use the
+                <strong>Matplotlib</strong> library, often wrapped by <strong>Seaborn</strong> for beauty.</p>
+            <h3>5.1 Figures and Axes</h3>
+            <p>Matplotlib is the grandfather of Python plotting, but it suffers from a split personality. It has two
+                interfaces: a simple "Matlab-style" state-machine (which beginners use) and a powerful
+                <strong>Object-Oriented Interface</strong> (which pros use). We will focus exclusively on the OO-style
+                because it gives you control over every pixel.</p>
+            <ul>
+                <li>
+                    <p><strong>Figure</strong>: The blank canvas or window.</p>
+                </li>
+                <li>
+                    <p><strong>Axes</strong>: The actual plot/graph drawn on the canvas. A Figure can have multiple Axes
+                        (subplots).</p>
+                </li>
+            </ul>
+            <pre><code class="language-python">import matplotlib.pyplot as plt
 
 # The professional way
 fig, ax = plt.subplots(figsize=(10, 6))
@@ -558,21 +786,26 @@ ax.legend()
 
 plt.show()
 </code></pre>
-<h3>5.2 Seaborn</h3>
-<p>Seaborn simplifies complex statistical plots.</p>
-<ul>
-<li>
-<p><strong>Heatmaps</strong>: Essential for visualizing the <strong>Correlation Matrix</strong> (<code>df.corr()</code>). It shows instantly which features are related (e.g., Experience correlates with Salary).</p>
-</li>
-<li>
-<p><strong>Pairplots</strong>: Creates a grid of scatterplots comparing every variable against every other variable. This is often the first thing a Data Scientist runs on a new dataset.</p>
-</li>
-</ul>
-<h2>6. Case Study: Network Traffic Analysis</h2>
-<p>Let's put everything together. We will analyze a real-world dataset: <code>Week_3_Lab_Data.csv</code>. This dataset contains network flow statistics, labeled as either <strong>benign</strong> or <strong>suspicious</strong> (a potential attack).</p>
-<h3>6.1 Loading and Inspecting</h3>
-<p>First, we load the data and check its health.</p>
-<pre><code class="language-python">import pandas as pd
+            <h3>5.2 Seaborn</h3>
+            <p>Seaborn simplifies complex statistical plots.</p>
+            <ul>
+                <li>
+                    <p><strong>Heatmaps</strong>: Essential for visualizing the <strong>Correlation Matrix</strong>
+                        (<code>df.corr()</code>). It shows instantly which features are related (e.g., Experience
+                        correlates with Salary).</p>
+                </li>
+                <li>
+                    <p><strong>Pairplots</strong>: Creates a grid of scatterplots comparing every variable against every
+                        other variable. This is often the first thing a Data Scientist runs on a new dataset.</p>
+                </li>
+            </ul>
+            <h2>6. Case Study: Network Traffic Analysis</h2>
+            <p>Let's put everything together. We will analyze a real-world dataset: <code>Week_3_Lab_Data.csv</code>.
+                This dataset contains network flow statistics, labeled as either <strong>benign</strong> or
+                <strong>suspicious</strong> (a potential attack).</p>
+            <h3>6.1 Loading and Inspecting</h3>
+            <p>First, we load the data and check its health.</p>
+            <pre><code class="language-python">import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -585,9 +818,10 @@ print(df.shape)          # Check dimensions
 print(df.info())         # Check for missing values (Non-Null counts)
 print(df['label'].value_counts()) # Check class balance (Benign vs Suspicious)
 </code></pre>
-<h3>6.2 Data Cleaning (NumPy &amp; Pandas)</h3>
-<p>Real data is messy. We might find missing values (NaN) in the <code>protocol</code> or <code>packet_count</code> columns.</p>
-<pre><code class="language-python"># 1. Drop rows completely missing critical identifiers
+            <h3>6.2 Data Cleaning (NumPy &amp; Pandas)</h3>
+            <p>Real data is messy. We might find missing values (NaN) in the <code>protocol</code> or
+                <code>packet_count</code> columns.</p>
+            <pre><code class="language-python"># 1. Drop rows completely missing critical identifiers
 df = df.dropna(subset=['protocol'])
 
 # 2. Fill missing numerical stats with the median (robust to outliers)
@@ -595,10 +829,10 @@ df = df.dropna(subset=['protocol'])
 median_pkts = np.nanmedian(df['packet_count'])
 df['packet_count'] = df['packet_count'].fillna(median_pkts)
 </code></pre>
-<h3>6.3 Analysis (Grouping &amp; Filtering)</h3>
-<p>We want to know: <em>Do attacks send more data than normal traffic?</em><br />
-We apply the <strong>Split-Apply-Combine</strong> pattern.</p>
-<pre><code class="language-python"># Group by Label and calculate average Byte Count
+            <h3>6.3 Analysis (Grouping &amp; Filtering)</h3>
+            <p>We want to know: <em>Do attacks send more data than normal traffic?</em><br />
+                We apply the <strong>Split-Apply-Combine</strong> pattern.</p>
+            <pre><code class="language-python"># Group by Label and calculate average Byte Count
 traffic_analysis = df.groupby('label')['byte_count'].mean()
 print(traffic_analysis)
 
@@ -606,9 +840,9 @@ print(traffic_analysis)
 # Using Boolean Masking (NumPy style) inside Pandas
 heavy_attacks = df[(df['label'] == 'suspicious') &amp; (df['byte_count'] &gt; 1_000_000)]
 </code></pre>
-<h3>6.4 Visualization</h3>
-<p>Numbers are good; charts are better. Let's inspect the relationship between Duration and Volume.</p>
-<pre><code class="language-python"># Comparing classes using Seaborn
+            <h3>6.4 Visualization</h3>
+            <p>Numbers are good; charts are better. Let's inspect the relationship between Duration and Volume.</p>
+            <pre><code class="language-python"># Comparing classes using Seaborn
 plt.figure(figsize=(10, 6))
 sns.scatterplot(
     data=df, 
@@ -621,39 +855,63 @@ plt.title(&quot;Network Flow Duration vs Byte Count&quot;)
 plt.yscale('log') # Use Log Scale because values vary wildly
 plt.show()
 </code></pre>
-<p><img alt="Network Flow Duration vs Byte Count" src="images/case_study_traffic_plot.png" /><br />
-<em>Figure 6.1: A detailed view of network traffic patterns.</em></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Interpretation</strong><br />
-The plot clearly reveals two distinct circular clusters. The <strong>Orange cluster (suspicious)</strong> is consistently positioned higher on the Y-axis, indicating that attack traffic transmits significantly more bytes (Volume) than normal traffic, even for short-duration connections. This insight confirms our hypothesis: "Volume" is a strong feature for detecting these attacks. The features explored here (volume, duration) will later serve as inputs to classifiers such as Logistic Regression and Neural Networks in Week 5.</p></div></div>
-<h2>7. Summary</h2>
-<p>We have treated Python, NumPy, and Pandas not just as scripts, but as robust engineering frameworks that handle the complexity of Big Data.</p>
-<ul>
-<li>
-<p><strong>Foundation</strong>: We established that <strong>Data is the Fuel</strong> of AI, and its quality (Continuous vs Discrete, Clean vs Dirty) dictates model success.</p>
-</li>
-<li>
-<p><strong>Environment</strong>: We isolated our dependencies using <strong>Virtual Environments</strong> to avoid conflicts.</p>
-</li>
-<li>
-<p><strong>Speed</strong>: We used <strong>NumPy</strong> to leverage SIMD vectorization, making mathematical operations orders of magnitude faster.</p>
-</li>
-<li>
-<p><strong>Wrangling</strong>: We applied the <strong>Split-Apply-Combine</strong> strategy in <strong>Pandas</strong> to extract insights from raw logs.</p>
-</li>
-<li>
-<p><strong>Visualization</strong>: We used <strong>Object-Oriented Plotting</strong> to uncover hidden patterns in traffic data.</p>
-</li>
-</ul>
-<p>These tools are the "Refineries" of AI. They turn raw, messy data into high-octane fuel. Next week, in <strong>Machine Learning Foundations</strong>, we will finally ignite the engine.</p>
-            
-            
-<div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
-    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
-    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's material? Take the interactive quiz now!</p>
-    <a href="Week_3_Quiz.html" class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
-        Start Quiz
-    </a>
-</div>
+            <p><img alt="Network Flow Duration vs Byte Count" src="images/case_study_traffic_plot.png" /><br />
+                <em>Figure 6.1: A detailed view of network traffic patterns.</em>
+            </p>
+            <div
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div class="flex-1 text-sm md:text-base"><strong>Interpretation</strong><br />
+                    The plot clearly reveals two distinct circular clusters. The <strong>Orange cluster
+                        (suspicious)</strong> is consistently positioned higher on the Y-axis, indicating that attack
+                    traffic transmits significantly more bytes (Volume) than normal traffic, even for short-duration
+                    connections. This insight confirms our hypothesis: "Volume" is a strong feature for detecting these
+                    attacks. The features explored here (volume, duration) will later serve as inputs to classifiers
+                    such as Logistic Regression and Neural Networks in Week 5.</p>
+                </div>
+            </div>
+            <h2>7. Summary</h2>
+            <p>We have treated Python, NumPy, and Pandas not just as scripts, but as robust engineering frameworks that
+                handle the complexity of Big Data.</p>
+            <ul>
+                <li>
+                    <p><strong>Foundation</strong>: We established that <strong>Data is the Fuel</strong> of AI, and its
+                        quality (Continuous vs Discrete, Clean vs Dirty) dictates model success.</p>
+                </li>
+                <li>
+                    <p><strong>Environment</strong>: We isolated our dependencies using <strong>Virtual
+                            Environments</strong> to avoid conflicts.</p>
+                </li>
+                <li>
+                    <p><strong>Speed</strong>: We used <strong>NumPy</strong> to leverage SIMD vectorization, making
+                        mathematical operations orders of magnitude faster.</p>
+                </li>
+                <li>
+                    <p><strong>Wrangling</strong>: We applied the <strong>Split-Apply-Combine</strong> strategy in
+                        <strong>Pandas</strong> to extract insights from raw logs.</p>
+                </li>
+                <li>
+                    <p><strong>Visualization</strong>: We used <strong>Object-Oriented Plotting</strong> to uncover
+                        hidden patterns in traffic data.</p>
+                </li>
+            </ul>
+            <p>These tools are the "Refineries" of AI. They turn raw, messy data into high-octane fuel. Next week, in
+                <strong>Machine Learning Foundations</strong>, we will finally ignite the engine.</p>
+
+
+            <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+                <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
+                    material? Take the interactive quiz now!</p>
+                <a href="Week_3_Quiz.html"
+                    class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+                    Start Quiz
+                </a>
+            </div>
 
         </article>
     </main>
@@ -662,33 +920,55 @@ The plot clearly reveals two distinct circular clusters. The <strong>Orange clus
         Vaal University of Technology - AI Module 2026
     </footer>
 
-    
-<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
-    
-                        <a href="../Week%202%20-%20Mathematics%20for%20AI/Week_2_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 2</span>
-                        </a>
-                        
-    
-    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
-             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-        </div>
-        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
-    </a>
 
-    
-                        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 4</span>
-                        </a>
-                        
-</div>
+    <div
+        class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+
+        <a href="../Week%202%20-%20Mathematics%20for%20AI/Week_2_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                2</span>
+        </a>
+
+
+        <a href="../index.html"
+            class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+            <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                    </path>
+                </svg>
+            </div>
+            <span
+                class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course
+                Index</span>
+        </a>
+
+
+        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html"
+            class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors"
+                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </div>
+            <span
+                class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week
+                4</span>
+        </a>
+
+    </div>
 
 </body>
+
 </html>
