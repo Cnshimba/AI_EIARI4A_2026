@@ -227,304 +227,296 @@
 
             <div
                 class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-                    By the end of this chapter, you will be able to:<br />
-                    1. <strong>Explain</strong> the anatomy of a perceptron (weights, bias, activation).<br />
-                    2. <strong>Differentiate</strong> between Sigmoid and ReLU activation functions.<br />
-                    3. <strong>Design</strong> a Multi-Layer Perceptron (MLP) architecture.<br />
-                    4. <strong>Trace</strong> the flow of Backpropagation (Forward, Loss, Backward, Update).<br />
-                    5. <strong>Build</strong> a neural network forward pass using NumPy.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                        </path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+                        By the end of this chapter, you will be able to:<br />
+                        1. <strong>Explain</strong> the anatomy of a perceptron (weights, bias, activation).<br />
+                        2. <strong>Differentiate</strong> between Sigmoid and ReLU activation functions.<br />
+                        3. <strong>Design</strong> a Multi-Layer Perceptron (MLP) architecture.<br />
+                        4. <strong>Trace</strong> the flow of Backpropagation (Forward, Loss, Backward, Update).<br />
+                        5. <strong>Build</strong> a neural network forward pass using NumPy.<br />
+                        <br />
+                        <strong>Week 7 Goal</strong>:<br />
+                        We are leaving "Classical Machine Learning" behind. While Linear Regression drew a simple line
+                        and Decision Trees built a flowchart, <strong>Neural Networks</strong> attempt to build a brain.
+                        This week is arguably the hardest but most rewarding. We will deconstruct the internal mechanics
+                        of modern AI by building a Neural Network from <strong>scratch</strong>—using only raw
+                        mathematics and Python—before we introduce high-level frameworks like PyTorch next week.</p>
+                    </div>
                 </div>
-            </div>
-            <!-- break -->
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Week 7 Goal</strong>:<br />
-                    We are leaving "Classical Machine Learning" behind. While Linear Regression drew a simple line
-                    and
-                    Decision Trees built a flowchart, <strong>Neural Networks</strong> attempt to build a brain.
-                    This
-                    week is arguably the hardest but most rewarding. We will deconstruct the internal mechanics of
-                    modern AI by building a Neural Network from <strong>scratch</strong>—using only raw mathematics
-                    and
-                    Python—before we introduce high-level frameworks like PyTorch next week.</p>
+                <h2>1. The Perceptron</h2>
+                <p>The smallest unit of a Neural Network is a <strong>Perceptron</strong> (or Neuron).</p>
+                <h3>1.1 The Anatomy of a Neuron</h3>
+                <p>To understand a neural network, we must first dissect its fundamental building block: the neuron. It
+                    consists of five key components (see Figure 1):</p>
+                <ol>
+                    <li>
+                        <p><strong>Inputs ($x$)</strong>: These act as the raw data points entering the neuron, similar
+                            to
+                            how our eyes perceive individual pixels of light. In a digital image, each input might
+                            represent
+                            the brightness value of a single pixel.</p>
+                    </li>
+                    <li>
+                        <p><strong>Weights ($w$)</strong>: Assigned to each input, weights represent the importance or
+                            strength of that connection. If a specific input is crucial for the decision (like a sharp
+                            edge
+                            in an image), it gets a higher weight. Training a network is essentially just adjusting
+                            these
+                            weights until they are correct.</p>
+                    </li>
+                    <li>
+                        <p><strong>Bias ($b$)</strong>: This is an extra parameter that acts as a threshold or offset.
+                            It
+                            allows the neuron to shift its activation function left or right, ensuring that the neuron
+                            can
+                            fire even when all inputs are zero, much like the intercept in a linear equation.</p>
+                    </li>
+                    <li>
+                        <p><strong>Weighted Sum</strong>: The neuron first aggregates all information by multiplying
+                            each
+                            input by its weight and adding the bias: $z = \sum (x \cdot w) + b$. This is mathematically
+                            identical to the Linear Regression formula we learned earlier.</p>
+                    </li>
+                    <li>
+                        <p><strong>Activation Function ($a$)</strong>: This is the decision-maker. It takes the weighted
+                            sum
+                            and decides whether the neuron should "fire" (output a strong signal) or stay dormant. It
+                            adds
+                            non-linearity, enabling the network to learn complex patterns beyond simple straight lines.
+                        </p>
+                    </li>
+                </ol>
+                <p>$$Output = Activation(\sum (Input \cdot Weight) + Bias)$$</p>
+                <p><img alt="Figure 1: Anatomy of an Artificial Neuron" src="images/neuron_anatomy.png" /><br />
+                    <em>Figure 1: Anatomy of an Artificial Neuron. Inputs ($x$) are weighted ($w$) and summed with a
+                        bias
+                        ($b$) before passing through an activation function.</em>
+                </p>
+                <hr />
+                <h2>2. Activation Functions</h2>
+                <h3>Why do we need them?</h3>
+                <p>To understand their importance, imagine a neural network <em>without</em> activation functions. In
+                    such a
+                    scenario, every neuron would perform only a linear transformation (multiplying input by weight and
+                    adding bias).</p>
+                <p>There is a fundamental mathematical limitation here: <strong>Linear + Linear = Linear</strong>.</p>
+                <p>No matter how many layers you stack—you could have 100 hidden layers with 1,000 neurons each—the
+                    entire
+                    network would mathematically collapse into a single linear equation ($y = mx + c$). It would
+                    effectively
+                    be just a complex-looking Linear Regression model. It could draw a straight line through data, but
+                    it
+                    could never learn to separate data that is curved, circular, or scattered in complex ways.</p>
+                <p><strong>Activation functions introduce non-linearity.</strong> They bend the line. By applying a
+                    non-linear function (like turning negative values to zero) at every neuron, we allow the network to
+                    approximate <em>any</em> function, no matter how complex. This capability, known as the
+                    <strong>Universal Approximation Theorem</strong>, is what enables neural networks to recognize
+                    faces,
+                    understand language, and drive cars.
+                </p>
+                <h3>2.1 Common Functions</h3>
+                <p><img alt="Figure 2: Comparison of Sigmoid and ReLU" src="images/activation_functions.png" /><br />
+                    <em>Figure 2: Comparison of Sigmoid and ReLU Activation Functions. Notice how Sigmoid saturates at 0
+                        and
+                        1, while ReLU is linear for positive values.</em>
+                </p>
+                <p>There are several activation functions used in deep learning (see Figure 2), but two of the most
+                    critical
+                    ones to understand are Sigmoid and ReLU.</p>
+                <h4>2.1.1 Sigmoid</h4>
+                <p>The Sigmoid function, often represented by the Greek letter $\sigma$, produces a smooth S-shaped
+                    curve.
+                    Its defining characteristic is that it compresses, or “crushes,” any input value into a narrow range
+                    between 0 and 1. Because of this behaviour, sigmoid outputs are easy to interpret as probabilities.
+                    For
+                    example, if a neuron produces an output of 0.95, we can naturally read this as the model being 95%
+                    confident in its prediction.</p>
+                <p>Despite this intuitive interpretation, the sigmoid function is poorly suited for deep neural
+                    networks.
+                    When input values become very large or very small, the sigmoid curve flattens out. In these flat
+                    regions, the gradient becomes extremely small. During backpropagation, these tiny gradients are
+                    passed
+                    backward through multiple layers and rapidly diminish, preventing earlier layers from learning
+                    effectively. This phenomenon is known as the vanishing gradient problem, and it is the main reason
+                    sigmoid is rarely used in the hidden layers of modern deep learning models.</p>
+                <h4>2.1.2 ReLU (Rectified Linear Unit)</h4>
+                <p>The ReLU (Rectified Linear Unit) activation function is defined by the simple mathematical rule:</p>
+                <p>$$f(x) = max(0, x)$$</p>
+                <p>Although this definition looks almost too simple, ReLU is one of the key reasons modern deep learning
+                    models are able to train effectively.</p>
+                <p>At a basic level, ReLU acts as a gate. When the input to a neuron is positive, the function passes
+                    that
+                    value through unchanged, allowing the information to continue forward through the network. When the
+                    input is negative, the output becomes zero, effectively shutting the neuron off for that particular
+                    input. This behaviour introduces non-linearity while remaining easy to compute.</p>
+                <p>One of ReLU’s greatest strengths is how it behaves during training. Unlike sigmoid, ReLU does not
+                    squash
+                    all outputs into a small range. For positive inputs, the gradient remains constant rather than
+                    shrinking
+                    toward zero. This allows error signals during backpropagation to flow backward through many layers
+                    without disappearing, greatly reducing the vanishing gradient problem. As a result, deep networks
+                    with
+                    many hidden layers can actually learn meaningful features.</p>
+                <p>ReLU is also computationally efficient. It involves only a simple comparison and does not require
+                    expensive operations such as exponentials or divisions. This efficiency becomes critical when
+                    training
+                    large networks with millions of neurons and billions of calculations.</p>
+                <p>Another important property of ReLU is that it encourages sparse activation. Because negative inputs
+                    produce an output of zero, many neurons are inactive at any given time. This sparsity can improve
+                    learning efficiency and help the network focus on the most relevant features in the data.</p>
+                <p>Because of its simplicity, training stability, and practical effectiveness, ReLU has become the
+                    default
+                    activation function for hidden layers in most state-of-the-art neural networks used in computer
+                    vision,
+                    speech recognition, and natural language processing.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Dying ReLU Problem</strong><br />
+                        While ReLU solves many problems, it is not perfect. Some neurons can become permanently inactive
+                        if
+                        they only receive negative inputs during training, a situation known as the “dying ReLU”
+                        problem.
+                        Variants such as Leaky ReLU were introduced to address this issue.</p>
+                    </div>
                 </div>
-            </div>
-            <h2>1. The Perceptron</h2>
-            <p>The smallest unit of a Neural Network is a <strong>Perceptron</strong> (or Neuron).</p>
-            <h3>1.1 The Anatomy of a Neuron</h3>
-            <p>To understand a neural network, we must first dissect its fundamental building block: the neuron. It
-                consists of five key components (see Figure 1):</p>
-            <ol>
-                <li>
-                    <p><strong>Inputs ($x$)</strong>: These act as the raw data points entering the neuron, similar
-                        to
-                        how our eyes perceive individual pixels of light. In a digital image, each input might
-                        represent
-                        the brightness value of a single pixel.</p>
-                </li>
-                <li>
-                    <p><strong>Weights ($w$)</strong>: Assigned to each input, weights represent the importance or
-                        strength of that connection. If a specific input is crucial for the decision (like a sharp
-                        edge
-                        in an image), it gets a higher weight. Training a network is essentially just adjusting
-                        these
-                        weights until they are correct.</p>
-                </li>
-                <li>
-                    <p><strong>Bias ($b$)</strong>: This is an extra parameter that acts as a threshold or offset.
-                        It
-                        allows the neuron to shift its activation function left or right, ensuring that the neuron
-                        can
-                        fire even when all inputs are zero, much like the intercept in a linear equation.</p>
-                </li>
-                <li>
-                    <p><strong>Weighted Sum</strong>: The neuron first aggregates all information by multiplying
-                        each
-                        input by its weight and adding the bias: $z = \sum (x \cdot w) + b$. This is mathematically
-                        identical to the Linear Regression formula we learned earlier.</p>
-                </li>
-                <li>
-                    <p><strong>Activation Function ($a$)</strong>: This is the decision-maker. It takes the weighted
-                        sum
-                        and decides whether the neuron should "fire" (output a strong signal) or stay dormant. It
-                        adds
-                        non-linearity, enabling the network to learn complex patterns beyond simple straight lines.
-                    </p>
-                </li>
-            </ol>
-            <p>$$Output = Activation(\sum (Input \cdot Weight) + Bias)$$</p>
-            <p><img alt="Figure 1: Anatomy of an Artificial Neuron" src="images/neuron_anatomy.png" /><br />
-                <em>Figure 1: Anatomy of an Artificial Neuron. Inputs ($x$) are weighted ($w$) and summed with a
-                    bias
-                    ($b$) before passing through an activation function.</em>
-            </p>
-            <hr />
-            <h2>2. Activation Functions</h2>
-            <h3>Why do we need them?</h3>
-            <p>To understand their importance, imagine a neural network <em>without</em> activation functions. In
-                such a
-                scenario, every neuron would perform only a linear transformation (multiplying input by weight and
-                adding bias).</p>
-            <p>There is a fundamental mathematical limitation here: <strong>Linear + Linear = Linear</strong>.</p>
-            <p>No matter how many layers you stack—you could have 100 hidden layers with 1,000 neurons each—the
-                entire
-                network would mathematically collapse into a single linear equation ($y = mx + c$). It would
-                effectively
-                be just a complex-looking Linear Regression model. It could draw a straight line through data, but
-                it
-                could never learn to separate data that is curved, circular, or scattered in complex ways.</p>
-            <p><strong>Activation functions introduce non-linearity.</strong> They bend the line. By applying a
-                non-linear function (like turning negative values to zero) at every neuron, we allow the network to
-                approximate <em>any</em> function, no matter how complex. This capability, known as the
-                <strong>Universal Approximation Theorem</strong>, is what enables neural networks to recognize
-                faces,
-                understand language, and drive cars.
-            </p>
-            <h3>2.1 Common Functions</h3>
-            <p><img alt="Figure 2: Comparison of Sigmoid and ReLU" src="images/activation_functions.png" /><br />
-                <em>Figure 2: Comparison of Sigmoid and ReLU Activation Functions. Notice how Sigmoid saturates at 0
-                    and
-                    1, while ReLU is linear for positive values.</em>
-            </p>
-            <p>There are several activation functions used in deep learning (see Figure 2), but two of the most
-                critical
-                ones to understand are Sigmoid and ReLU.</p>
-            <h4>2.1.1 Sigmoid</h4>
-            <p>The Sigmoid function, often represented by the Greek letter $\sigma$, produces a smooth S-shaped
-                curve.
-                Its defining characteristic is that it compresses, or “crushes,” any input value into a narrow range
-                between 0 and 1. Because of this behaviour, sigmoid outputs are easy to interpret as probabilities.
-                For
-                example, if a neuron produces an output of 0.95, we can naturally read this as the model being 95%
-                confident in its prediction.</p>
-            <p>Despite this intuitive interpretation, the sigmoid function is poorly suited for deep neural
-                networks.
-                When input values become very large or very small, the sigmoid curve flattens out. In these flat
-                regions, the gradient becomes extremely small. During backpropagation, these tiny gradients are
-                passed
-                backward through multiple layers and rapidly diminish, preventing earlier layers from learning
-                effectively. This phenomenon is known as the vanishing gradient problem, and it is the main reason
-                sigmoid is rarely used in the hidden layers of modern deep learning models.</p>
-            <h4>2.1.2 ReLU (Rectified Linear Unit)</h4>
-            <p>The ReLU (Rectified Linear Unit) activation function is defined by the simple mathematical rule:</p>
-            <p>$$f(x) = max(0, x)$$</p>
-            <p>Although this definition looks almost too simple, ReLU is one of the key reasons modern deep learning
-                models are able to train effectively.</p>
-            <p>At a basic level, ReLU acts as a gate. When the input to a neuron is positive, the function passes
-                that
-                value through unchanged, allowing the information to continue forward through the network. When the
-                input is negative, the output becomes zero, effectively shutting the neuron off for that particular
-                input. This behaviour introduces non-linearity while remaining easy to compute.</p>
-            <p>One of ReLU’s greatest strengths is how it behaves during training. Unlike sigmoid, ReLU does not
-                squash
-                all outputs into a small range. For positive inputs, the gradient remains constant rather than
-                shrinking
-                toward zero. This allows error signals during backpropagation to flow backward through many layers
-                without disappearing, greatly reducing the vanishing gradient problem. As a result, deep networks
-                with
-                many hidden layers can actually learn meaningful features.</p>
-            <p>ReLU is also computationally efficient. It involves only a simple comparison and does not require
-                expensive operations such as exponentials or divisions. This efficiency becomes critical when
-                training
-                large networks with millions of neurons and billions of calculations.</p>
-            <p>Another important property of ReLU is that it encourages sparse activation. Because negative inputs
-                produce an output of zero, many neurons are inactive at any given time. This sparsity can improve
-                learning efficiency and help the network focus on the most relevant features in the data.</p>
-            <p>Because of its simplicity, training stability, and practical effectiveness, ReLU has become the
-                default
-                activation function for hidden layers in most state-of-the-art neural networks used in computer
-                vision,
-                speech recognition, and natural language processing.</p>
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Dying ReLU Problem</strong><br />
-                    While ReLU solves many problems, it is not perfect. Some neurons can become permanently inactive
-                    if
-                    they only receive negative inputs during training, a situation known as the “dying ReLU”
-                    problem.
-                    Variants such as Leaky ReLU were introduced to address this issue.</p>
-                </div>
-            </div>
-            <hr />
-            <h2>3. The Multi-Layer Perceptron (MLP)</h2>
-            <p>One neuron is weak. But if we organize them into layers, they become powerful.</p>
-            <h3>3.1 Network Architecture</h3>
-            <p>A standard Multi-Layer Perceptron (MLP) consists of three distinct types of layers (see Figure 3),
-                each
-                with a specific purpose:</p>
-            <ol>
-                <li>
-                    <p><strong>Input Layer</strong>: This is the entryway for data into the network. It passively
-                        receives raw information, such as the 784 individual pixel values of a 28x28 grayscale
-                        image.
-                        Importantly, this layer usually performs no calculation; it simply holds the data for the
-                        next
-                        layer.</p>
-                </li>
-                <li>
-                    <p><strong>Hidden Layers</strong>: Positioned between the input and output, these layers do the
-                        heavy lifting. This is where the network extracts features and patterns. Early hidden layers
-                        might detect simple edges, while deeper layers combine these edges to recognize complexity
-                        like
-                        shapes, textures, or even eyes and noses. This hierarchical learning is why we call it
-                        "Deep"
-                        Learning.</p>
-                </li>
-                <li>
-                    <p><strong>Output Layer</strong>: The final destination of the signal. This layer transforms the
-                        network's understanding into a prediction. For a digit classification task, it would have 10
-                        neurons, where each neuron represents the probability that the image corresponds to a
-                        specific
-                        digit from "0" through "9".</p>
-                </li>
-            </ol>
-            <p><strong>Fully-Connected (Dense)</strong>: Every neuron in Layer 1 is connected to every neuron in
-                Layer
-                2.</p>
-            <p><img alt="Figure 3: Multi-Layer Perceptron Architecture" src="images/mlp_architecture.png" /><br />
-                <em>Figure 3: Multi-Layer Perceptron Architecture. Input data flows from left to right through
-                    connections to the hidden layer and finally the output layer.</em>
-            </p>
-            <hr />
-            <h2>4. How Training Works: Backpropagation</h2>
-            <p>Backpropagation is the core algorithm that allows a neural network to learn from its mistakes.
-                Without
-                it, a network could make predictions, but it would have no systematic way to improve them. The
-                process
-                happens in four tightly connected steps and is repeated thousands of times during training.</p>
-            <h3>Step 1: Forward Propagation — The Guess</h3>
-            <p>Training begins with forward propagation. Input data is fed into the network and flows layer by layer
-                from the input layer, through the hidden layers, and finally to the output layer.</p>
-            <p>At each neuron, the input is multiplied by weights, a bias is added, and an activation function is
-                applied. By the time the data reaches the output layer, the network produces a prediction.</p>
-            <p>For example, when shown an image of a handwritten digit, the network might say:</p>
-            <p>“I think this image is a digit ‘3’ with 50% confidence.”</p>
-            <p>At this stage, the network is simply making its best guess based on its current weights.</p>
-            <h3>Step 2: Loss Calculation — The Error</h3>
-            <p>Next, the network compares its prediction to the true label. If the correct answer is actually the
-                digit
-                5, then the prediction is wrong.</p>
-            <p>This difference between the predicted output and the true answer is measured using a loss function.
-                The
-                loss is a single number that tells us how bad the prediction was. A small loss means the prediction
-                was
-                close; a large loss means it was far off.</p>
-            <p>The loss function gives the network a clear objective: reduce this error.</p>
-            <h3>Step 3: Backward Propagation — The Blame</h3>
-            <p>Now comes the key idea. To reduce the loss, the network must figure out which weights caused the
-                mistake
-                and by how much. This is the purpose of backpropagation.</p>
-            <p>Starting from the output layer, the algorithm moves backward through the network. Using the Chain
-                Rule of
-                Calculus, it computes how sensitive the loss is to each individual weight.</p>
-            <p>In effect, the network assigns responsibility for the error:</p>
-            <p>“Neuron 45 in Layer 2 contributed a lot to this mistake — your weight needs to decrease.”</p>
-            <p>“Neuron 12 in Layer 1 had little effect — your weight should change only slightly.”</p>
-            <p>Each weight receives a gradient, which tells us the direction and magnitude of change needed to
-                reduce
-                the error.</p>
-            <h3>Step 4: Optimization — The Fix</h3>
-            <p>Finally, the network updates its weights using an optimization method, most commonly Gradient
-                Descent.
-            </p>
-            <p>Each weight is adjusted slightly in the opposite direction of its gradient. This nudges the network
-                toward a better solution without changing things too drastically. After the update, the network is a
-                little bit better than it was before.</p>
-            <h3>The big picture</h3>
-            <p>This entire process (as illustrated in Figure 4) — forward propagation, loss calculation,
-                backpropagation, and weight updates — is repeated over and over with many training examples. With
-                each
-                cycle, the network gradually improves its predictions.</p>
-            <p><img alt="Figure 4: The Cycle of Backpropagation" src="images/backprop_flow.png" /><br />
-                <em>Figure 4: The Cycle of Backpropagation. Training is an iterative loop of guessing, measuring
-                    error,
-                    and assigning blame to update weights.</em>
-            </p>
-            <hr />
-            <h2>5. Lab Preview: Building it from Scratch</h2>
-            <p>In this week's lab (Experiment 1), we will <strong>not</strong> use <code>sklearn</code> or
-                <code>PyTorch</code>.<br />
-                We will use pure Python and <code>numpy</code> to build:<br />
-                1. <strong>Affine Layer</strong>: The $wx+b$ math.<br />
-                2. <strong>ReLU Layer</strong>: The non-linearity.<br />
-                3. <strong>SoftmaxWithLoss</strong>: The output probability and error calculation.<br />
-                4. <strong>Training Loop</strong>: The forward and backward pass.
-            </p>
-            <p>If you can build this, you understand AI.</p>
-            <hr />
-            <h2>6. Summary</h2>
-            <p>Neural Networks are built from layers of perceptrons. Activation functions such as ReLU give these
-                networks the power to model complex patterns. Forward propagation is how the network makes
-                predictions,
-                while backpropagation is how it learns from its mistakes.</p>
-            <p>Next week, we introduce the power tools: PyTorch and Convolutional Neural Networks (CNNs).</p>
+                <hr />
+                <h2>3. The Multi-Layer Perceptron (MLP)</h2>
+                <p>One neuron is weak. But if we organize them into layers, they become powerful.</p>
+                <h3>3.1 Network Architecture</h3>
+                <p>A standard Multi-Layer Perceptron (MLP) consists of three distinct types of layers (see Figure 3),
+                    each
+                    with a specific purpose:</p>
+                <ol>
+                    <li>
+                        <p><strong>Input Layer</strong>: This is the entryway for data into the network. It passively
+                            receives raw information, such as the 784 individual pixel values of a 28x28 grayscale
+                            image.
+                            Importantly, this layer usually performs no calculation; it simply holds the data for the
+                            next
+                            layer.</p>
+                    </li>
+                    <li>
+                        <p><strong>Hidden Layers</strong>: Positioned between the input and output, these layers do the
+                            heavy lifting. This is where the network extracts features and patterns. Early hidden layers
+                            might detect simple edges, while deeper layers combine these edges to recognize complexity
+                            like
+                            shapes, textures, or even eyes and noses. This hierarchical learning is why we call it
+                            "Deep"
+                            Learning.</p>
+                    </li>
+                    <li>
+                        <p><strong>Output Layer</strong>: The final destination of the signal. This layer transforms the
+                            network's understanding into a prediction. For a digit classification task, it would have 10
+                            neurons, where each neuron represents the probability that the image corresponds to a
+                            specific
+                            digit from "0" through "9".</p>
+                    </li>
+                </ol>
+                <p><strong>Fully-Connected (Dense)</strong>: Every neuron in Layer 1 is connected to every neuron in
+                    Layer
+                    2.</p>
+                <p><img alt="Figure 3: Multi-Layer Perceptron Architecture" src="images/mlp_architecture.png" /><br />
+                    <em>Figure 3: Multi-Layer Perceptron Architecture. Input data flows from left to right through
+                        connections to the hidden layer and finally the output layer.</em>
+                </p>
+                <hr />
+                <h2>4. How Training Works: Backpropagation</h2>
+                <p>Backpropagation is the core algorithm that allows a neural network to learn from its mistakes.
+                    Without
+                    it, a network could make predictions, but it would have no systematic way to improve them. The
+                    process
+                    happens in four tightly connected steps and is repeated thousands of times during training.</p>
+                <h3>Step 1: Forward Propagation — The Guess</h3>
+                <p>Training begins with forward propagation. Input data is fed into the network and flows layer by layer
+                    from the input layer, through the hidden layers, and finally to the output layer.</p>
+                <p>At each neuron, the input is multiplied by weights, a bias is added, and an activation function is
+                    applied. By the time the data reaches the output layer, the network produces a prediction.</p>
+                <p>For example, when shown an image of a handwritten digit, the network might say:</p>
+                <p>“I think this image is a digit ‘3’ with 50% confidence.”</p>
+                <p>At this stage, the network is simply making its best guess based on its current weights.</p>
+                <h3>Step 2: Loss Calculation — The Error</h3>
+                <p>Next, the network compares its prediction to the true label. If the correct answer is actually the
+                    digit
+                    5, then the prediction is wrong.</p>
+                <p>This difference between the predicted output and the true answer is measured using a loss function.
+                    The
+                    loss is a single number that tells us how bad the prediction was. A small loss means the prediction
+                    was
+                    close; a large loss means it was far off.</p>
+                <p>The loss function gives the network a clear objective: reduce this error.</p>
+                <h3>Step 3: Backward Propagation — The Blame</h3>
+                <p>Now comes the key idea. To reduce the loss, the network must figure out which weights caused the
+                    mistake
+                    and by how much. This is the purpose of backpropagation.</p>
+                <p>Starting from the output layer, the algorithm moves backward through the network. Using the Chain
+                    Rule of
+                    Calculus, it computes how sensitive the loss is to each individual weight.</p>
+                <p>In effect, the network assigns responsibility for the error:</p>
+                <p>“Neuron 45 in Layer 2 contributed a lot to this mistake — your weight needs to decrease.”</p>
+                <p>“Neuron 12 in Layer 1 had little effect — your weight should change only slightly.”</p>
+                <p>Each weight receives a gradient, which tells us the direction and magnitude of change needed to
+                    reduce
+                    the error.</p>
+                <h3>Step 4: Optimization — The Fix</h3>
+                <p>Finally, the network updates its weights using an optimization method, most commonly Gradient
+                    Descent.
+                </p>
+                <p>Each weight is adjusted slightly in the opposite direction of its gradient. This nudges the network
+                    toward a better solution without changing things too drastically. After the update, the network is a
+                    little bit better than it was before.</p>
+                <h3>The big picture</h3>
+                <p>This entire process (as illustrated in Figure 4) — forward propagation, loss calculation,
+                    backpropagation, and weight updates — is repeated over and over with many training examples. With
+                    each
+                    cycle, the network gradually improves its predictions.</p>
+                <p><img alt="Figure 4: The Cycle of Backpropagation" src="images/backprop_flow.png" /><br />
+                    <em>Figure 4: The Cycle of Backpropagation. Training is an iterative loop of guessing, measuring
+                        error,
+                        and assigning blame to update weights.</em>
+                </p>
+                <hr />
+                <h2>5. Lab Preview: Building it from Scratch</h2>
+                <p>In this week's lab (Experiment 1), we will <strong>not</strong> use <code>sklearn</code> or
+                    <code>PyTorch</code>.<br />
+                    We will use pure Python and <code>numpy</code> to build:<br />
+                    1. <strong>Affine Layer</strong>: The $wx+b$ math.<br />
+                    2. <strong>ReLU Layer</strong>: The non-linearity.<br />
+                    3. <strong>SoftmaxWithLoss</strong>: The output probability and error calculation.<br />
+                    4. <strong>Training Loop</strong>: The forward and backward pass.
+                </p>
+                <p>If you can build this, you understand AI.</p>
+                <hr />
+                <h2>6. Summary</h2>
+                <p>Neural Networks are built from layers of perceptrons. Activation functions such as ReLU give these
+                    networks the power to model complex patterns. Forward propagation is how the network makes
+                    predictions,
+                    while backpropagation is how it learns from its mistakes.</p>
+                <p>Next week, we introduce the power tools: PyTorch and Convolutional Neural Networks (CNNs).</p>
 
 
-            <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
-                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
-                <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
-                    material? Take the interactive quiz now!</p>
-                <a href="Week_7_Quiz.html"
-                    class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
-                    Start Quiz
-                </a>
-            </div>
+                <div
+                    class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
+                        material? Take the interactive quiz now!</p>
+                    <a href="Week_7_Quiz.html"
+                        class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+                        Start Quiz
+                    </a>
+                </div>
 
         </article>
     </main>

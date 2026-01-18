@@ -216,326 +216,367 @@
             </p>
             <div
                 class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-                    By the end of this chapter, you will be able to:<br />
-                    1. <strong>Explain</strong> the limitations of RNNs and the advantages of the Transformer
-                    architecture.<br />
-                    2. <strong>Describe</strong> the mechanism of Self-Attention (Query, Key, Value).<br />
-                    3. <strong>Contrast</strong> Pre-training (Next-Token Prediction) and Alignment (RLHF).<br />
-                    4. <strong>Deploy</strong> a Quantized LLM for local inference using Python.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                        </path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+                        By the end of this chapter, you will be able to:<br />
+                        1. <strong>Explain</strong> the limitations of RNNs and the advantages of the Transformer
+                        architecture.<br />
+                        2. <strong>Describe</strong> the mechanism of Self-Attention (Query, Key, Value).<br />
+                        3. <strong>Contrast</strong> Pre-training (Next-Token Prediction) and Alignment (RLHF).<br />
+                        4. <strong>Deploy</strong> a Quantized LLM for local inference using Python.<br />
+                        <br />
+                        <strong>Week 10 Goal:</strong><br />
+                        Earlier in the course, we trained a small custom model on 20 sentences—an educational exercise,
+                        but
+                        not how real-world AI works today. We're now in the era of <strong>foundation models</strong>:
+                        massive neural networks pre-trained on vast internet-scale data (Wikipedia, books, Reddit, code,
+                        and
+                        more) by companies like OpenAI, Meta, Anthropic, and Google. Models like GPT-4o, Llama 3.1,
+                        Claude
+                        3.5, and Gemma exemplify generalized intelligence emerging from scale. This week, we shift from
+                        "training from scratch" to <strong>prompting and deploying</strong> these pre-built giants.
+                        We'll
+                        dive into the Transformer architecture that powers them and adopt the mindset of an AI Engineer
+                        who
+                        leverages rather than builds these models.</p>
+                    </div>
                 </div>
-            </div>
-            <!-- break -->
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Week 10 Goal:</strong><br />
-                    Earlier in the course, we trained a small custom model on 20 sentences—an educational exercise, but
-                    not how real-world AI works today. We're now in the era of <strong>foundation models</strong>:
-                    massive neural networks pre-trained on vast internet-scale data (Wikipedia, books, Reddit, code, and
-                    more) by companies like OpenAI, Meta, Anthropic, and Google. Models like GPT-4o, Llama 3.1, Claude
-                    3.5, and Gemma exemplify generalized intelligence emerging from scale. This week, we shift from
-                    "training from scratch" to <strong>prompting and deploying</strong> these pre-built giants. We'll
-                    dive into the Transformer architecture that powers them and adopt the mindset of an AI Engineer who
-                    leverages rather than builds these models.</p>
+                <h2>1. The Transformer Revolution</h2>
+                <p>Before 2017, sequence models like Recurrent Neural Networks (RNNs) and LSTMs processed text
+                    <strong>sequentially</strong>—word by word. This was slow (no parallelization across time steps) and
+                    suffered from vanishing gradients, making it hard to capture long-range dependencies.
+                </p>
+                <p>In 2017, Google researchers published the groundbreaking paper <strong>"Attention Is All You
+                        Need"</strong>, introducing the <strong>Transformer</strong> architecture—which ditched
+                    recurrence
+                    entirely in favor of attention mechanisms.</p>
+                <p><img alt="Figure 1: The Transformer Architecture (Encoder-Decoder)"
+                        src="images/transformer_architecture.png" /><br />
+                    <em>Figure 1: The classic Transformer architecture (Vaswani et al., 2017), showing the Encoder
+                        (Left)
+                        and Decoder (Right) stacks.</em>
+                </p>
+                <h3>1.1 Self-Attention: The Core Innovation</h3>
+                <p>Imagine reading "The animal didn't cross the street because it was too tired." What does "it" refer
+                    to?
+                    Humans instantly relate words across the sentence.</p>
+                <p><strong>Self-attention</strong> does this mathematically—and for <strong>every word
+                        simultaneously</strong>. It computes attention scores between every pair of words, building a
+                    rich
+                    contextual representation.</p>
+                <p>Your "bank" example remains perfect: For "bank" near "river" vs. "money," attention weights
+                    disambiguate
+                    meaning.</p>
+                <p><img alt="Figure 2: Self-Attention Mechanism (Bank Example)"
+                        src="images/self_attention_bank.png" /><br />
+                    <em>Figure 2: Visualizing how self-attention resolves ambiguity. Connections show how "Bank" pays
+                        attention to "River".</em>
+                </p>
+                <h3>1.2 Multi-Head Attention</h3>
+                <p>Transformers don't use just one attention layer—they use <strong>multi-head attention</strong>,
+                    running
+                    several attention mechanisms in parallel. Each "head" learns to focus on different aspects (e.g.,
+                    one on
+                    syntax, another on semantics).</p>
+                <p><img alt="Figure 3: Multi-Head Attention Diagram" src="images/multi_head_attention.png" /><br />
+                    <em>Figure 3: Multiple heads process the input in parallel, capturing different linguistic features
+                        before being combined.</em>
+                </p>
+                <h3>1.3 Positional Encoding</h3>
+                <p>Attention has no built-in sense of order. To fix this, Transformers add <strong>positional
+                        encodings</strong> (fixed sine/cosine waves or learned vectors) to word embeddings.</p>
+                <h3>1.4 Deep Dive: How Attention Works (Q, K, V)</h3>
+                <p>Think of attention as a <strong>differentiable database lookup</strong>:</p>
+                <ul>
+                    <li>
+                        <p><strong>Query (Q)</strong>: What the current word is "asking" for.</p>
+                    </li>
+                    <li>
+                        <p><strong>Key (K)</strong>: What each other word "offers" as a match.</p>
+                    </li>
+                    <li>
+                        <p><strong>Value (V)</strong>: The actual content to retrieve.</p>
+                    </li>
+                </ul>
+                <p>Steps:<br />
+                    1. Compute dot-product similarity: score = Q · Kᵀ<br />
+                    2. Scale by √dₖ (dimension) to stabilize gradients.<br />
+                    3. Softmax to get weights.<br />
+                    4. Weighted sum: Attention = softmax(scores) · V</p>
+                <p>In decoder-only models (like GPT), causal masking prevents "peeking" at future tokens.</p>
+                <h3>1.5 Parallelization &amp; Scale</h3>
+                <p>By processing all words at once, Transformers are highly parallelizable on GPUs/TPUs. Self-attention
+                    scales quadratically with sequence length, which makes very long contexts computationally expensive
+                    and
+                    motivates recent efficiency innovations. However, this parallelization enabled training on thousands
+                    of
+                    GPUs for months, consuming petabytes of data—leading to <strong>emergent abilities</strong> (e.g.,
+                    arithmetic, translation) not explicitly trained for.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 1</strong><br />
+                        - <strong>Self-Attention</strong>: Relates every word to every other word to understand context
+                        ("Bank" of a river vs "Bank" for money).<br />
+                        - <strong>Multi-Head</strong>: Multiple "eyes" looking at the text simultaneously to capture
+                        syntax,
+                        semantics, and context.<br />
+                        - <strong>No Recurrence</strong>: Unlike RNNs, Transformers process the entire sentence at once,
+                        enabling massive parallel scaling.</p>
+                        <p>[!TIP]<br />
+                            <strong>Think About It</strong>: Why might parallelization enable "emergent"
+                            abilities?<br />
+                            <em>Hint: It's not just about speed. It allows the model to see vastly more data than any
+                                human
+                                could read in a thousand lifetimes. At this scale, the model stops just "memorizing" and
+                                starts "generalizing" to find rules.</em>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <h2>1. The Transformer Revolution</h2>
-            <p>Before 2017, sequence models like Recurrent Neural Networks (RNNs) and LSTMs processed text
-                <strong>sequentially</strong>—word by word. This was slow (no parallelization across time steps) and
-                suffered from vanishing gradients, making it hard to capture long-range dependencies.
-            </p>
-            <p>In 2017, Google researchers published the groundbreaking paper <strong>"Attention Is All You
-                    Need"</strong>, introducing the <strong>Transformer</strong> architecture—which ditched recurrence
-                entirely in favor of attention mechanisms.</p>
-            <p><img alt="Figure 1: The Transformer Architecture (Encoder-Decoder)"
-                    src="images/transformer_architecture.png" /><br />
-                <em>Figure 1: The classic Transformer architecture (Vaswani et al., 2017), showing the Encoder (Left)
-                    and Decoder (Right) stacks.</em>
-            </p>
-            <h3>1.1 Self-Attention: The Core Innovation</h3>
-            <p>Imagine reading "The animal didn't cross the street because it was too tired." What does "it" refer to?
-                Humans instantly relate words across the sentence.</p>
-            <p><strong>Self-attention</strong> does this mathematically—and for <strong>every word
-                    simultaneously</strong>. It computes attention scores between every pair of words, building a rich
-                contextual representation.</p>
-            <p>Your "bank" example remains perfect: For "bank" near "river" vs. "money," attention weights disambiguate
-                meaning.</p>
-            <p><img alt="Figure 2: Self-Attention Mechanism (Bank Example)"
-                    src="images/self_attention_bank.png" /><br />
-                <em>Figure 2: Visualizing how self-attention resolves ambiguity. Connections show how "Bank" pays
-                    attention to "River".</em>
-            </p>
-            <h3>1.2 Multi-Head Attention</h3>
-            <p>Transformers don't use just one attention layer—they use <strong>multi-head attention</strong>, running
-                several attention mechanisms in parallel. Each "head" learns to focus on different aspects (e.g., one on
-                syntax, another on semantics).</p>
-            <p><img alt="Figure 3: Multi-Head Attention Diagram" src="images/multi_head_attention.png" /><br />
-                <em>Figure 3: Multiple heads process the input in parallel, capturing different linguistic features
-                    before being combined.</em>
-            </p>
-            <h3>1.3 Positional Encoding</h3>
-            <p>Attention has no built-in sense of order. To fix this, Transformers add <strong>positional
-                    encodings</strong> (fixed sine/cosine waves or learned vectors) to word embeddings.</p>
-            <h3>1.4 Deep Dive: How Attention Works (Q, K, V)</h3>
-            <p>Think of attention as a <strong>differentiable database lookup</strong>:</p>
-            <ul>
-                <li>
-                    <p><strong>Query (Q)</strong>: What the current word is "asking" for.</p>
-                </li>
-                <li>
-                    <p><strong>Key (K)</strong>: What each other word "offers" as a match.</p>
-                </li>
-                <li>
-                    <p><strong>Value (V)</strong>: The actual content to retrieve.</p>
-                </li>
-            </ul>
-            <p>Steps:<br />
-                1. Compute dot-product similarity: score = Q · Kᵀ<br />
-                2. Scale by √dₖ (dimension) to stabilize gradients.<br />
-                3. Softmax to get weights.<br />
-                4. Weighted sum: Attention = softmax(scores) · V</p>
-            <p>In decoder-only models (like GPT), causal masking prevents "peeking" at future tokens.</p>
-            <h3>1.5 Parallelization &amp; Scale</h3>
-            <p>By processing all words at once, Transformers are highly parallelizable on GPUs/TPUs. Self-attention
-                scales quadratically with sequence length, which makes very long contexts computationally expensive and
-                motivates recent efficiency innovations. However, this parallelization enabled training on thousands of
-                GPUs for months, consuming petabytes of data—leading to <strong>emergent abilities</strong> (e.g.,
-                arithmetic, translation) not explicitly trained for.</p>
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 1</strong><br />
-                    - <strong>Self-Attention</strong>: Relates every word to every other word to understand context
-                    ("Bank" of a river vs "Bank" for money).<br />
-                    - <strong>Multi-Head</strong>: Multiple "eyes" looking at the text simultaneously to capture syntax,
-                    semantics, and context.<br />
-                    - <strong>No Recurrence</strong>: Unlike RNNs, Transformers process the entire sentence at once,
-                    enabling massive parallel scaling.</p>
-                    <p>[!TIP]<br />
-                        <strong>Think About It</strong>: Why might parallelization enable "emergent" abilities?<br />
-                        <em>Hint: It's not just about speed. It allows the model to see vastly more data than any human
-                            could read in a thousand lifetimes. At this scale, the model stops just "memorizing" and
-                            starts "generalizing" to find rules.</em>
-                    </p>
+                <hr />
+                <h2>2. Large Language Models (LLMs)</h2>
+                <p>Modern LLMs follow a two-stage process: <strong>pre-training</strong> (expensive) +
+                    <strong>post-training</strong> (alignment).
+                </p>
+                <h3>2.1 Pre-training: Next-Token Prediction</h3>
+                <p>The model predicts the next token in massive text corpora. This simple objective accidentally teaches
+                    grammar, facts, reasoning, and code.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>How Training Works</strong>: During training, the
+                        model
+                        makes a prediction, compares it to the actual next token using a <strong>loss function</strong>
+                        (e.g., cross-entropy), and then adjusts its <strong>weights</strong> (parameters) to reduce this
+                        error. This process repeats billions of times across trillions of tokens. Critically,
+                        <strong>only
+                            the weights are learned</strong>—the model's architecture and
+                        <strong>hyperparameters</strong>
+                        (like learning rate, batch size, number of layers) are set by engineers before training and
+                        remain
+                        fixed.</p>
+                    </div>
                 </div>
-            </div>
-            <hr />
-            <h2>2. Large Language Models (LLMs)</h2>
-            <p>Modern LLMs follow a two-stage process: <strong>pre-training</strong> (expensive) +
-                <strong>post-training</strong> (alignment).
-            </p>
-            <h3>2.1 Pre-training: Next-Token Prediction</h3>
-            <p>The model predicts the next token in massive text corpora. This simple objective accidentally teaches
-                grammar, facts, reasoning, and code.</p>
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>How Training Works</strong>: During training, the model
-                    makes a prediction, compares it to the actual next token using a <strong>loss function</strong>
-                    (e.g., cross-entropy), and then adjusts its <strong>weights</strong> (parameters) to reduce this
-                    error. This process repeats billions of times across trillions of tokens. Critically, <strong>only
-                        the weights are learned</strong>—the model's architecture and <strong>hyperparameters</strong>
-                    (like learning rate, batch size, number of layers) are set by engineers before training and remain
-                    fixed.</p>
+                <h3>2.2 Alignment: From Text Completer to Helpful Assistant</h3>
+                <p>Raw pre-trained models are great at continuation but not instruction-following.</p>
+                <p><strong>Reinforcement Learning from Human Feedback (RLHF)</strong> or modern alternatives like
+                    <strong>Direct Preference Optimization (DPO)</strong> align models through a cyclical process. It
+                    begins
+                    with humans ranking model responses from best to worst. A "Reward Model" is then trained to learn
+                    these
+                    human preferences, essentially understanding what a "good" answer looks like. Finally, the main LLM
+                    is
+                    optimized against this reward model, learning to maximize its score by producing responses that are
+                    helpful, honest, and harmless.
+                </p>
+                <p><strong>Example</strong>:</p>
+                <ul>
+                    <li>
+                        <p><strong>Prompt</strong>: "How do I bake a cake?"</p>
+                    </li>
+                    <li>
+                        <p><strong>Raw</strong>: Continues with unrelated text.</p>
+                    </li>
+                    <li>
+                        <p><strong>Aligned</strong>: Provides a clear recipe.</p>
+                    </li>
+                </ul>
+                <p>As of 2026, many models incorporate <strong>inference-time scaling</strong> (e.g., internal
+                    chain-of-thought in reasoning models like OpenAI's o-series or <strong>DeepSeek R1</strong>) for
+                    better
+                    performance on complex tasks.</p>
+                <h3>2.3 Foundation Model Flavors</h3>
+                <p>While all modern models use Transformers, they come in different architectural flavors suited for
+                    specific tasks. <strong>Encoder-only</strong> models (like BERT) are bidirectional, meaning they
+                    look at
+                    the whole sentence at once; they excel at "understanding" tasks like classification or sentiment
+                    analysis. <strong>Decoder-only</strong> models (like GPT, Llama, and Claude) are autoregressive,
+                    meaning
+                    they predict the next word in a sequence; these have become the dominant architecture for modern
+                    generative AI and chatbots. Finally, <strong>Encoder-Decoder</strong> models (like T5) combine both,
+                    making them ideal for sequence-to-sequence tasks like translation or summarization.</p>
+                <p>Many 2025–2026 models are multimodal (text + image/video/audio).</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 2</strong><br />
+                        - <strong>Pre-training</strong>: Teaches the model "Language and Facts" (The base
+                        capability).<br />
+                        - <strong>Alignment (RLHF/DPO)</strong>: Teaches the model "Helpfulness and Safety" (The chat
+                        personality).<br />
+                        - <strong>Decoder-Only</strong>: The dominant architecture for today's Generative AI (GPT-4,
+                        Claude,
+                        Llama).</p>
+                    </div>
                 </div>
-            </div>
-            <h3>2.2 Alignment: From Text Completer to Helpful Assistant</h3>
-            <p>Raw pre-trained models are great at continuation but not instruction-following.</p>
-            <p><strong>Reinforcement Learning from Human Feedback (RLHF)</strong> or modern alternatives like
-                <strong>Direct Preference Optimization (DPO)</strong> align models through a cyclical process. It begins
-                with humans ranking model responses from best to worst. A "Reward Model" is then trained to learn these
-                human preferences, essentially understanding what a "good" answer looks like. Finally, the main LLM is
-                optimized against this reward model, learning to maximize its score by producing responses that are
-                helpful, honest, and harmless.
-            </p>
-            <p><strong>Example</strong>:</p>
-            <ul>
-                <li>
-                    <p><strong>Prompt</strong>: "How do I bake a cake?"</p>
-                </li>
-                <li>
-                    <p><strong>Raw</strong>: Continues with unrelated text.</p>
-                </li>
-                <li>
-                    <p><strong>Aligned</strong>: Provides a clear recipe.</p>
-                </li>
-            </ul>
-            <p>As of 2026, many models incorporate <strong>inference-time scaling</strong> (e.g., internal
-                chain-of-thought in reasoning models like OpenAI's o-series or <strong>DeepSeek R1</strong>) for better
-                performance on complex tasks.</p>
-            <h3>2.3 Foundation Model Flavors</h3>
-            <p>While all modern models use Transformers, they come in different architectural flavors suited for
-                specific tasks. <strong>Encoder-only</strong> models (like BERT) are bidirectional, meaning they look at
-                the whole sentence at once; they excel at "understanding" tasks like classification or sentiment
-                analysis. <strong>Decoder-only</strong> models (like GPT, Llama, and Claude) are autoregressive, meaning
-                they predict the next word in a sequence; these have become the dominant architecture for modern
-                generative AI and chatbots. Finally, <strong>Encoder-Decoder</strong> models (like T5) combine both,
-                making them ideal for sequence-to-sequence tasks like translation or summarization.</p>
-            <p>Many 2025–2026 models are multimodal (text + image/video/audio).</p>
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 2</strong><br />
-                    - <strong>Pre-training</strong>: Teaches the model "Language and Facts" (The base capability).<br />
-                    - <strong>Alignment (RLHF/DPO)</strong>: Teaches the model "Helpfulness and Safety" (The chat
-                    personality).<br />
-                    - <strong>Decoder-Only</strong>: The dominant architecture for today's Generative AI (GPT-4, Claude,
-                    Llama).</p>
+                <hr />
+                <h2>3. Hugging Face &amp; Deployment</h2>
+                <p>Hugging Face is the "GitHub of AI"—hosting millions of open-source models, datasets, and tools.</p>
+                <h3>3.1 The Standard Deployment Pipeline</h3>
+                <p>Deploying an LLM involves a standardized pipeline, regardless of whether you are running a tiny model
+                    on
+                    your laptop or a massive one in the cloud. First, you <strong>Select a Model</strong> appropriate
+                    for
+                    your hardware constraints (e.g., Phi-3 for CPUs vs Llama-405B for GPU clusters). Next, the input
+                    text
+                    must be <strong>Tokenized</strong>, converting human language into the specific numerical IDs the
+                    model
+                    understands. The core step is <strong>Inference</strong>, where the model runs a forward pass to
+                    generate probability scores (logits) for the next possible token. Finally, a
+                    <strong>Decoding</strong>
+                    strategy (like sampling or greedy search) picks the best token and converts it back into text,
+                    repeating
+                    this loop until the response is complete.</p>
+                <p>Tools like <code>transformers</code> library + <code>pipeline()</code> abstract this. Modern stacks
+                    often
+                    use <strong>vLLM</strong> for ultra-fast, high-throughput inference serving.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Quantization Timing</strong>: During training,
+                        model
+                        weights are adjusted to minimize prediction error (loss). Quantization does not retrain the
+                        model;
+                        it only reduces the numerical precision of the already learned weights. Models are <strong>first
+                            trained</strong> in high precision (FP16/BF16) to learn accurate weights, then
+                        <strong>compressed afterward</strong> (INT8/INT4) for efficient deployment with minimal quality
+                        loss.</p>
+                        <p>[!TIP]<br />
+                            <strong>Hardware Tip</strong>: Use quantization (e.g., 4-bit) for local deployment; use APIs
+                            for
+                            closed models.
+                        </p>
+                        <p>[!NOTE]<br />
+                            <strong>Key Takeaways: Section 3</strong><br />
+                            - <strong>The Hub</strong>: Hugging Face is the central repository for open-source AI.<br />
+                            - <strong>Pipeline</strong>: Tokenize -&gt; Inference -&gt; Decode.<br />
+                            - <strong>Optimization</strong>: Techniques like Quantization and FlashAttention are
+                            critical
+                            for running these giants on real hardware.
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <hr />
-            <h2>3. Hugging Face &amp; Deployment</h2>
-            <p>Hugging Face is the "GitHub of AI"—hosting millions of open-source models, datasets, and tools.</p>
-            <h3>3.1 The Standard Deployment Pipeline</h3>
-            <p>Deploying an LLM involves a standardized pipeline, regardless of whether you are running a tiny model on
-                your laptop or a massive one in the cloud. First, you <strong>Select a Model</strong> appropriate for
-                your hardware constraints (e.g., Phi-3 for CPUs vs Llama-405B for GPU clusters). Next, the input text
-                must be <strong>Tokenized</strong>, converting human language into the specific numerical IDs the model
-                understands. The core step is <strong>Inference</strong>, where the model runs a forward pass to
-                generate probability scores (logits) for the next possible token. Finally, a <strong>Decoding</strong>
-                strategy (like sampling or greedy search) picks the best token and converts it back into text, repeating
-                this loop until the response is complete.</p>
-            <p>Tools like <code>transformers</code> library + <code>pipeline()</code> abstract this. Modern stacks often
-                use <strong>vLLM</strong> for ultra-fast, high-throughput inference serving.</p>
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Quantization Timing</strong>: During training, model
-                    weights are adjusted to minimize prediction error (loss). Quantization does not retrain the model;
-                    it only reduces the numerical precision of the already learned weights. Models are <strong>first
-                        trained</strong> in high precision (FP16/BF16) to learn accurate weights, then
-                    <strong>compressed afterward</strong> (INT8/INT4) for efficient deployment with minimal quality
-                    loss.</p>
-                    <p>[!TIP]<br />
-                        <strong>Hardware Tip</strong>: Use quantization (e.g., 4-bit) for local deployment; use APIs for
-                        closed models.
-                    </p>
-                    <p>[!NOTE]<br />
-                        <strong>Key Takeaways: Section 3</strong><br />
-                        - <strong>The Hub</strong>: Hugging Face is the central repository for open-source AI.<br />
-                        - <strong>Pipeline</strong>: Tokenize -&gt; Inference -&gt; Decode.<br />
-                        - <strong>Optimization</strong>: Techniques like Quantization and FlashAttention are critical
-                        for running these giants on real hardware.
-                    </p>
+                <hr />
+                <h2>4. Lab Preview: Choosing Your Path</h2>
+                <p>For Week 10, we have provided <strong>two separate labs</strong> depending on your available
+                    hardware.
+                    Choose the one that fits your setup:</p>
+                <h3>Option A: Lab 1 (CPU Inference)</h3>
+                <p><strong>Best for:</strong> Laptops (even without GPUs), MacBooks (M1/M2/M3), and standard desktops.
+                </p>
+                <ul>
+                    <li>
+                        <p><strong>Technology</strong>: We use <strong>Quantization</strong> (GGUF format) to compress
+                            the
+                            model to ~5GB.</p>
+                    </li>
+                    <li>
+                        <p><strong>Tool</strong>: <code>ctransformers</code> library.</p>
+                    </li>
+                    <li>
+                        <p><strong>Result</strong>: You will run a powerful Llama 3.1 8B model locally, though at a
+                            slower
+                            speed (3-10 tokens/sec).</p>
+                    </li>
+                </ul>
+                <h3>Option B: Lab 2 (GPU Acceleration)</h3>
+                <p><strong>Best for:</strong> Gaming PCs or Cloud Instances with NVIDIA GPUs (6GB+ VRAM).</p>
+                <ul>
+                    <li>
+                        <p><strong>Technology</strong>: We use <strong>8-bit loading</strong> via CUDA cores.</p>
+                    </li>
+                    <li>
+                        <p><strong>Tool</strong>: <code>transformers</code> + <code>accelerate</code> libraries.</p>
+                    </li>
+                    <li>
+                        <p><strong>Result</strong>: You will experience blazing fast generation speeds (50+ tokens/sec).
+                        </p>
+                    </li>
+                </ul>
+                <p>In both labs, you will build a local Python script to chat with the AI, keeping your data completely
+                    private.</p>
+                <hr />
+                <h2>5. Summary &amp; Key Takeaways</h2>
+                <ul>
+                    <li>
+                        <p>Transformers replaced sequential processing with parallel <strong>self-attention</strong>,
+                            enabling massive scale.</p>
+                    </li>
+                    <li>
+                        <p>Attention (QKV + multi-head) + positional encoding captures rich context.</p>
+                    </li>
+                    <li>
+                        <p>LLMs are <strong>pre-trained</strong> on next-token prediction, then <strong>aligned</strong>
+                            (RLHF/DPO) for helpfulness.</p>
+                    </li>
+                    <li>
+                        <p>Most modern LLMs are <strong>decoder-only</strong>; foundation models power everything from
+                            chatbots to code assistants.</p>
+                    </li>
+                    <li>
+                        <p>Hugging Face democratizes access—focus on <strong>prompting, fine-tuning, and
+                                deployment</strong>.</p>
+                    </li>
+                </ul>
+                <p><strong>Reflection Question:</strong> How might the quadratic complexity of attention limit context
+                    length, and what recent innovations (e.g., sparse attention, FlashAttention) address this?</p>
+                <p>Next week: Prompt engineering and ethical considerations.</p>
+                <div
+                    class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                        </path>
+                    </svg>
+                    <div class="flex-1 text-sm md:text-base"><strong>Glossary of Terms</strong><br />
+                        - <strong>Attention</strong>: Mechanism to weigh the importance of different words in a sentence
+                        relative to each other.<br />
+                        - <strong>Query / Key / Value (Q/K/V)</strong>: The internal vectors used to calculate attention
+                        scores. (Q looks for a match, K provides the match, V provides the content).<br />
+                        - <strong>RLHF</strong>: Reinforcement Learning from Human Feedback. Examples: Learning not to
+                        be
+                        toxic.<br />
+                        - <strong>Multimodal</strong>: Models that can see (Images), hear (Audio), and read (Text)
+                        simultaneously.<br />
+                        - <strong>Inference</strong>: The process of using a trained model to generate predictions.</p>
+                    </div>
                 </div>
-            </div>
-            <hr />
-            <h2>4. Lab Preview: Choosing Your Path</h2>
-            <p>For Week 10, we have provided <strong>two separate labs</strong> depending on your available hardware.
-                Choose the one that fits your setup:</p>
-            <h3>Option A: Lab 1 (CPU Inference)</h3>
-            <p><strong>Best for:</strong> Laptops (even without GPUs), MacBooks (M1/M2/M3), and standard desktops.</p>
-            <ul>
-                <li>
-                    <p><strong>Technology</strong>: We use <strong>Quantization</strong> (GGUF format) to compress the
-                        model to ~5GB.</p>
-                </li>
-                <li>
-                    <p><strong>Tool</strong>: <code>ctransformers</code> library.</p>
-                </li>
-                <li>
-                    <p><strong>Result</strong>: You will run a powerful Llama 3.1 8B model locally, though at a slower
-                        speed (3-10 tokens/sec).</p>
-                </li>
-            </ul>
-            <h3>Option B: Lab 2 (GPU Acceleration)</h3>
-            <p><strong>Best for:</strong> Gaming PCs or Cloud Instances with NVIDIA GPUs (6GB+ VRAM).</p>
-            <ul>
-                <li>
-                    <p><strong>Technology</strong>: We use <strong>8-bit loading</strong> via CUDA cores.</p>
-                </li>
-                <li>
-                    <p><strong>Tool</strong>: <code>transformers</code> + <code>accelerate</code> libraries.</p>
-                </li>
-                <li>
-                    <p><strong>Result</strong>: You will experience blazing fast generation speeds (50+ tokens/sec).</p>
-                </li>
-            </ul>
-            <p>In both labs, you will build a local Python script to chat with the AI, keeping your data completely
-                private.</p>
-            <hr />
-            <h2>5. Summary &amp; Key Takeaways</h2>
-            <ul>
-                <li>
-                    <p>Transformers replaced sequential processing with parallel <strong>self-attention</strong>,
-                        enabling massive scale.</p>
-                </li>
-                <li>
-                    <p>Attention (QKV + multi-head) + positional encoding captures rich context.</p>
-                </li>
-                <li>
-                    <p>LLMs are <strong>pre-trained</strong> on next-token prediction, then <strong>aligned</strong>
-                        (RLHF/DPO) for helpfulness.</p>
-                </li>
-                <li>
-                    <p>Most modern LLMs are <strong>decoder-only</strong>; foundation models power everything from
-                        chatbots to code assistants.</p>
-                </li>
-                <li>
-                    <p>Hugging Face democratizes access—focus on <strong>prompting, fine-tuning, and
-                            deployment</strong>.</p>
-                </li>
-            </ul>
-            <p><strong>Reflection Question:</strong> How might the quadratic complexity of attention limit context
-                length, and what recent innovations (e.g., sparse attention, FlashAttention) address this?</p>
-            <p>Next week: Prompt engineering and ethical considerations.</p>
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
-                    </path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Glossary of Terms</strong><br />
-                    - <strong>Attention</strong>: Mechanism to weigh the importance of different words in a sentence
-                    relative to each other.<br />
-                    - <strong>Query / Key / Value (Q/K/V)</strong>: The internal vectors used to calculate attention
-                    scores. (Q looks for a match, K provides the match, V provides the content).<br />
-                    - <strong>RLHF</strong>: Reinforcement Learning from Human Feedback. Examples: Learning not to be
-                    toxic.<br />
-                    - <strong>Multimodal</strong>: Models that can see (Images), hear (Audio), and read (Text)
-                    simultaneously.<br />
-                    - <strong>Inference</strong>: The process of using a trained model to generate predictions.</p>
-                </div>
-            </div>
 
 
-            <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
-                <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
-                <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
-                    material? Take the interactive quiz now!</p>
-                <a href="Week_10_Quiz.html"
-                    class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
-                    Start Quiz
-                </a>
-            </div>
+                <div
+                    class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+                    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's
+                        material? Take the interactive quiz now!</p>
+                    <a href="Week_10_Quiz.html"
+                        class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+                        Start Quiz
+                    </a>
+                </div>
 
         </article>
     </main>

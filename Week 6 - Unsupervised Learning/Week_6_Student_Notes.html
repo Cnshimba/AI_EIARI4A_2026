@@ -225,11 +225,12 @@
                 </div>
             </div>
             <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor"
+                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
+                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z">
+                    </path>
                 </svg>
                 <div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
                     By the end of this chapter, you will be able to:<br />
@@ -237,19 +238,9 @@
                     Learning.<br />
                     2. <strong>Explain</strong> the concept of Clustering and its real-world applications.<br />
                     3. <strong>Execute</strong> the K-Means algorithm (Assign $\rightarrow$ Update loop).<br />
-                    4. <strong>Evaluate</strong> the optimal number of clusters ($K$) using the Elbow Method.</p>
-                </div>
-            </div>
-            <!-- break -->
-
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Week 6 Goal</strong>:<br />
+                    4. <strong>Evaluate</strong> the optimal number of clusters ($K$) using the Elbow Method.<br />
+                    <br />
+                    <strong>Week 6 Goal</strong>:<br />
                     So far, we have relied on the "Right Answer" (Labels) to train our models. But in the real world,
                     data is often disorganized and unlabeled. This week, we explore <strong>Unsupervised
                         Learning</strong>, focusing on <strong>Clustering</strong>. We will learn strategies like
@@ -260,14 +251,16 @@
             <h2>1. Supervised vs. Unsupervised Learning</h2>
             <p>In Weeks 2 and 3, every dataset we touched had a clear "correct answer" ($Y$). We knew the price of the
                 house, or whether the email was spam. Our goal was simply to map Input $\rightarrow$ Output. This is
-                <strong>Supervised Learning</strong>.</p>
+                <strong>Supervised Learning</strong>.
+            </p>
             <p>But what if we don't have labels? What if we just have a massive dump of raw customer data with no
                 indication of "Good Customer" or "Bad Customer"?</p>
             <p>This brings us to <strong>Unsupervised Learning</strong>. Here, the goal is not to predict a specific
                 outcome, but to explore the data and find hidden structures. Notice how K-Means still relies on
                 <strong>Linear Algebra</strong> (means, vectors) and <strong>Geometry</strong> (distance), even without
                 labels—reinforcing concepts from Week 2 and Week 3. The feedback loop changes: there is no "Loss
-                function" telling the model it was wrong. Instead, the model tries to group items that look similar.</p>
+                function" telling the model it was wrong. Instead, the model tries to group items that look similar.
+            </p>
             <table>
                 <thead>
                     <tr>
@@ -319,7 +312,8 @@
                         - <strong>Unsupervised Approach</strong>: You just have a list of all user activity. You ask the
                         AI to "Group similar users". It might discover that "Group A" buys diapers and beer (Parents),
                         while "Group B" buys gaming laptops and energy drinks (Gamers). You didn't tell it these groups
-                        existed; it found them.</p>
+                        existed; it found them.
+                    </p>
                 </div>
             </div>
             <!-- break -->
@@ -350,7 +344,8 @@
                         <li><strong>Assign</strong>: Everyone walks to the speaker playing the music they like best.
                         </li>
                         <li><strong>Update</strong>: You notice where people gathered, and you move the speaker to the
-                            <em>exact center</em> of that crowd to give them better sound.</li>
+                            <em>exact center</em> of that crowd to give them better sound.
+                        </li>
                         <li><strong>Repeat</strong>: Because the speaker moved, some people at the edge might now be
                             closer to a different speaker, so they switch. You keep moving the speakers until everyone
                             is happy and stops moving.</li>
