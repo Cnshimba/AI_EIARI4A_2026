@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 9 Lab 1 Textcnn Classification - AI Course</title>
+    <title>Week 9 Lab 1 Text Classification Jetson - AI Course</title>
     
 <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -160,7 +160,7 @@
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-3xl font-bold text-secondary m-0">Natural Language Processing (NLP)</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 1: TextCNN Classification</span>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 1: Text Classification Jetson</span>
     </div>
 </div>
 
@@ -176,138 +176,159 @@
 </div>
 
             
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
-In this lab, we will tackle <strong>Natural Language Processing (NLP)</strong>. We will build a model that can read news headlines (AG_NEWS dataset) and classify them into categories (World, Sports, Business, Sci/Tech). We will use PyTorch's <code>EmbeddingBag</code> layer to efficiently process variable-length text.</p></div></div>
+<h2>Foreword</h2>
+<p>In this lab, we dive into <strong>NLP</strong>.<br />
+We will build a model that can read a sentence and decide if it is <strong>Positive</strong> or <strong>Negative</strong>.<br />
+We will implement the entire pipeline:<br />
+1.  <strong>Tokenization</strong>: Converting text to numbers.<br />
+2.  <strong>Embeddings</strong>: Converting numbers to vectors.<br />
+3.  <strong>Classification</strong>: Using PyTorch to predict sentiment.</p>
 <hr />
-<h2>1. Setup and Imports</h2>
-<p>We need <code>torchtext</code> for datasets and tokenization (or standard torch tools if unavailable).</p>
+<h2>Part 1: Training the Text Classifier (PC)</h2>
+<h3>Step 1: Import Dependencies</h3>
+<p>We need <code>torch</code>.</p>
 <pre><code class="language-python">import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader
-import time
-
-device = torch.device(&quot;cuda&quot; if torch.cuda.is_available() else &quot;cpu&quot;)
-print(f&quot;Device: {device}&quot;)
+import torch.optim as optim
+import numpy as np
+import json # Added for saving vocab
 </code></pre>
-<hr />
-<h2>2. The Dataset (AG_NEWS)</h2>
-<p>We will use the torchtext API to load a standard classification dataset.</p>
-<pre><code class="language-python">from torchtext.datasets import AG_NEWS
-from torchtext.data.utils import get_tokenizer
-from torchtext.vocab import build_vocab_from_iterator
+<h3>Step 2: Define Data (Mini-IMDb)</h3>
+<p>For simplicity, we define a small dataset manually. In real life, this would be thousands of reviews.</p>
+<pre><code class="language-python">raw_data = [
+    (&quot;this movie is great&quot;, 1),
+    (&quot;i love this film&quot;, 1),
+    (&quot;fantastic acting and story&quot;, 1),
+    (&quot;terrible plot&quot;, 0),
+    (&quot;waste of time&quot;, 0),
+    (&quot;boring and slow&quot;, 0),
+    (&quot;best movie ever&quot;, 1),
+    (&quot;i hated it&quot;, 0),
+    (&quot;highly recommended&quot;, 1),
+    (&quot;do not watch&quot;, 0)
+]
 
-train_iter = AG_NEWS(split='train')
-tokenizer = get_tokenizer('basic_english')
-
-def yield_tokens(data_iter):
-    for _, text in data_iter:
-        yield tokenizer(text)
-
-vocab = build_vocab_from_iterator(yield_tokens(train_iter), specials=[&quot;&lt;unk&gt;&quot;])
-vocab.set_default_index(vocab[&quot;&lt;unk&gt;&quot;])
-
-text_pipeline = lambda x: vocab(tokenizer(x))
-label_pipeline = lambda x: int(x) - 1
-
-print(f&quot;Vocabulary Size: {len(vocab)}&quot;)
+print(f&quot;Dataset Size: {len(raw_data)}&quot;)
+print(f&quot;Example: {raw_data[0]}&quot;)
 </code></pre>
-<hr />
-<h2>3. Data Batching (Collate Function)</h2>
-<p>Unlike images, sentences have different lengths. We need a custom <code>collate_fn</code> to package them into a batch. <code>EmbeddingBag</code> requires a flat list of text tensor and an <code>offsets</code> tensor to know where each sentence starts.</p>
-<pre><code class="language-python">def collate_batch(batch):
-    label_list, text_list, offsets = [], [], [0]
-    for (_label, _text) in batch:
-        label_list.append(label_pipeline(_label))
-        processed_text = torch.tensor(text_pipeline(_text), dtype=torch.int64)
-        text_list.append(processed_text)
-        offsets.append(processed_text.size(0))
-    label_list = torch.tensor(label_list, dtype=torch.int64)
-    offsets = torch.tensor(offsets[:-1]).cumsum(dim=0)
-    text_list = torch.cat(text_list)
-    return label_list.to(device), text_list.to(device), offsets.to(device)
+<h3>Step 3: Build Vocabulary</h3>
+<p>We need to map every unique word to a unique Integer ID.</p>
+<pre><code class="language-python">word_to_ix = {&quot;&lt;PAD&gt;&quot;: 0, &quot;&lt;UNK&gt;&quot;: 1}
 
-train_iter = AG_NEWS(split='train')
-dataloader = DataLoader(train_iter, batch_size=8, shuffle=False, collate_fn=collate_batch)
+for sentence, label in raw_data:
+    for word in sentence.split():
+        if word not in word_to_ix:
+            word_to_ix[word] = len(word_to_ix)
+
+print(f&quot;Vocab Size: {len(word_to_ix)}&quot;)
+print(&quot;Mapping:&quot;, word_to_ix)
 </code></pre>
-<hr />
-<h2>4. The Model (EmbeddingBag)</h2>
-<p>Our model consists of an embedding layer (which converts word indices to vectors and averages them) and a linear layer for classification.</p>
-<pre><code class="language-python">class TextClassificationModel(nn.Module):
+<h3>Step 4: Tokenization Helper</h3>
+<p>A function to convert a sentence string into a tensor of IDs.</p>
+<pre><code class="language-python">def prepare_sequence(seq, to_ix):
+    idxs = [to_ix.get(w, to_ix[&quot;&lt;UNK&gt;&quot;]) for w in seq.split()]
+    return torch.tensor(idxs, dtype=torch.long)
+
+# Test it
+print(prepare_sequence(&quot;this movie is great&quot;, word_to_ix))
+</code></pre>
+<h3>Step 5: Define the Model (EmbeddingBag)</h3>
+<p>We use a simple but effective architecture:<br />
+1.  <strong>Embedding</strong>: Converts Word IDs to Vectors (Dimensions=10).<br />
+2.  <strong>Mean</strong>: Averages the vectors of all words in the sentence.<br />
+3.  <strong>Linear</strong>: Maps the average vector to the Output (2 classes: Positive/Negative).</p>
+<pre><code class="language-python">class TextClassifier(nn.Module):
     def __init__(self, vocab_size, embed_dim, num_class):
-        super(TextClassificationModel, self).__init__()
-        self.embedding = nn.EmbeddingBag(vocab_size, embed_dim, sparse=True)
+        super(TextClassifier, self).__init__()
+        self.embedding = nn.EmbeddingBag(vocab_size, embed_dim, sparse=False)
         self.fc = nn.Linear(embed_dim, num_class)
-        self.init_weights()
-
-    def init_weights(self):
-        initrange = 0.5
-        self.embedding.weight.data.uniform_(-initrange, initrange)
-        self.fc.weight.data.uniform_(-initrange, initrange)
-        self.fc.bias.data.zero_()
 
     def forward(self, text, offsets):
         embedded = self.embedding(text, offsets)
         return self.fc(embedded)
 
-num_class = 4
-vocab_size = len(vocab)
-emsize = 64
-model = TextClassificationModel(vocab_size, emsize, num_class).to(device)
+# Config
+VOCAB_SIZE = len(word_to_ix)
+EMBED_DIM = 10
+NUM_CLASS = 2
+model = TextClassifier(VOCAB_SIZE, EMBED_DIM, NUM_CLASS)
+print(model)
 </code></pre>
-<hr />
-<h2>5. Training Loop</h2>
-<pre><code class="language-python">def train(dataloader):
-    model.train()
-    total_acc, total_count = 0, 0
-    log_interval = 500
-    start_time = time.time()
+<h3>Step 6: Train the Model</h3>
+<p>We train for 100 epochs.</p>
+<pre><code class="language-python">optimizer = optim.SGD(model.parameters(), lr=0.1)
+criterion = nn.CrossEntropyLoss()
 
-    for idx, (label, text, offsets) in enumerate(dataloader):
-        optimizer.zero_grad()
-        predicted_label = model(text, offsets)
-        loss = criterion(predicted_label, label)
+print(&quot;Training...&quot;)
+for epoch in range(100):
+    total_loss = 0
+    for text,label in raw_data:
+        model.zero_grad()
+
+        # Prepare inputs
+        text_in = prepare_sequence(text, word_to_ix)
+        label_in = torch.tensor([label], dtype=torch.long)
+        offsets = torch.tensor([0], dtype=torch.long) # Since batch size is 1, offset is 0
+
+        # Forward
+        output = model(text_in, offsets)
+        loss = criterion(output, label_in)
+
+        # Backward
         loss.backward()
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 0.1)
         optimizer.step()
-        total_acc += (predicted_label.argmax(1) == label).sum().item()
-        total_count += label.size(0)
+        total_loss += loss.item()
 
-        if idx % log_interval == 0 and idx &gt; 0:
-            elapsed = time.time() - start_time
-            print(f'| epoch {epoch:3d} | {idx:5d}/{len(dataloader):5d} batches '
-                  f'| accuracy {total_acc/total_count:8.3f}')
-            total_acc, total_count = 0, 0
-            start_time = time.time()
+    if epoch % 20 == 0:
+        print(f&quot;Epoch {epoch}: Loss {total_loss:.4f}&quot;)
+</code></pre>
+<h3>Step 7: Test with New Sentences</h3>
+<p>Let's try sentences the model has never seen!</p>
+<pre><code class="language-python">def predict(text):
+    with torch.no_grad():
+        text_in = prepare_sequence(text, word_to_ix)
+        offsets = torch.tensor([0], dtype=torch.long)
+        output = model(text_in, offsets)
+        predicted_cls = output.argmax(1).item()
+        sentiment = &quot;POSITIVE&quot; if predicted_cls == 1 else &quot;NEGATIVE&quot;
+        print(f&quot;'{text}' -&gt; {sentiment}&quot;)
 
-criterion = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=5.0)
-scheduler = torch.optim.lr_scheduler.StepLR(optimizer, 1.0, gamma=0.1)
-
-EPOCHS = 3 
-for epoch in range(1, EPOCHS + 1):
-    train_iter = AG_NEWS(split='train')
-    train_dataloader = DataLoader(train_iter, batch_size=64, shuffle=True, collate_fn=collate_batch)
-    train(train_dataloader)
-    scheduler.step()
+predict(&quot;this is great&quot;)
+predict(&quot;absolute rubbish&quot;)
+predict(&quot;i love it&quot;)
 </code></pre>
 <hr />
-<h2>6. Evaluation</h2>
-<p>Check accuracy on the test set.</p>
-<pre><code class="language-python">test_iter = AG_NEWS(split='test')
-test_dataloader = DataLoader(test_iter, batch_size=64, shuffle=True, collate_fn=collate_batch)
+<h2>Part 2: Deploying to Jetson Orin Nano</h2>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base">Take this custom model and run it on the Edge Device to classify text in real-time.</p></div></div>
+<h3>Step 1: Save Model and Vocabulary</h3>
+<p>In your notebook, run this cell to save the trained model and the word mapping. We need both!</p>
+<pre><code class="language-python"># Save Model
+torch.save(model.state_dict(), 'text_classifier.pth')
 
-model.eval()
-total_acc, total_count = 0, 0
+# Save Vocab (Dictionary)
+with open('vocab.json', 'w') as f:
+    json.dump(word_to_ix, f)
 
-with torch.no_grad():
-    for idx, (label, text, offsets) in enumerate(test_dataloader):
-        predicted_label = model(text, offsets)
-        total_acc += (predicted_label.argmax(1) == label).sum().item()
-        total_count += label.size(0)
-
-print(f'Test Accuracy: {total_acc/total_count:.3f}')
+print(&quot;Files saved: text_classifier.pth, vocab.json&quot;)
 </code></pre>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Expected Result</strong>: You should achieve <strong>&gt;88% accuracy</strong> quite quickly. Text classification is often easier than image classification for simple topics!</p></div></div>
+<h3>Step 2: Transfer to Jetson</h3>
+<p>Move the files to your Jetson device:<br />
+1.  <code>text_classifier.pth</code><br />
+2.  <code>vocab.json</code><br />
+3.  <code>Week_9_Jetson_Inference.py</code> (Download this from the lab materials).</p>
+<h3>Step 3: Run Inference</h3>
+<p>Open the terminal on your Jetson and run:</p>
+<pre><code class="language-bash">python3 Week_9_Jetson_Inference.py --model text_classifier.pth --vocab vocab.json
+</code></pre>
+<h3>Interactive Mode</h3>
+<p>The script will ask for input. Type any sentence and hit Enter.</p>
+<pre><code class="language-text">Input &gt; the acting was bad
+Sentiment: NEGATIVE :( (98.2%)
+
+Input &gt; amazing visuals
+Sentiment: POSITIVE :) (99.1%)
+</code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base">This lightweight model runs instantly on the Jetson CPU/GPU. Integrating NLP into robots allows them to understand basic commands or emotional tone!</p></div></div>
             
             
         
