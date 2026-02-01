@@ -1,88 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 10 Quiz - Quiz</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        primary: '#002F6E', // VUT Midnight Blue
-                        secondary: '#c9984a', // Gold
-                        background: '#f8fafc',
-                        card: '#ffffff',
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
                     },
-                    typography: {
-                        DEFAULT: {
-                            css: {
-                                color: '#334155',
-                                maxWidth: '100%',
-                                h1: { color: '#1e3a5f' },
-                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                                h3: { color: '#1e3a5f' },
-                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                                'code::before': { content: '""' },
-                                'code::after': { content: '""' }
-                            }
-                        },
-                        dark: {
-                            css: {
-                                color: '#cbd5e1',
-                                h1: { color: '#38bdf8' }, // Sky 400
-                                h2: { color: '#c9984a' },
-                                h3: { color: '#38bdf8' },
-                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
-                            }
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
                         }
                     }
                 }
             }
         }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('theme-toggle');
-            const html = document.documentElement;
-            const iconSun = document.getElementById('icon-sun');
-            const iconMoon = document.getElementById('icon-moon');
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
 
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                html.classList.add('dark');
-                iconSun.classList.remove('hidden');
-                iconMoon.classList.add('hidden');
-            } else {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
+                localStorage.theme = 'light';
                 iconSun.classList.add('hidden');
                 iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
             }
-
-            themeToggle.addEventListener('click', () => {
-                if (html.classList.contains('dark')) {
-                    html.classList.remove('dark');
-                    localStorage.theme = 'light';
-                    iconSun.classList.add('hidden');
-                    iconMoon.classList.remove('hidden');
-                } else {
-                    html.classList.add('dark');
-                    localStorage.theme = 'dark';
-                    iconSun.classList.remove('hidden');
-                    iconMoon.classList.add('hidden');
-                }
-            });
         });
-    </script>
+    });
+</script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
@@ -97,13 +96,11 @@
             line-height: 1.6;
             min-height: 100vh;
         }
-
         .quiz-wrapper {
             max-width: 900px;
             margin: 0 auto;
             padding-top: 40px;
         }
-
         header {
             text-align: center;
             padding: 40px 20px;
@@ -111,13 +108,11 @@
             border-radius: 15px;
             margin-bottom: 30px;
         }
-
         header h1 {
             font-size: 2.5em;
             color: #c9984a;
             margin-bottom: 10px;
         }
-
         .quiz-setup {
             background: rgba(30, 58, 95, 0.6);
             padding: 30px;
@@ -125,14 +120,12 @@
             margin-bottom: 30px;
             border: 2px solid #c9984a;
         }
-
         .quiz-setup label {
             display: block;
             font-size: 1.2em;
             color: #c9984a;
             margin-bottom: 10px;
         }
-
         .quiz-setup select {
             width: 100%;
             padding: 12px;
@@ -143,7 +136,6 @@
             color: #ffffff;
             margin-bottom: 20px;
         }
-
         .start-btn {
             width: 100%;
             padding: 15px;
@@ -156,20 +148,16 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .start-btn:hover {
             background: #ffffff;
             transform: scale(1.02);
         }
-
         .quiz-container {
             display: none;
         }
-
         .quiz-container.active {
             display: block;
         }
-
         .question-card {
             background: rgba(30, 58, 95, 0.6);
             padding: 30px;
@@ -177,14 +165,12 @@
             margin-bottom: 25px;
             border-left: 5px solid #c9984a;
         }
-
         .question-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-
         .question-number {
             background: #c9984a;
             color: #1e3a5f;
@@ -192,7 +178,6 @@
             border-radius: 20px;
             font-weight: bold;
         }
-
         .question-type {
             background: rgba(201, 152, 74, 0.3);
             padding: 6px 12px;
@@ -200,19 +185,16 @@
             font-size: 0.9em;
             color: #c9984a;
         }
-
         .question-text {
             font-size: 1.2em;
             margin-bottom: 20px;
             line-height: 1.6;
         }
-
         .options {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .option {
             padding: 15px 20px;
             background: rgba(255, 255, 255, 0.05);
@@ -221,28 +203,23 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .option:hover {
             background: rgba(201, 152, 74, 0.2);
             border-color: #c9984a;
             transform: translateX(5px);
         }
-
         .option.selected {
             background: rgba(201, 152, 74, 0.3);
             border-color: #c9984a;
         }
-
         .option.correct {
             background: rgba(76, 175, 80, 0.3);
             border-color: #4caf50;
         }
-
         .option.incorrect {
             background: rgba(244, 67, 54, 0.3);
             border-color: #f44336;
         }
-
         .fill-input {
             width: 100%;
             padding: 12px;
@@ -253,7 +230,6 @@
             color: #ffffff;
             font-family: 'Courier New', monospace;
         }
-
         .explanation {
             margin-top: 15px;
             padding: 15px;
@@ -262,21 +238,17 @@
             border-radius: 5px;
             display: none;
         }
-
         .explanation.show {
             display: block;
         }
-
         .explanation strong {
             color: #c9984a;
         }
-
         .navigation {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
-
         .nav-btn {
             padding: 12px 30px;
             background: rgba(201, 152, 74, 0.3);
@@ -289,17 +261,14 @@
             text-decoration: none;
             display: inline-block;
         }
-
         .nav-btn:hover {
             background: #c9984a;
             color: #1e3a5f;
         }
-
         .nav-btn:disabled {
             opacity: 0.3;
             cursor: not-allowed;
         }
-
         .results {
             background: rgba(30, 58, 95, 0.6);
             padding: 40px;
@@ -308,23 +277,19 @@
             text-align: center;
             display: none;
         }
-
         .results.show {
             display: block;
         }
-
         .score {
             font-size: 4em;
             color: #c9984a;
             font-weight: bold;
             margin: 20px 0;
         }
-
         .grade {
             font-size: 2em;
             margin: 20px 0;
         }
-
         .attempts-left {
             background: rgba(201, 152, 74, 0.2);
             padding: 15px;
@@ -332,7 +297,6 @@
             margin-top: 20px;
             font-size: 1.1em;
         }
-
         /* New Types Styling */
         .editor-container {
             margin: 15px 0;
@@ -340,7 +304,6 @@
             border-radius: 6px;
             overflow: hidden;
         }
-
         .editor-label {
             background: rgba(201, 152, 74, 0.2);
             padding: 5px 10px;
@@ -348,7 +311,6 @@
             color: #c9984a;
             font-weight: bold;
         }
-
         .editor {
             font-family: 'Courier New', monospace;
             font-size: 14px;
@@ -358,7 +320,6 @@
             color: #e2e8f0;
             outline: none;
         }
-
         .ace-editor-container {
             width: 100%;
             height: 250px;
@@ -366,13 +327,11 @@
             border: 1px solid #c9984a;
             margin-bottom: 10px;
         }
-
         .editor-toolbar {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 10px;
         }
-
         .run-btn {
             background: #4caf50;
             color: white;
@@ -386,16 +345,13 @@
             gap: 5px;
             transition: background 0.2s;
         }
-
         .run-btn:hover {
             background: #43a047;
         }
-
         .run-btn:disabled {
             background: #757575;
             cursor: wait;
         }
-
         .output-console {
             background: #1e1e1e;
             color: #d4d4d4;
@@ -410,15 +366,12 @@
             border: 1px solid #333;
             display: none;
         }
-
         .output-console.active {
             display: block;
         }
-
         .output-error {
             color: #ff6b6b;
         }
-
         .sortable-list {
             list-style: none;
             padding: 10px;
@@ -426,7 +379,6 @@
             border-radius: 8px;
             min-height: 60px;
         }
-
         .sortable-item {
             background: rgba(30, 58, 95, 0.8);
             border: 1px solid #c9984a;
@@ -438,13 +390,11 @@
             display: flex;
             align-items: center;
         }
-
         .sortable-item:active {
             cursor: grabbing;
             background: #c9984a;
             color: #1e3a5f;
         }
-
         .match-row {
             display: grid;
             grid-template-columns: 1fr 40px 1fr;
@@ -452,7 +402,6 @@
             align-items: center;
             margin-bottom: 15px;
         }
-
         .match-key {
             padding: 12px;
             background: rgba(255, 255, 255, 0.05);
@@ -460,13 +409,11 @@
             border-radius: 5px;
             text-align: right;
         }
-
         .match-arrow {
             text-align: center;
             color: #c9984a;
             font-weight: bold;
         }
-
         .match-dropzone {
             min-height: 50px;
             background: rgba(0, 0, 0, 0.2);
@@ -474,7 +421,6 @@
             border-radius: 5px;
             padding: 5px;
         }
-
         .match-pool {
             margin-top: 20px;
             padding: 15px;
@@ -482,58 +428,37 @@
         }
     </style>
 </head>
-
 <body>
-
-    <nav
-        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-            <a href="../index.html"
-                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-                <div class="flex flex-col">
-                    <span
-                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
-                        Intelligence
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
-                            2026</span>
-                    </span>
-                </div>
-            </a>
-            <div class="flex items-center space-x-6">
-                <a href="../index.html"
-                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
-                    Home</a>
-                <a href="../glossary.html"
-                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-                <button id="theme-toggle"
-                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
-                        </path>
-                    </svg>
-                </button>
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
             </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <div class="quiz-wrapper">
         <header>
             <div style="text-align: left; margin-bottom: 20px;">
-                <a href="Week_10_Student_Notes.html" class="nav-btn" style="padding: 8px 16px; font-size: 0.9em;">← Back
-                    to Chapter</a>
+                <a href="Week_10_Student_Notes.html" class="nav-btn" style="padding: 8px 16px; font-size: 0.9em;">← Back to Chapter</a>
             </div>
             <h1>Week 10 Quiz</h1>
             <p>Artificial Intelligence - Assessment</p>
         </header>
-
+        
         <!-- Quiz Setup -->
         <div class="quiz-setup" id="quizSetup">
             <h2 style="color: #c9984a; margin-bottom: 20px;">Quiz Settings</h2>
@@ -543,7 +468,7 @@
                 <option value="2">2 Attempts</option>
                 <option value="3" selected>3 Attempts (Recommended)</option>
             </select>
-
+            
             <div style="background: rgba(201, 152, 74, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 <p><strong style="color: #c9984a;">Quiz Format:</strong></p>
                 <ul style="margin-left: 20px; margin-top: 10px;">
@@ -552,22 +477,21 @@
                     <li>Passing score: 70%</li>
                 </ul>
             </div>
-
+            
             <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
         </div>
-
+        
         <!-- Quiz Questions -->
         <div class="quiz-container" id="quizContainer">
             <div id="questionsArea"></div>
-
+            
             <div class="navigation">
                 <button class="nav-btn" onclick="previousQuestion()" id="prevBtn">← Previous</button>
                 <button class="nav-btn" onclick="nextQuestion()" id="nextBtn">Next →</button>
-                <button class="nav-btn" onclick="submitQuiz()" id="submitBtn" style="display: none;">✓ Submit
-                    Quiz</button>
+                <button class="nav-btn" onclick="submitQuiz()" id="submitBtn" style="display: none;">✓ Submit Quiz</button>
             </div>
         </div>
-
+        
         <!-- Results -->
         <div class="results" id="results">
             <h2 style="color: #c9984a;">Quiz Results</h2>
@@ -578,193 +502,17 @@
             <a href="../index.html" class="nav-btn" style="margin-top: 20px;">Back to Course</a>
         </div>
     </div>
-
+    
     <script>
-        const quizData = {
-            "scenario": [
-                {
-                    "type": "scenario",
-                    "question": "What is the key innovation in the \"Transformer\" architecture (2017)?",
-                    "options": [
-                        "Self-Attention Mechanism",
-                        "Convolutional Layers",
-                        "Recurrent Loops",
-                        "Max Pooling"
-                    ],
-                    "answer": "Self-Attention Mechanism",
-                    "explanation": "\"Attention is All You Need\". It allows the model to look at the entire sentence at once and weigh the importance of relationships between words.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "How does a GPT model generate text?",
-                    "options": [
-                        "It predicts the next token (word/part of word) probability distribution one at a time.",
-                        "It writes the whole paragraph at once.",
-                        "It searches Google and copies the text.",
-                        "It translates from a database."
-                    ],
-                    "answer": "It predicts the next token (word/part of word) probability distribution one at a time.",
-                    "explanation": "It is an \"Autoregressive\" model. It writes word 1, then uses word 1 to predict word 2, etc.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "What is \"Temperature\" in the context of LLM sampling?",
-                    "options": [
-                        "A parameter controlling randomness (High = Creative/Random, Low = Deterministic/Focused).",
-                        "The heat of the GPU.",
-                        "The speed of generation.",
-                        "The size of the model."
-                    ],
-                    "answer": "A parameter controlling randomness (High = Creative/Random, Low = Deterministic/Focused).",
-                    "explanation": "Low temp (0.1) is good for code/math. High temp (0.8) is good for poetry/stories.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "What is \"RAG\" (Retrieval-Augmented Generation)?",
-                    "options": [
-                        "Feeding external data (PDFs, Databases) to the LLM to ground its answers in facts.",
-                        "Making the model angry.",
-                        "Randomly generating answers.",
-                        "A type of neural network."
-                    ],
-                    "answer": "Feeding external data (PDFs, Databases) to the LLM to ground its answers in facts.",
-                    "explanation": "RAG fixes the knowledge cutoff and hallucination issues by giving the model an open book test.",
-                    "points": 1
-                }
-            ],
-            "fill_blank": [
-                {
-                    "type": "fill_blank",
-                    "question": "_______ AI refers to algorithms that can create new content, including audio, code, images, text, simulations, and videos.",
-                    "answer": "Generative",
-                    "explanation": "Contrast with Discriminative AI (Classifiers) which simply separates data.",
-                    "points": 2
-                },
-                {
-                    "type": "fill_blank",
-                    "question": "A _______ is the basic unit of text that an LLM processes. It can be a word, part of a word, or a character (approx 0.75 words).",
-                    "answer": "Token",
-                    "explanation": "\"Smart\" is 1 token. \"Smartphones\" might be 2 tokens.",
-                    "points": 2
-                },
-                {
-                    "type": "fill_blank",
-                    "question": "_______ allows the model to dynamically focus on different parts of the input sequence when generating each output token.",
-                    "answer": "Attention",
-                    "explanation": "When generating \"ate\", the model pays valid attention to \"apple\" earlier in the sentence.",
-                    "points": 2
-                }
-            ],
-            "matching": [
-                {
-                    "type": "matching",
-                    "question": "Match the GenAI term to its definition",
-                    "pairs": {
-                        "LLM": "A massive transformer trained on internet-scale text",
-                        "Hallucination": "When an LLM generates factually incorrect information confidently",
-                        "Prompt Engineering": "The art of crafting inputs to guide the model's output",
-                        "FineTuning": "Updating a pre-trained model on a specific dataset"
-                    },
-                    "explanation": "The vocabulary of the modern AI era.",
-                    "points": 4
-                },
-                {
-                    "type": "matching",
-                    "question": "Match the Model to its Creator",
-                    "pairs": {
-                        "GPT4": "OpenAI",
-                        "Llama 3": "Meta (Facebook)",
-                        "Claude": "Anthropic",
-                        "Gemini": "Google"
-                    },
-                    "explanation": "The current titans of the Model Zoo.",
-                    "points": 4
-                },
-                {
-                    "type": "matching",
-                    "question": "Match the component to the acronym",
-                    "pairs": {
-                        "GAN": "Image generation (Generative Adversarial Network)",
-                        "BERT": "Understanding (Bidirectional Encoder)",
-                        "GPT": "Generation (Generative Pre-trained Transformer)"
-                    },
-                    "explanation": "BERT reads bidirectional (Encoder), GPT reads left-to-right (Decoder).",
-                    "points": 3
-                }
-            ],
-            "ordering": [
-                {
-                    "type": "ordering",
-                    "question": "Order the lifecycle of an LLM",
-                    "sequence": [
-                        "Pre-training (Learning grammar/facts)",
-                        "Supervised Fine-Tuning (SFT)",
-                        "RLHF (Reinforcement Learning)",
-                        "Deployment (Inference)",
-                        "Prompt Engineering (User)"
-                    ],
-                    "explanation": "Pre-training takes months. Fine-tuning takes days. Prompting takes seconds.",
-                    "points": 3
-                },
-                {
-                    "type": "ordering",
-                    "question": "Order the steps of \"Context\" processing",
-                    "sequence": [
-                        "User enters prompt",
-                        "Tokenizer converts text to IDs",
-                        "Embedding layer converts IDs to Vectors",
-                        "Transformer Layers (Processing)",
-                        "Un-embedding (Vectors to Probabilities)",
-                        "Sampling (Selecting the next token)"
-                    ],
-                    "explanation": "The journey of a prompt.",
-                    "points": 3
-                }
-            ],
-            "code": [
-                {
-                    "type": "code",
-                    "question": "Implement a simple Token Counter",
-                    "starter": "def count_tokens(text):\n    # TODO: Split the text by spaces and return the number of words\n    pass\n\n# Test\nprint(count_tokens(\"Generative AI is amazing\"))",
-                    "answer": "def count_tokens(text):\n    return len(text.split())\n\nprint(count_tokens(\"Generative AI is amazing\"))",
-                    "expectedOutput": "4",
-                    "points": 5,
-                    "explanation": "Splitting by space is the simplest form of tokenization."
-                },
-                {
-                    "type": "code",
-                    "question": "Create a simple Rule-Based Chatbot Logic",
-                    "starter": "def simple_bot(user_input):\n    # TODO: Convert input to lowercase\n    # If \"hello\" is in input, return \"Hi there!\"\n    # Else return \"I am a bot.\"\n    pass\n\n# Test\nprint(simple_bot(\"Hello world\"))",
-                    "answer": "def simple_bot(user_input):\n    if \"hello\" in user_input.lower():\n        return \"Hi there!\"\n    return \"I am a bot.\"\n\nprint(simple_bot(\"Hello world\"))",
-                    "expectedOutput": "Hi there!",
-                    "points": 5,
-                    "explanation": "Basic chatbots often use string matching or regex before moving to LLMs."
-                }
-            ]
-        };
-
-        // --- State Variables ---
+        const quizData = {"scenario": [{"type": "scenario", "question": "What is the key innovation in the \"Transformer\" architecture (2017)?", "options": ["Self-Attention Mechanism", "Convolutional Layers", "Recurrent Loops", "Max Pooling"], "answer": "Self-Attention Mechanism", "explanation": "\"Attention is All You Need\". It allows the model to look at the entire sentence at once and weigh the importance of relationships between words."}, {"type": "scenario", "question": "How does a GPT model generate text?", "options": ["It predicts the next token (word/part of word) probability distribution one at a time.", "It writes the whole paragraph at once.", "It searches Google and copies the text.", "It translates from a database."], "answer": "It predicts the next token (word/part of word) probability distribution one at a time.", "explanation": "It is an \"Autoregressive\" model. It writes word 1, then uses word 1 to predict word 2, etc."}, {"type": "scenario", "question": "What is \"Temperature\" in the context of LLM sampling?", "options": ["A parameter controlling randomness (High = Creative/Random, Low = Deterministic/Focused).", "The heat of the GPU.", "The speed of generation.", "The size of the model."], "answer": "A parameter controlling randomness (High = Creative/Random, Low = Deterministic/Focused).", "explanation": "Low temp (0.1) is good for code/math. High temp (0.8) is good for poetry/stories."}, {"type": "scenario", "question": "What is \"RAG\" (Retrieval-Augmented Generation)?", "options": ["Feeding external data (PDFs, Databases) to the LLM to ground its answers in facts.", "Making the model angry.", "Randomly generating answers.", "A type of neural network."], "answer": "Feeding external data (PDFs, Databases) to the LLM to ground its answers in facts.", "explanation": "RAG fixes the knowledge cutoff and hallucination issues by giving the model an open book test."}], "fill_blank": [{"type": "fill_blank", "question": "_______ AI refers to algorithms that can create new content, including audio, code, images, text, simulations, and videos.", "answer": "Generative", "explanation": "Contrast with Discriminative AI (Classifiers) which simply separates data."}, {"type": "fill_blank", "question": "A _______ is the basic unit of text that an LLM processes. It can be a word, part of a word, or a character (approx 0.75 words).", "answer": "Token", "explanation": "\"Smart\" is 1 token. \"Smartphones\" might be 2 tokens."}, {"type": "fill_blank", "question": "_______ allows the model to dynamically focus on different parts of the input sequence when generating each output token.", "answer": "Attention", "explanation": "When generating \"ate\", the model pays valid attention to \"apple\" earlier in the sentence."}], "matching": [{"type": "matching", "question": "Match the GenAI term to its definition", "pairs": {"LLM (Large Language Model)": "A massive transformer trained on internet-scale text", "Hallucination": "When an LLM generates factually incorrect information confidently", "Prompt Engineering": "The art of crafting inputs to guide the model's output", "FineTuning": "Updating a pre-trained model on a specific dataset"}, "explanation": "The vocabulary of the modern AI era."}, {"type": "matching", "question": "Match the Model to its Creator", "pairs": {"GPT4": "OpenAI", "Llama 3": "Meta (Facebook)", "Claude": "Anthropic", "Gemini": "Google"}, "explanation": "The current titans of the Model Zoo."}, {"type": "matching", "question": "Match the component to the acronym", "pairs": {"GAN": "Generative Adversarial Network (Image generation)", "VAE": "Variational Autoencoder (Compression/Generation)", "BERT": "Bidirectional Encoder Representations from Transformers (Understanding)", "GPT": "Generative Pre-trained Transformer (Generation)"}, "explanation": "BERT reads left-to-right and right-to-left (Encoder). GPT reads left-to-right only (Decoder)."}], "ordering": [{"type": "ordering", "question": "Order the lifecycle of an LLM", "sequence": ["Pre-training (Learning grammar/facts from wrong internet data)", "Supervised Fine-Tuning (SFT) (Learning to follow instructions)", "RLHF (Reinforcement Learning from Human Feedback)", "Deployment (Inference)", "Prompt Engineering (User Interaction)"], "explanation": "Pre-training takes months. Fine-tuning takes days. Prompting takes seconds."}, {"type": "ordering", "question": "Order the steps of \"Context\" processing", "sequence": ["User enters prompt", "Tokenizer converts text to IDs", "Embedding layer converts IDs to Vectors", "Evaluation through Transformer Layers (Attention + FFN)", "Un-embedding (Vectors to Probabilities)", "Sampling (Selecting the next token)"], "explanation": "The journey of a prompt."}], "code": [{"type": "code", "question": "Load a pipeline from Hugging Face Transformers", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Generate text using a pipeline", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Use the tokenizer", "starter": "", "answer": "", "explanation": ""}]};
+        
         let currentAttempt = 1;
         let maxAttempts = 3;
         let currentQuestion = 0;
         let questions = [];
-        let userAnswers = [];
-        let score = 0;
-        let maxScore = 0;
-        let pyodide = null; // Store Pyodide instance
-
-        // --- Pyodide Loading ---
-        async function loadPyodideEngine() {
-            if (pyodide) return pyodide;
-            console.log("Loading Pyodide...");
-            pyodide = await loadPyodide();
-            console.log("Pyodide Loaded.");
-            return pyodide;
-        }
-
+        let userAnswers = []; // Array to store user answers
+        let matchSortables = []; // To store Sortable instances for cleanup
+        
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -776,54 +524,53 @@
         function generateQuestions() {
             questions = [];
             userAnswers = [];
-
+            
+            // Collect all questions
             ['scenario', 'fill_blank', 'matching', 'ordering', 'code'].forEach(type => {
                 if (quizData[type]) {
                     quizData[type].forEach(q => {
-                        questions.push({ ...q, type: type });
+                        questions.push({...q, type: type});
                     });
                 }
             });
-
+            
             questions = shuffleArray(questions);
             userAnswers = new Array(questions.length).fill(null);
         }
-
+        
         function startQuiz() {
             maxAttempts = parseInt(document.getElementById('attempts').value);
             generateQuestions();
-
+            
             document.getElementById('quizSetup').style.display = 'none';
             document.getElementById('quizContainer').classList.add('active');
-
+            
             renderQuestions();
             showQuestion(0);
         }
-
+        
         function renderQuestions() {
             const area = document.getElementById('questionsArea');
             area.innerHTML = '';
-
+            matchSortables = []; // Reset sortables
+            
             questions.forEach((q, index) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = 'question-card';
                 qDiv.id = `question-${index}`;
                 qDiv.style.display = 'none';
-
+                
                 let typeLabel = q.type.charAt(0).toUpperCase() + q.type.slice(1).replace('_', ' ');
-                let pointsLabel = `<span style="font-size: 0.8em; color: #888; margin-left: 10px;">(${q.points || 1} Points)</span>`;
-
+                
                 let content = `
                     <div class="question-header">
                         <span class="question-number">Question ${index + 1} of ${questions.length}</span>
-                        <div>
-                            <span class="question-type">${typeLabel}</span>
-                            ${pointsLabel}
-                        </div>
+                        <span class="question-type">${typeLabel}</span>
                     </div>
                     <div class="question-text">${q.question}</div>
                 `;
-
+                
+                // --- Type Specific Rendering ---
                 if (q.type === 'scenario') {
                     content += '<div class="options">';
                     q.options.forEach((opt, i) => {
@@ -834,11 +581,13 @@
                         `;
                     });
                     content += '</div>';
+                    
                 } else if (q.type === 'fill_blank') {
                     content += `
                         <input type="text" class="fill-input" id="input-${index}" 
                                placeholder="Type your answer..." onchange="saveSimpleAnswer(${index}, this.value)">
                     `;
+                    
                 } else if (q.type === 'code') {
                     content += `
                         <div class="editor-container">
@@ -852,19 +601,24 @@
                             <div id="output-${index}" class="output-console"></div>
                         </div>
                     `;
+                    // Ace init will be handled in showQuestion
+                    
                 } else if (q.type === 'ordering') {
                     content += `<p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Drag to reorder:</p>`;
                     content += `<ul class="sortable-list" id="sortable-${index}">`;
-                    let shuffledSeq = shuffleArray([...q.sequence]);
+                    // Shuffle sequence for display
+                    let shuffledSeq = shuffleArray([...q.sequence]); 
                     shuffledSeq.forEach(item => {
                         content += `<li class="sortable-item" data-id="${item}">${item}</li>`;
                     });
                     content += `</ul>`;
+                    
                 } else if (q.type === 'matching') {
                     content += `<p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Drag options from the pool to the correct targets:</p>`;
+                    
                     let keys = Object.keys(q.pairs);
                     let values = shuffleArray(Object.values(q.pairs));
-
+                    
                     keys.forEach((key, kIndex) => {
                         content += `
                             <div class="match-row">
@@ -874,45 +628,49 @@
                             </div>
                         `;
                     });
-
+                    
                     content += `<div class="match-pool sortable-list" id="match-pool-${index}">`;
                     values.forEach(val => {
                         content += `<div class="sortable-item" data-id="${val}">${val}</div>`;
                     });
                     content += `</div>`;
                 }
-
+                
                 content += `
                     <div class="explanation" id="explanation-${index}">
                         <strong>Explanation:</strong> ${q.explanation}
                     </div>
                 `;
-
+                
                 qDiv.innerHTML = content;
                 area.appendChild(qDiv);
-
+                
+                // Initialize Sortables immediately (they work even if hidden)
                 if (q.type === 'ordering') {
                     new Sortable(document.getElementById(`sortable-${index}`), {
                         animation: 150,
-                        onEnd: function () { saveOrderingAnswer(index); }
+                        onEnd: function() { saveOrderingAnswer(index); }
                     });
                 } else if (q.type === 'matching') {
+                    // Pool
                     new Sortable(document.getElementById(`match-pool-${index}`), {
                         group: `matching-${index}`,
                         animation: 150
                     });
+                    
+                    // Zones
                     Object.keys(q.pairs).forEach((key, kIndex) => {
                         new Sortable(document.getElementById(`match-zone-${index}-${kIndex}`), {
                             group: `matching-${index}`,
                             animation: 150,
-                            maxItems: 1,
-                            onEnd: function () { saveMatchingAnswer(index); }
+                            maxItems: 1, // Only one item per zone
+                            onEnd: function() { saveMatchingAnswer(index); }
                         });
                     });
                 }
             });
         }
-
+        
         function selectOption(qIndex, answer) {
             userAnswers[qIndex] = answer;
             const options = document.getElementById(`question-${qIndex}`).querySelectorAll('.option');
@@ -921,17 +679,17 @@
                 if (opt.textContent.includes(answer)) opt.classList.add('selected');
             });
         }
-
+        
         function saveSimpleAnswer(qIndex, val) {
             userAnswers[qIndex] = val.trim();
         }
-
+        
         function saveOrderingAnswer(qIndex) {
             const list = document.getElementById(`sortable-${qIndex}`);
             const items = Array.from(list.children).map(li => li.getAttribute('data-id'));
             userAnswers[qIndex] = items;
         }
-
+        
         function saveMatchingAnswer(qIndex) {
             const q = questions[qIndex];
             const result = {};
@@ -947,29 +705,45 @@
         }
 
         function showQuestion(index) {
+            // Hide all
             document.querySelectorAll('.question-card').forEach(el => el.style.display = 'none');
+            // Show current
             document.getElementById(`question-${index}`).style.display = 'block';
-
+            
+            // Buttons
             document.getElementById('prevBtn').disabled = (index === 0);
             document.getElementById('nextBtn').style.display = (index === questions.length - 1) ? 'none' : 'inline-block';
             document.getElementById('submitBtn').style.display = (index === questions.length - 1) ? 'inline-block' : 'none';
-
+            
             currentQuestion = index;
-
+            
+            // Initialize Ace Editor if needed and not already done
             const q = questions[index];
             if (q.type === 'code') {
                 const editorId = `editor-${index}`;
                 const editorEl = document.getElementById(editorId);
+                
+                // Check if Ace is already initialized on this element
                 if (!editorEl.classList.contains('ace_editor')) {
                     const editor = ace.edit(editorId);
                     editor.setTheme("ace/theme/chrome");
                     editor.session.setMode("ace/mode/python");
                     editor.setFontSize(14);
                     editor.setShowPrintMargin(false);
+                    
+                    // Set initial value if user has no answer yet, otherwise usage works via the div content automatically usually,
+                    // but ace.edit() might consume the text content.
+                    // If user has an answer already (navigated back), restore it.
                     if (userAnswers[index]) {
-                        editor.setValue(userAnswers[index], 1);
+                        editor.setValue(userAnswers[index], 1); // 1 = moves cursor to end
+                    } else if (q.starter) {
+                         // The starter text is in the div, Ace pick it up? 
+                         // Ace typically uses the text content as initial value.
+                         // But if we want to be sure:
+                         // editor.setValue(q.starter, -1);
                     }
-                    editor.session.on('change', function (delta) {
+
+                    editor.session.on('change', function(delta) {
                         userAnswers[index] = editor.getValue();
                     });
                 }
@@ -978,33 +752,144 @@
 
         function previousQuestion() { if (currentQuestion > 0) showQuestion(currentQuestion - 1); }
         function nextQuestion() { if (currentQuestion < questions.length - 1) showQuestion(currentQuestion + 1); }
+        
+        function submitQuiz() {
+            calculateScore();
+            document.getElementById('quizContainer').classList.remove('active');
+            showResults();
+        }
+        
+        function calculateScore() {
+            score = 0;
+            questions.forEach((q, i) => {
+                let isCorrect = false;
+                const userAns = userAnswers[i];
+                
+                if (q.type === 'scenario') {
+                    isCorrect = (userAns === q.answer);
+                    // Visual feedback
+                    const options = document.getElementById(`question-${i}`).querySelectorAll('.option');
+                    options.forEach(opt => {
+                         if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
+                         else if (opt.textContent.includes(userAns) && !isCorrect) opt.classList.add('incorrect');
+                    });
+                    
+                } else if (q.type === 'fill_blank') {
+                    isCorrect = (userAns || '').toLowerCase() === q.answer.toLowerCase();
+                    
+                } else if (q.type === 'ordering') {
+                    // Compare arrays
+                    if (userAns && userAns.length === q.sequence.length) {
+                        isCorrect = userAns.every((val, idx) => val === q.sequence[idx]);
+                    }
+                    
+                } else if (q.type === 'matching') {
+                    // Compare objects
+                    if (userAns) {
+                        isCorrect = true;
+                        Object.keys(q.pairs).forEach(key => {
+                            if (userAns[key] !== q.pairs[key]) isCorrect = false;
+                        });
+                    }
+                    
+                } else if (q.type === 'code') {
+                    // Basic check: does it contain the answer string?
+                    // Or regex match if we enhanced it. For now, simple containment or exact match is tricky.
+                    // Let's assume the 'answer' field in markdown contains the key snippet.
+                    if (userAns && q.answer) {
+                        // Normalize whitespace
+                        const normUser = userAns.replace(/\s+/g, ' ').trim();
+                        const normAns = q.answer.replace(/\s+/g, ' ').trim();
+                        isCorrect = normUser.includes(normAns);
+                    }
+                }
+                
+                if (isCorrect) score++;
+                document.getElementById(`explanation-${i}`).classList.add('show');
+            });
+        }
+        
+        function showResults() {
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
+            
+            let grade = 'Keep Studying';
+            if (percentage >= 90) grade = 'Excellent!';
+            else if (percentage >= 80) grade = 'Great Job!';
+            else if (percentage >= 70) grade = 'Passed';
+            
+            document.getElementById('gradeDisplay').innerHTML = `${percentage}% - ${grade}`;
+            
+            const attemptsLeft = maxAttempts - currentAttempt;
+            let attemptInfo = `<div class="attempts-left">`;
+            attemptInfo += `<strong>Attempt ${currentAttempt} of ${maxAttempts}</strong><br>`;
+            
+            if (percentage < 70 && attemptsLeft > 0) {
+                attemptInfo += `You have ${attemptsLeft} attempt(s) remaining.`;
+                document.getElementById('retryBtn').style.display = 'block';
+            } else {
+                 document.getElementById('retryBtn').style.display = 'none';
+            }
+            attemptInfo += `</div>`;
+            document.getElementById('attemptsInfo').innerHTML = attemptInfo;
+            document.getElementById('results').classList.add('show');
+        }
+        
+        let pyodide = null;
+        let pyodideReadyPromise = null;
 
-        // --- Async Run Code ---
+        async function loadPyodideEngine() {
+            if (pyodideReadyPromise) return pyodideReadyPromise;
+            
+            pyodideReadyPromise = (async () => {
+                try {
+                    console.log("Loading Pyodide...");
+                    pyodide = await loadPyodide();
+                    console.log("Pyodide Loaded");
+                    return pyodide;
+                } catch (err) {
+                    console.error("Failed to load Pyodide:", err);
+                    pyodideReadyPromise = null; // Reset promise so we can try again
+                    throw err;
+                }
+            })();
+            
+            return pyodideReadyPromise;
+        }
+
         async function runCode(index) {
             const btn = document.getElementById(`run-btn-${index}`);
             const outputDiv = document.getElementById(`output-${index}`);
             const editorId = `editor-${index}`;
+            
+            // Get code
             const editor = ace.edit(editorId);
             const code = editor.getValue();
-
+            
+            // Reset UI
             btn.disabled = true;
             btn.textContent = "Running...";
             outputDiv.innerHTML = "";
             outputDiv.classList.add('active');
-
+            
             try {
+                // Ensure Python is loaded
                 if (!pyodide) {
-                    outputDiv.innerText = "Initializing Python environment...";
+                    outputDiv.innerText = "Initializing Python environment (this may take a moment first time)...";
                     await loadPyodideEngine();
-                    outputDiv.innerText = "";
+                    outputDiv.innerText = ""; // Clear loading message
                 }
-
-                // Reset standard output capture
+                
+                // Redirect stdout/stderr
                 pyodide.setStdout({ batched: (msg) => { outputDiv.innerText += msg + "\n"; } });
                 pyodide.setStderr({ batched: (msg) => { outputDiv.innerHTML += `<span class="output-error">${msg}\n</span>`; } });
+                
+                // Load packages automatically
+                await pyodide.loadPackagesFromImports(code);
 
+                // execution
                 await pyodide.runPythonAsync(code);
-
+                
             } catch (err) {
                 outputDiv.innerHTML += `<span class="output-error">${err}</span>`;
             } finally {
@@ -1013,154 +898,14 @@
             }
         }
 
-        async function submitQuiz() {
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.innerHTML = "Grading...";
-            submitBtn.disabled = true;
-
-            await calculateScoreAsync();
-
-            document.getElementById('quizContainer').classList.remove('active');
-            showResults();
-
-            submitBtn.innerHTML = "✓ Submit Quiz";
-            submitBtn.disabled = false;
-        }
-
-        async function calculateScoreAsync() {
-            score = 0;
-            maxScore = 0;
-
-            // Ensure Pyodide if we have code questions
-            const hasCode = questions.some(q => q.type === 'code');
-            if (hasCode && !pyodide) await loadPyodideEngine();
-
-            for (let i = 0; i < questions.length; i++) {
-                const q = questions[i];
-                const points = q.points || 1;
-                maxScore += points;
-
-                let isCorrect = false;
-                const userAns = userAnswers[i];
-
-                if (q.type === 'scenario') {
-                    isCorrect = (userAns === q.answer);
-                    const options = document.getElementById(`question-${i}`).querySelectorAll('.option');
-                    options.forEach(opt => {
-                        if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
-                        else if (opt.textContent.includes(userAns) && !isCorrect) opt.classList.add('incorrect');
-                    });
-
-                } else if (q.type === 'fill_blank') {
-                    isCorrect = (userAns || '').toLowerCase().trim() === q.answer.toLowerCase().trim();
-
-                } else if (q.type === 'ordering') {
-                    if (userAns && userAns.length === q.sequence.length) {
-                        isCorrect = userAns.every((val, idx) => val === q.sequence[idx]);
-                    }
-
-                } else if (q.type === 'matching') {
-                    if (userAns) {
-                        isCorrect = true;
-                        Object.keys(q.pairs).forEach(key => {
-                            if (userAns[key] !== q.pairs[key]) isCorrect = false;
-                        });
-                    }
-                } else if (q.type === 'code') {
-                    // Hybrid Grading: 1. Output Check (if expectedOutput), 2. Keyword Check
-                    let codeCorrect = false;
-
-                    // A. Output Check via Pyodide
-                    if (q.expectedOutput && pyodide) {
-                        try {
-                            // Capture output
-                            let capturedOutput = "";
-                            pyodide.setStdout({ batched: (msg) => { capturedOutput += msg; } });
-                            await pyodide.runPythonAsync(userAns);
-
-                            // Normalize (trim whitespace)
-                            if (capturedOutput.trim() === q.expectedOutput.trim()) {
-                                codeCorrect = true;
-                            }
-                        } catch (e) {
-                            console.log("Code execution failed during grading:", e);
-                        }
-                    }
-
-                    // B. Keyword Fallback (if Output failed or not available)
-                    if (!codeCorrect && q.requiredKeywords) {
-                        const missing = q.requiredKeywords.filter(k => !userAns.includes(k));
-                        if (missing.length === 0) codeCorrect = true;
-                    }
-
-                    // C. Simple string match as last resort or if no other criteria
-                    if (!codeCorrect && !q.expectedOutput && !q.requiredKeywords && q.answer) {
-                        // Very basic normalize
-                        if (userAns.replace(/\s/g, '') === q.answer.replace(/\s/g, '')) codeCorrect = true;
-                    }
-
-                    isCorrect = codeCorrect;
-                }
-
-                if (isCorrect) score += points;
-                document.getElementById(`explanation-${i}`).classList.add('show');
-            }
-        }
-
-        function showResults() {
-            const resultsDiv = document.getElementById('results');
-            const scoreDisplay = document.getElementById('scoreDisplay');
-            const gradeDisplay = document.getElementById('gradeDisplay');
-
-            const percentage = Math.round((score / maxScore) * 100);
-
-            scoreDisplay.textContent = `${score} / ${maxScore}`;
-            gradeDisplay.textContent = `${percentage}%`;
-
-            let gradeColor = '#f44336';
-            if (percentage >= 70) gradeColor = '#4caf50';
-            else if (percentage >= 50) gradeColor = '#c9984a';
-
-            gradeDisplay.style.color = gradeColor;
-
-            const feedback = percentage >= 70 ? "Excellent work! You have mastered these concepts." :
-                percentage >= 50 ? "Good effort! Review the explanations to improve." :
-                    "Keep practicing! Review the notes and try again.";
-
-            gradeDisplay.innerHTML += `<div style="font-size: 0.5em; margin-top: 10px; color: #ccc;">${feedback}</div>`;
-
-            document.getElementById('attemptsInfo').textContent = `Attempt ${currentAttempt} of ${maxAttempts}`;
-
-            resultsDiv.classList.add('show');
-
-            const retryBtn = document.getElementById('retryBtn');
-            if (currentAttempt >= maxAttempts && percentage < 70) {
-                retryBtn.disabled = true;
-                retryBtn.textContent = "Max Attempts Reached";
-                retryBtn.style.background = "#555";
-                retryBtn.style.cursor = "not-allowed";
-            } else if (percentage >= 70) {
-                retryBtn.style.display = "none";
-                // Optionally keep it if they want to practice, but usually passing means done.
-                // Let's hide it to signal completion, or change text "Practice Again"
-            }
-        }
-
         function retryQuiz() {
-            currentAttempt++;
-            document.getElementById('results').classList.remove('show');
-            document.getElementById('quizSetup').style.display = 'block';
-
-            // Clear answers
-            userAnswers = [];
-            // Hide explanations
-            document.querySelectorAll('.explanation').forEach(el => el.classList.remove('show'));
-            // Reset option styling
-            document.querySelectorAll('.option').forEach(el => el.classList.remove('correct', 'incorrect', 'selected'));
+             if (currentAttempt < maxAttempts) {
+                currentAttempt++;
+                document.getElementById('results').classList.remove('show');
+                startQuiz(); // Re-shuffle and start
+            }
         }
-
 
     </script>
 </body>
-
 </html>

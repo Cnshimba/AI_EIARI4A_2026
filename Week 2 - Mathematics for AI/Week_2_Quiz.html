@@ -1,88 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 2 Quiz - Quiz</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        primary: '#002F6E', // VUT Midnight Blue
-                        secondary: '#c9984a', // Gold
-                        background: '#f8fafc',
-                        card: '#ffffff',
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
                     },
-                    typography: {
-                        DEFAULT: {
-                            css: {
-                                color: '#334155',
-                                maxWidth: '100%',
-                                h1: { color: '#1e3a5f' },
-                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                                h3: { color: '#1e3a5f' },
-                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                                'code::before': { content: '""' },
-                                'code::after': { content: '""' }
-                            }
-                        },
-                        dark: {
-                            css: {
-                                color: '#cbd5e1',
-                                h1: { color: '#38bdf8' }, // Sky 400
-                                h2: { color: '#c9984a' },
-                                h3: { color: '#38bdf8' },
-                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
-                            }
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
                         }
                     }
                 }
             }
         }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('theme-toggle');
-            const html = document.documentElement;
-            const iconSun = document.getElementById('icon-sun');
-            const iconMoon = document.getElementById('icon-moon');
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
 
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                html.classList.add('dark');
-                iconSun.classList.remove('hidden');
-                iconMoon.classList.add('hidden');
-            } else {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
+                localStorage.theme = 'light';
                 iconSun.classList.add('hidden');
                 iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
             }
-
-            themeToggle.addEventListener('click', () => {
-                if (html.classList.contains('dark')) {
-                    html.classList.remove('dark');
-                    localStorage.theme = 'light';
-                    iconSun.classList.add('hidden');
-                    iconMoon.classList.remove('hidden');
-                } else {
-                    html.classList.add('dark');
-                    localStorage.theme = 'dark';
-                    iconSun.classList.remove('hidden');
-                    iconMoon.classList.add('hidden');
-                }
-            });
         });
-    </script>
+    });
+</script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
@@ -97,13 +96,11 @@
             line-height: 1.6;
             min-height: 100vh;
         }
-
         .quiz-wrapper {
             max-width: 900px;
             margin: 0 auto;
             padding-top: 40px;
         }
-
         header {
             text-align: center;
             padding: 40px 20px;
@@ -111,13 +108,11 @@
             border-radius: 15px;
             margin-bottom: 30px;
         }
-
         header h1 {
             font-size: 2.5em;
             color: #c9984a;
             margin-bottom: 10px;
         }
-
         .quiz-setup {
             background: rgba(30, 58, 95, 0.6);
             padding: 30px;
@@ -125,14 +120,12 @@
             margin-bottom: 30px;
             border: 2px solid #c9984a;
         }
-
         .quiz-setup label {
             display: block;
             font-size: 1.2em;
             color: #c9984a;
             margin-bottom: 10px;
         }
-
         .quiz-setup select {
             width: 100%;
             padding: 12px;
@@ -143,7 +136,6 @@
             color: #ffffff;
             margin-bottom: 20px;
         }
-
         .start-btn {
             width: 100%;
             padding: 15px;
@@ -156,20 +148,16 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .start-btn:hover {
             background: #ffffff;
             transform: scale(1.02);
         }
-
         .quiz-container {
             display: none;
         }
-
         .quiz-container.active {
             display: block;
         }
-
         .question-card {
             background: rgba(30, 58, 95, 0.6);
             padding: 30px;
@@ -177,14 +165,12 @@
             margin-bottom: 25px;
             border-left: 5px solid #c9984a;
         }
-
         .question-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-
         .question-number {
             background: #c9984a;
             color: #1e3a5f;
@@ -192,7 +178,6 @@
             border-radius: 20px;
             font-weight: bold;
         }
-
         .question-type {
             background: rgba(201, 152, 74, 0.3);
             padding: 6px 12px;
@@ -200,19 +185,16 @@
             font-size: 0.9em;
             color: #c9984a;
         }
-
         .question-text {
             font-size: 1.2em;
             margin-bottom: 20px;
             line-height: 1.6;
         }
-
         .options {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .option {
             padding: 15px 20px;
             background: rgba(255, 255, 255, 0.05);
@@ -221,28 +203,23 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .option:hover {
             background: rgba(201, 152, 74, 0.2);
             border-color: #c9984a;
             transform: translateX(5px);
         }
-
         .option.selected {
             background: rgba(201, 152, 74, 0.3);
             border-color: #c9984a;
         }
-
         .option.correct {
             background: rgba(76, 175, 80, 0.3);
             border-color: #4caf50;
         }
-
         .option.incorrect {
             background: rgba(244, 67, 54, 0.3);
             border-color: #f44336;
         }
-
         .fill-input {
             width: 100%;
             padding: 12px;
@@ -253,7 +230,6 @@
             color: #ffffff;
             font-family: 'Courier New', monospace;
         }
-
         .explanation {
             margin-top: 15px;
             padding: 15px;
@@ -262,21 +238,17 @@
             border-radius: 5px;
             display: none;
         }
-
         .explanation.show {
             display: block;
         }
-
         .explanation strong {
             color: #c9984a;
         }
-
         .navigation {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
-
         .nav-btn {
             padding: 12px 30px;
             background: rgba(201, 152, 74, 0.3);
@@ -289,17 +261,14 @@
             text-decoration: none;
             display: inline-block;
         }
-
         .nav-btn:hover {
             background: #c9984a;
             color: #1e3a5f;
         }
-
         .nav-btn:disabled {
             opacity: 0.3;
             cursor: not-allowed;
         }
-
         .results {
             background: rgba(30, 58, 95, 0.6);
             padding: 40px;
@@ -308,23 +277,19 @@
             text-align: center;
             display: none;
         }
-
         .results.show {
             display: block;
         }
-
         .score {
             font-size: 4em;
             color: #c9984a;
             font-weight: bold;
             margin: 20px 0;
         }
-
         .grade {
             font-size: 2em;
             margin: 20px 0;
         }
-
         .attempts-left {
             background: rgba(201, 152, 74, 0.2);
             padding: 15px;
@@ -332,7 +297,6 @@
             margin-top: 20px;
             font-size: 1.1em;
         }
-
         /* New Types Styling */
         .editor-container {
             margin: 15px 0;
@@ -340,7 +304,6 @@
             border-radius: 6px;
             overflow: hidden;
         }
-
         .editor-label {
             background: rgba(201, 152, 74, 0.2);
             padding: 5px 10px;
@@ -348,7 +311,6 @@
             color: #c9984a;
             font-weight: bold;
         }
-
         .editor {
             font-family: 'Courier New', monospace;
             font-size: 14px;
@@ -358,7 +320,6 @@
             color: #e2e8f0;
             outline: none;
         }
-
         .ace-editor-container {
             width: 100%;
             height: 250px;
@@ -366,13 +327,11 @@
             border: 1px solid #c9984a;
             margin-bottom: 10px;
         }
-
         .editor-toolbar {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 10px;
         }
-
         .run-btn {
             background: #4caf50;
             color: white;
@@ -386,16 +345,13 @@
             gap: 5px;
             transition: background 0.2s;
         }
-
         .run-btn:hover {
             background: #43a047;
         }
-
         .run-btn:disabled {
             background: #757575;
             cursor: wait;
         }
-
         .output-console {
             background: #1e1e1e;
             color: #d4d4d4;
@@ -410,15 +366,12 @@
             border: 1px solid #333;
             display: none;
         }
-
         .output-console.active {
             display: block;
         }
-
         .output-error {
             color: #ff6b6b;
         }
-
         .sortable-list {
             list-style: none;
             padding: 10px;
@@ -426,7 +379,6 @@
             border-radius: 8px;
             min-height: 60px;
         }
-
         .sortable-item {
             background: rgba(30, 58, 95, 0.8);
             border: 1px solid #c9984a;
@@ -438,13 +390,11 @@
             display: flex;
             align-items: center;
         }
-
         .sortable-item:active {
             cursor: grabbing;
             background: #c9984a;
             color: #1e3a5f;
         }
-
         .match-row {
             display: grid;
             grid-template-columns: 1fr 40px 1fr;
@@ -452,7 +402,6 @@
             align-items: center;
             margin-bottom: 15px;
         }
-
         .match-key {
             padding: 12px;
             background: rgba(255, 255, 255, 0.05);
@@ -460,13 +409,11 @@
             border-radius: 5px;
             text-align: right;
         }
-
         .match-arrow {
             text-align: center;
             color: #c9984a;
             font-weight: bold;
         }
-
         .match-dropzone {
             min-height: 50px;
             background: rgba(0, 0, 0, 0.2);
@@ -474,7 +421,6 @@
             border-radius: 5px;
             padding: 5px;
         }
-
         .match-pool {
             margin-top: 20px;
             padding: 15px;
@@ -482,58 +428,37 @@
         }
     </style>
 </head>
-
 <body>
-
-    <nav
-        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-            <a href="../index.html"
-                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-                <div class="flex flex-col">
-                    <span
-                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
-                        Intelligence
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
-                            2026</span>
-                    </span>
-                </div>
-            </a>
-            <div class="flex items-center space-x-6">
-                <a href="../index.html"
-                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
-                    Home</a>
-                <a href="../glossary.html"
-                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-                <button id="theme-toggle"
-                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
-                        </path>
-                    </svg>
-                </button>
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
             </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <div class="quiz-wrapper">
         <header>
             <div style="text-align: left; margin-bottom: 20px;">
-                <a href="Week_2_Student_Notes.html" class="nav-btn" style="padding: 8px 16px; font-size: 0.9em;">← Back
-                    to Chapter</a>
+                <a href="Week_2_Student_Notes.html" class="nav-btn" style="padding: 8px 16px; font-size: 0.9em;">← Back to Chapter</a>
             </div>
             <h1>Week 2 Quiz</h1>
             <p>Artificial Intelligence - Assessment</p>
         </header>
-
+        
         <!-- Quiz Setup -->
         <div class="quiz-setup" id="quizSetup">
             <h2 style="color: #c9984a; margin-bottom: 20px;">Quiz Settings</h2>
@@ -543,7 +468,7 @@
                 <option value="2">2 Attempts</option>
                 <option value="3" selected>3 Attempts (Recommended)</option>
             </select>
-
+            
             <div style="background: rgba(201, 152, 74, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 <p><strong style="color: #c9984a;">Quiz Format:</strong></p>
                 <ul style="margin-left: 20px; margin-top: 10px;">
@@ -552,22 +477,21 @@
                     <li>Passing score: 70%</li>
                 </ul>
             </div>
-
+            
             <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
         </div>
-
+        
         <!-- Quiz Questions -->
         <div class="quiz-container" id="quizContainer">
             <div id="questionsArea"></div>
-
+            
             <div class="navigation">
                 <button class="nav-btn" onclick="previousQuestion()" id="prevBtn">← Previous</button>
                 <button class="nav-btn" onclick="nextQuestion()" id="nextBtn">Next →</button>
-                <button class="nav-btn" onclick="submitQuiz()" id="submitBtn" style="display: none;">✓ Submit
-                    Quiz</button>
+                <button class="nav-btn" onclick="submitQuiz()" id="submitBtn" style="display: none;">✓ Submit Quiz</button>
             </div>
         </div>
-
+        
         <!-- Results -->
         <div class="results" id="results">
             <h2 style="color: #c9984a;">Quiz Results</h2>
@@ -578,213 +502,17 @@
             <a href="../index.html" class="nav-btn" style="margin-top: 20px;">Back to Course</a>
         </div>
     </div>
-
+    
     <script>
-        const quizData = {
-            "scenario": [
-                {
-                    "type": "scenario",
-                    "question": "Why is the \"Gradient\" important in Machine Learning (specifically Gradient Descent)?",
-                    "options": [
-                        "It points in the direction of steepest ascent, helping us find the minimum error.",
-                        "It calculates the probability of the data being correct.",
-                        "It multiplies the input features to create a larger dataset.",
-                        "It ensures that the model never overfits."
-                    ],
-                    "answer": "It points in the direction of steepest ascent, helping us find the minimum error.",
-                    "explanation": "The gradient tells us how to tweak our \"weights\" to reduce the error. by moving *against* the gradient, we minimize the loss.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "You have a vector v = [2, 3] and u = [4, 1]. What is their dot product?",
-                    "options": [
-                        "11",
-                        "10",
-                        "[8, 3]",
-                        "7"
-                    ],
-                    "answer": "11",
-                    "explanation": "$2*4 + 3*1 = 8 + 3 = 11$.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "What does a \"Conditional Probability\" P(A|B) represent?",
-                    "options": [
-                        "The probability of event A occurring given that event B has happened.",
-                        "The probability of A and B happening at the same time.",
-                        "The probability of A happening minus the probability of B.",
-                        "The probability of B happening given A."
-                    ],
-                    "answer": "The probability of event A occurring given that event B has happened.",
-                    "explanation": "The vertical bar `|` is read as \"given\". It restricts the sample space to cases where B is true.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "In the context of Matrices, what is \"Broadcasting\"?",
-                    "options": [
-                        "Automatically expanding smaller arrays to match the shape of larger arrays during operations.",
-                        "Sending the data to multiple GPUs.",
-                        "A method to print the matrix to the console.",
-                        "Multiplying a matrix by its inverse."
-                    ],
-                    "answer": "Automatically expanding smaller arrays to match the shape of larger arrays during operations.",
-                    "explanation": "Broadcasting allows NumPy to add a scaler to a vector (e.g., `[1, 2] + 5 = [6, 7]`) or add a vector to a matrix without explicit loops.",
-                    "points": 1
-                }
-            ],
-            "fill_blank": [
-                {
-                    "type": "fill_blank",
-                    "question": "A _______ is a single number (0-dimensional tensor), whereas a Vector is a 1-dimensional array.",
-                    "answer": "Scalar",
-                    "explanation": "In Linear Algebra: Scalar (0D), Vector (1D), Matrix (2D), Tensor (nD).",
-                    "points": 1
-                },
-                {
-                    "type": "fill_blank",
-                    "question": "The _______ function squashes its input to be between 0 and 1, making it useful for interpreting outputs as probabilities.",
-                    "answer": "Sigmoid",
-                    "explanation": "The Sigmoid activation function is $1 / (1 + e^{-x})$.",
-                    "points": 1
-                },
-                {
-                    "type": "fill_blank",
-                    "question": "If two events are _______, knowing the outcome of one tells you nothing about the outcome of the other.",
-                    "answer": "Independent",
-                    "explanation": "For independent events, $P(A|B) = P(A)$.",
-                    "points": 1
-                }
-            ],
-            "matching": [
-                {
-                    "type": "matching",
-                    "question": "Match the Linear Algebra term to its definition",
-                    "pairs": {
-                        "Vector": "An object with magnitude and direction (e.g., coordinates)",
-                        "Matrix": "A rectangular array of numbers representing data or transformations",
-                        "Dot Product": "A single number representing the similarity between two vectors",
-                        "Tensor": "A multi-dimensional array generalizing scalars, vectors, and matrices"
-                    },
-                    "explanation": "Vectors are 1D, Matrices are 2D, and Tensors can be n-D. The Dot Product is a fundamental operation for projections and similarity.",
-                    "points": 2
-                },
-                {
-                    "type": "matching",
-                    "question": "Match the Probability term to its role in Bayes' Theorem",
-                    "pairs": {
-                        "Prior": "Probability of an event before seeing new data",
-                        "Likelihood": "Probability of the evidence given the hypothesis",
-                        "Posterior": "Probability of the hypothesis after seeing the evidence",
-                        "Evidence": "The new data or observation"
-                    },
-                    "explanation": "Bayes theorem updates our belief (Prior) with new data (Likelihood/Evidence) to get a new belief (Posterior).",
-                    "points": 2
-                },
-                {
-                    "type": "matching",
-                    "question": "Match the NumPy attribute to what it returns",
-                    "pairs": {
-                        ".shape": "Tuple of array dimensions (rows, cols)",
-                        ".dtype": "The data type of elements (e.g., int64, float32)",
-                        ".ndim": "Number of dimensions (axes)",
-                        ".size": "Total number of elements in the array"
-                    },
-                    "explanation": "These are the fundamental attributes to inspect any NumPy array.",
-                    "points": 2
-                }
-            ],
-            "ordering": [
-                {
-                    "type": "ordering",
-                    "question": "Order the operations in a single Neuron's forward pass",
-                    "sequence": [
-                        "Receive Input Vector (x)",
-                        "Calculate Dot Product with Weights (w)",
-                        "Add Bias (b)",
-                        "Apply Non-linear Activation Function (ReLU/Sigmoid)",
-                        "Output Result (y)"
-                    ],
-                    "explanation": "A neuron computes $f(w \\cdot x + b)$. The dot product happens first, then bias, then activation.",
-                    "points": 2
-                },
-                {
-                    "type": "ordering",
-                    "question": "Order the steps of the Gradient Descent algorithm",
-                    "sequence": [
-                        "Initialize weights randomly",
-                        "Calculate the output (Forward Pass)",
-                        "Calculate the error (Loss)",
-                        "Compute the Gradient (Backpropagation)",
-                        "Update weights (Step in opposite direction of gradient)"
-                    ],
-                    "explanation": "We start random, check how wrong we are, find out distinct direction to improve (gradient), and take a step. Repeat.",
-                    "points": 2
-                }
-            ],
-            "code": [
-                {
-                    "type": "code",
-                    "question": "Create a 3x3 Identity Matrix using NumPy",
-                    "starter": "import numpy as np\n# Create identity matrix\n",
-                    "answer": "print(np.eye(3))",
-                    "expectedOutput": "[[1. 0. 0.]\n [0. 1. 0.]\n [0. 0. 1.]]",
-                    "requiredKeywords": ["np.eye", "print"],
-                    "points": 3,
-                    "explanation": "np.eye(N) creates an NxN identity matrix."
-                },
-                {
-                    "type": "code",
-                    "question": "Calculate the mean of a NumPy array",
-                    "starter": "import numpy as np\narr = np.array([1, 2, 3, 4, 5])\n# Print the mean\n",
-                    "answer": "print(np.mean(arr))",
-                    "expectedOutput": "3.0",
-                    "requiredKeywords": ["np.mean", "print"],
-                    "points": 3,
-                    "explanation": "np.mean() computes the arithmetic average."
-                },
-                {
-                    "type": "code",
-                    "question": "Reshape a 1D array of 12 elements into a 3x4 Matrix",
-                    "starter": "import numpy as np\narr = np.arange(12)\n# Reshape to (3,4) and print\n",
-                    "answer": "print(arr.reshape(3, 4))",
-                    "expectedOutput": "[[ 0  1  2  3]\n [ 4  5  6  7]\n [ 8  9 10 11]]",
-                    "requiredKeywords": ["reshape", "print"],
-                    "points": 3,
-                    "explanation": "The reshape method returns a new view of the data."
-                },
-                {
-                    "type": "code",
-                    "question": "Perform Element-wise multiplication of two arrays",
-                    "starter": "import numpy as np\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\n# Multiply and print\n",
-                    "answer": "print(a * b)",
-                    "expectedOutput": "[ 4 10 18]",
-                    "requiredKeywords": ["print"],
-                    "points": 3,
-                    "explanation": "NumPy arrays support element-wise operations with standard operators."
-                },
-                {
-                    "type": "code",
-                    "question": "Generate 5 random numbers between 0 and 1",
-                    "starter": "import numpy as np\nnp.random.seed(42)\n# Generate 5 random numbers and print\n",
-                    "answer": "print(np.random.rand(5))",
-                    "expectedOutput": "[0.37454012 0.95071431 0.73199394 0.59865848 0.15601864]",
-                    "requiredKeywords": ["np.random", "print"],
-                    "points": 3,
-                    "explanation": "np.random.rand() generates uniform random numbers."
-                }
-            ]
-        };
-
+        const quizData = {"scenario": [{"type": "scenario", "question": "Why is the \"Gradient\" important in Machine Learning (specifically Gradient Descent)?", "options": ["It points in the direction of steepest ascent, helping us find the minimum error.", "It calculates the probability of the data being correct.", "It multiplies the input features to create a larger dataset.", "It ensures that the model never overfits."], "answer": "It points in the direction of steepest ascent, helping us find the minimum error.", "explanation": "The gradient tells us how to tweak our \"weights\" to reduce the error. by moving *against* the gradient, we minimize the loss."}, {"type": "scenario", "question": "You have a vector v = [2, 3] and u = [4, 1]. What is their dot product?", "options": ["11", "10", "[8, 3]", "7"], "answer": "11", "explanation": "$2*4 + 3*1 = 8 + 3 = 11$."}, {"type": "scenario", "question": "What does a \"Conditional Probability\" P(A|B) represent?", "options": ["The probability of event A occurring given that event B has happened.", "The probability of A and B happening at the same time.", "The probability of A happening minus the probability of B.", "The probability of B happening given A."], "answer": "The probability of event A occurring given that event B has happened.", "explanation": "The vertical bar `|` is read as \"given\". It restricts the sample space to cases where B is true."}, {"type": "scenario", "question": "In the context of Matrices, what is \"Broadcasting\"?", "options": ["Automatically expanding smaller arrays to match the shape of larger arrays during operations.", "Sending the data to multiple GPUs.", "A method to print the matrix to the console.", "Multiplying a matrix by its inverse."], "answer": "Automatically expanding smaller arrays to match the shape of larger arrays during operations.", "explanation": "Broadcasting allows NumPy to add a scaler to a vector (e.g., `[1, 2] + 5 = [6, 7]`) or add a vector to a matrix without explicit loops."}], "fill_blank": [{"type": "fill_blank", "question": "A _______ is a single number (0-dimensional tensor), whereas a Vector is a 1-dimensional array.", "answer": "Scalar", "explanation": "In Linear Algebra: Scalar (0D), Vector (1D), Matrix (2D), Tensor (nD)."}, {"type": "fill_blank", "question": "The _______ function squashes its input to be between 0 and 1, making it useful for interpreting outputs as probabilities.", "answer": "Sigmoid", "explanation": "The Sigmoid activation function is $1 / (1 + e^{-x})$."}, {"type": "fill_blank", "question": "If two events are _______, knowing the outcome of one tells you nothing about the outcome of the other.", "answer": "Independent", "explanation": "For independent events, $P(A|B) = P(A)$."}], "matching": [{"type": "matching", "question": "Match the Linear Algebra term to its definition", "pairs": {"Vector": "An object with magnitude and direction (e.g., coordinates)", "Matrix": "A rectangular array of numbers representing data or transformations", "Dot Product": "A single number representing the similarity between two vectors", "Tensor": "A multi-dimensional array generalizing scalars, vectors, and matrices"}, "explanation": "Vectors are 1D, Matrices are 2D, and Tensors can be n-D. The Dot Product is a fundamental operation for projections and similarity."}, {"type": "matching", "question": "Match the Probability term to its role in Bayes' Theorem", "pairs": {"Prior": "Probability of an event before seeing new data", "Likelihood": "Probability of the evidence given the hypothesis", "Posterior": "Probability of the hypothesis after seeing the evidence", "Evidence": "The new data or observation"}, "explanation": "Bayes theorem updates our belief (Prior) with new data (Likelihood/Evidence) to get a new belief (Posterior)."}, {"type": "matching", "question": "Match the NumPy attribute to what it returns", "pairs": {".shape": "Tuple of array dimensions (rows, cols)", ".dtype": "The data type of elements (e.g., int64, float32)", ".ndim": "Number of dimensions (axes)", ".size": "Total number of elements in the array"}, "explanation": "These are the fundamental attributes to inspect any NumPy array."}], "ordering": [{"type": "ordering", "question": "Order the operations in a single Neuron's forward pass", "sequence": ["Receive Input Vector (x)", "Calculate Dot Product with Weights (w)", "Add Bias (b)", "Apply Non-linear Activation Function (ReLU/Sigmoid)", "Output Result (y)"], "explanation": "A neuron computes $f(w \\cdot x + b)$. The dot product happens first, then bias, then activation."}, {"type": "ordering", "question": "Order the steps of the Gradient Descent algorithm", "sequence": ["Initialize weights randomly", "Calculate the output (Forward Pass)", "Calculate the error (Loss)", "Compute the Gradient (Backpropagation)", "Update weights (Step in opposite direction of gradient)"], "explanation": "We start random, check how wrong we are, find out distinct direction to improve (gradient), and take a step. Repeat."}], "code": [{"type": "code", "question": "Create a 3x3 Identity Matrix using NumPy", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Calculate the mean of a NumPy array", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Reshape a 1D array of 12 elements into a 3x4 Matrix", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Perform Element-wise multiplication of two arrays", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Generate 5 random numbers between 0 and 1", "starter": "", "answer": "", "explanation": ""}]};
+        
         let currentAttempt = 1;
         let maxAttempts = 3;
         let currentQuestion = 0;
         let questions = [];
         let userAnswers = []; // Array to store user answers
         let matchSortables = []; // To store Sortable instances for cleanup
-
+        
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -796,44 +524,44 @@
         function generateQuestions() {
             questions = [];
             userAnswers = [];
-
+            
             // Collect all questions
             ['scenario', 'fill_blank', 'matching', 'ordering', 'code'].forEach(type => {
                 if (quizData[type]) {
                     quizData[type].forEach(q => {
-                        questions.push({ ...q, type: type });
+                        questions.push({...q, type: type});
                     });
                 }
             });
-
+            
             questions = shuffleArray(questions);
             userAnswers = new Array(questions.length).fill(null);
         }
-
+        
         function startQuiz() {
             maxAttempts = parseInt(document.getElementById('attempts').value);
             generateQuestions();
-
+            
             document.getElementById('quizSetup').style.display = 'none';
             document.getElementById('quizContainer').classList.add('active');
-
+            
             renderQuestions();
             showQuestion(0);
         }
-
+        
         function renderQuestions() {
             const area = document.getElementById('questionsArea');
             area.innerHTML = '';
             matchSortables = []; // Reset sortables
-
+            
             questions.forEach((q, index) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = 'question-card';
                 qDiv.id = `question-${index}`;
                 qDiv.style.display = 'none';
-
+                
                 let typeLabel = q.type.charAt(0).toUpperCase() + q.type.slice(1).replace('_', ' ');
-
+                
                 let content = `
                     <div class="question-header">
                         <span class="question-number">Question ${index + 1} of ${questions.length}</span>
@@ -841,7 +569,7 @@
                     </div>
                     <div class="question-text">${q.question}</div>
                 `;
-
+                
                 // --- Type Specific Rendering ---
                 if (q.type === 'scenario') {
                     content += '<div class="options">';
@@ -853,13 +581,13 @@
                         `;
                     });
                     content += '</div>';
-
+                    
                 } else if (q.type === 'fill_blank') {
                     content += `
                         <input type="text" class="fill-input" id="input-${index}" 
                                placeholder="Type your answer..." onchange="saveSimpleAnswer(${index}, this.value)">
                     `;
-
+                    
                 } else if (q.type === 'code') {
                     content += `
                         <div class="editor-container">
@@ -874,23 +602,23 @@
                         </div>
                     `;
                     // Ace init will be handled in showQuestion
-
+                    
                 } else if (q.type === 'ordering') {
                     content += `<p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Drag to reorder:</p>`;
                     content += `<ul class="sortable-list" id="sortable-${index}">`;
                     // Shuffle sequence for display
-                    let shuffledSeq = shuffleArray([...q.sequence]);
+                    let shuffledSeq = shuffleArray([...q.sequence]); 
                     shuffledSeq.forEach(item => {
                         content += `<li class="sortable-item" data-id="${item}">${item}</li>`;
                     });
                     content += `</ul>`;
-
+                    
                 } else if (q.type === 'matching') {
                     content += `<p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Drag options from the pool to the correct targets:</p>`;
-
+                    
                     let keys = Object.keys(q.pairs);
                     let values = shuffleArray(Object.values(q.pairs));
-
+                    
                     keys.forEach((key, kIndex) => {
                         content += `
                             <div class="match-row">
@@ -900,28 +628,28 @@
                             </div>
                         `;
                     });
-
+                    
                     content += `<div class="match-pool sortable-list" id="match-pool-${index}">`;
                     values.forEach(val => {
                         content += `<div class="sortable-item" data-id="${val}">${val}</div>`;
                     });
                     content += `</div>`;
                 }
-
+                
                 content += `
                     <div class="explanation" id="explanation-${index}">
                         <strong>Explanation:</strong> ${q.explanation}
                     </div>
                 `;
-
+                
                 qDiv.innerHTML = content;
                 area.appendChild(qDiv);
-
+                
                 // Initialize Sortables immediately (they work even if hidden)
                 if (q.type === 'ordering') {
                     new Sortable(document.getElementById(`sortable-${index}`), {
                         animation: 150,
-                        onEnd: function () { saveOrderingAnswer(index); }
+                        onEnd: function() { saveOrderingAnswer(index); }
                     });
                 } else if (q.type === 'matching') {
                     // Pool
@@ -929,20 +657,20 @@
                         group: `matching-${index}`,
                         animation: 150
                     });
-
+                    
                     // Zones
                     Object.keys(q.pairs).forEach((key, kIndex) => {
                         new Sortable(document.getElementById(`match-zone-${index}-${kIndex}`), {
                             group: `matching-${index}`,
                             animation: 150,
                             maxItems: 1, // Only one item per zone
-                            onEnd: function () { saveMatchingAnswer(index); }
+                            onEnd: function() { saveMatchingAnswer(index); }
                         });
                     });
                 }
             });
         }
-
+        
         function selectOption(qIndex, answer) {
             userAnswers[qIndex] = answer;
             const options = document.getElementById(`question-${qIndex}`).querySelectorAll('.option');
@@ -951,17 +679,17 @@
                 if (opt.textContent.includes(answer)) opt.classList.add('selected');
             });
         }
-
+        
         function saveSimpleAnswer(qIndex, val) {
             userAnswers[qIndex] = val.trim();
         }
-
+        
         function saveOrderingAnswer(qIndex) {
             const list = document.getElementById(`sortable-${qIndex}`);
             const items = Array.from(list.children).map(li => li.getAttribute('data-id'));
             userAnswers[qIndex] = items;
         }
-
+        
         function saveMatchingAnswer(qIndex) {
             const q = questions[qIndex];
             const result = {};
@@ -981,20 +709,20 @@
             document.querySelectorAll('.question-card').forEach(el => el.style.display = 'none');
             // Show current
             document.getElementById(`question-${index}`).style.display = 'block';
-
+            
             // Buttons
             document.getElementById('prevBtn').disabled = (index === 0);
             document.getElementById('nextBtn').style.display = (index === questions.length - 1) ? 'none' : 'inline-block';
             document.getElementById('submitBtn').style.display = (index === questions.length - 1) ? 'inline-block' : 'none';
-
+            
             currentQuestion = index;
-
+            
             // Initialize Ace Editor if needed and not already done
             const q = questions[index];
             if (q.type === 'code') {
                 const editorId = `editor-${index}`;
                 const editorEl = document.getElementById(editorId);
-
+                
                 // Check if Ace is already initialized on this element
                 if (!editorEl.classList.contains('ace_editor')) {
                     const editor = ace.edit(editorId);
@@ -1002,20 +730,20 @@
                     editor.session.setMode("ace/mode/python");
                     editor.setFontSize(14);
                     editor.setShowPrintMargin(false);
-
+                    
                     // Set initial value if user has no answer yet, otherwise usage works via the div content automatically usually,
                     // but ace.edit() might consume the text content.
                     // If user has an answer already (navigated back), restore it.
                     if (userAnswers[index]) {
                         editor.setValue(userAnswers[index], 1); // 1 = moves cursor to end
                     } else if (q.starter) {
-                        // The starter text is in the div, Ace pick it up? 
-                        // Ace typically uses the text content as initial value.
-                        // But if we want to be sure:
-                        // editor.setValue(q.starter, -1);
+                         // The starter text is in the div, Ace pick it up? 
+                         // Ace typically uses the text content as initial value.
+                         // But if we want to be sure:
+                         // editor.setValue(q.starter, -1);
                     }
 
-                    editor.session.on('change', function (delta) {
+                    editor.session.on('change', function(delta) {
                         userAnswers[index] = editor.getValue();
                     });
                 }
@@ -1024,65 +752,37 @@
 
         function previousQuestion() { if (currentQuestion > 0) showQuestion(currentQuestion - 1); }
         function nextQuestion() { if (currentQuestion < questions.length - 1) showQuestion(currentQuestion + 1); }
-
-        async function submitQuiz() {
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.textContent = "Grading...";
-
-            await calculateScoreAsync();
-
+        
+        function submitQuiz() {
+            calculateScore();
             document.getElementById('quizContainer').classList.remove('active');
             showResults();
-
-            btn.disabled = false;
-            btn.textContent = "✓ Submit Quiz";
         }
-
-        let maxScore = 0;
-
-        async function calculateScoreAsync() {
+        
+        function calculateScore() {
             score = 0;
-            maxScore = 0;
-
-            // Ensure Pyodide is loaded for grading code questions
-            let pyodideInstance = null;
-            const hasCodeQuestions = questions.some(q => q.type === 'code');
-            if (hasCodeQuestions) {
-                try {
-                    pyodideInstance = await loadPyodideEngine();
-                } catch (e) {
-                    console.error("Using existing instance or failed load", e);
-                }
-            }
-
-            // We need to loop sequentially for async execution
-            for (let i = 0; i < questions.length; i++) {
-                const q = questions[i];
-                const points = q.points || 1;
-                maxScore += points;
-
+            questions.forEach((q, i) => {
                 let isCorrect = false;
                 const userAns = userAnswers[i];
-
+                
                 if (q.type === 'scenario') {
                     isCorrect = (userAns === q.answer);
-                    // Visual feedback output
+                    // Visual feedback
                     const options = document.getElementById(`question-${i}`).querySelectorAll('.option');
                     options.forEach(opt => {
-                        if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
-                        else if (opt.textContent.includes(userAns) && !isCorrect) opt.classList.add('incorrect');
+                         if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
+                         else if (opt.textContent.includes(userAns) && !isCorrect) opt.classList.add('incorrect');
                     });
-
+                    
                 } else if (q.type === 'fill_blank') {
                     isCorrect = (userAns || '').toLowerCase() === q.answer.toLowerCase();
-
+                    
                 } else if (q.type === 'ordering') {
                     // Compare arrays
                     if (userAns && userAns.length === q.sequence.length) {
                         isCorrect = userAns.every((val, idx) => val === q.sequence[idx]);
                     }
-
+                    
                 } else if (q.type === 'matching') {
                     // Compare objects
                     if (userAns) {
@@ -1091,83 +791,56 @@
                             if (userAns[key] !== q.pairs[key]) isCorrect = false;
                         });
                     }
-
+                    
                 } else if (q.type === 'code') {
-                    // Hybrid Grading: Output + Syntax
-                    if (q.expectedOutput && userAns) {
-                        try {
-                            // 1. Output Check
-                            let capturedOutput = "";
-                            pyodideInstance.setStdout({ batched: (msg) => { capturedOutput += msg + "\n"; } });
-                            pyodideInstance.setStderr({ batched: (msg) => { /* ignore */ } });
-
-                            await pyodideInstance.loadPackagesFromImports(userAns);
-                            await pyodideInstance.runPythonAsync(userAns);
-
-                            const normActual = capturedOutput.trim().replace(/\s+/g, ' ');
-                            const normExpected = q.expectedOutput.trim().replace(/\s+/g, ' ');
-                            isCorrect = (normActual === normExpected);
-
-                            // 2. Syntax Check (Keywords)
-                            if (isCorrect && q.requiredKeywords && q.requiredKeywords.length > 0) {
-                                const missing = q.requiredKeywords.filter(k => !userAns.includes(k));
-                                if (missing.length > 0) {
-                                    isCorrect = false;
-                                    console.log(`Missing keywords: ${missing.join(', ')}`);
-                                }
-                            }
-
-                        } catch (err) {
-                            console.log("Grading Error:", err);
-                            isCorrect = false;
-                        }
-                    } else if (q.answer && userAns) {
-                        // Fallback
+                    // Basic check: does it contain the answer string?
+                    // Or regex match if we enhanced it. For now, simple containment or exact match is tricky.
+                    // Let's assume the 'answer' field in markdown contains the key snippet.
+                    if (userAns && q.answer) {
+                        // Normalize whitespace
                         const normUser = userAns.replace(/\s+/g, ' ').trim();
                         const normAns = q.answer.replace(/\s+/g, ' ').trim();
                         isCorrect = normUser.includes(normAns);
                     }
                 }
-
-                if (isCorrect) score += points;
+                
+                if (isCorrect) score++;
                 document.getElementById(`explanation-${i}`).classList.add('show');
-            }
+            });
         }
-
+        
         function showResults() {
-            // Use maxScore if available, else fallback to questions count (for safety)
-            const total = (typeof maxScore !== 'undefined' && maxScore > 0) ? maxScore : questions.length;
-            const percentage = Math.round((score / total) * 100);
-            document.getElementById('scoreDisplay').textContent = `${score}/${total}`;
-
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
+            
             let grade = 'Keep Studying';
             if (percentage >= 90) grade = 'Excellent!';
             else if (percentage >= 80) grade = 'Great Job!';
             else if (percentage >= 70) grade = 'Passed';
-
+            
             document.getElementById('gradeDisplay').innerHTML = `${percentage}% - ${grade}`;
-
+            
             const attemptsLeft = maxAttempts - currentAttempt;
             let attemptInfo = `<div class="attempts-left">`;
             attemptInfo += `<strong>Attempt ${currentAttempt} of ${maxAttempts}</strong><br>`;
-
+            
             if (percentage < 70 && attemptsLeft > 0) {
                 attemptInfo += `You have ${attemptsLeft} attempt(s) remaining.`;
                 document.getElementById('retryBtn').style.display = 'block';
             } else {
-                document.getElementById('retryBtn').style.display = 'none';
+                 document.getElementById('retryBtn').style.display = 'none';
             }
             attemptInfo += `</div>`;
             document.getElementById('attemptsInfo').innerHTML = attemptInfo;
             document.getElementById('results').classList.add('show');
         }
-
+        
         let pyodide = null;
         let pyodideReadyPromise = null;
 
         async function loadPyodideEngine() {
             if (pyodideReadyPromise) return pyodideReadyPromise;
-
+            
             pyodideReadyPromise = (async () => {
                 try {
                     console.log("Loading Pyodide...");
@@ -1180,7 +853,7 @@
                     throw err;
                 }
             })();
-
+            
             return pyodideReadyPromise;
         }
 
@@ -1188,17 +861,17 @@
             const btn = document.getElementById(`run-btn-${index}`);
             const outputDiv = document.getElementById(`output-${index}`);
             const editorId = `editor-${index}`;
-
+            
             // Get code
             const editor = ace.edit(editorId);
             const code = editor.getValue();
-
+            
             // Reset UI
             btn.disabled = true;
             btn.textContent = "Running...";
             outputDiv.innerHTML = "";
             outputDiv.classList.add('active');
-
+            
             try {
                 // Ensure Python is loaded
                 if (!pyodide) {
@@ -1206,17 +879,17 @@
                     await loadPyodideEngine();
                     outputDiv.innerText = ""; // Clear loading message
                 }
-
+                
                 // Redirect stdout/stderr
                 pyodide.setStdout({ batched: (msg) => { outputDiv.innerText += msg + "\n"; } });
                 pyodide.setStderr({ batched: (msg) => { outputDiv.innerHTML += `<span class="output-error">${msg}\n</span>`; } });
-
+                
                 // Load packages automatically
                 await pyodide.loadPackagesFromImports(code);
 
                 // execution
                 await pyodide.runPythonAsync(code);
-
+                
             } catch (err) {
                 outputDiv.innerHTML += `<span class="output-error">${err}</span>`;
             } finally {
@@ -1226,7 +899,7 @@
         }
 
         function retryQuiz() {
-            if (currentAttempt < maxAttempts) {
+             if (currentAttempt < maxAttempts) {
                 currentAttempt++;
                 document.getElementById('results').classList.remove('show');
                 startQuiz(); // Re-shuffle and start
@@ -1235,5 +908,4 @@
 
     </script>
 </body>
-
 </html>

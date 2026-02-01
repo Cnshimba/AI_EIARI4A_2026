@@ -1,88 +1,87 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Week 5 Quiz - Quiz</title>
-
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        primary: '#002F6E', // VUT Midnight Blue
-                        secondary: '#c9984a', // Gold
-                        background: '#f8fafc',
-                        card: '#ffffff',
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
                     },
-                    typography: {
-                        DEFAULT: {
-                            css: {
-                                color: '#334155',
-                                maxWidth: '100%',
-                                h1: { color: '#1e3a5f' },
-                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                                h3: { color: '#1e3a5f' },
-                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
-                                code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
-                                'code::before': { content: '""' },
-                                'code::after': { content: '""' }
-                            }
-                        },
-                        dark: {
-                            css: {
-                                color: '#cbd5e1',
-                                h1: { color: '#38bdf8' }, // Sky 400
-                                h2: { color: '#c9984a' },
-                                h3: { color: '#38bdf8' },
-                                a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
-                                blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
-                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
-                            }
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
                         }
                     }
                 }
             }
         }
-    </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const themeToggle = document.getElementById('theme-toggle');
-            const html = document.documentElement;
-            const iconSun = document.getElementById('icon-sun');
-            const iconMoon = document.getElementById('icon-moon');
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
 
-            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                html.classList.add('dark');
-                iconSun.classList.remove('hidden');
-                iconMoon.classList.add('hidden');
-            } else {
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
                 html.classList.remove('dark');
+                localStorage.theme = 'light';
                 iconSun.classList.add('hidden');
                 iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
             }
-
-            themeToggle.addEventListener('click', () => {
-                if (html.classList.contains('dark')) {
-                    html.classList.remove('dark');
-                    localStorage.theme = 'light';
-                    iconSun.classList.add('hidden');
-                    iconMoon.classList.remove('hidden');
-                } else {
-                    html.classList.add('dark');
-                    localStorage.theme = 'dark';
-                    iconSun.classList.remove('hidden');
-                    iconMoon.classList.add('hidden');
-                }
-            });
         });
-    </script>
+    });
+</script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
@@ -97,13 +96,11 @@
             line-height: 1.6;
             min-height: 100vh;
         }
-
         .quiz-wrapper {
             max-width: 900px;
             margin: 0 auto;
             padding-top: 40px;
         }
-
         header {
             text-align: center;
             padding: 40px 20px;
@@ -111,13 +108,11 @@
             border-radius: 15px;
             margin-bottom: 30px;
         }
-
         header h1 {
             font-size: 2.5em;
             color: #c9984a;
             margin-bottom: 10px;
         }
-
         .quiz-setup {
             background: rgba(30, 58, 95, 0.6);
             padding: 30px;
@@ -125,14 +120,12 @@
             margin-bottom: 30px;
             border: 2px solid #c9984a;
         }
-
         .quiz-setup label {
             display: block;
             font-size: 1.2em;
             color: #c9984a;
             margin-bottom: 10px;
         }
-
         .quiz-setup select {
             width: 100%;
             padding: 12px;
@@ -143,7 +136,6 @@
             color: #ffffff;
             margin-bottom: 20px;
         }
-
         .start-btn {
             width: 100%;
             padding: 15px;
@@ -156,20 +148,16 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .start-btn:hover {
             background: #ffffff;
             transform: scale(1.02);
         }
-
         .quiz-container {
             display: none;
         }
-
         .quiz-container.active {
             display: block;
         }
-
         .question-card {
             background: rgba(30, 58, 95, 0.6);
             padding: 30px;
@@ -177,14 +165,12 @@
             margin-bottom: 25px;
             border-left: 5px solid #c9984a;
         }
-
         .question-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-
         .question-number {
             background: #c9984a;
             color: #1e3a5f;
@@ -192,7 +178,6 @@
             border-radius: 20px;
             font-weight: bold;
         }
-
         .question-type {
             background: rgba(201, 152, 74, 0.3);
             padding: 6px 12px;
@@ -200,19 +185,16 @@
             font-size: 0.9em;
             color: #c9984a;
         }
-
         .question-text {
             font-size: 1.2em;
             margin-bottom: 20px;
             line-height: 1.6;
         }
-
         .options {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .option {
             padding: 15px 20px;
             background: rgba(255, 255, 255, 0.05);
@@ -221,28 +203,23 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-
         .option:hover {
             background: rgba(201, 152, 74, 0.2);
             border-color: #c9984a;
             transform: translateX(5px);
         }
-
         .option.selected {
             background: rgba(201, 152, 74, 0.3);
             border-color: #c9984a;
         }
-
         .option.correct {
             background: rgba(76, 175, 80, 0.3);
             border-color: #4caf50;
         }
-
         .option.incorrect {
             background: rgba(244, 67, 54, 0.3);
             border-color: #f44336;
         }
-
         .fill-input {
             width: 100%;
             padding: 12px;
@@ -253,7 +230,6 @@
             color: #ffffff;
             font-family: 'Courier New', monospace;
         }
-
         .explanation {
             margin-top: 15px;
             padding: 15px;
@@ -262,21 +238,17 @@
             border-radius: 5px;
             display: none;
         }
-
         .explanation.show {
             display: block;
         }
-
         .explanation strong {
             color: #c9984a;
         }
-
         .navigation {
             display: flex;
             justify-content: space-between;
             margin-top: 30px;
         }
-
         .nav-btn {
             padding: 12px 30px;
             background: rgba(201, 152, 74, 0.3);
@@ -289,17 +261,14 @@
             text-decoration: none;
             display: inline-block;
         }
-
         .nav-btn:hover {
             background: #c9984a;
             color: #1e3a5f;
         }
-
         .nav-btn:disabled {
             opacity: 0.3;
             cursor: not-allowed;
         }
-
         .results {
             background: rgba(30, 58, 95, 0.6);
             padding: 40px;
@@ -308,23 +277,19 @@
             text-align: center;
             display: none;
         }
-
         .results.show {
             display: block;
         }
-
         .score {
             font-size: 4em;
             color: #c9984a;
             font-weight: bold;
             margin: 20px 0;
         }
-
         .grade {
             font-size: 2em;
             margin: 20px 0;
         }
-
         .attempts-left {
             background: rgba(201, 152, 74, 0.2);
             padding: 15px;
@@ -332,7 +297,6 @@
             margin-top: 20px;
             font-size: 1.1em;
         }
-
         /* New Types Styling */
         .editor-container {
             margin: 15px 0;
@@ -340,7 +304,6 @@
             border-radius: 6px;
             overflow: hidden;
         }
-
         .editor-label {
             background: rgba(201, 152, 74, 0.2);
             padding: 5px 10px;
@@ -348,7 +311,6 @@
             color: #c9984a;
             font-weight: bold;
         }
-
         .editor {
             font-family: 'Courier New', monospace;
             font-size: 14px;
@@ -358,7 +320,6 @@
             color: #e2e8f0;
             outline: none;
         }
-
         .ace-editor-container {
             width: 100%;
             height: 250px;
@@ -366,13 +327,11 @@
             border: 1px solid #c9984a;
             margin-bottom: 10px;
         }
-
         .editor-toolbar {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 10px;
         }
-
         .run-btn {
             background: #4caf50;
             color: white;
@@ -386,16 +345,13 @@
             gap: 5px;
             transition: background 0.2s;
         }
-
         .run-btn:hover {
             background: #43a047;
         }
-
         .run-btn:disabled {
             background: #757575;
             cursor: wait;
         }
-
         .output-console {
             background: #1e1e1e;
             color: #d4d4d4;
@@ -410,15 +366,12 @@
             border: 1px solid #333;
             display: none;
         }
-
         .output-console.active {
             display: block;
         }
-
         .output-error {
             color: #ff6b6b;
         }
-
         .sortable-list {
             list-style: none;
             padding: 10px;
@@ -426,7 +379,6 @@
             border-radius: 8px;
             min-height: 60px;
         }
-
         .sortable-item {
             background: rgba(30, 58, 95, 0.8);
             border: 1px solid #c9984a;
@@ -438,13 +390,11 @@
             display: flex;
             align-items: center;
         }
-
         .sortable-item:active {
             cursor: grabbing;
             background: #c9984a;
             color: #1e3a5f;
         }
-
         .match-row {
             display: grid;
             grid-template-columns: 1fr 40px 1fr;
@@ -452,7 +402,6 @@
             align-items: center;
             margin-bottom: 15px;
         }
-
         .match-key {
             padding: 12px;
             background: rgba(255, 255, 255, 0.05);
@@ -460,13 +409,11 @@
             border-radius: 5px;
             text-align: right;
         }
-
         .match-arrow {
             text-align: center;
             color: #c9984a;
             font-weight: bold;
         }
-
         .match-dropzone {
             min-height: 50px;
             background: rgba(0, 0, 0, 0.2);
@@ -474,7 +421,6 @@
             border-radius: 5px;
             padding: 5px;
         }
-
         .match-pool {
             margin-top: 20px;
             padding: 15px;
@@ -482,58 +428,37 @@
         }
     </style>
 </head>
-
 <body>
-
-    <nav
-        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
-        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-            <a href="../index.html"
-                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-                <div class="flex flex-col">
-                    <span
-                        class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial
-                        Intelligence
-                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module
-                            2026</span>
-                    </span>
-                </div>
-            </a>
-            <div class="flex items-center space-x-6">
-                <a href="../index.html"
-                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course
-                    Home</a>
-                <a href="../glossary.html"
-                    class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
-                <button id="theme-toggle"
-                    class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
-                    <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg>
-                    <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor"
-                        viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
-                        </path>
-                    </svg>
-                </button>
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
             </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <div class="quiz-wrapper">
         <header>
             <div style="text-align: left; margin-bottom: 20px;">
-                <a href="Week_5_Student_Notes.html" class="nav-btn" style="padding: 8px 16px; font-size: 0.9em;">← Back
-                    to Chapter</a>
+                <a href="Week_5_Student_Notes.html" class="nav-btn" style="padding: 8px 16px; font-size: 0.9em;">← Back to Chapter</a>
             </div>
             <h1>Week 5 Quiz</h1>
             <p>Artificial Intelligence - Assessment</p>
         </header>
-
+        
         <!-- Quiz Setup -->
         <div class="quiz-setup" id="quizSetup">
             <h2 style="color: #c9984a; margin-bottom: 20px;">Quiz Settings</h2>
@@ -543,7 +468,7 @@
                 <option value="2">2 Attempts</option>
                 <option value="3" selected>3 Attempts (Recommended)</option>
             </select>
-
+            
             <div style="background: rgba(201, 152, 74, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 20px;">
                 <p><strong style="color: #c9984a;">Quiz Format:</strong></p>
                 <ul style="margin-left: 20px; margin-top: 10px;">
@@ -552,22 +477,21 @@
                     <li>Passing score: 70%</li>
                 </ul>
             </div>
-
+            
             <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
         </div>
-
+        
         <!-- Quiz Questions -->
         <div class="quiz-container" id="quizContainer">
             <div id="questionsArea"></div>
-
+            
             <div class="navigation">
                 <button class="nav-btn" onclick="previousQuestion()" id="prevBtn">← Previous</button>
                 <button class="nav-btn" onclick="nextQuestion()" id="nextBtn">Next →</button>
-                <button class="nav-btn" onclick="submitQuiz()" id="submitBtn" style="display: none;">✓ Submit
-                    Quiz</button>
+                <button class="nav-btn" onclick="submitQuiz()" id="submitBtn" style="display: none;">✓ Submit Quiz</button>
             </div>
         </div>
-
+        
         <!-- Results -->
         <div class="results" id="results">
             <h2 style="color: #c9984a;">Quiz Results</h2>
@@ -578,193 +502,17 @@
             <a href="../index.html" class="nav-btn" style="margin-top: 20px;">Back to Course</a>
         </div>
     </div>
-
+    
     <script>
-        const quizData = {
-            "scenario": [
-                {
-                    "type": "scenario",
-                    "question": "You are analyzing medical data to detect cancer (Cancer/No Cancer). Which metric is most critical if you want to avoid missing any positive cases?",
-                    "options": [
-                        "Recall (Sensitivity)",
-                        "Precision",
-                        "Accuracy",
-                        "Mean Squared Error"
-                    ],
-                    "answer": "Recall (Sensitivity)",
-                    "explanation": "Recall measures \"Of all actual positives, how many did we find?\". Missing a cancer diagnosis (False Negative) is fatal, so we prioritize Recall.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "What is the main advantage of a Random Forest over a single Decision Tree?",
-                    "options": [
-                        "Reduced variance (Less overfitting)",
-                        "Faster training time",
-                        "Easier to interpret (Visualizable)",
-                        "Requires less memory"
-                    ],
-                    "answer": "Reduced variance (Less overfitting)",
-                    "explanation": "Random Forest aggregates many trees (Bagging). The \"Wisdom of Crowds\" reduces the likelihood of overfitting to noise.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "In K-Fold Cross Validation with K=5, how many times is the model trained?",
-                    "options": [
-                        "5 times",
-                        "1 time",
-                        "10 times",
-                        "4 times"
-                    ],
-                    "answer": "5 times",
-                    "explanation": "The data is split into 5 folds. We train on 4 and test on 1, rotating until every fold has been the test set once.",
-                    "points": 1
-                },
-                {
-                    "type": "scenario",
-                    "question": "Which algorithm assumes that all features are independent of each other?",
-                    "options": [
-                        "Naive Bayes",
-                        "Decision Trees",
-                        "Support Vector Machines",
-                        "Linear Regression"
-                    ],
-                    "answer": "Naive Bayes",
-                    "explanation": "That's why it is called \"Naive\". Despite this strong assumption, it works surprisingly well for text classification.",
-                    "points": 1
-                }
-            ],
-            "fill_blank": [
-                {
-                    "type": "fill_blank",
-                    "question": "A _______ is a table used to evaluate the performance of a classification model, showing True Positives, False Positives, True Negatives, and False Negatives.",
-                    "answer": "Confusion Matrix",
-                    "explanation": "It gives a complete picture of where the model is making errors.",
-                    "points": 1
-                },
-                {
-                    "type": "fill_blank",
-                    "question": "Logistic Regression uses the _______ function to map its output to a probability between 0 and 1.",
-                    "answer": "Sigmoid",
-                    "explanation": "$S(x) = 1 / (1 + e^{-x})$.",
-                    "points": 1
-                },
-                {
-                    "type": "fill_blank",
-                    "question": "To prevent overfitting in Decision Trees, we can limit the _______, which stops the tree from growing too deep and memorizing noise.",
-                    "answer": "Max Depth",
-                    "explanation": "Pruning the tree makes it generalize better.",
-                    "points": 1
-                }
-            ],
-            "matching": [
-                {
-                    "type": "matching",
-                    "question": "Match the Algorithm to its primary Task Type",
-                    "pairs": {
-                        "Linear Regression": "Regression (Predicting continuous values)",
-                        "Logistic Regression": "Classification (Predicting categories)",
-                        "Decision Tree": "Both (Can handle Regression and Classification)",
-                        "KNearest Neighbors (KNN)": "Instance-based Learning (Lazy Learning)"
-                    },
-                    "explanation": "It is crucial to choose the right tool for the job. Logistic Regression is confusingly named—it is a classifier!",
-                    "points": 2
-                },
-                {
-                    "type": "matching",
-                    "question": "Match the metric to its formula component",
-                    "pairs": {
-                        "Accuracy": "(TP + TN) / Total",
-                        "Precision": "TP / (TP + FP)",
-                        "Recall": "TP / (TP + FN)",
-                        "F1 Score": "Harmonic Mean of Precision and Recall"
-                    },
-                    "explanation": "Accuracy is misleading for imbalanced datasets. Precision = \"How useful are my results?\". Recall = \"How complete are my results?\".",
-                    "points": 2
-                },
-                {
-                    "type": "matching",
-                    "question": "Match the Regression type to its line shape",
-                    "pairs": {
-                        "Linear Regression": "Straight Line",
-                        "Polynomial Regression": "Curve",
-                        "Support Vector Regression": "Tube (Margin)",
-                        "Ridge Regression": "Straight Line (but regularized/shrunken weights)"
-                    },
-                    "explanation": "All are attempting to predict a continuous value $y$ given $x$.",
-                    "points": 2
-                }
-            ],
-            "ordering": [
-                {
-                    "type": "ordering",
-                    "question": "Order the steps of the K-Nearest Neighbors (KNN) algorithm prediction",
-                    "sequence": [
-                        "Receive new query point",
-                        "Calculate distance to all training points",
-                        "Sort distances and pick the top K neighbors",
-                        "Get labels of the K neighbors",
-                        "Return the majority vote (Mode)"
-                    ],
-                    "explanation": "KNN is \"lazy\" because it does no work during training. All computation happens at prediction time.",
-                    "points": 2
-                },
-                {
-                    "type": "ordering",
-                    "question": "Order the complexity of Decision Boundaries (Low to High)",
-                    "sequence": [
-                        "Linear Regression (Straight Line)",
-                        "Logistic Regression (Linear Boundary)",
-                        "Decision Tree (Axis-parallel boxes)",
-                        "Random Forest (Complex non-linear shapes)",
-                        "Deep Neural Network (Highly complex manifold)"
-                    ],
-                    "explanation": "Simple linear models cannot separate non-linearly separable data (like the XOR problem).",
-                    "points": 2
-                }
-            ],
-            "code": [
-                {
-                    "type": "code",
-                    "question": "Train a Decision Tree Classifier",
-                    "starter": "from sklearn.tree import DecisionTreeClassifier\nimport numpy as np\nX = [[0, 0], [1, 1]]\ny = [0, 1]\n# Create model, fit it, and predict for [[2, 2]] (print the result)\n",
-                    "answer": "clf = DecisionTreeClassifier()\nclf.fit(X, y)\nprint(clf.predict([[2, 2]]))",
-                    "expectedOutput": "[1]",
-                    "requiredKeywords": ["DecisionTreeClassifier", ".fit", "predict"],
-                    "points": 3,
-                    "explanation": "Decision Trees split data based on features."
-                },
-                {
-                    "type": "code",
-                    "question": "Calculate the Mean Squared Error (MSE)",
-                    "starter": "from sklearn.metrics import mean_squared_error\ny_true = [3, -0.5, 2, 7]\ny_pred = [2.5, 0.0, 2, 8]\n# Calculate and print MSE\n",
-                    "answer": "mse = mean_squared_error(y_true, y_pred)\nprint(mse)",
-                    "expectedOutput": "0.375",
-                    "requiredKeywords": ["mean_squared_error", "print"],
-                    "points": 3,
-                    "explanation": "MSE is the average of squared differences."
-                },
-                {
-                    "type": "code",
-                    "question": "Instantiate a Random Forest with 100 trees",
-                    "starter": "from sklearn.ensemble import RandomForestClassifier\n# Create RF with n_estimators=100 and print(rf.n_estimators)\n",
-                    "answer": "rf = RandomForestClassifier(n_estimators=100)\nprint(rf.n_estimators)",
-                    "expectedOutput": "100",
-                    "requiredKeywords": ["RandomForestClassifier", "n_estimators"],
-                    "points": 3,
-                    "explanation": "Random Forest is an ensemble of Decision Trees."
-                }
-            ]
-        };
-
+        const quizData = {"scenario": [{"type": "scenario", "question": "You are analyzing medical data to detect cancer (Cancer/No Cancer). Which metric is most critical if you want to avoid missing any positive cases?", "options": ["Recall (Sensitivity)", "Precision", "Accuracy", "Mean Squared Error"], "answer": "Recall (Sensitivity)", "explanation": "Recall measures \"Of all actual positives, how many did we find?\". Missing a cancer diagnosis (False Negative) is fatal, so we prioritize Recall."}, {"type": "scenario", "question": "What is the main advantage of a Random Forest over a single Decision Tree?", "options": ["Reduced variance (Less overfitting)", "Faster training time", "Easier to interpret (Visualizable)", "Requires less memory"], "answer": "Reduced variance (Less overfitting)", "explanation": "Random Forest aggregates many trees (Bagging). The \"Wisdom of Crowds\" reduces the likelihood of overfitting to noise."}, {"type": "scenario", "question": "In K-Fold Cross Validation with K=5, how many times is the model trained?", "options": ["5 times", "1 time", "10 times", "4 times"], "answer": "5 times", "explanation": "The data is split into 5 folds. We train on 4 and test on 1, rotating until every fold has been the test set once."}, {"type": "scenario", "question": "Which algorithm assumes that all features are independent of each other?", "options": ["Naive Bayes", "Decision Trees", "Support Vector Machines", "Linear Regression"], "answer": "Naive Bayes", "explanation": "That's why it is called \"Naive\". Despite this strong assumption, it works surprisingly well for text classification."}], "fill_blank": [{"type": "fill_blank", "question": "A _______ is a table used to evaluate the performance of a classification model, showing True Positives, False Positives, True Negatives, and False Negatives.", "answer": "Confusion Matrix", "explanation": "It gives a complete picture of where the model is making errors."}, {"type": "fill_blank", "question": "Logicstic Regression uses the _______ function to map its output to a probability between 0 and 1.", "answer": "Sigmoid", "explanation": "$S(x) = 1 / (1 + e^{-x})$."}, {"type": "fill_blank", "question": "To prevent overfitting in Decision Trees, we can limit the _______, which stops the tree from growing too deep and memorizing noise.", "answer": "Max Depth", "explanation": "Pruning the tree makes it generalize better."}], "matching": [{"type": "matching", "question": "Match the Algorithm to its primary Task Type", "pairs": {"Linear Regression": "Regression (Predicting continuous values)", "Logistic Regression": "Classification (Predicting categories)", "Decision Tree": "Both (Can handle Regression and Classification)", "KNearest Neighbors (KNN)": "Instance-based Learning (Lazy Learning)"}, "explanation": "It is crucial to choose the right tool for the job. Logistic Regression is confusingly named\u2014it is a classifier!"}, {"type": "matching", "question": "Match the metric to its formula component", "pairs": {"Accuracy": "(TP + TN) / Total", "Precision": "TP / (TP + FP)", "Recall": "TP / (TP + FN)", "F1 Score": "Harmonic Mean of Precision and Recall"}, "explanation": "Accuracy is misleading for imbalanced datasets. Precision = \"How useful are my results?\". Recall = \"How complete are my results?\"."}, {"type": "matching", "question": "Match the Regression type to its line shape", "pairs": {"Linear Regression": "Straight Line", "Polynomial Regression": "Curve", "Support Vector Regression": "Tube (Margin)", "Ridge Regression": "Straight Line (but regularized/shrunken weights)"}, "explanation": "All are attempting to predict a continuous value $y$ given $x$."}], "ordering": [{"type": "ordering", "question": "Order the steps of the K-Nearest Neighbors (KNN) algorithm prediction", "sequence": ["Receive new query point", "Calculate distance to all training points", "Sort distances and pick the top K neighbors", "Get labels of the K neighbors", "Return the majority vote (Mode)"], "explanation": "KNN is \"lazy\" because it does no work during training. All computation happens at prediction time."}, {"type": "ordering", "question": "Order the complexity of Decision Boundaries (Low to High)", "sequence": ["Linear Regression (Straight Line)", "Logistic Regression (Linear Boundary)", "Decision Tree (Axis-parallel boxes)", "Random Forest (Complex non-linear shapes)", "Deep Neural Network (Highly complex manifold)"], "explanation": "Simple linear models cannot separate non-linearly separable data (like the XOR problem)."}], "code": [{"type": "code", "question": "Train a Decision Tree Classifier", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Calculate the Mean Squared Error (MSE)", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Instantiate a Random Forest with 100 trees", "starter": "", "answer": "", "explanation": ""}]};
+        
         let currentAttempt = 1;
         let maxAttempts = 3;
         let currentQuestion = 0;
         let questions = [];
         let userAnswers = []; // Array to store user answers
         let matchSortables = []; // To store Sortable instances for cleanup
-
+        
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -776,44 +524,44 @@
         function generateQuestions() {
             questions = [];
             userAnswers = [];
-
+            
             // Collect all questions
             ['scenario', 'fill_blank', 'matching', 'ordering', 'code'].forEach(type => {
                 if (quizData[type]) {
                     quizData[type].forEach(q => {
-                        questions.push({ ...q, type: type });
+                        questions.push({...q, type: type});
                     });
                 }
             });
-
+            
             questions = shuffleArray(questions);
             userAnswers = new Array(questions.length).fill(null);
         }
-
+        
         function startQuiz() {
             maxAttempts = parseInt(document.getElementById('attempts').value);
             generateQuestions();
-
+            
             document.getElementById('quizSetup').style.display = 'none';
             document.getElementById('quizContainer').classList.add('active');
-
+            
             renderQuestions();
             showQuestion(0);
         }
-
+        
         function renderQuestions() {
             const area = document.getElementById('questionsArea');
             area.innerHTML = '';
             matchSortables = []; // Reset sortables
-
+            
             questions.forEach((q, index) => {
                 const qDiv = document.createElement('div');
                 qDiv.className = 'question-card';
                 qDiv.id = `question-${index}`;
                 qDiv.style.display = 'none';
-
+                
                 let typeLabel = q.type.charAt(0).toUpperCase() + q.type.slice(1).replace('_', ' ');
-
+                
                 let content = `
                     <div class="question-header">
                         <span class="question-number">Question ${index + 1} of ${questions.length}</span>
@@ -821,7 +569,7 @@
                     </div>
                     <div class="question-text">${q.question}</div>
                 `;
-
+                
                 // --- Type Specific Rendering ---
                 if (q.type === 'scenario') {
                     content += '<div class="options">';
@@ -833,13 +581,13 @@
                         `;
                     });
                     content += '</div>';
-
+                    
                 } else if (q.type === 'fill_blank') {
                     content += `
                         <input type="text" class="fill-input" id="input-${index}" 
                                placeholder="Type your answer..." onchange="saveSimpleAnswer(${index}, this.value)">
                     `;
-
+                    
                 } else if (q.type === 'code') {
                     content += `
                         <div class="editor-container">
@@ -854,23 +602,23 @@
                         </div>
                     `;
                     // Ace init will be handled in showQuestion
-
+                    
                 } else if (q.type === 'ordering') {
                     content += `<p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Drag to reorder:</p>`;
                     content += `<ul class="sortable-list" id="sortable-${index}">`;
                     // Shuffle sequence for display
-                    let shuffledSeq = shuffleArray([...q.sequence]);
+                    let shuffledSeq = shuffleArray([...q.sequence]); 
                     shuffledSeq.forEach(item => {
                         content += `<li class="sortable-item" data-id="${item}">${item}</li>`;
                     });
                     content += `</ul>`;
-
+                    
                 } else if (q.type === 'matching') {
                     content += `<p style="font-size:0.9em; opacity:0.8; margin-bottom:10px;">Drag options from the pool to the correct targets:</p>`;
-
+                    
                     let keys = Object.keys(q.pairs);
                     let values = shuffleArray(Object.values(q.pairs));
-
+                    
                     keys.forEach((key, kIndex) => {
                         content += `
                             <div class="match-row">
@@ -880,28 +628,28 @@
                             </div>
                         `;
                     });
-
+                    
                     content += `<div class="match-pool sortable-list" id="match-pool-${index}">`;
                     values.forEach(val => {
                         content += `<div class="sortable-item" data-id="${val}">${val}</div>`;
                     });
                     content += `</div>`;
                 }
-
+                
                 content += `
                     <div class="explanation" id="explanation-${index}">
                         <strong>Explanation:</strong> ${q.explanation}
                     </div>
                 `;
-
+                
                 qDiv.innerHTML = content;
                 area.appendChild(qDiv);
-
+                
                 // Initialize Sortables immediately (they work even if hidden)
                 if (q.type === 'ordering') {
                     new Sortable(document.getElementById(`sortable-${index}`), {
                         animation: 150,
-                        onEnd: function () { saveOrderingAnswer(index); }
+                        onEnd: function() { saveOrderingAnswer(index); }
                     });
                 } else if (q.type === 'matching') {
                     // Pool
@@ -909,20 +657,20 @@
                         group: `matching-${index}`,
                         animation: 150
                     });
-
+                    
                     // Zones
                     Object.keys(q.pairs).forEach((key, kIndex) => {
                         new Sortable(document.getElementById(`match-zone-${index}-${kIndex}`), {
                             group: `matching-${index}`,
                             animation: 150,
                             maxItems: 1, // Only one item per zone
-                            onEnd: function () { saveMatchingAnswer(index); }
+                            onEnd: function() { saveMatchingAnswer(index); }
                         });
                     });
                 }
             });
         }
-
+        
         function selectOption(qIndex, answer) {
             userAnswers[qIndex] = answer;
             const options = document.getElementById(`question-${qIndex}`).querySelectorAll('.option');
@@ -931,17 +679,17 @@
                 if (opt.textContent.includes(answer)) opt.classList.add('selected');
             });
         }
-
+        
         function saveSimpleAnswer(qIndex, val) {
             userAnswers[qIndex] = val.trim();
         }
-
+        
         function saveOrderingAnswer(qIndex) {
             const list = document.getElementById(`sortable-${qIndex}`);
             const items = Array.from(list.children).map(li => li.getAttribute('data-id'));
             userAnswers[qIndex] = items;
         }
-
+        
         function saveMatchingAnswer(qIndex) {
             const q = questions[qIndex];
             const result = {};
@@ -961,20 +709,20 @@
             document.querySelectorAll('.question-card').forEach(el => el.style.display = 'none');
             // Show current
             document.getElementById(`question-${index}`).style.display = 'block';
-
+            
             // Buttons
             document.getElementById('prevBtn').disabled = (index === 0);
             document.getElementById('nextBtn').style.display = (index === questions.length - 1) ? 'none' : 'inline-block';
             document.getElementById('submitBtn').style.display = (index === questions.length - 1) ? 'inline-block' : 'none';
-
+            
             currentQuestion = index;
-
+            
             // Initialize Ace Editor if needed and not already done
             const q = questions[index];
             if (q.type === 'code') {
                 const editorId = `editor-${index}`;
                 const editorEl = document.getElementById(editorId);
-
+                
                 // Check if Ace is already initialized on this element
                 if (!editorEl.classList.contains('ace_editor')) {
                     const editor = ace.edit(editorId);
@@ -982,20 +730,20 @@
                     editor.session.setMode("ace/mode/python");
                     editor.setFontSize(14);
                     editor.setShowPrintMargin(false);
-
+                    
                     // Set initial value if user has no answer yet, otherwise usage works via the div content automatically usually,
                     // but ace.edit() might consume the text content.
                     // If user has an answer already (navigated back), restore it.
                     if (userAnswers[index]) {
                         editor.setValue(userAnswers[index], 1); // 1 = moves cursor to end
                     } else if (q.starter) {
-                        // The starter text is in the div, Ace pick it up? 
-                        // Ace typically uses the text content as initial value.
-                        // But if we want to be sure:
-                        // editor.setValue(q.starter, -1);
+                         // The starter text is in the div, Ace pick it up? 
+                         // Ace typically uses the text content as initial value.
+                         // But if we want to be sure:
+                         // editor.setValue(q.starter, -1);
                     }
 
-                    editor.session.on('change', function (delta) {
+                    editor.session.on('change', function(delta) {
                         userAnswers[index] = editor.getValue();
                     });
                 }
@@ -1004,67 +752,37 @@
 
         function previousQuestion() { if (currentQuestion > 0) showQuestion(currentQuestion - 1); }
         function nextQuestion() { if (currentQuestion < questions.length - 1) showQuestion(currentQuestion + 1); }
-
-        async function submitQuiz() {
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.textContent = "Grading...";
-
-            await calculateScoreAsync();
-
+        
+        function submitQuiz() {
+            calculateScore();
             document.getElementById('quizContainer').classList.remove('active');
             showResults();
-
-            btn.disabled = false;
-            btn.textContent = "✓ Submit Quiz";
         }
-
-        let maxScore = 0;
-
-        async function calculateScoreAsync() {
+        
+        function calculateScore() {
             score = 0;
-            maxScore = 0;
-
-            // Ensure Pyodide is loaded for grading code questions
-            let pyodideInstance = null;
-            const hasCodeQuestions = questions.some(q => q.type === 'code');
-            if (hasCodeQuestions) {
-                try {
-                    pyodideInstance = await loadPyodideEngine();
-                    // Pre-load common ML packages if needed
-                    await pyodideInstance.loadPackage("scikit-learn");
-                } catch (e) {
-                    console.error("Using existing instance or failed load", e);
-                }
-            }
-
-            // We need to loop sequentially for async execution
-            for (let i = 0; i < questions.length; i++) {
-                const q = questions[i];
-                const points = q.points || 1;
-                maxScore += points;
-
+            questions.forEach((q, i) => {
                 let isCorrect = false;
                 const userAns = userAnswers[i];
-
+                
                 if (q.type === 'scenario') {
                     isCorrect = (userAns === q.answer);
-                    // Visual feedback output
+                    // Visual feedback
                     const options = document.getElementById(`question-${i}`).querySelectorAll('.option');
                     options.forEach(opt => {
-                        if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
-                        else if (opt.textContent.includes(userAns) && !isCorrect) opt.classList.add('incorrect');
+                         if (opt.textContent.includes(q.answer)) opt.classList.add('correct');
+                         else if (opt.textContent.includes(userAns) && !isCorrect) opt.classList.add('incorrect');
                     });
-
+                    
                 } else if (q.type === 'fill_blank') {
                     isCorrect = (userAns || '').toLowerCase() === q.answer.toLowerCase();
-
+                    
                 } else if (q.type === 'ordering') {
                     // Compare arrays
                     if (userAns && userAns.length === q.sequence.length) {
                         isCorrect = userAns.every((val, idx) => val === q.sequence[idx]);
                     }
-
+                    
                 } else if (q.type === 'matching') {
                     // Compare objects
                     if (userAns) {
@@ -1073,83 +791,56 @@
                             if (userAns[key] !== q.pairs[key]) isCorrect = false;
                         });
                     }
-
+                    
                 } else if (q.type === 'code') {
-                    // Hybrid Grading: Output + Syntax
-                    if (q.expectedOutput && userAns) {
-                        try {
-                            // 1. Output Check
-                            let capturedOutput = "";
-                            pyodideInstance.setStdout({ batched: (msg) => { capturedOutput += msg + "\n"; } });
-                            pyodideInstance.setStderr({ batched: (msg) => { /* ignore */ } });
-
-                            await pyodideInstance.loadPackagesFromImports(userAns);
-                            await pyodideInstance.runPythonAsync(userAns);
-
-                            const normActual = capturedOutput.trim().replace(/\s+/g, ' ');
-                            const normExpected = q.expectedOutput.trim().replace(/\s+/g, ' ');
-                            isCorrect = (normActual === normExpected);
-
-                            // 2. Syntax Check (Keywords)
-                            if (isCorrect && q.requiredKeywords && q.requiredKeywords.length > 0) {
-                                const missing = q.requiredKeywords.filter(k => !userAns.includes(k));
-                                if (missing.length > 0) {
-                                    isCorrect = false;
-                                    console.log(`Missing keywords: ${missing.join(', ')}`);
-                                }
-                            }
-
-                        } catch (err) {
-                            console.log("Grading Error:", err);
-                            isCorrect = false;
-                        }
-                    } else if (q.answer && userAns) {
-                        // Fallback
+                    // Basic check: does it contain the answer string?
+                    // Or regex match if we enhanced it. For now, simple containment or exact match is tricky.
+                    // Let's assume the 'answer' field in markdown contains the key snippet.
+                    if (userAns && q.answer) {
+                        // Normalize whitespace
                         const normUser = userAns.replace(/\s+/g, ' ').trim();
                         const normAns = q.answer.replace(/\s+/g, ' ').trim();
                         isCorrect = normUser.includes(normAns);
                     }
                 }
-
-                if (isCorrect) score += points;
+                
+                if (isCorrect) score++;
                 document.getElementById(`explanation-${i}`).classList.add('show');
-            }
+            });
         }
-
+        
         function showResults() {
-            // Use maxScore if available, else fallback to questions count (for safety)
-            const total = (typeof maxScore !== 'undefined' && maxScore > 0) ? maxScore : questions.length;
-            const percentage = Math.round((score / total) * 100);
-            document.getElementById('scoreDisplay').textContent = `${score}/${total}`;
-
+            const percentage = Math.round((score / questions.length) * 100);
+            document.getElementById('scoreDisplay').textContent = `${score}/${questions.length}`;
+            
             let grade = 'Keep Studying';
             if (percentage >= 90) grade = 'Excellent!';
             else if (percentage >= 80) grade = 'Great Job!';
             else if (percentage >= 70) grade = 'Passed';
-
+            
             document.getElementById('gradeDisplay').innerHTML = `${percentage}% - ${grade}`;
-
+            
             const attemptsLeft = maxAttempts - currentAttempt;
             let attemptInfo = `<div class="attempts-left">`;
             attemptInfo += `<strong>Attempt ${currentAttempt} of ${maxAttempts}</strong><br>`;
-
+            
             if (percentage < 70 && attemptsLeft > 0) {
                 attemptInfo += `You have ${attemptsLeft} attempt(s) remaining.`;
                 document.getElementById('retryBtn').style.display = 'block';
             } else {
-                document.getElementById('retryBtn').style.display = 'none';
+                 document.getElementById('retryBtn').style.display = 'none';
             }
             attemptInfo += `</div>`;
             document.getElementById('attemptsInfo').innerHTML = attemptInfo;
             document.getElementById('results').classList.add('show');
         }
-
+        
         let pyodide = null;
         let pyodideReadyPromise = null;
 
         async function loadPyodideEngine() {
             if (pyodideReadyPromise) return pyodideReadyPromise;
-
+            
             pyodideReadyPromise = (async () => {
                 try {
                     console.log("Loading Pyodide...");
@@ -1162,7 +853,7 @@
                     throw err;
                 }
             })();
-
+            
             return pyodideReadyPromise;
         }
 
@@ -1170,17 +861,17 @@
             const btn = document.getElementById(`run-btn-${index}`);
             const outputDiv = document.getElementById(`output-${index}`);
             const editorId = `editor-${index}`;
-
+            
             // Get code
             const editor = ace.edit(editorId);
             const code = editor.getValue();
-
+            
             // Reset UI
             btn.disabled = true;
             btn.textContent = "Running...";
             outputDiv.innerHTML = "";
             outputDiv.classList.add('active');
-
+            
             try {
                 // Ensure Python is loaded
                 if (!pyodide) {
@@ -1188,17 +879,17 @@
                     await loadPyodideEngine();
                     outputDiv.innerText = ""; // Clear loading message
                 }
-
+                
                 // Redirect stdout/stderr
                 pyodide.setStdout({ batched: (msg) => { outputDiv.innerText += msg + "\n"; } });
                 pyodide.setStderr({ batched: (msg) => { outputDiv.innerHTML += `<span class="output-error">${msg}\n</span>`; } });
-
+                
                 // Load packages automatically
                 await pyodide.loadPackagesFromImports(code);
 
                 // execution
                 await pyodide.runPythonAsync(code);
-
+                
             } catch (err) {
                 outputDiv.innerHTML += `<span class="output-error">${err}</span>`;
             } finally {
@@ -1208,7 +899,7 @@
         }
 
         function retryQuiz() {
-            if (currentAttempt < maxAttempts) {
+             if (currentAttempt < maxAttempts) {
                 currentAttempt++;
                 document.getElementById('results').classList.remove('show');
                 startQuiz(); // Re-shuffle and start
@@ -1217,5 +908,4 @@
 
     </script>
 </body>
-
 </html>
