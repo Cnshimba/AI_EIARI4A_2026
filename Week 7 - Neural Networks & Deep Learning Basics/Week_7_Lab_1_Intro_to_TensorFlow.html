@@ -178,7 +178,7 @@
             
 <h2>Goal</h2>
 <p>In this lab, you will build your first Neural Network using <strong>TensorFlow</strong> and its high-level API, <strong>Keras</strong>. You will implement a simple Feed Forward Neural Network (FCNN) to classify handwritten digits from the famous <strong>MNIST</strong> dataset.</p>
-<p>This lab mirrors the PyTorch lab (Lab 2), allowing you to compare the two most popular Deep Learning frameworks.</p>
+<p>In Week 8, you will solve the same problem using <strong>PyTorch</strong>, allowing you to compare the two most popular Deep Learning frameworks.</p>
 <h2>1. Setup and Imports</h2>
 <p>First, we need to import TensorFlow and other necessary libraries.</p>
 <pre><code class="language-python">import tensorflow as tf
@@ -256,39 +256,7 @@ print(f&quot;Predictions (Probabilities): {predictions}&quot;)
 print(f&quot;Predicted Class: {np.argmax(predictions)}&quot;)
 print(f&quot;True Label: {y_test[0]}&quot;)
 </code></pre>
-<h2>Comparisons: PyTorch vs TensorFlow</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align: left;">Feature</th>
-<th style="text-align: left;">PyTorch</th>
-<th style="text-align: left;">TensorFlow (Keras)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>API Style</strong></td>
-<td style="text-align: left;">Object-Oriented (Class based)</td>
-<td style="text-align: left;">Functional / Sequential (Layer based)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Dynamic Graph</strong></td>
-<td style="text-align: left;">Yes (Eager by default)</td>
-<td style="text-align: left;">Yes (since TF 2.0)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Debugging</strong></td>
-<td style="text-align: left;">Pythonic (Standard debugger)</td>
-<td style="text-align: left;">Can be tricky (Graph mode)</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Industry Usage</strong></td>
-<td style="text-align: left;">Research dominant</td>
-<td style="text-align: left;">Production / Mobile dominant</td>
-</tr>
-</tbody>
-</table>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base">Both frameworks are excellent. It is recommended to know the basics of both!</p></div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base">In Week 8, you will implement a similar neural network using <strong>PyTorch</strong>. Knowing both frameworks is essential for any AI practitioner.</p></div></div>
             
             
         
