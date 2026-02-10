@@ -287,7 +287,144 @@ We will use pure Python and <code>numpy</code> to build:<br />
 4.  <strong>Training Loop</strong>: The forward and backward pass.</p>
 <p>If you can build this, you understand AI.</p>
 <hr />
-<h2>6. Summary</h2>
+<h2>6. Introduction to TensorFlow &amp; Keras</h2>
+<h3>6.1 What is TensorFlow?</h3>
+<p><strong>TensorFlow</strong> is an end-to-end open-source platform for machine learning, developed by <strong>Google</strong>. While it is famous for Deep Learning, it is essentially a library for <strong>numerical computation</strong> using data flow graphs.</p>
+<p>Key features:</p>
+<ul>
+<li>
+<p><strong>Ecosystem</strong>: From research (TensorFlow) to production (TFX) to mobile (TF Lite) and web (TF.js).</p>
+</li>
+<li>
+<p><strong>Hardware Acceleration</strong>: Automatically runs on CPUs, GPUs, and TPUs (Tensor Processing Units) without changing code.</p>
+</li>
+</ul>
+<h3>6.2 Tensors: The Atoms of Deep Learning</h3>
+<p>A <strong>Tensor</strong> is a multi-dimensional array, similar to a NumPy array, but with two key differences:<br />
+1.  It can run on a GPU.<br />
+2.  It is immutable (for <code>tf.constant</code>).</p>
+<p><strong>Types of Tensors:</strong></p>
+<ul>
+<li>
+<p><strong>Scalar (Rank 0)</strong>: A single number. <code>tf.constant(4)</code></p>
+</li>
+<li>
+<p><strong>Vector (Rank 1)</strong>: A list of numbers. <code>tf.constant([1.0, 2.0, 3.0])</code></p>
+</li>
+<li>
+<p><strong>Matrix (Rank 2)</strong>: A 2D table. <code>tf.constant([[1, 2], [3, 4]])</code></p>
+</li>
+<li>
+<p><strong>n-Tensor (Rank n)</strong>: Higher dimensions (e.g., an image is Rank 3: Height x Width x Channels).</p>
+</li>
+</ul>
+<p><strong>Variables:</strong><br />
+To train a model, we need values that <em>change</em> (like weights and biases). For this, we use <code>tf.Variable</code>.</p>
+<pre><code class="language-python">import tensorflow as tf
+
+# A constant (cannot change)
+c = tf.constant([[1.0, 2.0], [3.0, 4.0]])
+
+# A variable (can be updated during training)
+# Initialize with random values from a normal distribution
+w = tf.Variable(tf.random.normal([2, 2]), name='weights')
+</code></pre>
+<h3>6.3 Basic Operations</h3>
+<p>TensorFlow supports standard mathematical operations.</p>
+<pre><code class="language-python">a = tf.constant([[1, 2], [3, 4]])
+b = tf.constant([[1, 1], [1, 1]])
+
+# Element-wise Addition
+print(tf.add(a, b))  # [[2, 3], [4, 5]]
+
+# Element-wise Multiplication
+print(tf.multiply(a, b)) # [[1, 2], [3, 4]]
+
+# Matrix Multiplication (The Dot Product)
+# This is the most common operation in Neural Networks
+print(tf.matmul(a, b)) # [[3, 3], [7, 7]]
+</code></pre>
+<h3>6.4 Automatic Differentiation (<code>GradientTape</code>)</h3>
+<p>How do neural networks learn? By calculating <strong>gradients</strong> (derivatives) of the error with respect to the weights. TensorFlow handles this calculus automatically using the <strong>Gradient Tape</strong>.</p>
+<p>Any operation recorded inside a <code>with tf.GradientTape() as tape:</code> block can be differentiated.</p>
+<pre><code class="language-python">x = tf.Variable(3.0)
+
+with tf.GradientTape() as tape:
+    y = x ** 2  # y = x^2
+
+# Calculate dy/dx (which is 2x)
+dy_dx = tape.gradient(y, x)
+print(dy_dx.numpy())  # Output: 6.0 (since 2 * 3 = 6)
+</code></pre>
+<h3>6.5 Comparison: Linear Regression from Scratch</h3>
+<p>Let's solve a simple linear problem: $y = W \cdot x + b$.<br />
+We will generate synthetic data and train a model to find $W$ and $b$ using raw Tensors.</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+
+# 1. Generate Synthetic Data
+TRUE_W = 3.0
+TRUE_B = 2.0
+NUM_EXAMPLES = 1000
+
+# Random inputs
+inputs = tf.random.normal(shape=[NUM_EXAMPLES])
+# True outputs with some random noise
+noise = tf.random.normal(shape=[NUM_EXAMPLES])
+outputs = inputs * TRUE_W + TRUE_B + noise
+
+# 2. Define the Model (Weights and Biases)
+# Initialize randomly
+W = tf.Variable(5.0)
+b = tf.Variable(0.0)
+
+def model(x):
+    return W * x + b
+
+# 3. Define Loss Function (Mean Squared Error)
+def loss(predicted_y, target_y):
+    return tf.reduce_mean(tf.square(predicted_y - target_y))
+
+# 4. Training Loop
+learning_rate = 0.1
+epochs = 20
+
+print(f&quot;Starting: W={W.numpy():.2f}, b={b.numpy():.2f}&quot;)
+
+for epoch in range(epochs):
+    with tf.GradientTape() as tape:
+        current_loss = loss(model(inputs), outputs)
+
+    # Compute Gradients
+    dW, db = tape.gradient(current_loss, [W, b])
+
+    # Update Weights (Gradient Descent)
+    W.assign_sub(learning_rate * dW)
+    b.assign_sub(learning_rate * db)
+
+    if epoch % 5 == 0:
+        print(f&quot;Epoch {epoch}: Loss: {current_loss.numpy():.2f}, W: {W.numpy():.2f}, b: {b.numpy():.2f}&quot;)
+
+print(f&quot;Final: W={W.numpy():.2f}, b={b.numpy():.2f} (Target: 3.0, 2.0)&quot;)
+</code></pre>
+<h3>6.6 The High-Level API: Keras</h3>
+<p>While <code>GradientTape</code> gives you low-level control, <strong>Keras</strong> provides the standard building blocks for Deep Learning.</p>
+<p>In Keras, you assemble <strong>Layers</strong> into a <strong>Model</strong>.</p>
+<pre><code class="language-python"># The exact same regression model using Keras
+model = tf.keras.Sequential([
+    tf.keras.layers.Dense(units=1, input_shape=[1])
+])
+
+model.compile(optimizer='sgd', loss='mean_squared_error')
+model.fit(inputs, outputs, epochs=5)
+</code></pre>
+<p>For Deep Learning, we simply stack more layers and use non-linear activations:</p>
+<pre><code class="language-python">model = tf.keras.Sequential([
+    tf.keras.layers.Dense(128, activation='relu'), # Hidden Layer
+    tf.keras.layers.Dense(10, activation='softmax') # Output Layer
+])
+</code></pre>
+<hr />
+<h2>7. Summary</h2>
 <p>Neural Networks are built from layers of perceptrons. Activation functions such as ReLU give these networks the power to model complex patterns. Forward propagation is how the network makes predictions, while backpropagation is how it learns from its mistakes.</p>
 <p>Next week, we introduce the power tools: PyTorch and Convolutional Neural Networks (CNNs).</p>
             
