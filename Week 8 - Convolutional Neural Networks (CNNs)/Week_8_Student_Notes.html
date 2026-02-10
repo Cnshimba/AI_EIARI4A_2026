@@ -203,8 +203,108 @@ Last week, we introduced the concept of the Neural Network. This week, we transi
 </li>
 </ul>
 <p>In Deep Learning, we often work with 4-dimensional tensors to represent a batch of images.</p>
-<h3>1.2 Autograd (Automatic Differentiation)</h3>
-<p>The most significant advantage of using a framework like PyTorch is <strong>Autograd</strong>. In our previous manual implementation, we had to derive and write the code for the backward pass (<code>backward()</code>) by hand, ensuring every dot product and gradient was calculated correctly. In PyTorch, this entire process is automated. By simply calling <code>loss.backward()</code>, the engine traverses the computation graph in reverse and calculates the precise gradient for every parameter in the network.</p>
+<p><strong>Creating Tensors:</strong></p>
+<pre><code class="language-python">import torch
+
+# From raw data
+x = torch.tensor([[1, 2], [3, 4]])
+
+# Zeros / Ones (useful for initialization)
+zeros = torch.zeros(3, 3)
+ones = torch.ones(2, 5)
+
+# Random values (most common for weight initialization)
+rand = torch.randn(3, 3)  # Normal distribution (mean=0, std=1)
+
+# Check properties
+print(x.shape)   # torch.Size([2, 2])
+print(x.dtype)   # torch.int64
+print(x.device)  # cpu (or cuda:0 if on GPU)
+</code></pre>
+<h3>1.2 Tensor Operations</h3>
+<p>PyTorch supports the same mathematical operations as TensorFlow/NumPy, but with its own syntax.</p>
+<pre><code class="language-python">a = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
+b = torch.tensor([[1.0, 1.0], [1.0, 1.0]])
+
+# Element-wise Addition
+print(a + b)        # tensor([[2., 3.], [4., 5.]])
+
+# Element-wise Multiplication (Hadamard Product)
+print(a * b)        # tensor([[1., 2.], [3., 4.]])
+
+# Matrix Multiplication (Dot Product) — the core of neural networks
+print(a @ b)        # tensor([[3., 3.], [7., 7.]])
+# Equivalent: torch.matmul(a, b)
+
+# Reshaping (critical for CNNs)
+c = torch.randn(2, 3, 4)     # Shape: [2, 3, 4]
+print(c.view(2, 12).shape)   # Shape: [2, 12] — flatten last two dims
+print(c.view(-1).shape)      # Shape: [24] — flatten everything
+</code></pre>
+<h3>1.3 Autograd (Automatic Differentiation)</h3>
+<p>The most significant advantage of using a framework like PyTorch is <strong>Autograd</strong>. In our previous manual implementation, we had to derive and write the code for the backward pass (<code>backward()</code>) by hand, ensuring every dot product and gradient was calculated correctly. In PyTorch, this entire process is automated.</p>
+<p>To enable gradient tracking, set <code>requires_grad=True</code> on a tensor:</p>
+<pre><code class="language-python"># Create a tensor that tracks gradients
+x = torch.tensor(3.0, requires_grad=True)
+
+# Define a computation
+y = x ** 2    # y = x^2
+
+# Compute gradients (dy/dx = 2x)
+y.backward()
+
+print(x.grad)  # tensor(6.)  — because 2 * 3 = 6
+</code></pre>
+<p>By simply calling <code>loss.backward()</code>, the engine traverses the computation graph in reverse and calculates the precise gradient for every parameter in the network.</p>
+<h3>1.4 Building Models with <code>nn.Module</code></h3>
+<p>In PyTorch, every neural network is defined as a <strong>class</strong> that inherits from <code>torch.nn.Module</code>. This is unlike TensorFlow/Keras where you just list layers in a <code>Sequential</code> call.</p>
+<p>There are two required parts:<br />
+1.  <strong><code>__init__()</code></strong>: Define the layers (parameters).<br />
+2.  <strong><code>forward()</code></strong>: Define how data flows through the layers.</p>
+<pre><code class="language-python">import torch.nn as nn
+import torch.nn.functional as F
+
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        self.fc1 = nn.Linear(784, 128)   # Input: 784 features -&gt; 128 neurons
+        self.fc2 = nn.Linear(128, 10)    # 128 neurons -&gt; 10 classes
+
+    def forward(self, x):
+        x = x.view(-1, 784)             # Flatten the input
+        x = F.relu(self.fc1(x))          # Hidden layer + ReLU
+        x = self.fc2(x)                  # Output layer (raw scores)
+        return x
+
+model = SimpleNet()
+print(model)
+</code></pre>
+<h3>1.5 Loss Functions and Optimizers</h3>
+<p>After defining the model architecture, we need two more components:</p>
+<p><strong>Loss Function</strong> — measures how wrong the prediction is:</p>
+<pre><code class="language-python">criterion = nn.CrossEntropyLoss()  # For classification (combines Softmax + NLLLoss)
+</code></pre>
+<p><strong>Optimizer</strong> — updates the weights to reduce the loss:</p>
+<pre><code class="language-python">optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
+</code></pre>
+<h3>1.6 The Training Loop</h3>
+<p>Unlike Keras (where you call <code>model.fit()</code>), PyTorch requires you to write the training loop explicitly. This gives you full control over every step:</p>
+<pre><code class="language-python">for epoch in range(5):
+    for images, labels in train_loader:
+        # 1. Forward Pass
+        outputs = model(images)
+        loss = criterion(outputs, labels)
+
+        # 2. Backward Pass
+        optimizer.zero_grad()   # Clear old gradients
+        loss.backward()         # Compute new gradients
+
+        # 3. Update Weights
+        optimizer.step()        # Apply gradients to weights
+
+    print(f&quot;Epoch {epoch+1}, Loss: {loss.item():.4f}&quot;)
+</code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why <code>optimizer.zero_grad()</code>?</strong> PyTorch accumulates gradients by default. If you forget to zero them, gradients from the previous batch will be added to the current batch, corrupting the training process.</p></div></div>
 <hr />
 <h2>2. Convolutional Neural Networks (CNNs)</h2>
 <p>Traditional Fully Connected Networks (like the one we built previously) face significant challenges when processing images. First, they ignore spatial structure; treating a pixel at coordinate (0,0) and (0,1) as completely independent inputs involves losing valuable contextual information. Second, they suffer from a parameter explosion. Connecting a standard 1000x1000 pixel image to a hidden layer of just 100 neurons would require 100 million weights, making training computationally prohibitive and prone to overfitting.</p>
