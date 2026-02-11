@@ -169,386 +169,125 @@
 
 <p><strong>Module</strong>: Artificial Intelligence (AI)<br />
 <strong>Level</strong>: Undergraduate (Final Project)<br />
-<strong>Weight</strong>: 40%<br />
-<strong>Duration</strong>: 4 weeks<br />
-<strong>Submission</strong>: Jupyter Notebook + Technical Report<br />
-<strong>Prerequisite</strong>: Midterm Project (ML-based IDS on flow CSV)</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
-By the end of this project, you will be able to:<br />
-1.  <strong>Extract</strong> flow-level features from raw PCAP data (Zeek/CICFlowMeter).<br />
-2.  <strong>Design</strong> a Deep Learning pipeline for Intrusion Detection (IDS).<br />
-3.  <strong>Implement</strong> both Supervised (Binary Classification) and Unsupervised (Autoencoder) models.<br />
-4.  <strong>Evaluate</strong> the security implications of your model (False Positives vs. Negatives).</p></div></div>
-<p><br></p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 12 Goal</strong>:<br />
-This is it—the culmination of your semester. You will combine your cybersecurity knowledge with your new AI skills to build an <strong>End-to-End Intrusion Detection System (IDS)</strong>. You will take raw network traffic (PCAP), clean it, engineer features, and train a Deep Learning model to hunt for attacks. This mirrors the real-world workflow of a Security Operations Center (SOC) analyst or AI Security Engineer.</p></div></div>
-<hr />
-<h2>1. Big Picture Progression (Very Important)</h2>
-<p>Students now complete the <strong>entire security ML pipeline</strong>:</p>
-<pre><code>PCAP
- ↓
-Traffic Feature Extraction
- ↓
-Data Cleaning &amp; Engineering
- ↓
-Deep Learning Models
- ↓
-Intrusion Detection
-</code></pre>
-<p>This closes the loop that started in <strong>Week 1</strong>.</p>
-<hr />
-<h2>2. Final Project Scenario</h2>
-<blockquote>
-<p>Your organisation suspects malicious activity on its internal network.</p>
-<p>A <strong>packet capture (PCAP)</strong> was taken at the network gateway.</p>
-<p>You are tasked with:</p>
+<strong>Weight</strong>: 40% of Final Grade<br />
+<strong>Duration</strong>: 4 weeks</p>
+<h2>1. Introduction</h2>
+<p>The final project is a capstone assessment that requires you to apply the full AI workflow to a real-world problem. You will demonstrate your ability to handle data, build models, and evaluate results professionally.</p>
+<h2>2. Project Options</h2>
+<p>Students must choose <strong>ONE</strong> of the following tracks. Please refer to the <a href="Week_12_Brief.html"><strong>Project Brief Page</strong></a> for a side-by-side comparison.</p>
+<ul>
+<li>
+<p><strong>Option A: Cyber-Security Track (IDS)</strong></p>
+</li>
+<li>
+<p>Build an End-to-End Intrusion Detection System using Deep Learning.</p>
+</li>
+<li>
+<p>Focus: PCAP data, Feature Extraction, Autoencoders.</p>
+</li>
+<li>
+<p><a href="Week_12_Project_IDS.html">View IDS Project Details</a></p>
+</li>
+<li>
+<p><strong>Option B: Computer Vision (CNN)</strong></p>
+</li>
+<li>
+<p>Image classification project.</p>
+</li>
+<li>
+<p><a href="Week_12_Project_CNN.html">View CNN Project Details</a></p>
+</li>
+<li>
+<p><strong>Option C: Natural Language Processing (NLP)</strong></p>
+</li>
+<li>
+<p>Sentiment Analysis or Text Classification.</p>
+</li>
+<li>
+<p><a href="Week_12_Project_NLP.html">View NLP Project Details</a></p>
+</li>
+<li>
+<p><strong>Option D: Recommender Systems</strong></p>
+</li>
+<li>
+<p>Building a personalized recommendation engine.</p>
+</li>
+<li>
+<p><a href="Week_12_Project_Recommender.html">View Recommender Project Details</a></p>
+</li>
+<li>
+<p><strong>Option E: Time-Series Forecasting</strong></p>
+</li>
+<li>
+<p>Predicting future trends from historical data.</p>
+</li>
+<li>
+<p><a href="Week_12_Project_Forecasting.html">View Forecasting Project Details</a></p>
+</li>
+</ul>
+<h2>3. Required Deliverables</h2>
+<p>Regardless of the track chosen, all students must submit:</p>
 <ol>
-<li>Extracting meaningful features from the PCAP</li>
-<li>Preparing the data for Deep Learning</li>
-<li>Designing a <strong>Deep Learning–based Intrusion Detection System (DL-IDS)</strong></li>
-<li>Detecting suspicious network behaviour</li>
+<li><strong>Jupyter Notebook</strong>:</li>
 </ol>
-</blockquote>
-<p>This mirrors <strong>real SOC and blue-team workflows</strong>.</p>
-<hr />
-<h2>3. Learning Outcomes (Final-Level)</h2>
-<p>By the end of this project, students must demonstrate:</p>
-<ol>
-<li>Understanding of PCAP structure</li>
-<li>Ability to extract <strong>flow-level features</strong></li>
-<li>Ability to design <strong>DL pipelines for security</strong></li>
-<li>Understanding of <strong>temporal and behavioural attacks</strong></li>
-<li>Cybersecurity-driven interpretation of AI results</li>
-</ol>
-<hr />
-<h2>4. Tools &amp; Constraints (Pedagogically Important)</h2>
-<h3>Mandatory Tools</h3>
 <ul>
 <li>
-<p><strong>tcpdump</strong> (capture understanding)</p>
+<p>Must be clean, well-commented, and runnable.</p>
 </li>
 <li>
-<p><strong>Zeek OR CICFlowMeter</strong> (feature extraction)</p>
+<p>Include Markdown cells explaining your data exploration, preprocessing, and model choices.<br />
+2.  <strong>Technical Report (PDF)</strong>:</p>
 </li>
 <li>
-<p><strong>Python (NumPy, Pandas, Matplotlib)</strong></p>
+<p>Length: 4–6 pages.</p>
 </li>
 <li>
-<p><strong>TensorFlow / PyTorch</strong></p>
+<p>Structure: Introduction, Methodology, Experiments, Results, Conclusion.<br />
+3.  <strong>Presentation/Defense</strong>:</p>
+</li>
+<li>
+<p>A 5-minute recorded presentation or slide deck summarizing your project's business value and technical success.</p>
 </li>
 </ul>
-<h3>Explicitly NOT Required</h3>
-<p>❌ Writing packet parsers<br />
-❌ Deep protocol decoding<br />
-❌ Real-time systems</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base">Focus is <strong>security analytics</strong>, not packet engineering.</p></div></div>
-<hr />
-<h2>5. Provided Resources</h2>
-<p>Students receive:</p>
-<pre><code>traffic_capture.pcap
-</code></pre>
-<p>Optionally:</p>
-<pre><code>attack_capture.pcap
-</code></pre>
-<p>PCAP is <strong>small (5–20 MB)</strong> and curated.</p>
-<hr />
-<h2>6. Project Structure (Graded Pipeline)</h2>
-<hr />
-<h2>Part A: Understanding PCAP &amp; Traffic Flows (10%)</h2>
-<p>Students must explain (Markdown):</p>
-<ul>
-<li>
-<p>What a PCAP file contains</p>
-</li>
-<li>
-<p>Difference between packets and flows</p>
-</li>
-<li>
-<p>Why raw packets cannot be used directly in ML</p>
-</li>
-<li>
-<p>Why feature extraction is required</p>
-</li>
-</ul>
-<p>No code here.</p>
-<hr />
-<h2>Part B: PCAP → Flow Feature Extraction (20%)</h2>
-<p>This is the <strong>core upgrade</strong> from the midterm.</p>
-<h3>Option 1 (Recommended): Zeek</h3>
-<pre><code class="language-bash">zeek -r traffic_capture.pcap
-</code></pre>
-<p>Students must:</p>
-<ul>
-<li>
-<p>Identify generated logs (<code>conn.log</code>, <code>http.log</code>, etc.)</p>
-</li>
-<li>
-<p>Convert <code>conn.log</code> to CSV</p>
-</li>
-</ul>
-<pre><code class="language-bash">zeek-cut &lt; conn.log &gt; flows.csv
-</code></pre>
-<hr />
-<h3>Option 2: CICFlowMeter (Alternative)</h3>
-<pre><code class="language-bash">java -jar CICFlowMeter.jar -f traffic_capture.pcap -c flows.csv
-</code></pre>
-<hr />
-<h3>Required Deliverables</h3>
-<p>Students must:</p>
-<ul>
-<li>
-<p>Explain what features were extracted</p>
-</li>
-<li>
-<p>Identify flow identifiers</p>
-</li>
-<li>
-<p>Justify feature relevance to intrusion detection</p>
-</li>
-</ul>
-<p>Marks are for <strong>understanding</strong>, not tool mastery.</p>
-<hr />
-<h2>Part C: Data Cleaning &amp; Feature Engineering (15%)</h2>
-<p>Students now repeat <strong>Week 1 + Midterm skills</strong>, but on <em>real data</em>.</p>
-<p>Required tasks:</p>
-<ul>
-<li>
-<p>Handle missing values</p>
-</li>
-<li>
-<p>Remove duplicates</p>
-</li>
-<li>
-<p>Fix inconsistent protocol labels</p>
-</li>
-<li>
-<p>Create at least <strong>one new feature</strong>, e.g.:</p>
-</li>
-</ul>
-<pre><code class="language-python">df[&quot;bytes_per_packet&quot;] = df[&quot;total_bytes&quot;] / df[&quot;total_packets&quot;]
-</code></pre>
-<p>Explain <strong>security relevance</strong>.</p>
-<hr />
-<h2>Part D: Deep Learning Model 1 — Supervised IDS (20%)</h2>
-<p>Students must build a <strong>fully connected neural network</strong>.</p>
-<h3>Dataset</h3>
-<ul>
-<li>
-<p>Label traffic as:</p>
-</li>
-<li>
-<p>benign</p>
-</li>
-<li>
-<p>suspicious<br />
-    (Labels may be provided or rule-derived.)</p>
-</li>
-</ul>
-<h3>Architecture</h3>
-<ul>
-<li>
-<p>Input: flow features</p>
-</li>
-<li>
-<p>Hidden layers: ReLU</p>
-</li>
-<li>
-<p>Output: Sigmoid</p>
-</li>
-</ul>
-<p>Explain:</p>
-<ul>
-<li>
-<p>Loss function</p>
-</li>
-<li>
-<p>Activation choices</p>
-</li>
-<li>
-<p>Overfitting risks</p>
-</li>
-</ul>
-<hr />
-<h2>Part E: Deep Learning Model 2 — Autoencoder IDS (Unsupervised) (20%)</h2>
-<p>This is the <strong>cybersecurity centerpiece</strong>.</p>
-<h3>Why Autoencoders?</h3>
-<ul>
-<li>
-<p>Detect unknown attacks</p>
-</li>
-<li>
-<p>Learn “normal traffic behaviour”</p>
-</li>
-<li>
-<p>Widely used in real IDS research</p>
-</li>
-</ul>
-<h3>Requirements</h3>
-<ul>
-<li>
-<p>Train only on benign traffic</p>
-</li>
-<li>
-<p>Compute reconstruction error</p>
-</li>
-<li>
-<p>Define anomaly threshold</p>
-</li>
-<li>
-<p>Flag suspicious flows</p>
-</li>
-</ul>
-<p>This directly links to <strong>zero-day attack detection</strong>.</p>
-<hr />
-<h2>Part F: Evaluation &amp; Security Interpretation (10%)</h2>
-<p>Students must:</p>
-<ul>
-<li>
-<p>Compare:</p>
-</li>
-<li>
-<p>ML (Midterm)</p>
-</li>
-<li>
-<p>Supervised DL</p>
-</li>
-<li>
-<p>Autoencoder DL</p>
-</li>
-<li>
-<p>Discuss:</p>
-</li>
-<li>
-<p>False positives vs false negatives</p>
-</li>
-<li>
-<p>Alert fatigue</p>
-</li>
-<li>
-<p>Real deployment challenges</p>
-</li>
-</ul>
-<hr />
-<h2>Part G: Reflection &amp; Future Work (5%)</h2>
-<p>Students must answer:</p>
-<ul>
-<li>
-<p>What attacks would this system miss?</p>
-</li>
-<li>
-<p>How could attackers evade detection?</p>
-</li>
-<li>
-<p>How would raw packet DL (CNNs) improve this?</p>
-</li>
-<li>
-<p>What are ethical risks of automated IDS?</p>
-</li>
-</ul>
-<hr />
-<h2>7. Deliverables</h2>
-<h3>1. Jupyter Notebook</h3>
-<p>Must include:</p>
-<ul>
-<li>
-<p>PCAP processing explanation</p>
-</li>
-<li>
-<p>Feature extraction evidence</p>
-</li>
-<li>
-<p>Plots and models</p>
-</li>
-<li>
-<p>Markdown explanations</p>
-</li>
-</ul>
-<h3>2. Technical Report (4–6 pages)</h3>
-<p>Sections:</p>
-<ul>
-<li>
-<p>Introduction</p>
-</li>
-<li>
-<p>PCAP processing</p>
-</li>
-<li>
-<p>Feature engineering</p>
-</li>
-<li>
-<p>DL models</p>
-</li>
-<li>
-<p>Results</p>
-</li>
-<li>
-<p>Cybersecurity implications</p>
-</li>
-</ul>
-<hr />
-<h2>8. Marking Rubric (Final)</h2>
+<h2>4. Marking Rubric (General Categories)</h2>
+<p>Most projects will be graded based on the following weighted criteria:</p>
 <table>
 <thead>
 <tr>
-<th>Section</th>
-<th>Marks</th>
+<th style="text-align: left;">Component</th>
+<th style="text-align: left;">Weight</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>PCAP understanding</td>
-<td>10</td>
+<td style="text-align: left;">Data Preprocessing &amp; Engineering</td>
+<td style="text-align: left;">25%</td>
 </tr>
 <tr>
-<td>Feature extraction</td>
-<td>20</td>
+<td style="text-align: left;">Model Architecture &amp; Implementation</td>
+<td style="text-align: left;">40%</td>
 </tr>
 <tr>
-<td>Data cleaning</td>
-<td>15</td>
+<td style="text-align: left;">Evaluation &amp; Results Analysis</td>
+<td style="text-align: left;">20%</td>
 </tr>
 <tr>
-<td>Supervised DL</td>
-<td>20</td>
-</tr>
-<tr>
-<td>Autoencoder IDS</td>
-<td>20</td>
-</tr>
-<tr>
-<td>Interpretation</td>
-<td>10</td>
-</tr>
-<tr>
-<td>Reflection</td>
-<td>5</td>
-</tr>
-<tr>
-<td><strong>Total</strong></td>
-<td><strong>100</strong></td>
+<td style="text-align: left;">Report Quality &amp; Presentation</td>
+<td style="text-align: left;">15%</td>
 </tr>
 </tbody>
 </table>
-<hr />
-<h2>9. Expertise You Will Acquire After This Project</h2>
-<p>Completing this project demonstrates mastery of the following high-demand skills:</p>
+<h2>5. Submission Instructions</h2>
 <ul>
 <li>
-<p><strong>End-to-End Pipeline Engineering</strong>: Moving from raw binary data (PCAP) to actionable AI insights.</p>
+<p>Upload your files to Blackboard before the deadline.</p>
 </li>
 <li>
-<p><strong>Real-World Cybersecurity Workflow</strong>: Applying AI not just as a math exercise, but as a tool for Security Operations (SOC).</p>
-</li>
-<li>
-<p><strong>Advanced Deep Learning Architecture</strong>: Implementing Autoencoders for anomaly detection (Zero-Day defense).</p>
-</li>
-<li>
-<p><strong>Critical Evaluation</strong>: Distinguishing between statistical success and security reality (addressing False Positives).</p>
-</li>
-<li>
-<p><strong>Industry &amp; Research Alignment</strong>: Using tools (Zeek, PyTorch) and methods found in top-tier security research.</p>
+<p>Ensure your names and student numbers are clearly visible on all documents.</p>
 </li>
 </ul>
+<hr />
+<p><strong><a href="Week_12_Brief.html">Launch the Project Brief Page to Choose Your Path</a></strong></p>
             
             
 <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
