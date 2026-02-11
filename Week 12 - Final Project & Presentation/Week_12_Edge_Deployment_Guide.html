@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 12 Project Ids - AI Course</title>
+    <title>Week 12 Edge Deployment Guide - AI Course</title>
     
 <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -160,208 +160,123 @@
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-3xl font-bold text-secondary m-0">Final Project & Presentation</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Week 12 Project IDS</span>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Week 12 Edge Deployment Guide</span>
     </div>
 </div>
 
             
             
 
-<p><a href="Week_12_Student_Notes.html">← Back to Project Overview</a> | <a href="Week_12_Brief.html">← Back to Project Brief Page</a></p>
-<p><strong>Module</strong>: Artificial Intelligence (AI)<br />
-<strong>Level</strong>: Undergraduate (Final Project)<br />
-<strong>Topic</strong>: Cybersecurity Analytics with Deep Learning<br />
-<strong>Prerequisite</strong>: Midterm Project (ML-based IDS on flow CSV)</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Project Goal</strong>:<br />
-This is it—the culmination of your semester. You will combine your cybersecurity knowledge with your new AI skills to build an <strong>End-to-End Intrusion Detection System (IDS)</strong>. You will take raw network traffic (PCAP), clean it, engineer features, and train a Deep Learning model to hunt for attacks. This mirrors the real-world workflow of a Security Operations Center (SOC) analyst or AI Security Engineer.</p></div></div>
+<p><a href="Week_12_Project_IDS.html">← Back to IDS Project Details</a></p>
 <hr />
-<h2>1. Big Picture Progression</h2>
-<p>Students now complete the <strong>entire security ML pipeline</strong>:</p>
-<pre><code>PCAP
- ↓
-Traffic Feature Extraction (Zeek / CICFlowMeter)
- ↓
-Data Cleaning &amp; Feature Engineering
- ↓
-Deep Learning Models (Supervised &amp; Unsupervised)
- ↓
-Intrusion Detection Analysis
-</code></pre>
-<p>This closes the loop that started in <strong>Week 1</strong>.</p>
-<hr />
-<h2>2. Project Scenario</h2>
-<blockquote>
-<p>Your organisation suspects malicious activity on its internal network.</p>
-<p>A <strong>packet capture (PCAP)</strong> was taken at the network gateway.</p>
-<p>You are tasked with:</p>
-<ol>
-<li>Extracting meaningful features from the PCAP</li>
-<li>Preparing the data for Deep Learning</li>
-<li>Designing a <strong>Deep Learning–based Intrusion Detection System (DL-IDS)</strong></li>
-<li>Detecting suspicious network behaviour</li>
-</ol>
-</blockquote>
-<p>This mirrors <strong>real SOC and blue-team workflows</strong>.</p>
-<hr />
-<h2>3. Learning Outcomes</h2>
-<ol>
-<li>Understanding of PCAP structure</li>
-<li>Ability to extract <strong>flow-level features</strong></li>
-<li>Ability to design <strong>DL pipelines for security</strong></li>
-<li>Understanding of <strong>temporal and behavioural attacks</strong></li>
-<li>Cybersecurity-driven interpretation of AI results</li>
-</ol>
-<hr />
-<h2>4. Tools &amp; Constraints</h2>
-<h3>Mandatory Tools</h3>
-<ul>
-<li>
-<p><strong>Zeek OR CICFlowMeter</strong> (feature extraction)</p>
-</li>
-<li>
-<p><strong>Python (NumPy, Pandas, Matplotlib)</strong></p>
-</li>
-<li>
-<p><strong>TensorFlow / PyTorch</strong></p>
-</li>
-</ul>
-<h3>Explicitly NOT Required</h3>
-<p>❌ Writing packet parsers<br />
-❌ Deep protocol decoding</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base">Focus is <strong>security analytics</strong>, not packet engineering.</p></div></div>
-<hr />
-<h2>5. Provided Resources</h2>
-<p>Students receive:</p>
-<ul>
-<li>
-<p><code>traffic_capture.pcap</code></p>
-</li>
-<li>
-<p>Optionally: <code>attack_capture.pcap</code></p>
-</li>
-</ul>
-<hr />
-<h2>6. Project Structure (Graded Pipeline)</h2>
-<h3>Part A: Understanding PCAP &amp; Traffic Flows (10%)</h3>
-<p>Students must explain (Markdown):</p>
-<ul>
-<li>
-<p>What a PCAP file contains</p>
-</li>
-<li>
-<p>Difference between packets and flows</p>
-</li>
-<li>
-<p>Why feature extraction is required</p>
-</li>
-</ul>
-<h3>Part B: PCAP → Flow Feature Extraction (20%)</h3>
-<p>This is the <strong>core upgrade</strong> from the midterm.</p>
-<ul>
-<li>
-<p>Use <strong>Zeek</strong> or <strong>CICFlowMeter</strong> to convert PCAP to CSV.</p>
-</li>
-<li>
-<p>Explain the features extracted.</p>
-</li>
-</ul>
-<h3>Part C: Data Cleaning &amp; Feature Engineering (15%)</h3>
-<ul>
-<li>
-<p>Handle missing values and duplicates.</p>
-</li>
-<li>
-<p>Create at least <strong>one new feature</strong> (e.g., bytes per packet).</p>
-</li>
-</ul>
-<h3>Part D: Deep Learning Model 1 — Supervised IDS (20%)</h3>
-<ul>
-<li>
-<p>Build a fully connected neural network (Dense Layers).</p>
-</li>
-<li>
-<p>Classify flows as Benign or Suspicious.</p>
-</li>
-</ul>
-<h3>Part E: Deep Learning Model 2 — Autoencoder IDS (20%)</h3>
-<ul>
-<li>
-<p><strong>Cybersecurity centerpiece</strong>: Anomaly detection.</p>
-</li>
-<li>
-<p>Train only on benign traffic to learn "normal" behavior.</p>
-</li>
-<li>
-<p>Use reconstruction error to flag zero-day attacks.</p>
-</li>
-</ul>
-<h3>Part F: Evaluation &amp; Security Interpretation (10%)</h3>
-<ul>
-<li>
-<p>Compare Supervised vs. Unsupervised models.</p>
-</li>
-<li>
-<p>Discuss False Positives/Negatives and Alert Fatigue.</p>
-</li>
-</ul>
-<h3>Part G: Reflection &amp; Future Work (5%)</h3>
-<ul>
-<li>Discuss evasion techniques and ethical risks.</li>
-</ul>
-<hr />
-<h2>7. Deliverables</h2>
-<ol>
-<li><strong>Jupyter Notebook</strong>: Complete pipeline with explanations.</li>
-<li><strong>Technical Report</strong>: 4–6 page PDF detailing methodology and results.</li>
-</ol>
-<hr />
-<h2>8. Marking Rubric</h2>
+<h2>1. Overview</h2>
+<p>Edge AI allows you to move your Intrusion Detection System from a batch-processing notebook to a real-time network appliance. This guide covers deployment on two popular platforms: the <strong>NVIDIA Jetson Orin Nano</strong> and the <strong>Raspberry Pi</strong>.</p>
+<h2>2. Platform Comparison</h2>
 <table>
 <thead>
 <tr>
-<th>Section</th>
-<th>Marks</th>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">NVIDIA Jetson Orin Nano</th>
+<th style="text-align: left;">Raspberry Pi (4/5)</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>PCAP understanding</td>
-<td>10</td>
+<td style="text-align: left;"><strong>Primary Processor</strong></td>
+<td style="text-align: left;">6-core ARM v8.2</td>
+<td style="text-align: left;">4-core ARM v8 (Pi 4) / v8.2 (Pi 5)</td>
 </tr>
 <tr>
-<td>Feature extraction</td>
-<td>20</td>
+<td style="text-align: left;"><strong>AI Acceleration</strong></td>
+<td style="text-align: left;">1024-core Ampere GPU</td>
+<td style="text-align: left;">CPU-only (with NEON optimization)</td>
 </tr>
 <tr>
-<td>Data cleaning</td>
-<td>15</td>
+<td style="text-align: left;"><strong>Max Throughput</strong></td>
+<td style="text-align: left;">High (GBps-level processing)</td>
+<td style="text-align: left;">Medium (MBps-level processing)</td>
 </tr>
 <tr>
-<td>Supervised DL</td>
-<td>20</td>
+<td style="text-align: left;"><strong>Library Focus</strong></td>
+<td style="text-align: left;">TensorRT, CUDA</td>
+<td style="text-align: left;">TensorFlow Lite, OpenVINO</td>
 </tr>
 <tr>
-<td>Autoencoder IDS</td>
-<td>20</td>
-</tr>
-<tr>
-<td>Interpretation</td>
-<td>10</td>
-</tr>
-<tr>
-<td>Reflection</td>
-<td>5</td>
-</tr>
-<tr>
-<td><strong>Total</strong></td>
-<td><strong>100</strong></td>
+<td style="text-align: left;"><strong>Best For</strong></td>
+<td style="text-align: left;">Heavy Deep Learning / Video</td>
+<td style="text-align: left;">Portable / Low-power Security Probes</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>9. Hardware Track: Edge AI Deployment (Optional)</h2>
-<p>If you have an <strong>NVIDIA Jetson Orin Nano</strong> or a <strong>Raspberry Pi (4 or 5)</strong>, you can take your project to the next level by deploying your IDS as a real-time network appliance.</p>
-<p>See the dedicated <a href="Week_12_Edge_Deployment_Guide.html"><strong>Edge AI Deployment Guide</strong></a> for technical setup, model optimization (TensorRT/TFLite), and real-time traffic sniffing instructions.</p>
+<h2>3. NVIDIA Jetson Track (GPU-Accelerated)</h2>
+<h3>Technical Goal</h3>
+<p>Use the hardware-specific <strong>TensorRT</strong> library to compile your model for maximum performance.</p>
+<h3>Steps:</h3>
+<ol>
+<li><strong>Export</strong>: Convert your PyTorch or TensorFlow model to <strong>ONNX</strong> format.</li>
+<li><strong>Optimize</strong>: Use the <code>trtexec</code> tool on the Jetson to compile the ONNX model into a <code>.trt</code> engine.</li>
+<li><strong>Inference</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Use the <code>jetson-inference</code> or <code>tensorrt</code> Python libraries.</p>
+</li>
+<li>
+<p>The GPU handles the 1024+ parallel operations required for deep neural networks.<br />
+4.  <strong>Real-time Sniffing</strong>: Use <code>Scapy</code> in a background thread to capture raw packets, extract flow features, and feed them to the TensorRT engine.</p>
+</li>
+</ul>
+<hr />
+<h2>4. Raspberry Pi Track (CPU-Optimized)</h2>
+<h3>Technical Goal</h3>
+<p>Can a Pi achieve the same? <strong>Yes.</strong> By using <strong>TensorFlow Lite (TFLite)</strong>, you can perform efficient inference on the Pi's ARM processor.</p>
+<h3>Steps:</h3>
+<ol>
+<li><strong>Quantization</strong>: Convert your model to a <code>.tflite</code> format.</li>
+</ol>
+<ul>
+<li>
+<p><em>Tip</em>: Use <strong>Int8 Quantization</strong> to reduce the model size by 4x and speed up inference by using integer math instead of floating-point.<br />
+2.  <strong>Optimization</strong>: Enable <strong>XNNPACK</strong> or use the <strong>Raspberry Pi AI Kit</strong> (if available) for NPU acceleration.<br />
+3.  <strong>Inference</strong>:</p>
+</li>
+<li>
+<p>Use the <code>tflite-runtime</code> library.</p>
+</li>
+<li>
+<p>Even without a GPU, the Pi 5 can process thousands of network flows per second using optimized CPU instructions (NEON).<br />
+4.  <strong>Edge Probe Setup</strong>:</p>
+</li>
+<li>
+<p>Set the Pi's ethernet port to <strong>Promiscuous Mode</strong>.</p>
+</li>
+<li>
+<p>Use a lightweight feature extractor like a custom Python script to minimize overhead.</p>
+</li>
+</ul>
+<hr />
+<h2>5. Unified Data Pipeline</h2>
+<p>Regardless of the device, your edge script will look like this:</p>
+<pre><code class="language-python">import scapy.all as scapy
+import tflite_runtime.interpreter as tflite # For Pi
+# or import tensorrt as trt # For Jetson
+
+def process_packet(packet):
+    # 1. Extract Features (Bytes, Port, IP Flags)
+    features = extract_flow_features(packet)
+
+    # 2. Inference
+    prediction = model.predict(features)
+
+    # 3. Alert
+    if prediction &gt; threshold:
+        print(f&quot;⚠️ MALICIOUS FLOW DETECTED: {packet.summary()}&quot;)
+
+scapy.sniff(iface=&quot;eth0&quot;, prn=process_packet, store=0)
+</code></pre>
+<h2>6. Conclusion</h2>
+<p>The <strong>Jetson</strong> is a powerhouse for complex, high-traffic environments, while the <strong>Raspberry Pi</strong> is an excellent, accessible choice for home-scale or distributed security monitoring. Both allow you to move from "offline analysis" to "active defense."</p>
             
             
         </article>
