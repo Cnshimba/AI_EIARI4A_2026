@@ -1,157 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project: NLP Sentiment Analyzer - Week 12</title>
-    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
-                    colors: {
-                        primary: '#002F6E',
-                        secondary: '#c9984a',
+    <title>Week 12 Project Nlp - AI Course</title>
+    
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: {
+                    primary: '#002F6E', // VUT Midnight Blue
+                    secondary: '#c9984a', // Gold
+                    background: '#f8fafc',
+                    card: '#ffffff',
+                },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#1e3a5f' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#1e3a5f' },
+                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
+                            'code::before': { content: '""' },
+                            'code::after': { content: '""' }
+                        }
                     },
-                    typography: {
-                        DEFAULT: {
-                            css: {
-                                color: '#334155',
-                                h1: { color: '#1e3a5f' },
-                                h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                                a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
-                                pre: { backgroundColor: '#0f0f0f', color: '#e2e8f0', borderLeft: '4px solid #c9984a' },
-                                code: { color: '#d63384', backgroundColor: '#f1f5f9' },
-                            }
-                        },
-                        dark: {
-                            css: {
-                                color: '#cbd5e1',
-                                h1: { color: '#38bdf8' },
-                                h2: { color: '#c9984a' },
-                                code: { color: '#f472b6', backgroundColor: '#1e293b' }
-                            }
+                    dark: {
+                        css: {
+                            color: '#cbd5e1',
+                            h1: { color: '#38bdf8' }, // Sky 400
+                            h2: { color: '#c9984a' },
+                            h3: { color: '#38bdf8' },
+                            a: { color: '#38bdf8', '&:hover': { color: '#c9984a' } },
+                            blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#94a3b8' },
+                            code: { color: '#f472b6', backgroundColor: '#1e293b' }
                         }
                     }
                 }
             }
         }
-    </script>
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    }
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const iconSun = document.getElementById('icon-sun');
+        const iconMoon = document.getElementById('icon-moon');
+
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+            iconSun.classList.remove('hidden');
+            iconMoon.classList.add('hidden');
+        } else {
+            html.classList.remove('dark');
+            iconSun.classList.add('hidden');
+            iconMoon.classList.remove('hidden');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+                iconSun.classList.add('hidden');
+                iconMoon.classList.remove('hidden');
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+                iconSun.classList.remove('hidden');
+                iconMoon.classList.add('hidden');
+            }
+        });
+    });
+</script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <script>hljs.highlightAll();</script>
     <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else {
-            document.documentElement.classList.remove('dark');
-        }
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
     </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Glossary Tooltip */
+        .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
+        .glossary-term:hover { color: #1e3a5f; }
+        html.dark .glossary-term:hover { color: #ffffff; }
+
+        /* OPS3-Style Code Blocks (VUT Theme) */
+        pre {
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 20px !important;
+            margin: 20px 0 !important;
+            border-radius: 5px !important;
+            overflow-x: auto !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            color: #e2e8f0 !important;
+        }
+        code {
+            font-family: 'Courier New', monospace !important;
+        }
+        /* Override prose defaults */
+        .prose pre {
+            background-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
 </head>
-
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
-
-    <nav
-        class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700">
-        <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
-            <a href="Week_12_Student_Notes.html"
-                class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
-                <span class="font-bold text-lg">← Back to Project Hub</span>
-            </a>
+    
+<nav class="fixed top-0 left-0 right-0 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+    <div class="container mx-auto px-4 max-w-5xl h-16 flex items-center justify-between">
+        <a href="../index.html" class="flex items-center space-x-3 text-slate-900 dark:text-white hover:text-blue-600 transition-colors no-underline">
+            <div class="flex flex-col">
+                <span class="font-bold text-lg leading-tight tracking-tight text-primary dark:text-sky-400 hidden sm:block">Artificial Intelligence
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium hidden sm:block">AI Module 2026</span>
+                </span>
+            </div>
+        </a>
+        <div class="flex items-center space-x-6">
+            <a href="../index.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Course Home</a>
+            <a href="../glossary.html" class="text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-sky-400 transition-colors no-underline">Glossary</a>
+            <button id="theme-toggle" class="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <svg id="icon-sun" class="w-5 h-5 text-yellow-500 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                <svg id="icon-moon" class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
         </div>
-    </nav>
+    </div>
+</nav>
 
+    
     <main class="container mx-auto px-4 max-w-5xl mb-12">
-        <article
-            class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_12_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 12</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Final Project & Presentation</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Week 12 Project NLP</span>
+    </div>
+</div>
 
-            <div class="flex items-center space-x-4 mb-8">
-                <div class="p-3 rounded-full bg-secondary/10 text-secondary">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
-                        </path>
-                    </svg>
-                </div>
-                <h1 class="m-0 text-3xl font-bold text-primary dark:text-sky-400">Option B: NLP Sentiment Analyzer</h1>
-            </div>
+            
+            
 
-            <h2>Project: Text Analysis System</h2>
-            <p><strong>Goal:</strong> Build a Natural Language Processing model to automatically classify text based on
-                emotion, sentiment (Positive/Negative/Neutral), or topic.</p>
-
-            <div
-                class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300">
-                <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                </svg>
-                <div class="flex-1 text-sm md:text-base"><strong>Specific Learning Outcomes</strong><br />
-                    1. Master Text Preprocessing (Tokenization, Lemmatization, Stop-words).<br />
-                    2. Implement and Compare Sparse (TF-IDF) vs Dense (Embeddings) representations.<br />
-                    3. Train Sequence models (RNNs) or Dense Classifiers for text.</div>
-            </div>
-
-            <hr />
-
-            <h2>1. The Scenario</h2>
-            <blockquote>
-                <p>Social media feeds, product reviews, and customer support tickets generate massive amounts of
-                    unstructured text. Your task is to build an engine that reads this text and tags it. E.g., flagging
-                    "Urgent" support tickets or tracking the sentiment of a brand launch on Twitter.</p>
-            </blockquote>
-
-            <h2>2. Tools & Constraints</h2>
-            <ul>
-                <li><strong>Dataset:</strong> IMDb Reviews, Amazon Products, Twitter Sentiment sets (Kaggle).</li>
-                <li><strong>Libraries:</strong> NLTK/Spacy (preprocessing), TensorFlow/PyTorch (Modeling).</li>
-                <li><strong>Constraint:</strong> You must implement <strong>Correction/Cleaning logic</strong> (handling
-                    emojis, slang, or URLs) specifically.</li>
-            </ul>
-
-            <hr />
-
-            <h2>3. Step-by-Step Pipeline</h2>
-
-            <h3>Step 1: Text Preprocessing (The Heavy Lifting)</h3>
-            <p>You cannot feed raw strings to a model.</p>
-            <ul>
-                <li><strong>Cleaning:</strong> Lowercasing, removing punctuation/HTML tags.</li>
-                <li><strong>Tokenization:</strong> Splitting sentences into words.</li>
-                <li><strong>Normalization:</strong> Lemmatization (running -> run) or Stemming.</li>
-                <li><strong>Stop Word Removal:</strong> removing "the", "is", "at".</li>
-            </ul>
-
-            <h3>Step 2: Vectorization (The Core Requirement)</h3>
-            <p>You must implement <strong>TWO</strong> approaches and compare them:</p>
-            <ol>
-                <li><strong>Approach A (Traditional):</strong> Bag-of-Words or TF-IDF. (Sparse vectors).</li>
-                <li><strong>Approach B (Modern):</strong> Word Embeddings. Use a pre-trained embedding (GloVe/Word2Vec)
-                    OR learn an Embedding layer (Keras <code>Embedding</code>).</li>
-            </ol>
-
-            <h3>Step 3: Model Architecture</h3>
-            <ul>
-                <li><strong>For Approach A:</strong> Logistic Regression or a simple Dense Neural Network.</li>
-                <li><strong>For Approach B:</strong> An LSTM/GRU layer or 1D-CNN layer to capture context.</li>
-            </ul>
-
-            <h3>Step 4: Training & Evaluation</h3>
-            <ul>
-                <li>Compare the accuracy of Approach A vs Approach B.</li>
-                <li>Does the Embedding model understand "Not bad" (positive) better than the Bag-of-Words model?</li>
-                <li><strong>Test Case:</strong> Create a list of 5 tricky sentences (sarcasm, double negatives) and see
-                    how your model predicts them.</li>
-            </ul>
-
+<p><a href="Week_12_Student_Notes.html">← Back to Project Overview</a></p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Project Goal</strong>:<br />
+Build a Natural Language Processing model to automatically classify text based on emotion, sentiment (Positive/Negative/Neutral), or topic. You will master text preprocessing, dense vs sparse representations, and sequence modeling.</p></div></div>
+<hr />
+<h2>1. The Scenario</h2>
+<p>Social media feeds, product reviews, and customer support tickets generate massive amounts of unstructured text. Your task is to build an engine that reads this text and tags it. E.g., flagging "Urgent" support tickets or tracking the sentiment of a brand launch on Twitter.</p>
+<hr />
+<h2>2. Tools &amp; Constraints</h2>
+<ul>
+<li>
+<p><strong>Dataset</strong>: IMDb Reviews, Amazon Products, Twitter Sentiment sets (Kaggle).</p>
+</li>
+<li>
+<p><strong>Libraries</strong>: NLTK/Spacy (preprocessing), TensorFlow/PyTorch (Modeling).</p>
+</li>
+<li>
+<p><strong>Constraint</strong>: You must implement <strong>Correction/Cleaning logic</strong> (handling emojis, slang, or URLs) specifically.</p>
+</li>
+</ul>
+<hr />
+<h2>3. Step-by-Step Pipeline</h2>
+<h3>Step 1: Text Preprocessing (The Heavy Lifting)</h3>
+<p>You cannot feed raw strings to a model.</p>
+<ul>
+<li>
+<p><strong>Cleaning</strong>: Lowercasing, removing punctuation/HTML tags.</p>
+</li>
+<li>
+<p><strong>Tokenization</strong>: Splitting sentences into words.</p>
+</li>
+<li>
+<p><strong>Normalization</strong>: Lemmatization (running -&gt; run) or Stemming.</p>
+</li>
+<li>
+<p><strong>Stop Word Removal</strong>: removing "the", "is", "at".</p>
+</li>
+</ul>
+<h3>Step 2: Vectorization (The Core Requirement)</h3>
+<p>You must implement <strong>TWO</strong> approaches and compare them:<br />
+1. <strong>Approach A (Traditional)</strong>: Bag-of-Words or TF-IDF. (Sparse vectors).<br />
+2. <strong>Approach B (Modern)</strong>: Word Embeddings. Use a pre-trained embedding (GloVe/Word2Vec) OR learn an Embedding layer (Keras <code>Embedding</code>).</p>
+<h3>Step 3: Model Architecture</h3>
+<ul>
+<li>
+<p><strong>For Approach A</strong>: Logistic Regression or a simple Dense Neural Network.</p>
+</li>
+<li>
+<p><strong>For Approach B</strong>: An LSTM/GRU layer or 1D-CNN layer to capture context.</p>
+</li>
+</ul>
+<h3>Step 4: Training &amp; Evaluation</h3>
+<ul>
+<li>
+<p>Compare the accuracy of Approach A vs Approach B.</p>
+</li>
+<li>
+<p>Does the Embedding model understand "Not bad" (positive) better than the Bag-of-Words model?</p>
+</li>
+<li>
+<p><strong>Test Case</strong>: Create a list of 5 tricky sentences (sarcasm, double negatives) and see how your model predicts them.</p>
+</li>
+</ul>
+            
+            
         </article>
     </main>
-</body>
 
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+
+    
+<div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
+    
+                        <a href="../Week%2011%20-%20AI%20Ethics,%20Bias,%20and%20Responsible%20AI/Week_11_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                            </div>
+                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 11</span>
+                        </a>
+                        
+    
+    <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
+             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+        </div>
+        <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
+    </a>
+
+    
+</div>
+
+</body>
 </html>
