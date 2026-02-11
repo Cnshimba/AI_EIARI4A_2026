@@ -202,17 +202,50 @@
 <td style="text-align: left;">TensorFlow Lite, OpenVINO</td>
 </tr>
 <tr>
+<td style="text-align: left;"><strong>Vision Potential</strong></td>
+<td style="text-align: left;">Real-time 4K / Multi-stream</td>
+<td style="text-align: left;">Real-time 1080p / Single stream</td>
+</tr>
+<tr>
 <td style="text-align: left;"><strong>Best For</strong></td>
-<td style="text-align: left;">Heavy Deep Learning / Video</td>
-<td style="text-align: left;">Portable / Low-power Security Probes</td>
+<td style="text-align: left;">Heavy DL / Complex Vision</td>
+<td style="text-align: left;">Portable Probes / Edge Classification</td>
 </tr>
 </tbody>
 </table>
 <hr />
-<h2>3. NVIDIA Jetson Track (GPU-Accelerated)</h2>
+<h2>3. Computer Vision Track (Jetson &amp; Pi + Camera)</h2>
+<h3>Technical Goal</h3>
+<p>Deploy your trained image classifier to recognize objects in a live video stream from a CSI or USB camera module.</p>
+<h3>Vision Steps:</h3>
+<ol>
+<li><strong>Camera Interfacing</strong>:</li>
+</ol>
+<ul>
+<li>
+<p>Use <strong>OpenCV (<code>cv2</code>)</strong> to capture frames.</p>
+</li>
+<li>
+<p><em>Pro Tip</em>: Map the GStreamer pipeline for Jetson CSI cameras for lower latency.<br />
+2.  <strong>Preprocessing on the Fly</strong>:</p>
+</li>
+<li>
+<p>Resize, normalize, and transpose frames in the capture loop before feeding them to the model.<br />
+3.  <strong>Optimization</strong>:</p>
+</li>
+<li>
+<p><strong>Jetson</strong>: Use <code>jetson.utils</code> for zero-copy memory between camera and GPU.</p>
+</li>
+<li>
+<p><strong>Raspberry Pi</strong>: Use the <strong>Camera Serial Interface (CSI)</strong> for lower CPU usage compared to USB.<br />
+4.  <strong>Display</strong>: Overlay the predicted class name and confidence score on the video frame using <code>cv2.putText()</code>.</p>
+</li>
+</ul>
+<hr />
+<h2>4. Cybersecurity IDS Track (Jetson &amp; Pi + Network)</h2>
 <h3>Technical Goal</h3>
 <p>Use the hardware-specific <strong>TensorRT</strong> library to compile your model for maximum performance.</p>
-<h3>Steps:</h3>
+<h3>IDS Steps:</h3>
 <ol>
 <li><strong>Export</strong>: Convert your PyTorch or TensorFlow model to <strong>ONNX</strong> format.</li>
 <li><strong>Optimize</strong>: Use the <code>trtexec</code> tool on the Jetson to compile the ONNX model into a <code>.trt</code> engine.</li>
@@ -228,10 +261,10 @@
 </li>
 </ul>
 <hr />
-<h2>4. Raspberry Pi Track (CPU-Optimized)</h2>
+<h2>5. Raspberry Pi Specific Optimization (CPU)</h2>
 <h3>Technical Goal</h3>
 <p>Can a Pi achieve the same? <strong>Yes.</strong> By using <strong>TensorFlow Lite (TFLite)</strong>, you can perform efficient inference on the Pi's ARM processor.</p>
-<h3>Steps:</h3>
+<h3>Pi Optimization Steps:</h3>
 <ol>
 <li><strong>Quantization</strong>: Convert your model to a <code>.tflite</code> format.</li>
 </ol>
@@ -245,38 +278,19 @@
 <p>Use the <code>tflite-runtime</code> library.</p>
 </li>
 <li>
-<p>Even without a GPU, the Pi 5 can process thousands of network flows per second using optimized CPU instructions (NEON).<br />
-4.  <strong>Edge Probe Setup</strong>:</p>
-</li>
-<li>
-<p>Set the Pi's ethernet port to <strong>Promiscuous Mode</strong>.</p>
-</li>
-<li>
-<p>Use a lightweight feature extractor like a custom Python script to minimize overhead.</p>
+<p>Even without a GPU, the Pi 5 can process thousands of samples per second using optimized CPU instructions (NEON).</p>
 </li>
 </ul>
 <hr />
-<h2>5. Unified Data Pipeline</h2>
-<p>Regardless of the device, your edge script will look like this:</p>
-<pre><code class="language-python">import scapy.all as scapy
+<h2>6. Unified Data Pipeline</h2>
+<p>Regardless of the device or track, your edge script will look like this:</p>
+<pre><code class="language-python">import scapy.all as scapy # For IDS
+import cv2 # For Vision
 import tflite_runtime.interpreter as tflite # For Pi
 # or import tensorrt as trt # For Jetson
-
-def process_packet(packet):
-    # 1. Extract Features (Bytes, Port, IP Flags)
-    features = extract_flow_features(packet)
-
-    # 2. Inference
-    prediction = model.predict(features)
-
-    # 3. Alert
-    if prediction &gt; threshold:
-        print(f&quot;⚠️ MALICIOUS FLOW DETECTED: {packet.summary()}&quot;)
-
-scapy.sniff(iface=&quot;eth0&quot;, prn=process_packet, store=0)
 </code></pre>
-<h2>6. Conclusion</h2>
-<p>The <strong>Jetson</strong> is a powerhouse for complex, high-traffic environments, while the <strong>Raspberry Pi</strong> is an excellent, accessible choice for home-scale or distributed security monitoring. Both allow you to move from "offline analysis" to "active defense."</p>
+<h2>7. Conclusion</h2>
+<p>The <strong>Jetson</strong> is a powerhouse for complex, high-traffic or high-resolution environments, while the <strong>Raspberry Pi</strong> is an excellent, accessible choice for portable probes and localized vision tasks. Both allow you to move from "offline analysis" to "active edge intelligence."</p>
             
             
         </article>
