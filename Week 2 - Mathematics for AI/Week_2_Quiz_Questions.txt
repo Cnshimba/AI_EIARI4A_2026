@@ -1,0 +1,643 @@
+1. What is a vector, geometrically speaking?
+*a) An arrow in space with direction and magnitude.
+b) A grid of numbers.
+c) A single floating-point number.
+d) A type of Python list.
+
+2. In Computer Science, how is a vector typically represented?
+*a) As a list of numbers (coordinates).
+b) As a dictionary of key-value pairs.
+c) As a binary tree.
+d) As a linked list.
+
+3. In AI, what are "Word Vectors" (Embeddings) used for?
+*a) Representing the meaning of words as numerical vectors in NLP.
+b) Counting the frequency of letters in a word.
+c) Storing entire dictionaries in memory.
+d) Compressing audio files.
+
+4. What is a Matrix best described as, in the context of AI?
+*a) A machine that transforms an input vector into a new, transformed vector.
+b) A simple grid of numbers with no geometric meaning.
+c) A type of database table.
+d) A sorting algorithm.
+
+5. What does a Matrix transformation do to the geometric space vectors live in?
+*a) It can rotate, stretch, or shear the grid.
+b) It only adds numbers to each element.
+c) It deletes half the data points.
+d) It converts vectors into strings.
+
+6. What is the result of multiplying a vector x by a matrix A?
+*a) A new, transformed vector b (Ax = b).
+b) A scalar (single number).
+c) A string of characters.
+d) An error; matrices and vectors cannot be multiplied.
+
+7. Neural Networks are fundamentally chains of what mathematical operation?
+*a) Matrix transformations.
+b) String concatenations.
+c) Sorting algorithms.
+d) File compressions.
+
+8. What does the Dot Product measure between two vectors?
+*a) The alignment (similarity) between them.
+b) The physical distance between their tips.
+c) The number of dimensions they occupy.
+d) The average of their components.
+
+9. If two vectors are perpendicular (90 degrees apart), what is their Dot Product?
+*a) Zero.
+b) Positive infinity.
+c) Negative one.
+d) One.
+
+10. If two vectors point in the same direction, their Dot Product is:
+*a) A high positive score.
+b) Zero.
+c) A high negative score.
+d) Undefined.
+
+11. What is the formula for the Dot Product of vectors a and b?
+*a) The sum of the products of their corresponding elements (Σ aᵢbᵢ).
+b) The product of their magnitudes.
+c) The difference of their sums.
+d) The square root of their sum.
+
+12. The Dot Product is the heartbeat of which modern AI mechanism?
+*a) The Attention Mechanism in Transformers (e.g., GPT-4).
+b) The Sorting Algorithm in databases.
+c) The File Compression in ZIP files.
+d) The Color Rendering in monitors.
+
+13. What are Eigenvectors?
+*a) Vectors that only get scaled (stretched) by a matrix transformation, not rotated.
+b) Vectors that always point upward.
+c) Vectors with zero magnitude.
+d) Vectors that are always perpendicular to each other.
+
+14. What is an Eigenvalue?
+*a) The scaling factor by which an Eigenvector is stretched.
+b) The angle of rotation of a vector.
+c) The number of dimensions in a matrix.
+d) The determinant of a vector.
+
+15. Eigenvalues and Eigenvectors are the math behind which AI technique?
+*a) Principal Component Analysis (PCA).
+b) Gradient Descent.
+c) Backpropagation.
+d) Bayes' Theorem.
+
+16. What is the purpose of PCA (Principal Component Analysis)?
+*a) To compress data by keeping only the directions where data varies the most.
+b) To increase the number of features in a dataset.
+c) To add noise to data for better training.
+d) To convert images into text.
+
+17. In the context of AI learning, what does "Gradient Descent" do?
+*a) Iteratively adjusts parameters by stepping in the direction that reduces error.
+b) Increases the learning rate until the model converges.
+c) Randomly changes weights until the error is zero.
+d) Copies weights from a pre-trained model.
+
+18. In the foggy mountain analogy, what does the "mountain" represent?
+*a) The Error/Loss landscape.
+b) The training dataset.
+c) The number of neurons.
+d) The GPU memory.
+
+19. What does the Gradient (∇f) point towards?
+*a) Uphill (the direction of steepest ascent).
+b) Downhill (the direction of steepest descent).
+c) Sideways (perpendicular to the slope).
+d) Nowhere; it is a scalar value.
+
+20. In Gradient Descent, we step in which direction relative to the Gradient?
+*a) The opposite direction (downhill).
+b) The same direction (uphill).
+c) A random direction.
+d) The perpendicular direction.
+
+21. What is the "Learning Rate" in Gradient Descent?
+*a) The step size that controls how far we move with each update.
+b) The total number of training epochs.
+c) The speed of the CPU.
+d) The size of the dataset.
+
+22. What is the correct Gradient Descent update rule?
+*a) θ_new = θ_old − LearningRate × ∇f
+b) θ_new = θ_old + LearningRate × ∇f
+c) θ_new = θ_old × LearningRate
+d) θ_new = θ_old / ∇f
+
+23. The gradient of f(x) = x² with respect to x is:
+*a) 2x
+b) x
+c) x²
+d) 2
+
+24. What happens if the Learning Rate is too large?
+*a) The model may overshoot the minimum and diverge.
+b) The model will always converge faster.
+c) Nothing changes.
+d) The model stops training immediately.
+
+25. What happens if the Learning Rate is too small?
+*a) Training becomes extremely slow and may get stuck in a local minimum.
+b) The model converges instantly.
+c) The model overshoots the minimum.
+d) The weights are randomized each step.
+
+26. What is the Loss Function in the context of Gradient Descent?
+*a) The function that measures the difference between the model's prediction and the correct answer.
+b) The function that generates random data.
+c) The activation function in a neuron.
+d) The function that loads data from disk.
+
+27. What does the Chain Rule in calculus allow us to calculate?
+*a) The derivative of a composite function (function of a function).
+b) The sum of two matrices.
+c) The dot product of two vectors.
+d) The eigenvalues of a matrix.
+
+28. The Chain Rule is the mathematical foundation of which AI algorithm?
+*a) Backpropagation.
+b) K-Means Clustering.
+c) Random Forest.
+d) PCA.
+
+29. Why is the Chain Rule essential for Deep Learning?
+*a) It allows error gradients to be propagated backwards through multiple layers.
+b) It speeds up matrix multiplication.
+c) It reduces the number of layers needed.
+d) It removes the need for a Loss Function.
+
+30. The Chain Rule formula dz/dx = (dz/dy) × (dy/dx) represents:
+*a) Rippling the error backwards through a chain of functions, assigning blame to each layer.
+b) Adding the derivatives of two independent functions.
+c) Computing the area under a curve.
+d) Finding the maximum of a function.
+
+31. What does Bayes' Theorem help us do?
+*a) Update our beliefs based on new evidence.
+b) Calculate the exact future outcome.
+c) Sort data alphabetically.
+d) Compress images losslessly.
+
+32. In Bayes' Theorem, what is the "Prior"?
+*a) What you believed before seeing the evidence.
+b) The final updated belief.
+c) The observed data.
+d) The probability of any random event.
+
+33. In Bayes' Theorem, what is the "Posterior"?
+*a) The updated belief after considering the evidence.
+b) The original assumption before evidence.
+c) The raw data collected from sensors.
+d) The error rate of the model.
+
+34. In Bayes' Theorem, what is the "Evidence" (or Likelihood)?
+*a) The observed data that causes us to update our belief.
+b) The initial assumption.
+c) The final conclusion.
+d) The Loss Function value.
+
+35. What is the formula for Bayes' Theorem?
+*a) P(A|B) = [P(B|A) × P(A)] / P(B)
+b) P(A|B) = P(A) + P(B)
+c) P(A|B) = P(A) × P(B)
+d) P(A|B) = P(B) − P(A)
+
+36. In the spam filter example, if 40% of mail is spam (Prior) and "Buy" appears in 80% of spam, what does Bayes' Theorem calculate?
+*a) The probability that an email is spam given it contains "Buy" (Posterior).
+b) The probability that any email contains "Buy".
+c) The total number of spam emails.
+d) The length of the email.
+
+37. How do self-driving cars use Bayesian reasoning?
+*a) By updating their belief about the environment (map) using sensor data (evidence).
+b) By driving at a constant speed.
+c) By following a pre-programmed route without updating.
+d) By ignoring sensor data.
+
+38. In Linear Algebra, what does the @ operator do in Python (NumPy)?
+*a) Performs matrix multiplication (Dot Product).
+b) Performs element-wise addition.
+c) Compares two arrays for equality.
+d) Concatenates two strings.
+
+39. What is the purpose of np.dot(inputs, weights) in a neural network context?
+*a) Computing the weighted sum of inputs (the core neuron operation).
+b) Sorting the inputs by magnitude.
+c) Generating random weights.
+d) Plotting the inputs on a graph.
+
+40. True or False: A vector in AI is just an ordered list of numbers.
+True
+
+41. True or False: Neural Networks are chains of matrix transformations.
+True
+
+42. True or False: The Dot Product of two opposite-pointing vectors is positive.
+False
+
+43. True or False: Eigenvectors change direction when a matrix transformation is applied.
+False
+
+44. True or False: PCA uses Eigenvalues to determine which directions capture the most data variance.
+True
+
+45. True or False: In Gradient Descent, we move in the same direction as the gradient.
+False
+
+46. True or False: The Learning Rate controls the size of each step in Gradient Descent.
+True
+
+47. True or False: Backpropagation would not work without the Chain Rule.
+True
+
+48. True or False: Bayes' Theorem can only be used for spam filtering.
+False
+
+49. True or False: The Gradient always points in the direction of steepest descent.
+False
+
+50. True or False: A matrix can be thought of as a function that warps space.
+True
+
+51. In recommender systems (like Netflix), what does a user vector represent?
+*a) The user's taste profile as a list of numbers (e.g., preference for genres).
+b) The user's name and email.
+c) The user's viewing history as text.
+d) The user's Wi-Fi speed.
+
+52. Finding a movie recommendation for a user is essentially:
+*a) Finding another vector that points in the same direction as the user's taste vector.
+b) Randomly selecting a movie.
+c) Selecting the most expensive movie.
+d) Choosing the newest release.
+
+53. When a Deep Learning paper mentions "100 layers," it refers to:
+*a) 100 consecutive geometric distortions (matrix transformations) of the data.
+b) 100 different datasets being combined.
+c) 100 different programming languages used.
+d) 100 copies of the same model running in parallel.
+
+54. Deep Learning is essentially billions of what operation?
+*a) Dot Products calculating similarity scores.
+b) String comparisons.
+c) Database queries.
+d) File copy operations.
+
+55. In the Gradient Descent bowl analogy, what represents the "valley" (bottom)?
+*a) The point of minimum error (optimal weights).
+b) The starting position of the model.
+c) The maximum possible error.
+d) The data loading stage.
+
+56. What is the relationship between Gradient Descent and all Neural Networks?
+*a) Gradient Descent is how ALL Neural Networks learn (optimize their weights).
+b) Only some Neural Networks use Gradient Descent.
+c) Gradient Descent is only used for image recognition.
+d) Gradient Descent is a data preprocessing technique, not a learning algorithm.
+
+57. Without the Chain Rule, what limitation would Neural Networks face?
+*a) We couldn't update the weights in the early (first) layers of a deep network.
+b) We couldn't calculate the final output.
+c) We couldn't load data into the network.
+d) We couldn't use GPUs.
+
+58. In the spam filter Bayes' example, P(B|A) represents:
+*a) The probability of seeing the word "Buy" given the email IS spam.
+b) The probability of spam given the word "Buy".
+c) The total number of emails.
+d) The probability the email is not spam.
+
+59. "Active Learning" in AI uses Bayesian Uncertainty to:
+*a) Decide which data the model should learn from next.
+b) Delete unnecessary training data.
+c) Speed up GPU computation.
+d) Encrypt sensitive data.
+
+60. What are the three mathematical pillars covered in this chapter?
+*a) Linear Algebra (Structure), Calculus (Optimization), and Probability (Uncertainty).
+b) Geometry, Trigonometry, and Statistics.
+c) Arithmetic, Set Theory, and Number Theory.
+d) Logic, Combinatorics, and Topology.
+
+61. Linear Algebra gives us the _____ to represent data.
+*a) Structure (Vectors/Matrices)
+b) Speed (Fast Computation)
+c) Logic (Decision Rules)
+d) Uncertainty (Probability)
+
+62. Calculus gives us the _____ to optimize and learn.
+*a) Engine (Gradients)
+b) Structure (Vectors)
+c) Logic (Bayes)
+d) Memory (Storage)
+
+63. Probability gives us the _____ to reason under uncertainty.
+*a) Logic (Bayes)
+b) Engine (Gradients)
+c) Structure (Vectors)
+d) Speed (Parallelism)
+
+64. Which NumPy operation is used to apply a matrix transformation in Python?
+*a) A @ x (the @ operator)
+b) A + x
+c) A - x
+d) A / x
+
+65. In the shear matrix example, what does the matrix [[1,1],[0,1]] do to the vector [2,2]?
+*a) It shifts the x-value while the y-value stays the same, producing [4, 2].
+b) It doubles both values, producing [4, 4].
+c) It rotates the vector 90 degrees, producing [-2, 2].
+d) It zeroes out the vector, producing [0, 0].
+
+66. A vector x in n-dimensional space (ℝⁿ) is written as:
+*a) A column of n components [x₁, x₂, ..., xₙ].
+b) A single number followed by a unit.
+c) A 2D grid of n rows and n columns.
+d) A string of n characters.
+
+67. How is a vector created in NumPy?
+*a) x = np.array([3, 2])
+b) x = np.vector(3, 2)
+c) x = np.list([3, 2])
+d) x = np.matrix(3, 2)
+
+68. True or False: The "Math as Code" approach means translating every formula into Python immediately.
+True
+
+69. True or False: The Dot Product can return a negative score if vectors point in opposite directions.
+True
+
+70. True or False: The Chain Rule applies to functions of functions (composite functions).
+True
+
+71. True or False: Bayes' Theorem always requires the Prior to be exactly 50%.
+False
+
+72. True or False: A higher Eigenvalue means the corresponding Eigenvector captures more variance in the data.
+True
+
+73. True or False: Gradient Descent can only be used with one-dimensional functions.
+False
+
+74. True or False: The posterior probability in Bayes' Theorem is always higher than the prior.
+False
+
+75. What does the notation ∇f represent?
+*a) The Gradient vector of partial derivatives pointing uphill.
+b) The determinant of a matrix.
+c) The trace of a matrix.
+d) The inverse of a function.
+
+76. In which AI application is the Dot Product used to determine how much "attention" to pay to a document?
+*a) The Attention Mechanism in Transformers.
+b) Data normalization in Pandas.
+c) Image resizing in Computer Vision.
+d) Audio compression in MP3s.
+
+77. Why did the chapter adopt a "Math as Code" approach?
+*a) To immediately connect every mathematical intuition to runnable Python code.
+b) To avoid teaching any actual mathematics.
+c) To ensure students only write code without understanding theory.
+d) To replace all formulas with plain English descriptions.
+
+78. If you use PCA and keep only the top 2 Eigenvectors, you might:
+*a) Capture ~90% of the information with only ~10% of the storage.
+b) Lose all the important information.
+c) Double the size of the dataset.
+d) Create more dimensions than the original data.
+
+79. In the spam Bayes' example, p_word_given_ham = 0.1 means:
+*a) The word "Buy" appears in only 10% of legitimate (non-spam) emails.
+b) 10% of all emails are spam.
+c) 10% of spam emails contain the word "Buy".
+d) The probability of any word appearing is 10%.
+
+80. What does "training" a Neural Network mean in terms of Gradient Descent?
+*a) Calculating the gradient of the loss with respect to millions of weights and nudging them "downhill."
+b) Loading data from a CSV file.
+c) Designing the network architecture on paper.
+d) Buying faster hardware.
+
+81. True or False: A matrix transformation can separate "Cat" pixels from "Dog" pixels in a deep network.
+True
+
+82. True or False: The @ operator in NumPy performs element-wise multiplication.
+False
+
+83. True or False: Bayesian reasoning is used in both Generative AI and Robotics.
+True
+
+84. Which real-world scenario uses Bayes' Theorem as described in the notes?
+*a) A self-driving car updating its belief about a pedestrian based on LiDAR sensor data.
+b) A calculator adding two numbers.
+c) A word processor checking spelling.
+d) A printer producing a document.
+
+85. What is the main reason PCA is useful for large datasets?
+*a) It reduces noise and allows models to train faster by compressing data.
+b) It adds more features to improve accuracy.
+c) It converts numerical data into categorical data.
+d) It increases the resolution of images.
+
+86. True or False: Without Calculus (Gradient Descent), AI models would have no way to learn from their mistakes.
+True
+
+87. True or False: In AI, "everything is a vector" — words, user tastes, and images can all be represented as vectors.
+True
+
+88. What is the key difference between a scalar and a vector?
+*a) A scalar is a single number; a vector is an ordered list of numbers with direction and magnitude.
+b) A scalar is always negative; a vector is always positive.
+c) A scalar can only be an integer; a vector can only be a float.
+d) There is no difference; they are the same thing.
+
+89. True or False: The posterior in Bayes' Theorem can be lower than the prior if the evidence contradicts the initial belief.
+True
+
+90. In a Recommender System context, "finding a vector pointing in the same direction" means:
+*a) Finding content with similar characteristics to the user's preferences.
+b) Finding content that is completely different from the user's history.
+c) Randomly selecting content from the database.
+d) Selecting the most popular content regardless of user preferences.
+
+91. What does the "training loop" in Gradient Descent essentially repeat?
+*a) Calculate error → Compute gradient → Update weights → Repeat.
+b) Load data → Save model → Delete data → Repeat.
+c) Generate random weights → Test on data → Print results.
+d) Send data to cloud → Receive results → Display.
+
+92. True or False: A 100-layer Deep Network applies 100 consecutive matrix transformations to the input data.
+True
+
+93. Which of the following is NOT one of the three mathematical pillars for AI discussed in this chapter?
+*a) Trigonometry
+b) Linear Algebra
+c) Calculus
+d) Probability
+
+94. True or False: The dot product np.dot(inputs, weights) computes the weighted sum of features.
+True
+
+95. In the vector [3, 2], what do the numbers represent?
+*a) Coordinates — move 3 steps right and 2 steps up from the origin.
+b) The vector's color and brightness.
+c) The vector's memory address.
+d) Random noise values.
+
+96. What geometric operation does a "shear" matrix perform?
+*a) It slides one axis relative to another, tilting the grid without changing areas.
+b) It rotates the entire grid by 90 degrees.
+c) It shrinks the grid to zero.
+d) It duplicates every vector.
+
+97. True or False: If you compress data with PCA, you always lose exactly 50% of the information.
+False
+
+98. Why is Backpropagation called "Back" propagation?
+*a) Because it propagates the error signal backwards from the output layer to the input layer.
+b) Because it runs the model in reverse to generate data.
+c) Because it backs up the model weights to a file.
+d) Because it only updates the last layer of the network.
+
+99. True or False: The Learning Rate is a hyperparameter that must be chosen by the engineer.
+True
+
+100. In the "AI Ecosystem" analogy from Week 1, the mathematics covered this week corresponds to:
+*a) The Engine — the internal mechanics that make learning possible.
+b) The Fuel — the data that feeds the model.
+c) The Chassis — the hardware that runs the computations.
+d) The Road — the infrastructure for deployment.
+
+101. True or False: Matrix multiplication (A @ x) and element-wise multiplication (A * x) produce the same result.
+False
+
+102. If the Dot Product of a query vector and a document vector is very high, what does the Attention Mechanism do?
+*a) The model "pays more attention" to that document.
+b) The model ignores that document.
+c) The model deletes that document.
+d) The model duplicates the query.
+
+103. True or False: Eigenvectors always have an Eigenvalue of exactly 1.
+False
+
+104. What does "stepping downhill" mean in Gradient Descent?
+*a) Adjusting the model parameters in the direction that reduces the error.
+b) Increasing the error deliberately.
+c) Reducing the number of training examples.
+d) Slowing down the computation speed.
+
+105. True or False: The Gradient of a function with multiple parameters is itself a vector, not a scalar.
+True
+
+106. In the Bayes' Theorem formula, P(B) in the denominator represents:
+*a) The total probability of seeing the evidence across all hypotheses.
+b) The probability of the hypothesis being true.
+c) The number of data points.
+d) The error rate of the model.
+
+107. True or False: A vector with magnitude zero is called the zero vector and points in no particular direction.
+True
+
+108. What defines a matrix as a "shear" transformation?
+*a) It has off-diagonal elements that create a sliding effect on one axis.
+b) It has all zeros on the diagonal.
+c) It is a square matrix with all values equal to 1.
+d) It has more rows than columns.
+
+109. True or False: Gradient Descent guarantees finding the global minimum in any function.
+False
+
+110. True or False: Bayesian reasoning allows AI systems to be uncertain and update their beliefs incrementally.
+True
+
+111. What analogy does the chapter use for the three mathematical pillars?
+*a) Linear Algebra = Structure, Calculus = Engine, Probability = Logic.
+b) Linear Algebra = Fuel, Calculus = Wheels, Probability = Dashboard.
+c) Linear Algebra = Software, Calculus = Hardware, Probability = Network.
+d) Linear Algebra = Output, Calculus = Input, Probability = Storage.
+
+112. True or False: The @ operator in Python/NumPy performs the same operation as np.dot() for 2D arrays.
+True
+
+113. What real-world problem does PCA help solve for massive datasets?
+*a) Reducing dimensionality so models can train faster with less noise.
+b) Increasing the number of features for better accuracy.
+c) Converting all data to binary format.
+d) Generating synthetic training data.
+
+114. True or False: A Learning Rate of 0 would mean the model never updates its weights.
+True
+
+115. What is the overall goal of Week 2's mathematical foundation?
+*a) To demystify the equations in AI papers using a "Math as Code" approach.
+b) To memorize all mathematical proofs by hand.
+c) To replace mathematics with heuristics.
+d) To learn advanced topology for deep learning.
+
+blank 1. A _______ is an arrow in space that has direction and magnitude.
+a. Vector
+
+blank 2. In AI, words are converted into numerical representations called Word _______.
+a. Embeddings
+
+blank 3. A Matrix acts as a _______ that transforms an input vector into a new output vector.
+a. Machine
+
+blank 4. The _______ measures the alignment or similarity between two vectors.
+a. Dot Product
+
+blank 5. If two vectors are perpendicular, their Dot Product equals _______.
+a. Zero
+
+blank 6. _______ are vectors that only get scaled (not rotated) by a matrix transformation.
+a. Eigenvectors
+
+blank 7. The amount an Eigenvector gets stretched by a matrix is called its _______.
+a. Eigenvalue
+
+blank 8. Eigenvalues and Eigenvectors are the math behind a technique called _______, used to compress data.
+a. PCA
+
+blank 9. The Gradient Descent update rule is θ_new = θ_old − _______ × ∇f.
+a. Learning Rate
+
+blank 10. The _______ is a vector of partial derivatives that points in the direction of steepest ascent.
+a. Gradient
+
+blank 11. In Gradient Descent, we step in the _______ direction of the gradient to reduce error.
+a. opposite
+
+blank 12. The _______ function measures the difference between the model's prediction and the correct answer.
+a. Loss
+
+blank 13. The _______ Rule allows us to calculate the derivative of a composite function, enabling Backpropagation.
+a. Chain
+
+blank 14. Backpropagation ripples the error signal _______ from the output layer to the input layer.
+a. backwards
+
+blank 15. In Bayes' Theorem, the _______ is what you believed before seeing the evidence.
+a. Prior
+
+blank 16. In Bayes' Theorem, the _______ is your updated belief after considering the evidence.
+a. Posterior
+
+blank 17. The three mathematical pillars of AI are Linear Algebra, _______, and Probability.
+a. Calculus
+
+blank 18. Linear Algebra provides the _______ of data using Vectors and Matrices.
+a. Structure
+
+blank 19. Calculus provides the _______ of learning through Gradients and optimization.
+a. Engine
+
+blank 20. Probability provides the _______ for reasoning under uncertainty through Bayes' Theorem.
+a. Logic
+
+
