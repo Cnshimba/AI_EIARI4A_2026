@@ -953,7 +953,8 @@ When you call <code>pipeline.fit()</code>, sklearn triggers a chain reaction: it
 
 <hr />
 <h4>Summary Reference: Most-Used Sub-Modules</h4>
-<p>Keep these imports handy for your labs and projects:</p>
+<p>Scikit-learn is built as a collection of <strong>specialized sub-modules</strong>. Unlike Pandas (where almost everything is in <code>pd</code>), sklearn requires you to import exactly what you need from the right place. The pattern is always: <code>from sklearn.submodule import ClassName</code>.</p>
+<p>Keep these imports handy for your labs and projects. They are organized by the phase of the pipeline where they are used:</p>
 <pre><code class="language-python">from sklearn.model_selection  import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
 from sklearn.preprocessing    import StandardScaler, MinMaxScaler, OneHotEncoder, OrdinalEncoder
 from sklearn.impute           import SimpleImputer
