@@ -433,60 +433,70 @@ Think of the Decision Boundary as the crossover point where the model stops bein
 <h2>6. From Pandas to Production: The sklearn Pipeline</h2>
 <p>In Week 3, we used <strong>Pandas</strong> to explore and clean data. Now that we understand supervised learning algorithms, it is the right time to answer a critical question: <em>"When do I use Pandas, and when do I switch to sklearn?"</em> Getting this boundary wrong is one of the most common mistakes in data science.</p>
 
-<h3>6.1 The Rule of Thumb</h3>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Golden Rule</strong><br />
-<strong>Pandas</strong> is for <em>"Discovery &amp; Structural Cleaning"</em>&nbsp;&mdash; use it to fix the dataset&apos;s skeleton and understand what you have.<br />
-<strong>sklearn</strong> is for <em>"Model-Ready Transformation"</em>&nbsp;&mdash; use it to turn cleaned data into a format a mathematical model can digest.</div></div>
+<h3>6.1 The Hand-off: Pandas &rarr; Scikit-learn</h3>
+<p>The boundary between Pandas and sklearn is where many projects fail. The rule of thumb: <strong>Pandas is for "Discovery & Structural Cleaning," while sklearn is for "Model-Ready Transformation."</strong></p>
 
-<h3>6.2 Phase 1 — The Pandas Phase (Before the Split)</h3>
-<p>You work with Pandas <strong>before</strong> calling <code>train_test_split</code>. Because Pandas is visual and labelled, it is ideal for structural decisions.</p>
-<ul>
-<li><p><strong>Dropping columns:</strong> If a column has 90% missing data, or is just a &ldquo;User ID&rdquo; that the model cannot learn from, drop it here with <code>df.drop()</code>.</p></li>
-<li><p><strong>Renaming:</strong> Fix messy column names so your pipeline code stays readable (e.g., <code>df.rename(columns={'Col 1': 'age'})</code>).</p></li>
-<li><p><strong>Filtering rows:</strong> Remove obviously bad data (e.g., a &ldquo;Height&rdquo; column containing <code>-5</code>).</p></li>
-<li><p><strong>Feature Engineering (the big logic):</strong> Combine columns that require domain knowledge, for example:<br /><code>df['Total_Area'] = df['Basement_Area'] + df['Living_Area']</code>.</p></li>
-<li><p><strong>EDA:</strong> Use <code>df.describe()</code> and <code>df.isnull().sum()</code> to decide <em>which</em> sklearn imputer strategy you will need later.</p></li>
-</ul>
-
-<h3>6.3 Phase 2 — The sklearn Phase (After the Split)</h3>
-<p>Once you call <code>train_test_split</code>, stop using Pandas for filling or scaling. Switch to <strong>sklearn Transformers</strong> because they are <em>stateful</em> — they learn the parameters from the training data and apply the exact same values to the test data and to future production data.</p>
-
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Deployment Test</strong><br />
-Ask yourself: <em>&ldquo;If a single new row of data arrives tomorrow, can my code handle it?&rdquo;</em><br />
-&bull; If you filled <code>NaN</code>s with <strong>Pandas</strong>, you must manually recalculate the mean for that new row — every single time.<br />
-&bull; If you used an <strong>sklearn Pipeline</strong>, you just call <code>pipeline.predict(new_row)</code>. The pipeline &ldquo;remembers&rdquo; the mean, the scaling, and the encoding from months ago and applies it instantly.</div></div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <div class="p-4 bg-[#002F6E]/5 dark:bg-[#002F6E]/10 rounded-lg border-l-4 border-[#002F6E]">
+        <h4 class="font-bold text-[#002F6E] mb-2">1. The Pandas Phase</h4>
+        <p class="text-sm"><strong>When:</strong> Before <code>train_test_split</code>.</p>
+        <p class="text-sm"><strong>Goal:</strong> Fix the dataset's "skeleton."</p>
+        <ul class="text-xs mt-2 list-disc ml-4">
+            <li>Drop useless columns (IDs, high missing %)</li>
+            <li>Rename columns for readability</li>
+            <li>Filter out impossible data (e.g., negative age)</li>
+            <li>Domain-specific Feature Engineering (e.g., Area = L * W)</li>
+        </ul>
+    </div>
+    <div class="p-4 bg-[#c9984a]/5 dark:bg-[#c9984a]/10 rounded-lg border-l-4 border-[#c9984a]">
+        <h4 class="font-bold text-[#c9984a] mb-2">2. The Scikit-learn Phase</h4>
+        <p class="text-sm"><strong>When:</strong> After <code>train_test_split</code>.</p>
+        <p class="text-sm"><strong>Goal:</strong> Prepare data for mathematical models.</p>
+        <ul class="text-xs mt-2 list-disc ml-4">
+            <li>Impute missing values (Mean/Median)</li>
+            <li>Scale numeric features (Standard/MinMax)</li>
+            <li>Encode categories (One-Hot/Ordinal)</li>
+            <li>Automate with <strong>Pipelines</strong> for production</li>
+        </ul>
+    </div>
+</div>
 
 <table>
-<thead>
-<tr>
-<th style="text-align: left;">Task</th>
-<th style="text-align: left;">Use <strong>Pandas</strong> if&hellip;</th>
-<th style="text-align: left;">Use <strong>sklearn</strong> if&hellip;</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align: left;"><strong>Missing Values</strong></td>
-<td style="text-align: left;">You want to delete the entire row/column.</td>
-<td style="text-align: left;">You want to fill the hole with the learned mean/median.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Categorical Data</strong></td>
-<td style="text-align: left;">You are just checking how many categories exist.</td>
-<td style="text-align: left;">You are converting &ldquo;Red/Blue&rdquo; into numbers for the model.</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Feature Creation</strong></td>
-<td style="text-align: left;">Logic is between columns (<code>A + B = C</code>).</td>
-<td style="text-align: left;">You are creating polynomial features ($x^2$).</td>
-</tr>
-<tr>
-<td style="text-align: left;"><strong>Scaling</strong></td>
-<td style="text-align: left;">Never — it leaks test statistics into training.</td>
-<td style="text-align: left;">Always — <code>StandardScaler</code> learns $\mu$ and $\sigma$ from train only.</td>
-</tr>
-</tbody>
+    <thead>
+        <tr>
+            <th style="text-align: left;">Task</th>
+            <th style="text-align: left;">Use <strong>Pandas</strong> if...</th>
+            <th style="text-align: left;">Use <strong>sklearn</strong> if...</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Missing Values</strong></td>
+            <td>You want to delete the entire row/column.</td>
+            <td>You want to fill holes with learned statistics.</td>
+        </tr>
+        <tr>
+            <td><strong>Categorical Data</strong></td>
+            <td>You are grouping or counting categories.</td>
+            <td>You are turning words into numbers for the model.</td>
+        </tr>
+        <tr>
+            <td><strong>Feature Creation</strong></td>
+            <td>Logic is domain-specific (A + B = C).</td>
+            <td>Logic is mathematical (e.g., Polynomials).</td>
+        </tr>
+        <tr>
+            <td><strong>Scaling</strong></td>
+            <td>Never (causes data leakage).</td>
+            <td>Always (keeps train/test separated).</td>
+        </tr>
+    </tbody>
 </table>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Deployment Test</strong><br />
+Ask yourself: <em>"If a single new row of data arrives tomorrow, can my code handle it?"</em><br />
+Manual Pandas cleaning usually fails this test. An sklearn Pipeline passes it instantly because it "remembers" every transformation step.</div></div>
+
 
 <hr />
 <h3>6.4 The sklearn Toolkit: A Full Reference</h3>
@@ -587,27 +597,6 @@ gs.fit(X_train, y_train)
 print("Best params:", gs.best_params_)
 </code></pre>
 
-<h4>Most-Used Sub-Modules: The Import Cheat Sheet</h4>
-<pre><code class="language-python">from sklearn.model_selection  import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
-from sklearn.preprocessing    import StandardScaler, MinMaxScaler, OneHotEncoder, OrdinalEncoder
-from sklearn.impute           import SimpleImputer
-from sklearn.compose          import ColumnTransformer, make_column_selector
-from sklearn.pipeline         import Pipeline, make_pipeline
-
-# --- Classical models ---
-from sklearn.linear_model     import LogisticRegression, Ridge, Lasso
-from sklearn.tree             import DecisionTreeClassifier
-from sklearn.ensemble         import RandomForestClassifier, GradientBoostingClassifier
-from sklearn.svm              import SVC
-from sklearn.neighbors        import KNeighborsClassifier
-
-# --- Unsupervised ---
-from sklearn.cluster          import KMeans, DBSCAN
-from sklearn.decomposition    import PCA
-
-# --- Metrics ---
-from sklearn.metrics          import accuracy_score, mean_squared_error, classification_report
-</code></pre>
 
 <h4>sklearn vs the Deep Learning World</h4>
 <table>
@@ -909,20 +898,36 @@ preprocessor = ColumnTransformer(
 </ul>
 
 <h4>Step 4 — The Glue: <code>Pipeline</code> / <code>make_pipeline</code></h4>
-<p>The <code>Pipeline</code> is the most powerful tool in the library because it behaves exactly like a single model.</p>
-<ul>
-<li><strong><code>make_pipeline</code>:</strong> A shorthand that automatically names steps (e.g., names <code>StandardScaler()</code> as <code>"standardscaler"</code>).</li>
-<li><strong>The secret sauce:</strong> When you call <code>pipeline.fit(X_train, y_train)</code>, sklearn automatically:<br />
-  1. Calls <code>.fit_transform()</code> on Step 1 (e.g., the <code>ColumnTransformer</code>).<br />
-  2. Passes the result to Step 2 and calls <code>.fit_transform()</code>.<br />
-  3. Passes that to the final model and calls <code>.fit()</code>.<br />
-  At prediction time, <code>.transform()</code> (not <code>.fit_transform()</code>) is used on each step, so no data leakage occurs.</li>
-</ul>
+<p>The <code>Pipeline</code> is the most powerful tool in the library because it behaves exactly like a single model. It "glues" your transformers and your model into one object.</p>
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The 3-Sentence Workflow</strong><br />
-1. Use <strong>Pandas</strong> to fix bulk errors and engineer your final feature set.<br />
-2. <strong>Split</strong> your data into Train and Test.<br />
-3. Use an <strong>sklearn Pipeline</strong> to handle all math-heavy transformations (Scaling, Imputing, Encoding) so your model stays consistent from training to production.</div></div>
+<h5>Assembly & Execution: An End-to-End Example</h5>
+<p>Once you have defined your <code>preprocessor</code> (the ColumnTransformer from Step 3), you can assemble the full model and train it in a single step:</p>
+
+<pre><code class="language-python">from sklearn.pipeline import make_pipeline
+from sklearn.ensemble import RandomForestClassifier
+
+# 1. ASSEMBLE the final pipeline
+# This connects your organization (Step 3) to your algorithm (Step 5)
+model_pipeline = make_pipeline(
+    preprocessor, 
+    RandomForestClassifier(random_state=42)
+)
+
+# 2. TRAIN the entire system
+# This automatically fits the Imputers, Scalers, Encoders AND the Model
+model_pipeline.fit(X_train, y_train)
+
+# 3. PREDICT & EVALUATE
+# The pipeline handles all preprocessing on X_test before making the guess
+predictions = model_pipeline.predict(X_test)
+accuracy = model_pipeline.score(X_test, y_test)
+
+print(f"Model Performance: {accuracy:.2%}")
+</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The "Fit Once, Predict Anywhere" Secret</strong><br />
+When you call <code>pipeline.fit()</code>, sklearn triggers a chain reaction: it fits and transforms each preprocessing step, then passes the pure numbers to the model. At prediction time, it reuses the <strong>State</strong> (the means and categories) from training to clean the new data instantly. No data leakage, no extra code.</div></div>
+
 
 <h4>Step 5 — The Models: The Estimators</h4>
 <p>Whether it is <code>RandomForestClassifier</code>, <code>LogisticRegression</code>, or <code>LinearRegression</code>, all sklearn models share the same interface.</p>
@@ -945,6 +950,24 @@ preprocessor = ColumnTransformer(
 <li><strong><code>param_grid</code>:</strong> A dictionary of settings to try, e.g., <code>{'n_estimators': [10, 50, 100]}</code>.</li>
 <li><strong><code>refit=True</code>:</strong> Once the best settings are found, it automatically retrains on the <em>entire</em> training set using those settings — so you get a production-ready model at the end.</li>
 </ul>
+
+<hr />
+<h4>Summary Reference: Most-Used Sub-Modules</h4>
+<p>Keep these imports handy for your labs and projects:</p>
+<pre><code class="language-python">from sklearn.model_selection  import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
+from sklearn.preprocessing    import StandardScaler, MinMaxScaler, OneHotEncoder, OrdinalEncoder
+from sklearn.impute           import SimpleImputer
+from sklearn.compose          import ColumnTransformer, make_column_selector
+from sklearn.pipeline         import Pipeline, make_pipeline
+
+# --- Models ---
+from sklearn.linear_model     import LogisticRegression
+from sklearn.ensemble         import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm              import SVC
+
+# --- Metrics ---
+from sklearn.metrics          import accuracy_score, classification_report, ConfusionMatrixDisplay
+</code></pre>
 <hr />
 <h2>7. Summary</h2>
 <p>We have expanded our toolkit from identifying relationships (Regression) to making choices (Classification).</p>
