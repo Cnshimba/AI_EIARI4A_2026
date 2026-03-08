@@ -264,6 +264,24 @@ We can think of the Linear Regression equation ($y = wx + b$) as the fare calcul
 </ul>
 <p>$$ \text{Price} = \underbrace{15}_{\text{Slope}(w)} \times \underbrace{(10)}_{\text{Dist}(x)} + \underbrace{20}_{\text{Bias}(b)} = \text{R170} $$</p></div></div>
 <p><strong>The Goal</strong>: The entire "Learning" process is simply the computer trying to find the optimal specific numbers for $w$ and $b$ so that the line passes as close as possible to our data points.</p>
+
+<h3>2.1.1 The Birth of a Model: Initialization & Adjustment</h3>
+<p>In traditional coding, you would hard-code the R15 and R20 from our Uber example. In AI, the computer doesn't know these numbers at the start. It must discover them.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <!-- Step 1: Initialization -->
+    <div class="p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h4 class="font-bold text-secondary mb-2">1. The Cold Start (Initialization)</h4>
+        <p class="text-sm">When you click "Train," the model starts as a blank slate. It initializes $w$ and $b$ with <strong>random small numbers</strong> (or sometimes zeros). </p>
+        <p class="text-xs mt-2 text-slate-500"><em>At this moment, the model is useless. If you asked it for a price, it would give a completely random, wrong answer.</em></p>
+    </div>
+    <!-- Step 2: Adjustment -->
+    <div class="p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h4 class="font-bold text-secondary mb-2">2. The Correction Loop (Adjustment)</h4>
+        <p class="text-sm">The model looks at its mistake (Loss), and slightly <strong>nudges</strong> $w$ and $b$ to reduce that mistake. </p>
+        <p class="text-xs mt-2 text-slate-500"><em>This happens thousands of times. If a prediction was too low, the model increases $w$. If it was too high, it decreases it. Over time, the random numbers "evolve" into the correct R15 and R20.</em></p>
+    </div>
+</div>
 <h3>2.2 The Cost Function (Loss)</h3>
 <p>How does the computer know if its current line is "good" or "bad"? We need a mathematical way to measure error. We typically use the <strong>Mean Squared Error (MSE)</strong>, often called the <strong>Loss Function</strong> $J(w,b)$.</p>
 <p>$$J(w,b) = \frac{1}{2m} \sum_{i=1}^{m} (\underbrace{wx^{(i)} + b}_{\text{Prediction}} - \underbrace{y^{(i)}}_{\text{Actual}})^2$$</p>
@@ -280,10 +298,28 @@ Let's apply the <strong>Full Loss Formula</strong>: $J(w,b) = \frac{1}{2m} \sum 
     $$ J = \frac{1}{2(1)} \times 900 = \frac{900}{2} = 450 $$<br />
 <strong>The final Cost ($J$) is 450.</strong></li>
 </ol>
-<p><strong>The Interpretation</strong>:<br />
-Why did we divide by 2? It's a mathematical trick to make the derivative (calculus) cleaner later on. But the message is the same: <strong>450</strong> is the penalty score for this model.<br />
--   <strong>High Loss</strong>: The line is far from the dots. The model is bad.<br />
--   <strong>Low Loss</strong>: The line is close to the dots. The model is good.</p></div></div>
+    <p><strong>The Interpretation</strong>:<br />
+    Why did we divide by 2? It's a mathematical trick to make the derivative (calculus) cleaner later on. But the message is the same: <strong>450</strong> is the penalty score for this model.<br />
+    -   <strong>High Loss</strong>: The line is far from the dots. The model is bad.<br />
+    -   <strong>Low Loss</strong>: The line is close to the dots. The model is good.</p></div></div>
+
+<h3>2.2.1 Beyond MSE: RMSE and MAE</h3>
+<p>While Mean Squared Error (MSE) is the gold standard for training (because its math is "smooth" for calculus), it is not always the best way for a human to understand how much the model is failing. We often use these secondary metrics:</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <!-- RMSE -->
+    <div class="p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h4 class="font-bold text-secondary mb-2">RMSE (Root Mean Squared Error)</h4>
+        <p class="text-sm">$$RMSE = \sqrt{\frac{1}{m} \sum_{i=1}^{m} (\hat{y}^{(i)} - y^{(i)})^2}$$</p>
+        <p class="text-xs mt-2 text-slate-500"><strong>The "Real-World" Metric</strong>. Because we take the square root of the MSE, the final answer is in the <strong>same units</strong> as our target. If we are predicting Rands, the RMSE tells us exactly how many Rands we are off by, on average.</p>
+    </div>
+    <!-- MAE -->
+    <div class="p-4 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h4 class="font-bold text-secondary mb-2">MAE (Mean Absolute Error)</h4>
+        <p class="text-sm">$$MAE = \frac{1}{m} \sum_{i=1}^{m} |\hat{y}^{(i)} - y^{(i)}|$$</p>
+        <p class="text-xs mt-2 text-slate-500"><strong>The "Outlier Resistant" Metric</strong>. Instead of squaring the error, we just take the absolute value. This means a single massive mistake (outlier) doesn't "break" the average as much as it does in MSE.</p>
+    </div>
+</div>
 <p><img alt="Visualizing Mean Squared Error Residuals" src="images/mse_residuals.png" /><br />
 <em>Figure 3: Visualizing the Error. The Red Lines are the residuals (Equation 1), and the Red Squares represent the Squared Error (Equation 2).</em></p>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Visual Guide</strong>:<br />
