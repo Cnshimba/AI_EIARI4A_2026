@@ -569,50 +569,93 @@ Manual Pandas cleaning usually fails this test. An sklearn Pipeline passes it in
 </tbody>
 </table>
 
-<h4>The Typical sklearn Workflow (5&ndash;7 Steps)</h4>
-<p>Every sklearn project follows the same structure. Learn this once, and you can build any classical ML model:</p>
+<h4>The Typical sklearn Workflow (Phase-by-Phase)</h4>
+<p>Every sklearn project follows a rigorous, predictable structure. By dividing the process into phases, you ensure that your code is modular, reproducible, and ready for production.</p>
 
-<pre><code class="language-python"># 0. Get data (pandas / numpy)
-X, y = load_some_data()   # X = features matrix, y = target vector
+<div class="space-y-8 mt-6">
+    <!-- Phase 1 -->
+    <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 1: Data Splitting</h5>
+        <p class="text-sm mb-3"><strong>The Tool:</strong> <code>train_test_split</code> (from <code>sklearn.model_selection</code>)</p>
+        <p class="text-sm mb-4">This is your first defense against <strong>overfitting</strong>. It shuffles your data and sets aside a "Final Exam" (the Test set) that the model will never see during training.</p>
+        <pre><code class="language-python">from sklearn.model_selection import train_test_split
 
-# 1. Split — ALWAYS do this first
-from sklearn.model_selection import train_test_split
+# Splits data: 80% for study (Train), 20% for testing (Test)
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
-)
+)</code></pre>
+    </section>
 
-# 2. Build a preprocessing pipeline (ColumnTransformer — see below)
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import make_pipeline
+    <!-- Phase 2 -->
+    <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 2: Building the Preprocessor</h5>
+        <p class="text-sm mb-3"><strong>The Tool:</strong> <code>ColumnTransformer</code> (from <code>sklearn.compose</code>)</p>
+        <p class="text-sm mb-4">You use <strong>Transformers</strong> (like <code>StandardScaler</code> or <code>OneHotEncoder</code>) to clean different columns in parallel. The <code>ColumnTransformer</code> acts as the "Air Traffic Controller," routing each column to its specific cleaning tool.</p>
+        <pre><code class="language-python">from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
-preprocessor = ColumnTransformer(...)  # configure for your columns
 
-# 3. Create the full modeling pipeline (preprocessor + model in one object)
+preprocessor = ColumnTransformer([
+    ('num', StandardScaler(), numeric_cols),
+    ('cat', OneHotEncoder(), categorical_cols)
+])</code></pre>
+    </section>
+
+    <!-- Phase 3 -->
+    <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 3: The Assembly</h5>
+        <p class="text-sm mb-3"><strong>The Tool:</strong> <code>Pipeline</code> or <code>make_pipeline</code> (from <code>sklearn.pipeline</code>)</p>
+        <p class="text-sm mb-4">This "glues" your preprocessing and your model into a single <strong>Estimator</strong>. Once assembled, the pipeline behaves like a single unit: call <code>.fit()</code> once, and the entire chain fits and transforms automatically.</p>
+        <pre><code class="language-python">from sklearn.pipeline import make_pipeline
 from sklearn.ensemble import RandomForestClassifier
-pipe = make_pipeline(
-    preprocessor,
-    RandomForestClassifier(random_state=42)
-)
 
-# 4. Train — ONE call does all preprocessing + model fitting
+# Assemblung everything into a single ready-to-use object
+pipe = make_pipeline(preprocessor, RandomForestClassifier())</code></pre>
+    </section>
+
+    <!-- Phase 4 -->
+    <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 4: Training & Prediction</h5>
+        <p class="text-sm mb-3"><strong>The Methods:</strong> <code>.fit()</code> and <code>.predict()</code></p>
+        <ul class="text-sm list-disc ml-5 mb-4 space-y-1">
+            <li><strong><code>.fit(X_train, y_train)</code>:</strong> The models finds the patterns. Transformers learn the means and categories.</li>
+            <li><strong><code>.predict(X_new)</code>:</strong> Applies those learned patterns to new data to generate guesses.</li>
+        </ul>
+        <pre><code class="language-python"># The entire pipeline learns in one command
 pipe.fit(X_train, y_train)
 
-# 5. Evaluate — compare train vs test to detect overfitting
-print("Train score:", pipe.score(X_train, y_train))
-print("Test score :", pipe.score(X_test, y_test))
+# Generate guesses for the test set
+y_pred = pipe.predict(X_test)</code></pre>
+    </section>
 
-# 6. Optional — Cross-validation for a more reliable estimate
-from sklearn.model_selection import cross_val_score
-scores = cross_val_score(pipe, X_train, y_train, cv=5)
-print("CV scores:", scores.mean().round(3), "±", scores.std().round(3))
+    <!-- Phase 5 -->
+    <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 5: Evaluation & Validation</h5>
+        <p class="text-sm mb-3"><strong>The Tools:</strong> <code>.score()</code> and <code>cross_val_score</code></p>
+        <p class="text-sm mb-4"><code>.score()</code> provides a quick accuracy check, while <code>cross_val_score</code> (K-Fold Validation) ensures the model's performance isn't just a fluke of the random split.</p>
+        <pre><code class="language-python">from sklearn.model_selection import cross_val_score
 
-# 7. Optional — Hyperparameter tuning
-from sklearn.model_selection import GridSearchCV
-param_grid = {'randomforestclassifier__n_estimators': [50, 100, 200]}
-gs = GridSearchCV(pipe, param_grid, cv=5, refit=True)
-gs.fit(X_train, y_train)
-print("Best params:", gs.best_params_)
-</code></pre>
+# Quick check on test set
+print("Accuracy:", pipe.score(X_test, y_test))
+
+# K-Fold check (splits train into 5 parts and rotates)
+scores = cross_val_score(pipe, X_train, y_train, cv=5)</code></pre>
+    </section>
+
+    <!-- Phase 6 -->
+    <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
+        <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 6: Optimization (Tuning)</h5>
+        <p class="text-sm mb-3"><strong>The Tool:</strong> <code>GridSearchCV</code> (from <code>sklearn.model_selection</code>)</p>
+        <p class="text-sm mb-4">Think of this as an automated search party. It tries every combination of settings (hyperparameters) you define to find the "Best Version" of your model.</p>
+        <pre><code class="language-python">from sklearn.model_selection import GridSearchCV
+
+# Define settings to try
+params = {'randomforestclassifier__n_estimators': [50, 100]}
+
+# Automated search for the best settings
+grid = GridSearchCV(pipe, params, cv=5)
+grid.fit(X_train, y_train)</code></pre>
+    </section>
+</div>
 
 
 <h4>sklearn vs the Deep Learning World</h4>
