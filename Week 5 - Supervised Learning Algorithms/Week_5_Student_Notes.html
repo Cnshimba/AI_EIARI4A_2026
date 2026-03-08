@@ -490,7 +490,161 @@ Ask yourself: <em>&ldquo;If a single new row of data arrives tomorrow, can my co
 
 <hr />
 <h3>6.4 The sklearn Toolkit: A Full Reference</h3>
-<p>Every class in sklearn is either an <strong>Estimator</strong> (learns patterns), a <strong>Transformer</strong> (changes data), or a <strong>Selector</strong> (splits/filters data). Here is the standard professional workflow.</p>
+
+<h4>What is sklearn?</h4>
+<p><strong>scikit-learn</strong> (imported as <code>sklearn</code>) is the standard open-source Python library for <strong>traditional (non-deep-learning) machine learning</strong>. As of 2026, it is at version <strong>~1.8.x</strong>.</p>
+
+<p>It became the industry standard because of:</p>
+<ul>
+<li><strong>A clean, consistent API</strong> &mdash; nearly every algorithm follows the same <code>.fit()</code> / <code>.predict()</code> pattern, so learning one model teaches you all of them.</li>
+<li><strong>Built on NumPy &amp; SciPy</strong> &mdash; excellent numeric performance without needing a GPU.</li>
+<li><strong>Battle-tested</strong> &mdash; used in industry, research, Kaggle competitions, and teaching worldwide.</li>
+<li><strong>BSD license</strong> &mdash; free to use in commercial products.</li>
+</ul>
+
+<h4>Core Object Types in sklearn</h4>
+<p>Everything in sklearn belongs to one of four categories:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Job</th>
+<th style="text-align: left;">Main Methods</th>
+<th style="text-align: left;">Examples</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estimator</strong></td>
+<td>Learns from data &amp; can predict</td>
+<td><code>.fit()</code>, <code>.predict()</code></td>
+<td><code>LinearRegression</code>, <code>RandomForestClassifier</code>, <code>SVC</code>, <code>KMeans</code></td>
+</tr>
+<tr>
+<td><strong>Transformer</strong></td>
+<td>Changes / cleans data (no target needed)</td>
+<td><code>.fit()</code>, <code>.transform()</code></td>
+<td><code>StandardScaler</code>, <code>OneHotEncoder</code>, <code>PCA</code>, <code>SimpleImputer</code></td>
+</tr>
+<tr>
+<td><strong>Pipeline</strong></td>
+<td>Chains steps together into one object</td>
+<td><code>.fit()</code>, <code>.predict()</code></td>
+<td><code>make_pipeline(scaler, model)</code></td>
+</tr>
+<tr>
+<td><strong>Model Selection</strong></td>
+<td>Helps choose and tune models</td>
+<td>varies</td>
+<td><code>GridSearchCV</code>, <code>cross_val_score</code>, <code>train_test_split</code></td>
+</tr>
+</tbody>
+</table>
+
+<h4>The Typical sklearn Workflow (5&ndash;7 Steps)</h4>
+<p>Every sklearn project follows the same structure. Learn this once, and you can build any classical ML model:</p>
+
+<pre><code class="language-python"># 0. Get data (pandas / numpy)
+X, y = load_some_data()   # X = features matrix, y = target vector
+
+# 1. Split — ALWAYS do this first
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 2. Build a preprocessing pipeline (ColumnTransformer — see below)
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+preprocessor = ColumnTransformer(...)  # configure for your columns
+
+# 3. Create the full modeling pipeline (preprocessor + model in one object)
+from sklearn.ensemble import RandomForestClassifier
+pipe = make_pipeline(
+    preprocessor,
+    RandomForestClassifier(random_state=42)
+)
+
+# 4. Train — ONE call does all preprocessing + model fitting
+pipe.fit(X_train, y_train)
+
+# 5. Evaluate — compare train vs test to detect overfitting
+print("Train score:", pipe.score(X_train, y_train))
+print("Test score :", pipe.score(X_test, y_test))
+
+# 6. Optional — Cross-validation for a more reliable estimate
+from sklearn.model_selection import cross_val_score
+scores = cross_val_score(pipe, X_train, y_train, cv=5)
+print("CV scores:", scores.mean().round(3), "±", scores.std().round(3))
+
+# 7. Optional — Hyperparameter tuning
+from sklearn.model_selection import GridSearchCV
+param_grid = {'randomforestclassifier__n_estimators': [50, 100, 200]}
+gs = GridSearchCV(pipe, param_grid, cv=5, refit=True)
+gs.fit(X_train, y_train)
+print("Best params:", gs.best_params_)
+</code></pre>
+
+<h4>Most-Used Sub-Modules: The Import Cheat Sheet</h4>
+<pre><code class="language-python">from sklearn.model_selection  import train_test_split, cross_val_score, GridSearchCV, RandomizedSearchCV
+from sklearn.preprocessing    import StandardScaler, MinMaxScaler, OneHotEncoder, OrdinalEncoder
+from sklearn.impute           import SimpleImputer
+from sklearn.compose          import ColumnTransformer, make_column_selector
+from sklearn.pipeline         import Pipeline, make_pipeline
+
+# --- Classical models ---
+from sklearn.linear_model     import LogisticRegression, Ridge, Lasso
+from sklearn.tree             import DecisionTreeClassifier
+from sklearn.ensemble         import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.svm              import SVC
+from sklearn.neighbors        import KNeighborsClassifier
+
+# --- Unsupervised ---
+from sklearn.cluster          import KMeans, DBSCAN
+from sklearn.decomposition    import PCA
+
+# --- Metrics ---
+from sklearn.metrics          import accuracy_score, mean_squared_error, classification_report
+</code></pre>
+
+<h4>sklearn vs the Deep Learning World</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Library</th>
+<th style="text-align: left;">Focus</th>
+<th style="text-align: left;">Data size sweet spot</th>
+<th style="text-align: left;">GPU needed?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>sklearn</strong></td>
+<td>Classical ML</td>
+<td>Hundreds &ndash; a few million rows</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>XGBoost / LightGBM</strong></td>
+<td>Gradient boosting (often beats sklearn)</td>
+<td>Up to ~10&ndash;50 M rows</td>
+<td>Optional</td>
+</tr>
+<tr>
+<td><strong>PyTorch / TensorFlow</strong></td>
+<td>Deep learning</td>
+<td>Millions &ndash; billions of rows/tokens</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Bottom Line (2026)</strong><br />
+If you are doing anything except deep learning or very large-scale structured data, <strong>sklearn</strong> (often paired with XGBoost or LightGBM) is still the fastest way to get a strong, production-viable model. The steps below zoom into each stage of the workflow above.</div></div>
+
+
 
 <h4>Step 1 — Data Splitting: <code>train_test_split</code></h4>
 <p>A utility function that shuffles and slices your arrays. It does not &ldquo;learn&rdquo; anything.</p>
@@ -516,15 +670,84 @@ Ask yourself: <em>&ldquo;If a single new row of data arrives tomorrow, can my co
 A well-engineered preprocessor is often <em>more valuable</em> than switching from one algorithm to a fancier one. Garbage in, garbage out.</div></div>
 
 <h5>How Transformers Work: The <code>.fit()</code> &rarr; <code>.transform()</code> Pattern</h5>
-<p>Every sklearn transformer follows a two-step, <strong>stateful</strong> design:</p>
+
+<p>In programming, <strong>stateful</strong> means an object &ldquo;remembers&rdquo; information from one step to use in another. In sklearn, every Scaler, Imputer, and Encoder is stateful: it calculates a specific value from your <strong>training data</strong> and &ldquo;locks it in&rdquo; to use later on your <strong>test data</strong> or any future production data.</p>
+
 <ul>
-<li><strong><code>.fit(X_train)</code></strong>: The transformer <em>learns</em> parameters from the training data (e.g. calculates the mean, identifies all unique categories).</li>
-<li><strong><code>.transform(X)</code></strong>: It applies the <em>pre-learned</em> parameters to any dataset &mdash; train, test, or a brand-new production row.</li>
+<li><strong><code>.fit(X_train)</code></strong>: The transformer <em>learns</em> parameters from the training data (e.g. calculates the mean, identifies all unique categories). <strong>State is created here.</strong></li>
+<li><strong><code>.transform(X)</code></strong>: It applies the <em>pre-learned</em> parameters to any dataset &mdash; train, test, or a brand-new production row. <strong>State is used here.</strong></li>
 <li><strong><code>.fit_transform(X_train)</code></strong>: A convenience shortcut that combines both steps in one call (used internally by <code>Pipeline</code>).</li>
 </ul>
 
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Mental Model: The Tailor vs. The T-Shirt</strong><br />
+&bull; <strong>Pandas (Stateless) &mdash; The T-shirt:</strong> &ldquo;One Size Fits All.&rdquo; If you fill missing values with the mean using Pandas, it calculates the mean right then and there from whatever data is in front of it. If the data changes tomorrow, the mean changes too.<br />
+&bull; <strong>sklearn (Stateful) &mdash; The Tailor:</strong> The Tailor takes your measurements (<code>.fit()</code>). They write those numbers in a notebook (<strong>State</strong>). Even if you come back a month later with a new jacket to alter, they use <em>those exact measurements</em> &mdash; not today&apos;s &mdash; to cut the fabric (<code>.transform()</code>).</div></div>
+
+<h5>Seeing State in the Code</h5>
+<p>After you call <code>.fit()</code>, sklearn creates special attributes that end with an <strong>underscore (<code>_</code>)</strong>. These are the &ldquo;State&rdquo; &mdash; the values the transformer learned and locked in. You can inspect them at any time:</p>
+
+<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
+import numpy as np
+
+# Training data: Ages 20, 30, 40
+X_train = np.array([[20], [30], [40]])
+
+scaler = StandardScaler()
+
+# THE FIT STEP — State is created
+scaler.fit(X_train)
+
+# The scaler now "knows" the mean from training
+print(scaler.mean_)   # Output: [30.]  <--- This IS the "State"
+print(scaler.scale_)  # Output: [8.16] <--- Standard deviation, also stored
+
+# THE TRANSFORM STEP — State is used (even on brand new data)
+X_new = np.array([[25]])
+print(scaler.transform(X_new))  # Output: [[-0.61]] (scaled using the stored 30 and 8.16)
+</code></pre>
+
+<h5>Why State is the Difference Between Success and Failure</h5>
+<p>Imagine you trained a house price model six months ago.</p>
+<ul>
+<li><strong>Training Phase:</strong> The average house price in your training data was <strong>$500,000</strong>. Your <code>StandardScaler</code> stored this as its state ($\mu = 500{,}000$).</li>
+<li><strong>Production Phase (6 months later):</strong> The market crashes. The current average has dropped to <strong>$200,000</strong>.</li>
+</ul>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Danger (Stateless):</strong> If you used a simple Pandas <code>fillna(df.mean())</code>, it would scale the new house based on today&apos;s $200,000 average. This shifts the &ldquo;goalposts&rdquo; for the model &mdash; the numbers entering your model look completely different from what it was trained on. The prediction will be wrong.<br /><br />
+<strong>The Solution (Stateful):</strong> Because sklearn is stateful, it ignores today&apos;s $200,000 market. It uses the <strong>$500,000</strong> it learned during training. This ensures the data entering the model looks <em>exactly</em> like the data the model studied during training &mdash; so the prediction stays meaningful.</div></div>
+
+<h5>The Three-Method Lifecycle</h5>
+<p>Almost every sklearn object follows this lifecycle. Understanding it unlocks everything else in the library:</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Method</th>
+<th style="text-align: left;">Action</th>
+<th style="text-align: left;">Effect on State</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>.fit()</code></strong></td>
+<td>Calculations</td>
+<td><strong>Creates State.</strong> Calculates and stores the Mean, Median, Variance, unique categories, etc.</td>
+</tr>
+<tr>
+<td><strong><code>.transform()</code></strong></td>
+<td>Application</td>
+<td><strong>Uses State.</strong> Applies the stored values to new data without recalculating.</td>
+</tr>
+<tr>
+<td><strong><code>.predict()</code></strong></td>
+<td>Inference</td>
+<td><strong>Uses State.</strong> The model applies its stored weights/coefficients to produce a prediction.</td>
+</tr>
+</tbody>
+</table>
+
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Critical Rule: Always fit on training data only.</strong><br />
-If you call <code>.fit()</code> on the full dataset (including the test set), the scaler learns the test-set mean/std and smuggles that information into your training loop. This is called <strong>data leakage</strong> and will give you an optimistic accuracy score that will <em>not</em> hold up in production.</div></div>
+If you call <code>.fit()</code> on the full dataset (including the test set), the scaler learns the test-set mean/std and smuggles that information into your training loop. This is called <strong>data leakage</strong> and will give you an optimistic accuracy score that will <em>not</em> hold up in production. A <code>Pipeline</code> prevents this automatically.</div></div>
 
 <h5>Scalers: Handling Numeric Columns</h5>
 <table>
@@ -660,6 +883,7 @@ preprocessor = ColumnTransformer(
 <tr><td>Already binary (yes/no, 0/1)</td><td><code>passthrough</code></td><td><code>is_smoker</code>, <code>has_children</code></td></tr>
 <tr><td>Any missing values</td><td><code>SimpleImputer</code> (median / most_frequent)</td><td>Almost every real dataset</td></tr>
 <tr><td>ID / email / date columns</td><td><code>drop</code></td><td><code>customer_id</code>, <code>signup_date</code></td></tr>
+<tr><td>Short text (comments, titles)</td><td><code>CountVectorizer</code> or <code>TfidfVectorizer</code></td><td>Review text, product titles, short descriptions</td></tr>
 </tbody>
 </table>
 
