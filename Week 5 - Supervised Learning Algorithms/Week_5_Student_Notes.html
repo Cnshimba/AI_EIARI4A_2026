@@ -513,7 +513,24 @@ Manual Pandas cleaning usually fails this test. An sklearn Pipeline passes it in
 </ul>
 
 <h4>Core Object Types in sklearn</h4>
-<p>Everything in sklearn belongs to one of four categories:</p>
+<p>In the sklearn ecosystem, every object you interact with follows a rigid structural design. This consistency is what makes the library so powerful. There are four primary roles an object can play:</p>
+
+<ul class="space-y-4 mb-6">
+    <li>
+        <strong>1. Estimators (The "Brains"):</strong> These are the models. Whether it's a simple Linear Regression or a complex Random Forest, an Estimator's job is to <em>look at data and learn from it</em>. They always have a <code>.fit()</code> method to start the learning process.
+    </li>
+    <li>
+        <strong>2. Transformers (The "Cleaners"):</strong> These objects prepare your data for the model. They handle the "math-heavy" chores like scaling numbers or encoding text. They use <code>.fit()</code> to learn the cleaning parameters (like the mean) and <code>.transform()</code> to apply them.
+    </li>
+    <li>
+        <strong>3. Pipelines (The "Glue"):</strong> A Pipeline allows you to bundle several Transformers and an Estimator into a single, unified object. This prevents "data leakage" and ensures that your preprocessing steps are never separated from your model.
+    </li>
+    <li>
+        <strong>4. Model Selection (The "Decision Makers"):</strong> These are utility tools that don't transform data themselves, but help you find the best version of your model. They handle splitting data, cross-validation, and finding the perfect hyperparameters.
+    </li>
+</ul>
+
+<p>The table below summarizes these roles for quick reference:</p>
 
 <table>
 <thead>
