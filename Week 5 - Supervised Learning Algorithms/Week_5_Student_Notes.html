@@ -501,31 +501,184 @@ Ask yourself: <em>&ldquo;If a single new row of data arrives tomorrow, can my co
 </ul>
 
 <h4>Step 2 — Preprocessing: The Transformers</h4>
-<p>These classes follow the <strong><code>.fit()</code> &rarr; <code>.transform()</code></strong> pattern. You always fit on training data only.</p>
 
-<p><strong><code>SimpleImputer</code> — Handling Missing Data</strong></p>
+<h5>Why Preprocessing Matters</h5>
+<p>Most classical ML algorithms are <strong>very sensitive</strong> to:</p>
 <ul>
-<li><strong>Purpose:</strong> Fills in blanks (<code>NaN</code>) in your data.</li>
-<li><strong>Strategy:</strong> Choose <code>mean</code>, <code>median</code>, or <code>most_frequent</code>.</li>
-<li><strong>The Fit:</strong> Calculates and stores the column mean from training data.</li>
-<li><strong>The Transform:</strong> Replaces all <code>NaN</code>s with that stored mean — in train, test, and production alike.</li>
+<li>Different feature scales (e.g. <em>age: 0&ndash;100</em> vs. <em>salary: 20,000&ndash;300,000</em>) &mdash; the model mistakes larger numbers for more importance.</li>
+<li>Missing values &mdash; most algorithms cannot handle <code>NaN</code> at all and will raise an error.</li>
+<li>Categorical strings &mdash; algorithms require numbers, not words like &ldquo;London.&rdquo;</li>
+<li>Skewed distributions &mdash; a few extreme outliers can distort distance-based models.</li>
+<li>Correlated or redundant features &mdash; adding noise without adding information.</li>
 </ul>
 
-<p><strong><code>StandardScaler</code> — Scaling</strong></p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Industry Reality</strong><br />
+A well-engineered preprocessor is often <em>more valuable</em> than switching from one algorithm to a fancier one. Garbage in, garbage out.</div></div>
+
+<h5>How Transformers Work: The <code>.fit()</code> &rarr; <code>.transform()</code> Pattern</h5>
+<p>Every sklearn transformer follows a two-step, <strong>stateful</strong> design:</p>
 <ul>
-<li><strong>Purpose:</strong> Centers data so features have a <strong>mean of 0</strong> and a <strong>standard deviation of 1</strong>.</li>
-<li><strong>Math:</strong> $z = \frac{x - \mu}{\sigma}$</li>
-<li><strong>Why?</strong> Models like <strong>SVC</strong> or <strong>Logistic Regression</strong> are sensitive to feature magnitude. If &ldquo;Salary&rdquo; is in the thousands and &ldquo;Age&rdquo; is under 100, the model will incorrectly weight Salary as &ldquo;more important.&rdquo;</li>
+<li><strong><code>.fit(X_train)</code></strong>: The transformer <em>learns</em> parameters from the training data (e.g. calculates the mean, identifies all unique categories).</li>
+<li><strong><code>.transform(X)</code></strong>: It applies the <em>pre-learned</em> parameters to any dataset &mdash; train, test, or a brand-new production row.</li>
+<li><strong><code>.fit_transform(X_train)</code></strong>: A convenience shortcut that combines both steps in one call (used internally by <code>Pipeline</code>).</li>
 </ul>
 
-<p><strong><code>OneHotEncoder</code> — Encoding Categories</strong></p>
-<ul>
-<li><strong>Purpose:</strong> Converts strings like &ldquo;City: London, Paris, NYC&rdquo; into binary columns (one column per city, filled with 0s and 1s).</li>
-<li><strong><code>handle_unknown='ignore'</code>:</strong> If a new city appears in the test set that was not in training, the encoder will not crash — it gives it all zeros instead.</li>
-</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Critical Rule: Always fit on training data only.</strong><br />
+If you call <code>.fit()</code> on the full dataset (including the test set), the scaler learns the test-set mean/std and smuggles that information into your training loop. This is called <strong>data leakage</strong> and will give you an optimistic accuracy score that will <em>not</em> hold up in production.</div></div>
+
+<h5>Scalers: Handling Numeric Columns</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Transformer</th>
+<th style="text-align: left;">What it does</th>
+<th style="text-align: left;">Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>StandardScaler</code></td>
+<td>Centres to mean 0, std 1. Formula: $z = \frac{x-\mu}{\sigma}$</td>
+<td>Age, height, temperature. Algorithms sensitive to scale: SVC, Logistic Regression, KNN.</td>
+</tr>
+<tr>
+<td><code>MinMaxScaler</code></td>
+<td>Squashes values into [0, 1].</td>
+<td>Bounded ranges like rating scores (0&ndash;100) or percentages.</td>
+</tr>
+<tr>
+<td><code>RobustScaler</code></td>
+<td>Uses the median and IQR instead of mean/std. Ignores outliers.</td>
+<td>Income, time-since-last-purchase &mdash; data with a long tail.</td>
+</tr>
+<tr>
+<td><code>PowerTransformer</code></td>
+<td>Applies a Yeo-Johnson or Box-Cox transform to make distributions more Gaussian.</td>
+<td>Strongly skewed features where you need to reduce the skew mathematically.</td>
+</tr>
+</tbody>
+</table>
+
+<h5>Encoders: Handling Categorical Columns</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Transformer</th>
+<th style="text-align: left;">What it does</th>
+<th style="text-align: left;">Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OneHotEncoder</code></td>
+<td>Creates one binary column per category. &ldquo;London/Paris/NYC&rdquo; &rarr; three 0/1 columns.</td>
+<td>Nominal categories with no order and low-to-medium cardinality (e.g. city, product type, gender).</td>
+</tr>
+<tr>
+<td><code>OrdinalEncoder</code></td>
+<td>Maps ordered categories to integers: &ldquo;Low/Medium/High&rdquo; &rarr; 0, 1, 2.</td>
+<td>Categories with a clear ranking: education level (HS &lt; BSc &lt; MSc &lt; PhD), satisfaction rating.</td>
+</tr>
+<tr>
+<td><code>passthrough</code></td>
+<td>Passes the column through unchanged.</td>
+<td>Binary columns already encoded as 0/1 (e.g. <code>is_subscriber</code>, <code>has_credit_card</code>).</td>
+</tr>
+<tr>
+<td><code>drop</code></td>
+<td>Removes the column entirely from the output.</td>
+<td>ID columns, email addresses, signup dates &mdash; any column that would confuse the model.</td>
+</tr>
+</tbody>
+</table>
+
+<h5>The Full <code>ColumnTransformer</code> Pattern</h5>
+<p>Rather than applying one transformation to all columns, <code>ColumnTransformer</code> lets you <strong>route each column group to the right transformer</strong>.
+Any sklearn transformer can be nested inside using <code>make_pipeline</code>, allowing you to chain an Imputer followed by a Scaler for the same column group.</p>
+
+<pre><code class="language-python">from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import make_pipeline, Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, OrdinalEncoder
+from sklearn.impute import SimpleImputer
+
+# --- Define column groups ---
+numeric_features     = ['age', 'income', 'num_children', 'avg_purchase_value']
+categorical_features = ['gender', 'city', 'education_level', 'occupation']
+ordinal_features     = ['satisfaction_rating']   # e.g. Low / Medium / High
+binary_features      = ['has_credit_card', 'is_subscriber']
+
+preprocessor = ColumnTransformer(
+    transformers=[
+
+        # 1. Numeric: fill NaNs with median, then scale to mean=0 / std=1
+        ('num', make_pipeline(
+            SimpleImputer(strategy='median'),
+            StandardScaler()
+        ), numeric_features),
+
+        # 2. Nominal categories: fill missing + one-hot encode
+        ('cat', make_pipeline(
+            SimpleImputer(strategy='most_frequent'),
+            OneHotEncoder(handle_unknown='ignore',   # won't crash on unseen cities
+                          sparse_output=False,        # return a plain NumPy array
+                          drop='if_binary')           # avoids the dummy variable trap
+        ), categorical_features),
+
+        # 3. Ordinal categories: fill missing + encode as ordered integers
+        ('ord', make_pipeline(
+            SimpleImputer(strategy='most_frequent'),
+            OrdinalEncoder(handle_unknown='use_encoded_value',
+                           unknown_value=-999)
+        ), ordinal_features),
+
+        # 4. Binary flags: already clean 0/1 -- pass through untouched
+        ('bin', 'passthrough', binary_features),
+
+        # 5. Junk columns: drop them so they never reach the model
+        ('drop_cols', 'drop', ['customer_id', 'email', 'signup_date'])
+    ],
+
+    remainder='passthrough',            # keep any columns not listed above
+    verbose_feature_names_out=False     # cleaner column names (sklearn >= 1.2)
+)</code></pre>
+
+<h5>Quick Transformer Selection Guide</h5>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Situation</th>
+<th style="text-align: left;">Best choice</th>
+<th style="text-align: left;">Typical columns</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>Numeric, continuous, no extreme outliers</td><td><code>StandardScaler</code></td><td>Age, height, temperature</td></tr>
+<tr><td>Numeric, positive &amp; skewed</td><td><code>RobustScaler</code> or <code>PowerTransformer</code></td><td>Income, time since last purchase</td></tr>
+<tr><td>Numeric, bounded range [0&ndash;1] or [0&ndash;100]</td><td><code>MinMaxScaler</code></td><td>Rating score, discount percentage</td></tr>
+<tr><td>Categories with no order</td><td><code>OneHotEncoder</code></td><td>City, product category, gender</td></tr>
+<tr><td>Categories with clear order</td><td><code>OrdinalEncoder</code></td><td>Education (HS &lt; BSc &lt; MSc &lt; PhD)</td></tr>
+<tr><td>Already binary (yes/no, 0/1)</td><td><code>passthrough</code></td><td><code>is_smoker</code>, <code>has_children</code></td></tr>
+<tr><td>Any missing values</td><td><code>SimpleImputer</code> (median / most_frequent)</td><td>Almost every real dataset</td></tr>
+<tr><td>ID / email / date columns</td><td><code>drop</code></td><td><code>customer_id</code>, <code>signup_date</code></td></tr>
+</tbody>
+</table>
+
+<h5>Minimal But Powerful Version (Most Common Starting Point)</h5>
+<p>For many projects, two column groups are sufficient to get started:</p>
+
+<pre><code class="language-python">simple_preprocessor = ColumnTransformer([
+    ('num', make_pipeline(
+        SimpleImputer(strategy='median'),
+        StandardScaler()
+    ), numeric_features),
+
+    ('cat', OneHotEncoder(handle_unknown='ignore',
+                          sparse_output=False), categorical_features)
+], remainder='passthrough')
+</code></pre>
 
 <h4>Step 3 — The Organiser: <code>ColumnTransformer</code></h4>
-<p>A <strong>Meta-Estimator</strong> that does not transform data itself — it delegates tasks to the right transformers for the right columns.</p>
+<p>A <strong>Meta-Estimator</strong> that does not transform data itself &mdash; it delegates tasks to the right transformers for the right columns.</p>
 <ul>
 <li><strong>The tuple structure:</strong> Takes a list of triples: <code>('name', transformer, [columns])</code>.</li>
 <li><strong><code>remainder='passthrough'</code>:</strong> By default, any columns you do not explicitly mention are dropped. Setting this keeps them in the final output.</li>
