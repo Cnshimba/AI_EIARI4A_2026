@@ -430,7 +430,146 @@ Think of the Decision Boundary as the crossover point where the model stops bein
 </ul>
 <p>The algorithm (such as ID3 or CART) calculates <strong>Information Gain</strong>. It looks at every possible feature (Wind, Temp, Humidity) and picks the one that reduces Entropy the most—effectively splitting the messy mixed groups into cleaner, purer subgroups.</p>
 <hr />
-<h2>6. Summary</h2>
+<h2>6. From Pandas to Production: The sklearn Pipeline</h2>
+<p>In Week 3, we used <strong>Pandas</strong> to explore and clean data. Now that we understand supervised learning algorithms, it is the right time to answer a critical question: <em>"When do I use Pandas, and when do I switch to sklearn?"</em> Getting this boundary wrong is one of the most common mistakes in data science.</p>
+
+<h3>6.1 The Rule of Thumb</h3>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Golden Rule</strong><br />
+<strong>Pandas</strong> is for <em>"Discovery &amp; Structural Cleaning"</em>&nbsp;&mdash; use it to fix the dataset&apos;s skeleton and understand what you have.<br />
+<strong>sklearn</strong> is for <em>"Model-Ready Transformation"</em>&nbsp;&mdash; use it to turn cleaned data into a format a mathematical model can digest.</div></div>
+
+<h3>6.2 Phase 1 — The Pandas Phase (Before the Split)</h3>
+<p>You work with Pandas <strong>before</strong> calling <code>train_test_split</code>. Because Pandas is visual and labelled, it is ideal for structural decisions.</p>
+<ul>
+<li><p><strong>Dropping columns:</strong> If a column has 90% missing data, or is just a &ldquo;User ID&rdquo; that the model cannot learn from, drop it here with <code>df.drop()</code>.</p></li>
+<li><p><strong>Renaming:</strong> Fix messy column names so your pipeline code stays readable (e.g., <code>df.rename(columns={'Col 1': 'age'})</code>).</p></li>
+<li><p><strong>Filtering rows:</strong> Remove obviously bad data (e.g., a &ldquo;Height&rdquo; column containing <code>-5</code>).</p></li>
+<li><p><strong>Feature Engineering (the big logic):</strong> Combine columns that require domain knowledge, for example:<br /><code>df['Total_Area'] = df['Basement_Area'] + df['Living_Area']</code>.</p></li>
+<li><p><strong>EDA:</strong> Use <code>df.describe()</code> and <code>df.isnull().sum()</code> to decide <em>which</em> sklearn imputer strategy you will need later.</p></li>
+</ul>
+
+<h3>6.3 Phase 2 — The sklearn Phase (After the Split)</h3>
+<p>Once you call <code>train_test_split</code>, stop using Pandas for filling or scaling. Switch to <strong>sklearn Transformers</strong> because they are <em>stateful</em> — they learn the parameters from the training data and apply the exact same values to the test data and to future production data.</p>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The Deployment Test</strong><br />
+Ask yourself: <em>&ldquo;If a single new row of data arrives tomorrow, can my code handle it?&rdquo;</em><br />
+&bull; If you filled <code>NaN</code>s with <strong>Pandas</strong>, you must manually recalculate the mean for that new row — every single time.<br />
+&bull; If you used an <strong>sklearn Pipeline</strong>, you just call <code>pipeline.predict(new_row)</code>. The pipeline &ldquo;remembers&rdquo; the mean, the scaling, and the encoding from months ago and applies it instantly.</div></div>
+
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Task</th>
+<th style="text-align: left;">Use <strong>Pandas</strong> if&hellip;</th>
+<th style="text-align: left;">Use <strong>sklearn</strong> if&hellip;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Missing Values</strong></td>
+<td style="text-align: left;">You want to delete the entire row/column.</td>
+<td style="text-align: left;">You want to fill the hole with the learned mean/median.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Categorical Data</strong></td>
+<td style="text-align: left;">You are just checking how many categories exist.</td>
+<td style="text-align: left;">You are converting &ldquo;Red/Blue&rdquo; into numbers for the model.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Feature Creation</strong></td>
+<td style="text-align: left;">Logic is between columns (<code>A + B = C</code>).</td>
+<td style="text-align: left;">You are creating polynomial features ($x^2$).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Scaling</strong></td>
+<td style="text-align: left;">Never — it leaks test statistics into training.</td>
+<td style="text-align: left;">Always — <code>StandardScaler</code> learns $\mu$ and $\sigma$ from train only.</td>
+</tr>
+</tbody>
+</table>
+
+<hr />
+<h3>6.4 The sklearn Toolkit: A Full Reference</h3>
+<p>Every class in sklearn is either an <strong>Estimator</strong> (learns patterns), a <strong>Transformer</strong> (changes data), or a <strong>Selector</strong> (splits/filters data). Here is the standard professional workflow.</p>
+
+<h4>Step 1 — Data Splitting: <code>train_test_split</code></h4>
+<p>A utility function that shuffles and slices your arrays. It does not &ldquo;learn&rdquo; anything.</p>
+<ul>
+<li><p><strong><code>test_size=0.2</code></strong>: Reserves 20% of data that the model will never see during training — the &ldquo;final exam.&rdquo;</p></li>
+<li><p><strong><code>random_state=42</code></strong>: A seed for the random number generator. Setting this ensures the exact same split every run, making experiments reproducible.</p></li>
+<li><p><strong><code>stratify=y</code></strong>: Crucial for classification. If your data is 90% &ldquo;No&rdquo; and 10% &ldquo;Yes,&rdquo; this ensures both train and test sets preserve that same 90/10 ratio.</p></li>
+</ul>
+
+<h4>Step 2 — Preprocessing: The Transformers</h4>
+<p>These classes follow the <strong><code>.fit()</code> &rarr; <code>.transform()</code></strong> pattern. You always fit on training data only.</p>
+
+<p><strong><code>SimpleImputer</code> — Handling Missing Data</strong></p>
+<ul>
+<li><strong>Purpose:</strong> Fills in blanks (<code>NaN</code>) in your data.</li>
+<li><strong>Strategy:</strong> Choose <code>mean</code>, <code>median</code>, or <code>most_frequent</code>.</li>
+<li><strong>The Fit:</strong> Calculates and stores the column mean from training data.</li>
+<li><strong>The Transform:</strong> Replaces all <code>NaN</code>s with that stored mean — in train, test, and production alike.</li>
+</ul>
+
+<p><strong><code>StandardScaler</code> — Scaling</strong></p>
+<ul>
+<li><strong>Purpose:</strong> Centers data so features have a <strong>mean of 0</strong> and a <strong>standard deviation of 1</strong>.</li>
+<li><strong>Math:</strong> $z = \frac{x - \mu}{\sigma}$</li>
+<li><strong>Why?</strong> Models like <strong>SVC</strong> or <strong>Logistic Regression</strong> are sensitive to feature magnitude. If &ldquo;Salary&rdquo; is in the thousands and &ldquo;Age&rdquo; is under 100, the model will incorrectly weight Salary as &ldquo;more important.&rdquo;</li>
+</ul>
+
+<p><strong><code>OneHotEncoder</code> — Encoding Categories</strong></p>
+<ul>
+<li><strong>Purpose:</strong> Converts strings like &ldquo;City: London, Paris, NYC&rdquo; into binary columns (one column per city, filled with 0s and 1s).</li>
+<li><strong><code>handle_unknown='ignore'</code>:</strong> If a new city appears in the test set that was not in training, the encoder will not crash — it gives it all zeros instead.</li>
+</ul>
+
+<h4>Step 3 — The Organiser: <code>ColumnTransformer</code></h4>
+<p>A <strong>Meta-Estimator</strong> that does not transform data itself — it delegates tasks to the right transformers for the right columns.</p>
+<ul>
+<li><strong>The tuple structure:</strong> Takes a list of triples: <code>('name', transformer, [columns])</code>.</li>
+<li><strong><code>remainder='passthrough'</code>:</strong> By default, any columns you do not explicitly mention are dropped. Setting this keeps them in the final output.</li>
+</ul>
+
+<h4>Step 4 — The Glue: <code>Pipeline</code> / <code>make_pipeline</code></h4>
+<p>The <code>Pipeline</code> is the most powerful tool in the library because it behaves exactly like a single model.</p>
+<ul>
+<li><strong><code>make_pipeline</code>:</strong> A shorthand that automatically names steps (e.g., names <code>StandardScaler()</code> as <code>"standardscaler"</code>).</li>
+<li><strong>The secret sauce:</strong> When you call <code>pipeline.fit(X_train, y_train)</code>, sklearn automatically:<br />
+  1. Calls <code>.fit_transform()</code> on Step 1 (e.g., the <code>ColumnTransformer</code>).<br />
+  2. Passes the result to Step 2 and calls <code>.fit_transform()</code>.<br />
+  3. Passes that to the final model and calls <code>.fit()</code>.<br />
+  At prediction time, <code>.transform()</code> (not <code>.fit_transform()</code>) is used on each step, so no data leakage occurs.</li>
+</ul>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>The 3-Sentence Workflow</strong><br />
+1. Use <strong>Pandas</strong> to fix bulk errors and engineer your final feature set.<br />
+2. <strong>Split</strong> your data into Train and Test.<br />
+3. Use an <strong>sklearn Pipeline</strong> to handle all math-heavy transformations (Scaling, Imputing, Encoding) so your model stays consistent from training to production.</div></div>
+
+<h4>Step 5 — The Models: The Estimators</h4>
+<p>Whether it is <code>RandomForestClassifier</code>, <code>LogisticRegression</code>, or <code>LinearRegression</code>, all sklearn models share the same interface.</p>
+<ul>
+<li><strong><code>.fit(X, y)</code></strong> — The &ldquo;Study&rdquo; phase: the model adjusts its internal parameters to minimise error.</li>
+<li><strong><code>.predict(X)</code></strong> — The &ldquo;Exam&rdquo; phase: the model applies its learned logic to new data.</li>
+<li><strong><code>.predict_proba(X)</code></strong> — For classifiers only: instead of a hard Yes/No, this returns the percentage chance for each class (e.g., <em>85% Yes</em>).</li>
+</ul>
+
+<h4>Step 6 — Validation: <code>cross_val_score</code></h4>
+<p>Instead of relying on a single train/test split, this performs <strong>K-Fold Cross-Validation</strong>.</p>
+<ul>
+<li><strong><code>cv=5</code>:</strong> Splits training data into 5 chunks. It trains on 4 and tests on 1, rotating 5 times so every row of data gets a turn in the &ldquo;test set.&rdquo;</li>
+<li><strong>Result:</strong> An array of 5 scores. If they are similar (e.g., <em>0.82, 0.81, 0.83</em>), your model is <strong>stable</strong>. If they vary wildly (e.g., <em>0.90, 0.50, 0.80</em>), your model is <strong>unstable</strong>.</li>
+</ul>
+
+<h4>Step 7 — Tuning: <code>GridSearchCV</code></h4>
+<p>Think of this as a &ldquo;for-loop on steroids&rdquo; for your model settings. It tries every combination of parameters you specify and identifies the best one.</p>
+<ul>
+<li><strong><code>param_grid</code>:</strong> A dictionary of settings to try, e.g., <code>{'n_estimators': [10, 50, 100]}</code>.</li>
+<li><strong><code>refit=True</code>:</strong> Once the best settings are found, it automatically retrains on the <em>entire</em> training set using those settings — so you get a production-ready model at the end.</li>
+</ul>
+<hr />
+<h2>7. Summary</h2>
 <p>We have expanded our toolkit from identifying relationships (Regression) to making choices (Classification).</p>
 <ul>
 <li>
@@ -442,9 +581,9 @@ Think of the Decision Boundary as the crossover point where the model stops bein
 </ul>
 <p>Next week, we will tackle the final paradigm of classical Machine Learning: <strong>Unsupervised Learning</strong>. What happens when we have data but no labels at all?</p>
 <hr />
-<h2>7. Lab Review</h2>
+<h2>8. Lab Review</h2>
 <p>We have prepared four practical experiments to solidify these concepts.</p>
-<h3>7.1 Lab 1 &amp; 2: Linear Regression (House Prices)</h3>
+<h3>8.1 Lab 1 &amp; 2: Linear Regression (House Prices)</h3>
 <p>We tackle the classic problem of House Price Prediction in two ways:</p>
 <ul>
 <li>
@@ -457,9 +596,9 @@ Think of the Decision Boundary as the crossover point where the model stops bein
 <p><strong>Interactive Visualization</strong>: We generate a 3D plot of weights vs. loss to watch Gradient Descent "walk" down the valley in real-time.</p>
 </li>
 </ul>
-<h3>7.2 Lab 3: Logistic Regression (Rent vs. Area)</h3>
+<h3>8.2 Lab 3: Logistic Regression (Rent vs. Area)</h3>
 <p>We revisit housing data but ask a classification question: "Is this apartment affordable?" (Yes/No). You will see how the Logistic curve fits the data differently than the straight line of regression.</p>
-<h3>7.3 Lab 4: Decision Trees (Play Tennis?)</h3>
+<h3>8.3 Lab 4: Decision Trees (Play Tennis?)</h3>
 <p>We use the classic "Play Tennis" dataset to train a Decision Tree. The highlight is using <code>graphviz</code> to visualize the tree and trace the AI's logic branch by branch.</p>
 <p><a id="labs"></a></p>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Hands-On Available</strong><br />
