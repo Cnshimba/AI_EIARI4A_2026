@@ -177,79 +177,130 @@
 
             
 <h2>Foreword</h2>
-<p>This lab introduces **Logistic Regression** for classification. You will learn how to turn numbers into probabilities using the **Sigmoid** function.</p>
-
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Classification vs Regression</strong>:<br />
-In this lab, we don't predict a price. We predict a <strong>Category</strong> (Pass/Fail) based on study habits.</p></div></div>
+<p>In this lab, we use the legendary <strong>Kaggle Titanic Dataset</strong>. Our mission is to predict whether a passenger <strong>Survived (1)</strong> or <strong>Perished (0)</strong> based on their social status and demographics.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this lab matters</strong>:<br />
+Logistic Regression introduces <strong>Binary Classification</strong>. It teaches models to output probabilities (0 to 100%) rather than infinite continuous numbers. This is the foundation for all decision-making AI.</div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.314a2 2 0 01-1.185.117l-1.637-.272a4 4 0 01-2.174-1.134l-1.623-1.623a2 2 0 10-2.828 2.828l1.623 1.623a6 6 0 003.262 1.701l1.765.294a2 2 0 001.185-.117l.628-.314a4 4 0 012.574-.344l2.431.487a2 2 0 001.022.547l.149.049a2 2 0 001.212-3.856l-.149-.049z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Structure</strong>:<br />
+We follow the <strong>6-Phase Professional Workflow</strong> and use a <code>ColumnTransformer</code> to handle both numerical data and categorical text data simultaneously. We will test the model's reliability using <strong>Cross-Validation</strong>.</div></div>
 
 <hr />
-<h2>Phase 1 & 2: Splitting & Preprocessing</h2>
-<p>We use <code>StandardScaler</code> to ensure all features are on the same scale, which is essential for the math behind Logistic Regression.</p>
-<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
-<ul>
-<li>
-<p><strong>X</strong>: Features [Price, Area]</p>
-</li>
-<li>
-<p><strong>y</strong>: Label [1 = Worth Renting, 0 = Not Worth Renting]</p>
-</li>
-</ul>
-<p>Then, we use <code>fit_transform</code> to standardize the data (mean=0, variance=1). This helps the model converge faster.</p>
-<pre><code class="language-python"># Feature Matrix: [Price, Area]
-X = [[2200,15],[2750,20],[5000,40],[4000,20],[3300,20],[2000,10],[2500,12],[12000,80],
-     [2880,10],[2300,15],[1500,10],[3000,8],[2000,14],[2000,10],[2150,8],[3400,20],
-     [5000,20],[4000,10],[3300,15],[2000,12],[2500,14],[10000,100],[3150,10],
-     [2950,15],[1500,5],[3000,18],[8000,12],[2220,14],[6000,100],[3050,10]]
+<h3> 1.1 Import Dependencies &amp; Load Data</h3>
+<p><strong>Concept</strong>: We fetch the Titanic data and focus on key features: Passenger Class (<code>Pclass</code>), Gender (<code>Sex</code>), and <code>Age</code>.</p>
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
 
-# Labels: 1 = Rent, 0 = Don't Rent
-y = [1,1,0,0,1,1,1,1,0,1,1,0,1,1,0,1,0,0,0,1,1,1,0,1,0,1,0,1,1,0]
+url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+df = pd.read_csv(url)
 
-# Normalize Data
-ss = StandardScaler()
-X_train = ss.fit_transform(X)
+df = df[['Survived', 'Pclass', 'Sex', 'Age']].dropna()
 
-print(&quot;Standardized Data (First 5 Rows):\n&quot;, X_train[:5])
+X = df[['Pclass', 'Sex', 'Age']]
+y = df['Survived']
 </code></pre>
-<h3>Step 3: Train the Model</h3>
-<p>We fit the Logistic Regression model to our standardized training data.</p>
-<pre><code class="language-python"># Initialize Model
-lr = LogisticRegression()
 
-# Train Model
-lr.fit(X_train, y)
-
-print(&quot;Model Trained Successfully!&quot;)
+<hr />
+<h3> 1.2 Phase 1: Data Splitting</h3>
+<p><strong>Concept</strong>: We secure 20% of the passenger data for our unbiased survival final exam.</p>
+<pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 </code></pre>
-<h3>Step 4: Make Predictions</h3>
-<p>Let's predict if we should rent a specific apartment.</p>
-<ul>
-<li><strong>Apartment A</strong>: Price = 2000, Area = 18 sqm.</li>
-</ul>
-<p>Remember to <strong>normalize</strong> the input data using the <em>same scaler</em> before predicting!</p>
-<pre><code class="language-python"># New Data Point
-new_apartment = [[2000, 18]]
 
-# Normalize
-new_apart_scaled = ss.transform(new_apartment)
+<hr />
+<h4>Theory: Logistic Regression &amp; Dummy Variables</h4>
+<p>When One-Hot Encoding binary features like <code>Sex</code> ('male', 'female'), creating two columns is redundant (if not male, must be female). We drop the first column to prevent the "Dummy Variable Trap."</p>
 
-# Predict
-prediction = lr.predict(new_apart_scaled)
-probability = lr.predict_proba(new_apart_scaled)
+<div class="overflow-x-auto my-6">
+<table class="min-w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<thead>
+<tr class="bg-primary text-white">
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Component</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Target</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>StandardScaler()</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>['Pclass', 'Age']</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Logistic Regression converges faster when numbers are scaled.</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>OneHotEncoder(drop='first')</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>['Sex']</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Converts 'male'/'female' into a single binary 1/0 column.</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-print(f&quot;Prediction: {prediction[0]} (1=Rent, 0=Don't Rent)&quot;)
-print(f&quot;Confidence: {probability[0][prediction[0]]*100:.2f}%&quot;)
+<h3> 1.3 Phase 2 &amp; 3: Preprocessing &amp; Assembly</h3>
+<p><strong>Concept</strong>: We map our operations to the exact columns they belong to.</p>
+<p><strong>Solution</strong>: We use <code>ColumnTransformer</code> for routing and wrap it in our <code>Pipeline</code>.</p>
+<pre><code class="language-python">preprocessor = ColumnTransformer([
+    ('num', StandardScaler(), ['Pclass', 'Age']),
+    ('cat', OneHotEncoder(drop='first'), ['Sex'])
+])
+
+workflow = Pipeline([
+    ('pre', preprocessor),
+    ('model', LogisticRegression())
+])
 </code></pre>
+
+<hr />
+<h3> 1.4 Phase 4: Training</h3>
+<p><strong>Concept</strong>: We train the model to find the optimal 'S-Curve' (Sigmoid) that separates survivors from those who perished.</p>
+<p><strong>Solution</strong>: Call <code>.fit()</code> on the entire pipeline.</p>
+<pre><code class="language-python">workflow.fit(X_train, y_train)
+</code></pre>
+
+<hr />
+<h3> 1.5 Phase 5: Evaluation (Accuracy &amp; Probabilities)</h3>
+<p><strong>Concept</strong>: We check the model's accuracy on the unseen test data. More importantly, we look at the raw probabilities the Sigmoid gives us.</p>
+<p><strong>Solution</strong>: We use <code>.predict()</code> for the final 0/1 decision, and <code>.predict_proba()</code> to see the percentage certainty.</p>
+<pre><code class="language-python">y_pred = workflow.predict(X_test)
+y_prob = workflow.predict_proba(X_test)
+
+print(f"Survival Prediction Accuracy: {accuracy_score(y_test, y_pred):.2%}")
+print(f"\nSample Prediction Probability for First Test Passenger:")
+print(f"Perish: {y_prob[0, 0]:.2%} | Survive: {y_prob[0, 1]:.2%}")
+</code></pre>
+
+<hr />
+<h3> 1.6 Phase 5: Cross-Validation</h3>
+<p><strong>Concept</strong>: Does the model perform consistently across all variations of the Titanic passenger lists?</p>
+<p><strong>Solution</strong>: We run a 5-fold cross-validation on the pipeline, using standard <code>accuracy</code> as the metric.</p>
+<pre><code class="language-python">scores = cross_val_score(workflow, X, y, scoring='accuracy', cv=5)
+print("Accuracy Scores across 5 folds:", np.round(scores, 3))
+print(f"\nAverage CV Accuracy: {scores.mean():.2%}")
+print(f"Standard Deviation: {scores.std():.2%} (How much the accuracy fluctuates)")
+</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg shadow-sm bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Observation</strong>: The cross-validation score reveals if the model's high accuracy was just luck. A stable accuracy around 78-80% is typical for this subset of features.</div></div>
+
+<div class="my-6 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="text-primary dark:text-sky-400 font-bold mb-2">Task 1</h4>
+    <p>In the <code>ColumnTransformer</code> in Phase 2, change <code>drop='first'</code> to <code>None</code> in the <code>OneHotEncoder</code>. Rerun the cross-validation. Does creating two dummy variables instead of one crash the model or change the accuracy significantly? Why or why not?</p>
+    <details class="cursor-pointer group mt-4">
+        <summary class="font-medium text-secondary hover:text-yellow-600 transition-colors list-none flex items-center">
+            <svg class="w-4 h-4 mr-2 transform group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <strong>Click here for Solution (Try it yourself first!)</strong>
+        </summary>
+        <div class="mt-4 pl-6 border-l-2 border-slate-200 dark:border-slate-600">
+            <p>If you remove <code>drop='first'</code>, <code>OneHotEncoder</code> creates two columns: <code>Sex_female</code> and <code>Sex_male</code>. The accuracy will likely remain identical.</p>
+            <p>Modern Scikit-Learn's <code>LogisticRegression</code> includes $L_2$ Regularization by default (the <code>C=1.0</code> parameter), which gracefully handles the collinearity (Dummy Variable Trap). However, for mathematical purity and slightly faster training, dropping the first column is best practice.</p>
+        </div>
+    </details>
+</div>
+
+<hr />
 <h3>Summary</h3>
-<p>In this lab, you explored Classification:<br />
-1.  <strong>Binary Classification</strong>: Predicting categories (Rent/Don't Rent) instead of continuous numbers.<br />
-2.  <strong>Normalization</strong>: Using <code>StandardScaler</code> to bring features to a comparable scale.<br />
-3.  <strong>Probabilistic Output</strong>: Seeing not just the decision (0 or 1), but the model's confidence in that decision.</p>
-<h3>Self Reflection</h3>
-<ol>
-<li><strong>Scale Effect</strong>: Why did we need <code>StandardScaler</code>? What would happen if 'Price' (thousands) was mixed with 'Area' (tens) without scaling?</li>
-<li><strong>Decision Boundary</strong>: Logistic Regression uses a threshold (usually 0.5) to decide 0 or 1. If the probability was 0.51, is it a "confident" prediction?</li>
-<li><strong>New Features</strong>: If we added "Safety Rating" (1-10) to the dataset, would it need scaling too?</li>
-</ol>
+<p>You've just built an AI that can predict historical outcomes with high consistency across cross-validation folds. Notice how the model doesn't just guess Yes/No; it calculates a <strong>Probability</strong> before making the final call!</p>
             
             
         

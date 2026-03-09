@@ -177,54 +177,117 @@
 
             
 <h2>Foreword</h2>
-<p>This lab introduces **Linear Regression**, the foundational algorithm for predicting continuous values. We will follow the **6-Phase Professional Workflow** used in industry.</p>
-
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Professional Workflow</strong>:<br />
-1. <strong>Phase 1: Splitting</strong> (Train/Test Split)<br />
-2. <strong>Phase 2: Preprocessing</strong> (Scaling)<br />
-3. <strong>Phase 3: Assembly</strong> (Building the Model)<br />
-4. <strong>Phase 4: Training & Prediction</strong><br />
-5. <strong>Phase 5: Evaluation</strong> (MSE, RMSE, MAE)<br />
-6. <strong>Phase 6: Optimization</strong></p></div></div>
+<p>In this lab, we use a professional <strong>Kaggle Dataset</strong>: <a href="https://www.kaggle.com/datasets/mirichampel/medical-cost-personal-datasets">Medical Cost Personal Datasets</a>.</p>
+<p><strong>Goal</strong>: To predict <strong>Medical Charges</strong> based on a patient's <strong>Age</strong> using a single-feature Linear Regression model.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this lab matters</strong>:<br />
+Before handling 100-feature datasets or complex neural networks, we must understand how a model draws a straight line through data. This establishes the foundation of the mathematical <strong>Adjustment Loop</strong>.</div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.314a2 2 0 01-1.185.117l-1.637-.272a4 4 0 01-2.174-1.134l-1.623-1.623a2 2 0 10-2.828 2.828l1.623 1.623a6 6 0 003.262 1.701l1.765.294a2 2 0 001.185-.117l.628-.314a4 4 0 012.574-.344l2.431.487a2 2 0 001.022.547l.149.049a2 2 0 001.212-3.856l-.149-.049z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Structure</strong>:<br />
+We will use the <strong>6-Phase Professional Workflow</strong> and introduce <strong>Cross Validation</strong> to ensure our model's performance isn't just a lucky guess.</div></div>
 
 <hr />
-<h2>Phase 1: Data Splitting</h2>
-<p>We split the data to ensure we test the model on data it hasn't seen before. This prevents "cheating" where the model just memorizes the answers.</p>
-<pre><code class="language-python">from sklearn.model_selection import train_test_split
+<h3> 1.1 Import Dependencies &amp; Load Data</h3>
+<p><strong>Concept</strong>: We fetch the dataset directly from a reliable GitHub mirror so we always have the same starting point.</p>
 
-# Split into 80% Train, 20% Test
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Real-World Application</strong><br />
+Predicting insurance costs is a classic regression task. You will see how age affects these costs and how to measure your model's accuracy using <strong>RMSE</strong> and <strong>MAE</strong>.</p></div></div>
+
+<hr />
+<p>We fetch the Kaggle data from GitHub and split it into <code>X_train</code> and <code>X_test</code>.</p>
+<pre><code class="language-python"># Load data
+url = "https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv"
+df = pd.read_csv(url)
+
+#<hr />
+<h3> 1.2 Phase 1: Data Splitting</h3>
+<p><strong>Concept</strong>: We never train on the final exam. We split the data into 80% training and 20% testing sets.</p>
+<pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+print(f"Training set size: {len(X_train)}")
+print(f"Testing set size: {len(X_test)}")
 </code></pre>
 
-<h2>Phase 3 & 4: Assembly & Training</h2>
-<p>We initialize the <code>LinearRegression</code> estimator and <strong>Fit</strong> it to the training data. This is where the model learns the weights $w$ and bias $b$.</p>
-<pre><code class="language-python">from sklearn.linear_model import LinearRegression
+<hr />
+<h4>Theory: Scikit-Learn Pipelines</h4>
+<p>A <code>Pipeline</code> links multiple steps together so they act as one single object.</p>
+<div class="overflow-x-auto my-6">
+<table class="min-w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<thead>
+<tr class="bg-primary text-white">
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Pipeline Step</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Function</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">ML Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>StandardScaler()</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Transformer</td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Scales numbers to have a mean of 0 and variance of 1.</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>LinearRegression()</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Estimator</td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Learns the coefficients (weights) and intercept (bias).</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-# Initialize
-model = LinearRegression()
+<h3> 1.3 Phase 2, 3 & 4: Preprocessing, Assembly & Training</h3>
+<p><strong>Concept</strong>: We must scale <code>Age</code> so it's on a leveled mathematical playing field. But scaling the test set using Test Set averages causes <strong>Data Leakage</strong>.</p>
+<p><strong>Solution</strong>: We use a <strong>Pipeline</strong> to tie the scaler and model together seamlessly. This ensures scaling rules from <code>X_train</code> are applied to <code>X_test</code>.</p>
 
-# Train (The Correction Loop)
-model.fit(X_train, y_train)
+<pre><code class="language-python">workflow = Pipeline([
+    ('scaler', StandardScaler()),
+    ('model', LinearRegression())
+])
 
-print(f"Weight (w): {model.coef_[0]:.2f}")
-print(f"Bias (b): {model.intercept_:.2f}")
+workflow.fit(X_train, y_train)
+
+# Extract the model from the pipeline to see what it learned
+lr_model = workflow.named_steps['model']
+print(f"Learned Scaled Weight (w): {lr_model.coef_[0]:.2f}")
+print(f"Learned Scaled Bias (b): {lr_model.intercept_:.2f}")
 </code></pre>
 
-<h2>Phase 5: Evaluation (The Quality Control)</h2>
-<p>Now we calculate our performance metrics: <strong>RMSE</strong> (Root Mean Squared Error) and <strong>MAE</strong> (Mean Absolute Error) as explained in the lecture notes.</p>
-<pre><code class="language-python">from sklearn.metrics import mean_squared_error, mean_absolute_error
+<hr />
+<h3> 1.4 Phase 5: Evaluation (Quality Control)</h3>
+<p><strong>Concept</strong>: We evaluate how well the model predicts charges for the test group.</p>
+<p><strong>Solution</strong>: We calculate <strong>RMSE</strong> (penalizes large errors heavily) and <strong>MAE</strong> (gives the plain average error).</p>
+<pre><code class="language-python"># We pass the WHOLE dataset (X, y) into cross_val_score because it handles the splitting!
+# Note: Scikit-learn uses negative MSE by default for scoring, so we convert it back.
+scores = cross_val_score(workflow, X, y, scoring='neg_mean_squared_error', cv=5)
+rmse_scores = np.sqrt(-scores)
 
-# Predict on Test Set
-y_pred = model.predict(X_test)
+print("RMSE Scores across 5 folds:", np.round(rmse_scores, 2))
+print(f"\nAverage CV RMSE: ${rmse_scores.mean():,.2f}")
+print(f"Standard Deviation: ${rmse_scores.std():,.2f} (How much it varies)")
 
-# Calculate Metrics
-mse = mean_squared_error(y_test, y_pred)
-rmse = np.sqrt(mse)
-mae = mean_absolute_error(y_test, y_pred)
-
-print(f"RMSE: {rmse:.2f}")
-print(f"MAE:  {mae:.2f}")
+# Observation: If the Average CV RMSE is close to our Test RMSE from earlier, our model is stable!
 </code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg shadow-sm bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Observation</strong>: The cross-validation error is closely aligned with our initial test error. This proves our pipeline is robust and hasn't just memorized a "lucky" subset of data.</div></div>
+
+<div class="my-6 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="text-primary dark:text-sky-400 font-bold mb-2">Task 1</h4>
+    <p>Change <code>cv=5</code> to <code>cv=10</code> in the <code>cross_val_score</code> function above. Run the cell again. Does the average error change significantly?</p>
+    <details class="cursor-pointer group mt-4">
+        <summary class="font-medium text-secondary hover:text-yellow-600 transition-colors list-none flex items-center">
+            <svg class="w-4 h-4 mr-2 transform group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <strong>Click here for Solution (Try it yourself first!)</strong>
+        </summary>
+        <div class="mt-4 pl-6 border-l-2 border-slate-200 dark:border-slate-600">
+            <pre><code class="language-python">scores_10 = cross_val_score(workflow, X, y, scoring='neg_mean_squared_error', cv=10)
+rmse_scores_10 = np.sqrt(-scores_10)
+print(f"10-Fold Average CV RMSE: ${rmse_scores_10.mean():,.2f}")</code></pre>
+            <p>The average will change slightly, but it should remain in the same ballpark, further proving stability.</p>
+        </div>
+    </details>
+</div>
+
+<hr />
+<h3>Summary</h3>
+<p>Using a real-world dataset, you've seen that as <strong>Age</strong> increases, <strong>Medical Charges</strong> tend to rise linearly. You completely automated this with a <strong>Pipeline</strong> and verified its stability with <strong>Cross-Validation</strong>.</p>
+<p>However, notice the wide spread in the scatter plot — there are clearly other factors at play (like smoking or BMI) which we will cover in Lab 2!</p>
 
 <hr />
 <h2>Part 2: Linear Regression from Scratch</h2>

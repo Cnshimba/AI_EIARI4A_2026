@@ -1,0 +1,194 @@
+import json
+import os
+
+filepath = r"c:\Users\carlos\OneDrive - Vaal University of Technology\WORK\2026\AI_v2_html\Week 5 - Supervised Learning Algorithms\Week_5_Lab_5_Random_Forest.ipynb"
+with open(filepath, "r") as f:
+    nb = json.load(f)
+
+# Cell 0
+nb["cells"][0]["source"] = [
+    "# Week 5 Lab 5: Random Forest (The Titanic Powerhouse & Pipelines)\n",
+    "\n",
+    "**Goal**: Predict Titanic survival using a Random Forest to fix the high variance of Decision Trees and automatically extract the most important survival factors.\n",
+    "\n",
+    "> **Why this lab matters**:\n",
+    "> A single Decision Tree is like asking one person for advice; a **Random Forest** is like asking a diverse crowd of 100 people and taking a vote. This is an **Ensemble** method. It drastically improves accuracy and prevents overfitting.\n",
+    "\n",
+    "> **Structure**:\n",
+    "> We follow the **6-Phase Professional Workflow**. We use a `ColumnTransformer` inside a `Pipeline` to feed data into a `RandomForestClassifier`. Finally, we evaluate its **Cross-Validation** stability and extract **Feature Importances**.\n",
+    "\n",
+    "---\n",
+    "## Foreword\n",
+    "In our final lab, we return to the **Titanic Dataset** but use a much more powerful model.\n",
+    "\n",
+    "1. **Phase 1: Splitting**\n",
+    "2. **Phase 2: Preprocessing (ColumnTransformers)**\n",
+    "3. **Phase 3: Assembly (Pipeline)**\n",
+    "4. **Phase 4: Training (Crowd Building)**\n",
+    "5. **Phase 5: Evaluation (Accuracy & Cross-Validation)**\n",
+    "6. **Phase 6: Optimization (Feature Importance)**"
+]
+
+# Cell 1
+nb["cells"][1]["source"] = [
+    "### 1.1 Import Dependencies & Load Data\n",
+    "**Concept**: We fetch the Titanic data, extracting `Pclass`, `Sex`, `Age`, and `Fare` (ticket price).\n"
+]
+
+# Cell 2: add cv
+nb["cells"][2]["source"] = [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "from sklearn.model_selection import train_test_split, cross_val_score\n",
+    "from sklearn.pipeline import Pipeline\n",
+    "from sklearn.compose import ColumnTransformer\n",
+    "from sklearn.preprocessing import OrdinalEncoder\n",
+    "from sklearn.ensemble import RandomForestClassifier\n",
+    "from sklearn.metrics import accuracy_score\n",
+    "\n",
+    "# Load Titanic Dataset\n",
+    "url = \"https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv\"\n",
+    "df = pd.read_csv(url)\n",
+    "df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']].dropna()\n",
+    "\n",
+    "X = df[['Pclass', 'Sex', 'Age', 'Fare']]\n",
+    "y = df['Survived']"
+]
+
+# Cell 3
+nb["cells"][3]["source"] = [
+    "---\n",
+    "### 1.2 Phase 1: Data Splitting\n",
+    "**Concept**: Secure 20% of the dataset to evaluate the crowd's final intelligence.\n"
+]
+
+# Cell 5
+nb["cells"][5]["source"] = [
+    "---\n",
+    "#### Theory: Ensemble Methods & Random Forest\n",
+    "A Random Forest is an **Ensemble** method. It creates many Decision Trees. To ensure the trees aren't identical (which would defeat the purpose of a \"crowd\"), each tree only gets to look at a **random subset** of the rows and columns. This forces different trees to learn different perspectives.\n",
+    "\n",
+    "| Component | Parameter | Function |\n",
+    "| :--- | :--- | :--- |\n",
+    "| `RandomForestClassifier()` | `n_estimators=100` | Creates a forest of exactly 100 independent decision trees. |\n",
+    "| `OrdinalEncoder()` | `['Sex']` | We still only need Ordinal Encoding because the underlying mechanism is still trees! |\n",
+    "\n",
+    "### 1.3 Phase 2 & 3: Preprocessing & Assembly\n",
+    "**Concept**: We build the pipeline to feed our forest.\n",
+    "**Solution**: A ColumnTransformer handles the text, while the remaining features pass directly into the 100 trees.\n"
+]
+
+# Cell 7
+nb["cells"][7]["source"] = [
+    "---\n",
+    "### 1.4 Phase 4: Training\n",
+    "**Concept**: When we call `.fit()`, Scikit-Learn will secretly train 100 individual decision trees.\n",
+    "**Solution**: Call `.fit()` on the pipeline.\n"
+]
+
+# Replace cells 8 onwards
+new_cells = [
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "workflow.fit(X_train, y_train)\n"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "---\n",
+            "### 1.5 Phase 5: Evaluation (Accuracy & Cross-Validation)\n",
+            "**Concept**: When we call `.predict()`, Scikit-Learn asks all 100 trees for their prediction and takes a **majority vote**.\n",
+            "**Solution**: We run a prediction and immediately follow up with a 5-fold cross-validation to see if it fixed the high variance from Lab 4.\n"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "y_pred = workflow.predict(X_test)\n",
+            "print(f\"Initial Testing Accuracy: {accuracy_score(y_test, y_pred):.2%}\")\n",
+            "\n",
+            "scores = cross_val_score(workflow, X, y, scoring='accuracy', cv=5)\n",
+            "print(\"\\nAccuracy Scores across 5 folds:\", np.round(scores, 3))\n",
+            "print(f\"Average CV Accuracy: {scores.mean():.2%}\")\n",
+            "print(f\"Standard Deviation: {scores.std():.2%} (Compare this to Lab 4's variance!)\")"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "> **Observation**: The standard deviation is now significantly lower than a single unconstrained Decision Tree! This proves the \"Wisdom of the Crowd\" stabilizes predictions and prevents overfitting."
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "---\n",
+            "### 1.6 Phase 6: Optimization (Feature Importance)\n",
+            "**Concept**: Since we have 100 trees, we can check which feature they repeatedly found most useful for splitting data. This helps us \"explain\" the AI to stakeholders.\n",
+            "**Solution**: We extract `feature_importances_` from the trained Random Forest."
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Extract the model and the transformed feature names from the pipeline\n",
+            "rf_model = workflow.named_steps['model']\n",
+            "importances = rf_model.feature_importances_\n",
+            "\n",
+            "feature_names = workflow.named_steps['pre'].get_feature_names_out()\n",
+            "feature_names = [name.split('__')[1] for name in feature_names] # Clean names\n",
+            "\n",
+            "print(\"--- TITANIC SURVIVAL FACTOR IMPORTANCE ---\")\n",
+            "for name, importance in zip(feature_names, importances):\n",
+            "    print(f\"Feature: {name:7} | Importance Score: {importance:.2%}\")"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "**Task 1**: In Phase 3, change `n_estimators=100` to `n_estimators=5`. Rerun the cross-validation and feature importances. What happens to the variance (Standard Deviation) when the crowd is too small?"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "<details>\n",
+            "<summary><strong> Click here for Solution (Try it yourself first!)</strong></summary>\n",
+            "\n",
+            "If you drop the number of trees to 5, the \"Wisdom of the Crowd\" is lost. The standard deviation jumps back up because 5 trees aren't enough to balance out their individual biases. \n",
+            "\n",
+            "Additionally, the Feature Importance percentages shift dramatically because the sample size of trees evaluating those features is too small. 100 estimators is the standard starting point in the industry.\n",
+            "</details>"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "---\n",
+            "### Summary\n",
+            "By using 100 trees in a pipeline, our model is less likely to \"hallucinate\" based on noise in the data and ensures zero data leakage. You've also verified that **Sex** and **Ticket Fare/Pclass** were the primary drivers behind the survival of Titanic passengers, while relying on the power of **Ensemble Methods**."
+        ]
+    }
+]
+
+nb["cells"] = nb["cells"][:8] + new_cells # Keep up to cell 7 (inclusive) and append new cells
+
+with open(filepath, "w") as f:
+    json.dump(nb, f, indent=1)

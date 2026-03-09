@@ -176,167 +176,130 @@
 </div>
 
             <h2>Foreword</h2>
-<p>This lab introduces **Decision Trees**, which behave like the "20 Questions" game. You will learn how the model calculates **Entropy** to decide which questions to ask.</p>
-
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Terminology Alert</strong>:<br />
-<strong>Entropy</strong> measures "messiness" or uncertainty. A Decision Tree tries to reduce entropy with every split.</p></div></div>
+<p>Decision Trees are highly interpretable. In this lab, we use the <strong>Titanic Dataset</strong> to see the logic.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this lab matters</strong>:<br />
+Unlike Regression models which calculate formulas, Decision Trees build highly interpretable logical flowcharts. They teach us how AI can automatically segment data by reducing <strong>Entropy</strong> (messiness).</div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.314a2 2 0 01-1.185.117l-1.637-.272a4 4 0 01-2.174-1.134l-1.623-1.623a2 2 0 10-2.828 2.828l1.623 1.623a6 6 0 003.262 1.701l1.765.294a2 2 0 001.185-.117l.628-.314a4 4 0 012.574-.344l2.431.487a2 2 0 001.022.547l.149.049a2 2 0 001.212-3.856l-.149-.049z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Structure</strong>:<br />
+We follow the <strong>6-Phase Professional Workflow</strong> and use <code>OrdinalEncoder</code> instead of <code>OneHotEncoder</code>. We will visualize "The Mind of the Machine" and use <strong>Cross-Validation</strong> to test node stability.</div></div>
 
 <hr />
-<h2>Phase 2: Preprocessing (Label Encoding)</h2>
-<p>Because Scikit-Learn only understands numbers, we use the <code>LabelEncoder</code> to convert text categories like "Sunny" and "Rain" into integers.</p>
-<pre><code class="language-python">from sklearn.preprocessing import LabelEncoder
-
-le = LabelEncoder()
-df_encoded = df.apply(le.fit_transform)
-</code></pre>
-
-<h2>Phase 3 & 4: Assembly & Training</h2>
-<p>We specify <code>criterion='entropy'</code> during assembly to ensure the model uses Information Gain logic.</p>
-<pre><code class="language-python">from sklearn import tree
-
-clf = tree.DecisionTreeClassifier(criterion='entropy')
-clf.fit(X, y)
-</code></pre>
-
-<h2>Phase 5: Evaluation (Visualization)</h2>
-<p>Decision Trees are unique because they are "White Box" models — you can see exactly how the logic works.</p>
-<pre><code class="language-python">import matplotlib.pyplot as plt
-tree.plot_tree(clf, filled=True)
-</code></pre>
-
-<h3>Summary</h3>
-<p>In this lab, you used statistical "messiness" (Entropy) to build a logical flowchart that can predict outcomes like a human.</p>
-<h3>Step 1: Import Dependencies &amp; Load Data</h3>
-<p>We need <code>pandas</code> for data handling and <code>DecisionTreeClassifier</code> from <code>sklearn</code>.</p>
-<p>The data is stored in <code>tennis.txt</code>.</p>
+<h3> 1.1 Import Dependencies &amp; Load Data</h3>
+<p><strong>Concept</strong>: We fetch the Titanic data, extracting <code>Pclass</code>, <code>Sex</code>, and <code>Age</code>.</p>
 <pre><code class="language-python">import pandas as pd
-import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn import tree
-from sklearn.preprocessing import LabelEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OrdinalEncoder
+import matplotlib.pyplot as plt
+import numpy as np
 
-# Load dataset
-def load_data():
-    # Example format of tennis.txt columns: Outlook, Temp, Humidity, Wind, Play
-    try:
-        data = pd.read_csv('tennis.txt', sep='\t') 
-        return data
-    except:
-        print(&quot;Dataset not found. Creating manual dataset.&quot;)
-        # Fallback dictionary if file missing
-        d = {
-            'Outlook': ['Sunny','Sunny','Overcast','Rain','Rain','Rain','Overcast','Sunny','Sunny','Rain','Sunny','Overcast','Overcast','Rain'],
-            'Temp': ['Hot','Hot','Hot','Mild','Cool','Cool','Cool','Mild','Cool','Mild','Mild','Mild','Hot','Mild'],
-            'Humidity': ['High','High','High','High','Normal','Normal','Normal','High','Normal','Normal','Normal','High','Normal','High'],
-            'Wind': ['Weak','Strong','Weak','Weak','Weak','Strong','Strong','Weak','Weak','Weak','Strong','Strong','Weak','Strong'],
-            'Play': ['No','No','Yes','Yes','Yes','No','Yes','No','Yes','Yes','Yes','Yes','Yes','No']
-        }
-        return pd.DataFrame(d)
+url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+df = pd.read_csv(url)
+df = df[['Survived', 'Pclass', 'Sex', 'Age']].dropna()
 
-data = load_data()
-print(data.head())
+X = df[['Pclass', 'Sex', 'Age']]
+y = df['Survived']
 </code></pre>
-<h3>Step 2: Preprocess Data (Encoding)</h3>
-<p>Decision Trees in <code>sklearn</code> (feature vectors) require numerical input. Our data involves strings ("Sunny", "Hot").<br />
-We use <code>LabelEncoder</code> to convert these text categories into numbers (e.g., Sunny=0, Rain=1).</p>
-<pre><code class="language-python"># Initialize Encoders for each column
-le_outlook = LabelEncoder()
-le_temp = LabelEncoder()
-le_humidity = LabelEncoder()
-le_wind = LabelEncoder()
-le_play = LabelEncoder()
 
-# Apply Encoding
-data_encoded = data.copy()
-data_encoded['Outlook'] = le_outlook.fit_transform(data['Outlook'])
-data_encoded['Temp'] = le_temp.fit_transform(data['Temp'])
-data_encoded['Humidity'] = le_humidity.fit_transform(data['Humidity'])
-data_encoded['Wind'] = le_wind.fit_transform(data['Wind'])
-data_encoded['Play'] = le_play.fit_transform(data['Play'])
-
-print(&quot;\nEncoded Data:&quot;)
-print(data_encoded.head())
+<hr />
+<h3> 1.2 Phase 1: Data Splitting</h3>
+<p><strong>Concept</strong>: We secure 20% of the dataset for an unbiased evaluation.</p>
+<pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 </code></pre>
-<h3>Step 3: Train the Model</h3>
-<p>We split the data into Features (<code>X</code>) and Labels (<code>y</code>) and train the tree.<br />
-We use <strong>Entropy</strong> as the criterion for splitting nodes.</p>
-<pre><code class="language-python"># Features (First 4 columns)
-X_train = data_encoded.iloc[:, :-1]
 
-# Labels (Last column)
-y_train = data_encoded.iloc[:, -1]
+<hr />
+<h4>Theory: Ordinal Encoder vs One-Hot Encoder</h4>
+<p>Decision trees don't calculate slopes, they split data based on thresholds (e.g., <code>Sex &lt;= 0.5</code>). Because of this, it is perfectly fine to map text to a single column of numbers (0, 1, 2) rather than creating separate columns.</p>
+<div class="overflow-x-auto my-6">
+<table class="min-w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<thead>
+<tr class="bg-primary text-white">
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Component</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Target</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>OrdinalEncoder()</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>['Sex']</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Converts 'female' to 0.0 and 'male' to 1.0. Keeps data sparse and efficient for trees.</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>remainder='passthrough'</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>Age, Pclass</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Tells the ColumnTransformer to ignore everything else but KEEP IT in the matrix!</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-# Initialize Decision Tree with Entropy
-clf = tree.DecisionTreeClassifier(criterion='entropy')
+<h3> 1.3 Phase 2 &amp; 3: Preprocessing &amp; Assembly</h3>
+<p><strong>Concept</strong>: We only need to convert text to numbers; trees don't care about standardization (Scaling).</p>
+<p><strong>Solution</strong>: We define the <code>OrdinalEncoder</code> in <code>ColumnTransformer</code> and build a pipeline with a max depth of 3.</p>
+<pre><code class="language-python">preprocessor = ColumnTransformer([
+    ('cat', OrdinalEncoder(), ['Sex'])
+], remainder='passthrough')
 
-# Train
-clf.fit(X_train, y_train)
-print(&quot;Decision Tree Trained!&quot;)
+workflow = Pipeline([
+    ('pre', preprocessor),
+    ('model', tree.DecisionTreeClassifier(criterion='entropy', max_depth=3))
+])
 </code></pre>
-<h3>Step 4: Visualize the Tree</h3>
-<p>We can visualize exactly how the tree makes decisions.</p>
-<pre><code class="language-python">import graphviz 
 
-# Define class names and feature names for the graph
-feature_names = ['Outlook', 'Temp', 'Humidity', 'Wind']
-class_names = ['No', 'Yes']
-
-# Export tree as data
-dot_data = tree.export_graphviz(clf, out_file=None, 
-                                feature_names=feature_names,  
-                                class_names=class_names,
-                                filled=True, rounded=True,  
-                                special_characters=True)  
-
-# Render graph
-graph = graphviz.Source(dot_data) 
-# graph.render(&quot;tennis_tree&quot;) # Saves PDF if needed
-graph
+<hr />
+<h3> 1.4 Phase 4: Training</h3>
+<p><strong>Concept</strong>: The tree calculates the "Information Gain" (reduction in Entropy) for every possible feature and threshold, and creates a split.</p>
+<p><strong>Solution</strong>: Call <code>.fit()</code> on the pipeline.</p>
+<pre><code class="language-python">workflow.fit(X_train, y_train)
 </code></pre>
-<p><em>(Note: To view the graph, you need <code>graphviz</code> installed on your system. If not, the code usually displays the Graphviz object in Jupyter Notebooks)</em></p>
-<h3>Step 5: Prediction</h3>
-<p>Lets predict:</p>
-<ul>
-<li>
-<p>Outlook: Sunny</p>
-</li>
-<li>
-<p>Temp: Cool</p>
-</li>
-<li>
-<p>Humidity: High</p>
-</li>
-<li>
-<p>Wind: Strong</p>
-</li>
-</ul>
-<pre><code class="language-python"># Transform inputs using the same label encoders
-# Note: This requires the encoders to have seen these values during fit
-try:
-    input_vector = [
-        le_outlook.transform(['Sunny'])[0],
-        le_temp.transform(['Cool'])[0],
-        le_humidity.transform(['High'])[0],
-        le_wind.transform(['Strong'])[0]
-    ]
 
-    prediction = clf.predict([input_vector])
-    result = le_play.inverse_transform(prediction)[0]
+<hr />
+<h3> 1.5 Phase 5: Evaluation (Visualization)</h3>
+<p><strong>Concept</strong>: One of the biggest strengths of Decision Trees is that we can literally view the mathematical conditions.</p>
+<p><strong>Solution</strong>: We use <code>tree.plot_tree</code> to render the model's logic.</p>
+<pre><code class="language-python">clf_model = workflow.named_steps['model']
+feature_names = workflow.named_steps['pre'].get_feature_names_out()
+feature_names = [name.split('__')[1] for name in feature_names]
 
-    print(f&quot;Prediction for (Sunny, Cool, High, Strong): {result}&quot;)
-except Exception as e:
-    print(f&quot;Error in prediction encoding: {e}&quot;)
+plt.figure(figsize=(15, 10))
+tree.plot_tree(clf_model, feature_names=feature_names, class_names=['Perished', 'Survived'], filled=True, rounded=True)
+plt.title("Titanic Decision Tree: Reducing Entropy")
+plt.show()
 </code></pre>
+
+<hr />
+<h3> 1.6 Phase 5: Cross-Validation</h3>
+<p><strong>Concept</strong>: A major flaw of Decision Trees is <strong>High Variance</strong>. Small changes in the training data can result in a completely different tree structure.</p>
+<p><strong>Solution</strong>: We use Cross-Validation to see how much the accuracy jumps around when the data changes.</p>
+<pre><code class="language-python">scores = cross_val_score(workflow, X, y, scoring='accuracy', cv=5)
+print("Accuracy Scores across 5 folds:", np.round(scores, 3))
+print(f"\nAverage CV Accuracy: {scores.mean():.2%}")
+print(f"Standard Deviation: {scores.std():.2%} (The higher this is, the higher the variance!)")
+</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg shadow-sm bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Observation</strong>: Notice the standard deviation. Decision trees tend to fluctuate slightly more than Logistic Regression because they overfit to specific subsets of data. This variance is exactly what Random Forests (Lab 5) are designed to fix.</div></div>
+
+<div class="my-6 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="text-primary dark:text-sky-400 font-bold mb-2">Task 1</h4>
+    <p>In Phase 3, change <code>max_depth=3</code> to <code>max_depth=None</code>. Rerun the entire notebook. What happens to the visualization? What happens to the Cross-Validation average accuracy and standard deviation?</p>
+    <details class="cursor-pointer group mt-4">
+        <summary class="font-medium text-secondary hover:text-yellow-600 transition-colors list-none flex items-center">
+            <svg class="w-4 h-4 mr-2 transform group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <strong>Click here for Solution (Try it yourself first!)</strong>
+        </summary>
+        <div class="mt-4 pl-6 border-l-2 border-slate-200 dark:border-slate-600">
+            <p>If you remove the depth limit, the tree becomes immense and highly complex.</p>
+            <p>The Average CV Accuracy will <strong>DROP</strong> and the standard deviation will <strong>INCREASE</strong>, proving that an infinitely deep tree simply <strong>Overfits</strong> to noise rather than learning genuine patterns.</p>
+        </div>
+    </details>
+</div>
+
+<hr />
 <h3>Summary</h3>
-<p>In this final lab, you built a Decision Tree:<br />
-1.  <strong>Handling Text</strong>: Used <code>LabelEncoder</code> to convert categorical text ("Sunny", "Hot") into numbers the model can understand.<br />
-2.  <strong>Entropy</strong>: Used the <code>entropy</code> criterion to let the tree decide the best questions to ask at each split.<br />
-3.  <strong>Visualization</strong>: Generated a flowchart of the model's decision-making process.</p>
-<h3>Self Reflection</h3>
-<ol>
-<li><strong>Encoding</strong>: Why can't we just pass "Sunny" string directly into <code>clf.fit()</code>?</li>
-<li><strong>Overfitting</strong>: If we had a tree with 100 layers depth for a small dataset, would that be good? Why or why not?</li>
-<li><strong>New Data</strong>: What happens if we try to predict with <code>Outlook: "Snowy"</code>? (Hint: See how <code>LabelEncoder</code> works).</li>
-</ol>
+<p>Look at the first split (The Root Node). Was it <code>Sex</code>? On the Titanic, "Women and children first" was a strong rule — the Decision Tree discovered this automatically by calculating which question reduced <strong>Entropy</strong> (messiness) the most! We achieved this professionally using pipelines.</p>
+
             
             
         

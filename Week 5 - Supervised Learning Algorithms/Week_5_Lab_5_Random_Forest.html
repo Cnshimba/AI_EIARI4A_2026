@@ -164,36 +164,133 @@
 </div>
 
 <h2>Foreword</h2>
-<p>This lab introduces <strong>Random Forest</strong>, a powerful ensemble learning algorithm. You will learn the "Wisdom of the Crowd" concept and see why forest models are more robust than single decision trees.</p>
-
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.314a2 2 0 01-1.185.117l-1.637-.272a4 4 0 01-2.174-1.134l-1.623-1.623a2 2 0 10-2.828 2.828l1.623 1.623a6 6 0 003.262 1.701l1.765.294a2 2 0 001.185-.117l.628-.314a4 4 0 012.574-.344l2.431.487a2 2 0 001.022.547l.149.049a2 2 0 001.212-3.856l-.149-.049z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Assembly Power</strong>:<br />
-Random Forest doesn't rely on one "expert" tree. It asks 100+ "average" trees and takes the average/majority vote. This prevents errors from outliers!</p></div></div>
+<p>In our final lab, we return to the <strong>Titanic Dataset</strong> but use a much more powerful model.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this lab matters</strong>:<br />
+A single Decision Tree is like asking one person for advice; a <strong>Random Forest</strong> is like asking a diverse crowd of 100 people and taking a vote. This is an <strong>Ensemble</strong> method. It drastically improves accuracy and prevents overfitting.</div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.314a2 2 0 01-1.185.117l-1.637-.272a4 4 0 01-2.174-1.134l-1.623-1.623a2 2 0 10-2.828 2.828l1.623 1.623a6 6 0 003.262 1.701l1.765.294a2 2 0 001.185-.117l.628-.314a4 4 0 012.574-.344l2.431.487a2 2 0 001.022.547l.149.049a2 2 0 001.212-3.856l-.149-.049z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Structure</strong>:<br />
+We follow the <strong>6-Phase Professional Workflow</strong>. We use a <code>ColumnTransformer</code> inside a <code>Pipeline</code> to feed data into a <code>RandomForestClassifier</code>. Finally, we evaluate its <strong>Cross-Validation</strong> stability and extract <strong>Feature Importances</strong>.</div></div>
 
 <hr />
-<h2>Phase 2 & 3: Preprocessing & Assembly</h2>
-<p>We use a <code>Pipeline</code> to ensure our data matches the scale requirements of the model every time we run it.</p>
-<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+<h3> 1.1 Import Dependencies &amp; Load Data</h3>
+<p><strong>Concept</strong>: We fetch the Titanic data, extracting <code>Pclass</code>, <code>Sex</code>, <code>Age</code>, and <code>Fare</code> (ticket price).</p>
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OrdinalEncoder
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
 
-pipeline = Pipeline([
-    ('scaler', StandardScaler()),
-    ('classifier', RandomForestClassifier(n_estimators=100))
+url = "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
+df = pd.read_csv(url)
+df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']].dropna()
+
+X = df[['Pclass', 'Sex', 'Age', 'Fare']]
+y = df['Survived']
+</code></pre>
+
+<hr />
+<h3> 1.2 Phase 1: Data Splitting</h3>
+<p><strong>Concept</strong>: Secure 20% of the dataset to evaluate the crowd's final intelligence.</p>
+<pre><code class="language-python">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+</code></pre>
+
+<hr />
+<h4>Theory: Ensemble Methods &amp; Random Forest</h4>
+<p>A Random Forest is an <strong>Ensemble</strong> method. It creates many Decision Trees. To ensure the trees aren't identical (which would defeat the purpose of a "crowd"), each tree only gets to look at a <strong>random subset</strong> of the rows and columns. This forces different trees to learn different perspectives.</p>
+<div class="overflow-x-auto my-6">
+<table class="min-w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+<thead>
+<tr class="bg-primary text-white">
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Component</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Parameter</th>
+<th class="py-2 px-4 border-b border-slate-200 dark:border-slate-700 text-left">Function</th>
+</tr>
+</thead>
+<tbody>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>RandomForestClassifier()</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>n_estimators=100</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">Creates a forest of exactly 100 independent decision trees.</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-700">
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>OrdinalEncoder()</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700"><code>['Sex']</code></td>
+<td class="py-2 px-4 border-b border-slate-200 dark:border-slate-700">We still only need Ordinal Encoding because the underlying mechanism is still trees!</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h3> 1.3 Phase 2 &amp; 3: Preprocessing &amp; Assembly</h3>
+<p><strong>Concept</strong>: We build the pipeline to feed our forest.</p>
+<p><strong>Solution</strong>: A ColumnTransformer handles the text, while the remaining features pass directly into the 100 trees.</p>
+<pre><code class="language-python">preprocessor = ColumnTransformer([
+    ('cat', OrdinalEncoder(), ['Sex'])
+], remainder='passthrough')
+
+workflow = Pipeline([
+    ('pre', preprocessor),
+    ('model', RandomForestClassifier(n_estimators=100, random_state=42))
 ])
 </code></pre>
 
-<h2>Phase 4: Training (The Forest Grows)</h2>
-<p>When you call <code>.fit()</code>, Scikit-Learn builds dozens of unique trees. Each tree only sees a slice of the data (Bagging) and a slice of the features (Feature Randomness).</p>
-<pre><code class="language-python">pipeline.fit(X_train, y_train)
+<hr />
+<h3> 1.4 Phase 4: Training</h3>
+<p><strong>Concept</strong>: When we call <code>.fit()</code>, Scikit-Learn will secretly train 100 individual decision trees.</p>
+<p><strong>Solution</strong>: Call <code>.fit()</code> on the pipeline.</p>
+<pre><code class="language-python">workflow.fit(X_train, y_train)
 </code></pre>
 
-<h2>Phase 6: Optimization (Feature Importance)</h2>
-<p>Random Forests allow us to see which features contributed most to the prediction. This is known as <strong>Feature Importance</strong>.</p>
-<pre><code class="language-python"># Get importances from the classifier step
-importances = pipeline.named_steps['classifier'].feature_importances_
+<hr />
+<h3> 1.5 Phase 5: Evaluation (Accuracy &amp; Cross-Validation)</h3>
+<p><strong>Concept</strong>: When we call <code>.predict()</code>, Scikit-Learn asks all 100 trees for their prediction and takes a <strong>majority vote</strong>.</p>
+<p><strong>Solution</strong>: We run a prediction and immediately follow up with a 5-fold cross-validation to see if it fixed the high variance from Lab 4.</p>
+<pre><code class="language-python">y_pred = workflow.predict(X_test)
+print(f"Initial Testing Accuracy: {accuracy_score(y_test, y_pred):.2%}")
+
+scores = cross_val_score(workflow, X, y, scoring='accuracy', cv=5)
+print("\nAccuracy Scores across 5 folds:", np.round(scores, 3))
+print(f"Average CV Accuracy: {scores.mean():.2%}")
+print(f"Standard Deviation: {scores.std():.2%} (Compare this to Lab 4's variance!)")
 </code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg shadow-sm bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Observation</strong>: The standard deviation is now significantly lower than a single unconstrained Decision Tree! This proves the "Wisdom of the Crowd" stabilizes predictions and prevents overfitting.</div></div>
+
+<hr />
+<h3> 1.6 Phase 6: Optimization (Feature Importance)</h3>
+<p><strong>Concept</strong>: Since we have 100 trees, we can check which feature they repeatedly found most useful for splitting data. This helps us "explain" the AI to stakeholders.</p>
+<p><strong>Solution</strong>: We extract <code>feature_importances_</code> from the trained Random Forest.</p>
+<pre><code class="language-python"># Extract the model and the transformed feature names from the pipeline
+rf_model = workflow.named_steps['model']
+importances = rf_model.feature_importances_
+
+feature_names = workflow.named_steps['pre'].get_feature_names_out()
+feature_names = [name.split('__')[1] for name in feature_names] # Clean names
+
+print("--- TITANIC SURVIVAL FACTOR IMPORTANCE ---")
+for name, importance in zip(feature_names, importances):
+    print(f"Feature: {name:7} | Importance Score: {importance:.2%}")
+</code></pre>
+
+<div class="my-6 p-6 bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+    <h4 class="text-primary dark:text-sky-400 font-bold mb-2">Task 1</h4>
+    <p>In Phase 3, change <code>n_estimators=100</code> to <code>n_estimators=5</code>. Rerun the cross-validation and feature importances. What happens to the variance (Standard Deviation) when the crowd is too small?</p>
+    <details class="cursor-pointer group mt-4">
+        <summary class="font-medium text-secondary hover:text-yellow-600 transition-colors list-none flex items-center">
+            <svg class="w-4 h-4 mr-2 transform group-open:rotate-90 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <strong>Click here for Solution (Try it yourself first!)</strong>
+        </summary>
+        <div class="mt-4 pl-6 border-l-2 border-slate-200 dark:border-slate-600">
+            <p>If you drop the number of trees to 5, the "Wisdom of the Crowd" is lost. The standard deviation jumps back up because 5 trees aren't enough to balance out their individual biases.</p>
+            <p>Additionally, the Feature Importance percentages shift dramatically because the sample size of trees evaluating those features is too small. 100 estimators is the standard starting point in the industry.</p>
+        </div>
+    </details>
+</div>
 
 <h3>Summary</h3>
-<p>In this lab, you used the **Wisdom of the Crowd** to build a highly accurate classifier that is far more stable than a single Decision Tree.</p>
+<p>By using 100 trees in a pipeline, our model is less likely to "hallucinate" based on noise in the data and ensures zero data leakage. You've also verified that <strong>Sex</strong> and <strong>Ticket Fare/Pclass</strong> were the primary drivers behind the survival of Titanic passengers, while relying on the power of <strong>Ensemble Methods</strong>.</p>
 
 <div class="mt-8 flex justify-center">
     <a href="Week_5_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
