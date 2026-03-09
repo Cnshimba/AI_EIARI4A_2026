@@ -608,7 +608,7 @@ y_pred = forest.predict(X_test)</code></pre>
 <h3>7.1 The Hand-off: Pandas &rarr; Scikit-learn</h3>
 <p>The boundary between Pandas and sklearn is where many projects fail. The rule of thumb: <strong>Pandas is for "Discovery & Structural Cleaning," while sklearn is for "Model-Ready Transformation."</strong></p>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+<div class="flex flex-col gap-4 my-6">
     <div class="p-4 bg-[#002F6E]/5 dark:bg-[#002F6E]/10 rounded-lg border-l-4 border-[#002F6E]">
         <h4 class="font-bold text-[#002F6E] mb-2">1. The Pandas Phase</h4>
         <p class="text-sm"><strong>When:</strong> Before <code>train_test_split</code>.</p>
@@ -748,7 +748,7 @@ Manual Pandas cleaning usually fails this test. An sklearn Pipeline passes it in
     <!-- Phase 1: Splitting -->
     <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
         <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 1: Data Splitting (The "Final Exam" Setup)</h5>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="flex flex-col gap-4 mb-4">
             <div>
                 <p class="text-sm mb-2"><strong>The Tool:</strong> <code>train_test_split</code> (from <code>sklearn.model_selection</code>)</p>
                 <p class="text-sm">This shuffles your data and sets aside a "Final Exam" (the Test set) that the model will never see during training.</p>
@@ -832,7 +832,7 @@ preprocessor = ColumnTransformer(transformers=[
     <!-- Phase 3: Assembly -->
     <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
         <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 3: The Assembly (Pipeline)</h5>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="flex flex-col gap-4 mb-4">
             <div>
                 <p class="text-sm mb-2"><strong>The Tool:</strong> <code>Pipeline</code> or <code>make_pipeline</code></p>
                 <p class="text-sm">This "glues" your preprocessor and your algorithm into a single <strong>Estimator</strong>. Once assembled, the pipeline behaves like a single unit.</p>
@@ -852,7 +852,7 @@ pipe = make_pipeline(preprocessor, RandomForestClassifier(random_state=42))</cod
     <!-- Phase 4: Training & Prediction -->
     <section class="p-5 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-700">
         <h5 class="text-lg font-bold text-[#002F6E] dark:text-sky-400 mb-2">Phase 4: Training & Prediction (The Estimators)</h5>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div class="flex flex-col gap-4 mb-4">
             <div>
                 <p class="text-sm">Whether you use a Decision Tree or a Linear Regression, all sklearn models share the same interface:</p>
             </div>
