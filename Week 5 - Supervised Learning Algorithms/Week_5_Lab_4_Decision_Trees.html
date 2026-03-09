@@ -175,11 +175,37 @@
     </a>
 </div>
 
-            
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal: Decision Trees</strong><br />
-In this lab, we will implement the <strong>Decision Tree</strong> algorithm used for classification.<br />
-Decision Trees split data into branches to make decisions, mimicking human reasoning.</p></div></div>
-<p>We will use the famous <strong>"Play Tennis"</strong> dataset to predict whether we should play tennis based on weather conditions.</p>
+            <h2>Foreword</h2>
+<p>This lab introduces **Decision Trees**, which behave like the "20 Questions" game. You will learn how the model calculates **Entropy** to decide which questions to ask.</p>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Terminology Alert</strong>:<br />
+<strong>Entropy</strong> measures "messiness" or uncertainty. A Decision Tree tries to reduce entropy with every split.</p></div></div>
+
+<hr />
+<h2>Phase 2: Preprocessing (Label Encoding)</h2>
+<p>Because Scikit-Learn only understands numbers, we use the <code>LabelEncoder</code> to convert text categories like "Sunny" and "Rain" into integers.</p>
+<pre><code class="language-python">from sklearn.preprocessing import LabelEncoder
+
+le = LabelEncoder()
+df_encoded = df.apply(le.fit_transform)
+</code></pre>
+
+<h2>Phase 3 & 4: Assembly & Training</h2>
+<p>We specify <code>criterion='entropy'</code> during assembly to ensure the model uses Information Gain logic.</p>
+<pre><code class="language-python">from sklearn import tree
+
+clf = tree.DecisionTreeClassifier(criterion='entropy')
+clf.fit(X, y)
+</code></pre>
+
+<h2>Phase 5: Evaluation (Visualization)</h2>
+<p>Decision Trees are unique because they are "White Box" models — you can see exactly how the logic works.</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+tree.plot_tree(clf, filled=True)
+</code></pre>
+
+<h3>Summary</h3>
+<p>In this lab, you used statistical "messiness" (Entropy) to build a logical flowchart that can predict outcomes like a human.</p>
 <h3>Step 1: Import Dependencies &amp; Load Data</h3>
 <p>We need <code>pandas</code> for data handling and <code>DecisionTreeClassifier</code> from <code>sklearn</code>.</p>
 <p>The data is stored in <code>tennis.txt</code>.</p>

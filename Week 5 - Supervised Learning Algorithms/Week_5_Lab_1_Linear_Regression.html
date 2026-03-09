@@ -177,99 +177,76 @@
 
             
 <h2>Foreword</h2>
-<p>This lab introduces common machine learning algorithms to help you better understand their functions and usages. Specifically, it will explain how to build a linear regression algorithm from scratch and implement it using scikit-learn.</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
-In this section, we use the <code>sklearn</code> library to perform simple linear regression on a small (House Price) dataset.</p></div></div>
+<p>This lab introduces **Linear Regression**, the foundational algorithm for predicting continuous values. We will follow the **6-Phase Professional Workflow** used in industry.</p>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Professional Workflow</strong>:<br />
+1. <strong>Phase 1: Splitting</strong> (Train/Test Split)<br />
+2. <strong>Phase 2: Preprocessing</strong> (Scaling)<br />
+3. <strong>Phase 3: Assembly</strong> (Building the Model)<br />
+4. <strong>Phase 4: Training & Prediction</strong><br />
+5. <strong>Phase 5: Evaluation</strong> (MSE, RMSE, MAE)<br />
+6. <strong>Phase 6: Optimization</strong></p></div></div>
+
 <hr />
-<h3>Step 1: Import Dependent Packages</h3>
-<p>We begin by importing the necessary libraries:</p>
-<ul>
-<li>
-<p><code>LinearRegression</code> from <code>sklearn</code> for the model.</p>
-</li>
-<li>
-<p><code>matplotlib</code> for plotting graphs.</p>
-</li>
-<li>
-<p><code>numpy</code> for numerical operations.</p>
-</li>
-</ul>
+<h2>Phase 1: Data Splitting</h2>
+<p>We split the data to ensure we test the model on data it hasn't seen before. This prevents "cheating" where the model just memorizes the answers.</p>
+<pre><code class="language-python">from sklearn.model_selection import train_test_split
+
+# Split into 80% Train, 20% Test
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+</code></pre>
+
+<h2>Phase 3 & 4: Assembly & Training</h2>
+<p>We initialize the <code>LinearRegression</code> estimator and <strong>Fit</strong> it to the training data. This is where the model learns the weights $w$ and bias $b$.</p>
 <pre><code class="language-python">from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
-import numpy as np
-</code></pre>
-<h3>Step 2: Build and Visualize the Dataset</h3>
-<p>We create a small dataset manually where:</p>
-<ul>
-<li>
-<p><code>x</code> represents the House Area (sqm).</p>
-</li>
-<li>
-<p><code>y</code> represents the House Price ($).</p>
-</li>
-</ul>
-<p>We then create a scatter plot to visualize the relationship.</p>
-<pre><code class="language-python"># House Area (Features)
-x = np.array([121, 125, 131, 141, 152, 161]).reshape(-1,1)
 
-# House Price (Labels)
-y = np.array([300, 350, 425, 405, 496, 517])
+# Initialize
+model = LinearRegression()
 
-plt.scatter(x,y)
-plt.xlabel(&quot;Area (sqm)&quot;)
-plt.ylabel(&quot;Price ($)&quot;)
-plt.title(&quot;House Area vs Price&quot;)
-plt.show()
-</code></pre>
-<h3>Step 3: Train the Model</h3>
-<p>We create an instance of the <code>LinearRegression</code> model and fit it to our data <code>(x, y)</code>.</p>
-<pre><code class="language-python"># Initialize and Train
-lr = LinearRegression()
-lr.fit(x,y)
-</code></pre>
-<h3>Step 4: Visualize the Model</h3>
-<p>Now that the model is trained, we can extract the learned parameters:</p>
-<ul>
-<li>
-<p><strong>Slope (w)</strong>: <code>lr.coef_</code></p>
-</li>
-<li>
-<p><strong>Intercept (b)</strong>: <code>lr.intercept_</code></p>
-</li>
-</ul>
-<p>We then plot the "Best Fit Line" over our original scatter plot to see how well our model fits the data.</p>
-<pre><code class="language-python">w = lr.coef_[0]
-b = lr.intercept_
-print('Slope (w): ', w)
-print('Intercept (b): ', b)
+# Train (The Correction Loop)
+model.fit(X_train, y_train)
 
-plt.scatter(x,y)
-plt.xlabel(&quot;Area&quot;)
-plt.ylabel(&quot;Price&quot;)
+print(f"Weight (w): {model.coef_[0]:.2f}")
+print(f"Bias (b): {model.intercept_:.2f}")
+</code></pre>
 
-# Plot the regression line
-plt.plot([x[0], x[-1]], [x[0]*w+b, x[-1]*w+b], color='red', label='Regression Line')
-plt.legend()
-plt.show()
+<h2>Phase 5: Evaluation (The Quality Control)</h2>
+<p>Now we calculate our performance metrics: <strong>RMSE</strong> (Root Mean Squared Error) and <strong>MAE</strong> (Mean Absolute Error) as explained in the lecture notes.</p>
+<pre><code class="language-python">from sklearn.metrics import mean_squared_error, mean_absolute_error
+
+# Predict on Test Set
+y_pred = model.predict(X_test)
+
+# Calculate Metrics
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MAE:  {mae:.2f}")
 </code></pre>
-<h3>Step 5: Make a Prediction</h3>
-<p>We can now use our trained model to predict the price of a house with a specific area (e.g., 130 sqm).</p>
-<pre><code class="language-python">testX = np.array([[130]])
-prediction = lr.predict(testX)
-print(f&quot;Predicted price for area 130 sqm: ${prediction[0]:.2f}&quot;)
+
+<hr />
+<h2>Part 2: Linear Regression from Scratch</h2>
+<p>To understand the "Black Box," we implement <strong>Gradient Descent</strong> using only NumPy.</p>
+<pre><code class="language-python">def gradient_descent(X, y, w, b, alpha, epochs):
+    m = len(X)
+    for i in range(epochs):
+        y_hat = w * X + b
+        error = y_hat - y
+        
+        # Calculate Nudges (Gradients)
+        dw = (2/m) * np.sum(error * X)
+        db = (2/m) * np.sum(error)
+        
+        # Update Weights
+        w = w - alpha * dw
+        b = b - alpha * db
+    return w, b
 </code></pre>
+
 <h3>Summary</h3>
-<p>In this lab, you successfully:<br />
-1.  <strong>Prepared Data</strong>: Created a simple dataset and reshaped the features for Scikit-Learn.<br />
-2.  <strong>Trained a Model</strong>: Used <code>LinearRegression().fit()</code> to find the best-fit line.<br />
-3.  <strong>Visualized Results</strong>: Plotted the data points and the regression line to verify the relationship.<br />
-4.  <strong>Made Predictions</strong>: Used the trained model to estimate values for new inputs.</p>
-<h3>Self Reflection</h3>
-<ol>
-<li><strong>Shape Matters</strong>: Why did we have to use <code>.reshape(-1,1)</code> on our <code>x</code> array? What does Scikit-Learn expect?</li>
-<li><strong>Model Parameters</strong>: Look at the slope (<code>w</code>) printed in Step 4. If this value was negative, what would that imply about House Prices vs Area?</li>
-<li><strong>Real World</strong>: In reality, is Area the only factor for House Price? How would you modify <code>x</code> to include "Number of Bedrooms"?</li>
-</ol>
+<p>In this lab, you successfully built a regression model using both <strong>Scikit-Learn</strong> and <strong>Numpy</strong>, aligning with the professional 6-phase workflow.</p>
             
             
         

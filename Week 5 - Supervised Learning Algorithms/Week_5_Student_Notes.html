@@ -569,10 +569,43 @@ Think of the Decision Boundary as the crossover point where the model stops bein
 </ul>
 <p>The algorithm (such as ID3 or CART) calculates <strong>Information Gain</strong>. It looks at every possible feature (Wind, Temp, Humidity) and picks the one that reduces Entropy the most—effectively splitting the messy mixed groups into cleaner, purer subgroups.</p>
 <hr />
-<h2>6. From Pandas to Production: The sklearn Pipeline</h2>
+<h2>6. Random Forest & Ensemble Learning (Assembly)</h2>
+<p>While a single Decision Tree is easy to follow, it has a major weakness: it is <strong>greedy</strong> and prone to <strong>overfitting</strong>. It can sometimes focus too much on small details in the training data that don't apply to the real world.</p>
+<p>To solve this, we use <strong>Ensemble Learning</strong>. Instead of relying on one "expert" tree, we build a forest of hundreds of trees and let them vote. This is the philosophy of <strong>Random Forest</strong>.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+    <div class="p-5 bg-white dark:bg-slate-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h4 class="font-bold text-secondary mb-3 italic">"Wisdom of the Crowd"</h4>
+        <p class="text-sm italic text-slate-500">"None of us is as smart as all of us."</p>
+        <p class="text-sm mt-2">In a Random Forest, each tree is slightly different. Some trees see different rows of data (<strong>Bagging</strong>), and some trees see different features (<strong>Feature Randomness</strong>). By averaging their results, the "noise" cancels out, leaving only the signal.</p>
+    </div>
+    <div class="p-5 bg-primary/10 dark:bg-primary/20 rounded-lg border border-primary/20">
+        <h4 class="font-bold text-primary dark:text-sky-400 mb-2">Why it’s a Powerhouse:</h4>
+        <ul class="text-xs space-y-2 list-disc ml-4">
+            <li><strong>Robustness:</strong> It handles missing data and outliers exceptionally well.</li>
+            <li><strong>Feature Importance:</strong> It can tell you which features were most helpful in making the decision.</li>
+            <li><strong>Plug-and-Play:</strong> It requires very little tuning compared to other models.</li>
+        </ul>
+    </div>
+</div>
+
+<p>Here is how you implement it in just a few lines:</p>
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+
+# Create our "Forest" of 100 trees
+forest = RandomForestClassifier(n_estimators=100, random_state=42)
+
+# Training the entire forest at once
+forest.fit(X_train, y_train)
+
+# Vote on the answer
+y_pred = forest.predict(X_test)</code></pre>
+
+<hr />
+<h2>7. From Pandas to Production: The sklearn Pipeline</h2>
 <p>In Week 3, we used <strong>Pandas</strong> to explore and clean data. Now that we understand supervised learning algorithms, it is the right time to answer a critical question: <em>"When do I use Pandas, and when do I switch to sklearn?"</em> Getting this boundary wrong is one of the most common mistakes in data science.</p>
 
-<h3>6.1 The Hand-off: Pandas &rarr; Scikit-learn</h3>
+<h3>7.1 The Hand-off: Pandas &rarr; Scikit-learn</h3>
 <p>The boundary between Pandas and sklearn is where many projects fail. The rule of thumb: <strong>Pandas is for "Discovery & Structural Cleaning," while sklearn is for "Model-Ready Transformation."</strong></p>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
@@ -638,7 +671,7 @@ Manual Pandas cleaning usually fails this test. An sklearn Pipeline passes it in
 
 
 <hr />
-<h3>6.4 The sklearn Toolkit: A Full Reference</h3>
+<h3>7.4 The sklearn Toolkit: A Full Reference</h3>
 
 <h4>What is sklearn?</h4>
 <p><strong>scikit-learn</strong> (imported as <code>sklearn</code>) is the standard open-source Python library for <strong>traditional (non-deep-learning) machine learning</strong>. As of 2026, it is at version <strong>~1.8.x</strong>.</p>

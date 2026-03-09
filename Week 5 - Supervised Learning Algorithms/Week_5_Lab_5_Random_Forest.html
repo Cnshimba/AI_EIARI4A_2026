@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 5 Lab 3 Logistic Regression - AI Course</title>
+    <title>Week 5 Lab 5: Random Forest - AI Course</title>
     
 <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -85,16 +85,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codejar/1.0.0/codejar.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     <script>hljs.highlightAll();</script>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\(', '\\)']]
-            }
-        };
-    </script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <style>
         /* Glossary Tooltip */
@@ -117,7 +108,6 @@
         code {
             font-family: 'Courier New', monospace !important;
         }
-        /* Override prose defaults */
         .prose pre {
             background-color: transparent;
             margin: 0;
@@ -147,7 +137,6 @@
     </div>
 </nav>
 
-    
     <main class="container mx-auto px-4 max-w-5xl mb-12">
         <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
             
@@ -160,106 +149,59 @@
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-3xl font-bold text-secondary m-0">Supervised Learning Algorithms</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 3: Logistic Regression</span>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 5: Random Forest & Ensembles</span>
     </div>
 </div>
 
-            
 <div class="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700 flex items-center justify-between">
     <div>
         <h4 class="font-bold text-slate-800 dark:text-slate-200">Jupyter Notebook Available</h4>
         <p class="text-sm text-slate-600 dark:text-slate-400 m-0">Download the interactive coding lab to run on your local machine.</p>
     </div>
-    <a href="Week_5_Lab_3_Logistic_Regression.ipynb" download target="_blank" class="ml-4 px-4 py-2 bg-secondary hover:bg-yellow-600 text-white font-medium rounded-md transition-colors shadow-sm no-underline whitespace-nowrap">
+    <a href="Week_5_Lab_5_Random_Forest.ipynb" download target="_blank" class="ml-4 px-4 py-2 bg-secondary hover:bg-yellow-600 text-white font-medium rounded-md transition-colors shadow-sm no-underline whitespace-nowrap">
         Download .ipynb
     </a>
 </div>
 
-            
 <h2>Foreword</h2>
-<p>This lab introduces **Logistic Regression** for classification. You will learn how to turn numbers into probabilities using the **Sigmoid** function.</p>
+<p>This lab introduces <strong>Random Forest</strong>, a powerful ensemble learning algorithm. You will learn the "Wisdom of the Crowd" concept and see why forest models are more robust than single decision trees.</p>
 
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Classification vs Regression</strong>:<br />
-In this lab, we don't predict a price. We predict a <strong>Category</strong> (Pass/Fail) based on study habits.</p></div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.628.314a2 2 0 01-1.185.117l-1.637-.272a4 4 0 01-2.174-1.134l-1.623-1.623a2 2 0 10-2.828 2.828l1.623 1.623a6 6 0 003.262 1.701l1.765.294a2 2 0 001.185-.117l.628-.314a4 4 0 012.574-.344l2.431.487a2 2 0 001.022.547l.149.049a2 2 0 001.212-3.856l-.149-.049z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Assembly Power</strong>:<br />
+Random Forest doesn't rely on one "expert" tree. It asks 100+ "average" trees and takes the average/majority vote. This prevents errors from outliers!</p></div></div>
 
 <hr />
-<h2>Phase 1 & 2: Splitting & Preprocessing</h2>
-<p>We use <code>StandardScaler</code> to ensure all features are on the same scale, which is essential for the math behind Logistic Regression.</p>
-<pre><code class="language-python">from sklearn.preprocessing import StandardScaler
-<ul>
-<li>
-<p><strong>X</strong>: Features [Price, Area]</p>
-</li>
-<li>
-<p><strong>y</strong>: Label [1 = Worth Renting, 0 = Not Worth Renting]</p>
-</li>
-</ul>
-<p>Then, we use <code>fit_transform</code> to standardize the data (mean=0, variance=1). This helps the model converge faster.</p>
-<pre><code class="language-python"># Feature Matrix: [Price, Area]
-X = [[2200,15],[2750,20],[5000,40],[4000,20],[3300,20],[2000,10],[2500,12],[12000,80],
-     [2880,10],[2300,15],[1500,10],[3000,8],[2000,14],[2000,10],[2150,8],[3400,20],
-     [5000,20],[4000,10],[3300,15],[2000,12],[2500,14],[10000,100],[3150,10],
-     [2950,15],[1500,5],[3000,18],[8000,12],[2220,14],[6000,100],[3050,10]]
+<h2>Phase 2 & 3: Preprocessing & Assembly</h2>
+<p>We use a <code>Pipeline</code> to ensure our data matches the scale requirements of the model every time we run it.</p>
+<pre><code class="language-python">from sklearn.ensemble import RandomForestClassifier
+from sklearn.pipeline import Pipeline
 
-# Labels: 1 = Rent, 0 = Don't Rent
-y = [1,1,0,0,1,1,1,1,0,1,1,0,1,1,0,1,0,0,0,1,1,1,0,1,0,1,0,1,1,0]
-
-# Normalize Data
-ss = StandardScaler()
-X_train = ss.fit_transform(X)
-
-print(&quot;Standardized Data (First 5 Rows):\n&quot;, X_train[:5])
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('classifier', RandomForestClassifier(n_estimators=100))
+])
 </code></pre>
-<h3>Step 3: Train the Model</h3>
-<p>We fit the Logistic Regression model to our standardized training data.</p>
-<pre><code class="language-python"># Initialize Model
-lr = LogisticRegression()
 
-# Train Model
-lr.fit(X_train, y)
-
-print(&quot;Model Trained Successfully!&quot;)
+<h2>Phase 4: Training (The Forest Grows)</h2>
+<p>When you call <code>.fit()</code>, Scikit-Learn builds dozens of unique trees. Each tree only sees a slice of the data (Bagging) and a slice of the features (Feature Randomness).</p>
+<pre><code class="language-python">pipeline.fit(X_train, y_train)
 </code></pre>
-<h3>Step 4: Make Predictions</h3>
-<p>Let's predict if we should rent a specific apartment.</p>
-<ul>
-<li><strong>Apartment A</strong>: Price = 2000, Area = 18 sqm.</li>
-</ul>
-<p>Remember to <strong>normalize</strong> the input data using the <em>same scaler</em> before predicting!</p>
-<pre><code class="language-python"># New Data Point
-new_apartment = [[2000, 18]]
 
-# Normalize
-new_apart_scaled = ss.transform(new_apartment)
-
-# Predict
-prediction = lr.predict(new_apart_scaled)
-probability = lr.predict_proba(new_apart_scaled)
-
-print(f&quot;Prediction: {prediction[0]} (1=Rent, 0=Don't Rent)&quot;)
-print(f&quot;Confidence: {probability[0][prediction[0]]*100:.2f}%&quot;)
+<h2>Phase 6: Optimization (Feature Importance)</h2>
+<p>Random Forests allow us to see which features contributed most to the prediction. This is known as <strong>Feature Importance</strong>.</p>
+<pre><code class="language-python"># Get importances from the classifier step
+importances = pipeline.named_steps['classifier'].feature_importances_
 </code></pre>
+
 <h3>Summary</h3>
-<p>In this lab, you explored Classification:<br />
-1.  <strong>Binary Classification</strong>: Predicting categories (Rent/Don't Rent) instead of continuous numbers.<br />
-2.  <strong>Normalization</strong>: Using <code>StandardScaler</code> to bring features to a comparable scale.<br />
-3.  <strong>Probabilistic Output</strong>: Seeing not just the decision (0 or 1), but the model's confidence in that decision.</p>
-<h3>Self Reflection</h3>
-<ol>
-<li><strong>Scale Effect</strong>: Why did we need <code>StandardScaler</code>? What would happen if 'Price' (thousands) was mixed with 'Area' (tens) without scaling?</li>
-<li><strong>Decision Boundary</strong>: Logistic Regression uses a threshold (usually 0.5) to decide 0 or 1. If the probability was 0.51, is it a "confident" prediction?</li>
-<li><strong>New Features</strong>: If we added "Safety Rating" (1-10) to the dataset, would it need scaling too?</li>
-</ol>
-            
-            
-        
-                         <div class="mt-8 flex justify-center">
-                            <a href="Week_5_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
-                                Back to Chapter Labs
-                            </a>
-                         </div>
-                         
+<p>In this lab, you used the **Wisdom of the Crowd** to build a highly accurate classifier that is far more stable than a single Decision Tree.</p>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_5_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
+        Back to Chapter Labs
+    </a>
+</div>
+
         </article>
     </main>
 
@@ -267,16 +209,13 @@ print(f&quot;Confidence: {probability[0][prediction[0]]*100:.2f}%&quot;)
         Vaal University of Technology - AI Module 2026
     </footer>
 
-    
 <div class="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 dark:bg-slate-900/90 backdrop-blur border border-gray-200 dark:border-gray-700 rounded-full shadow-2xl px-6 py-2 flex items-center space-x-8 z-50">
-    
-                        <a href="../Week%204%20-%20Machine%20Learning%20Foundations/Week_4_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 4</span>
-                        </a>
-                        
+    <a href="Week_5_Lab_4_Decision_Trees.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+        <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+            <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </div>
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Lab 4</span>
+    </a>
     
     <a href="../index.html" class="group relative flex items-center justify-center p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
         <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center shadow-lg border-2 border-secondary group-hover:scale-110 transition-transform">
@@ -285,14 +224,12 @@ print(f&quot;Confidence: {probability[0][prediction[0]]*100:.2f}%&quot;)
         <span class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">Course Index</span>
     </a>
 
-    
-                        <a href="../Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
-                            <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
-                                <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                            </div>
-                            <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 6</span>
-                        </a>
-                        
+    <a href="../Week%206%20-%20Unsupervised%20Learning/Week_6_Student_Notes.html" class="group flex flex-col items-center hover:text-primary dark:hover:text-sky-400 transition-colors">
+        <div class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 mb-1">
+            <svg class="w-6 h-6 text-slate-400 group-hover:text-primary dark:group-hover:text-sky-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </div>
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider group-hover:text-primary dark:group-hover:text-sky-400">Week 6</span>
+    </a>
 </div>
 
 </body>
