@@ -255,16 +255,7 @@ So far, we have relied on the "Right Answer" (Labels) to train our models. But i
 -   <strong>The Elbow</strong>: The perfect balance. In Figure 3, the arrow points to <strong>K=3</strong>.</p></div></div>
 <!-- break -->
 
-<h2>3. Lab Preview: Investigating Clusters</h2>
-<p>In this week's lab, we will strip away the complexity of real-world data to focus on the mechanics of the algorithm.</p>
-<ol>
-<li><strong>Generate Data</strong>: We will use <code>scikit-learn</code>'s <code>make_blobs</code> function to create synthetic "blobs" of data. We will create 3 distinct groups.</li>
-<li><strong>Run K-Means</strong>: We will ask the model to find these groups.</li>
-<li><strong>The "Ah-Ha" Moment</strong>: We will visualize the results. You will see the Centroids migrating to the center of the blobs.</li>
-<li><strong>Experiment</strong>: We will see what happens when we lie to the machine—telling it to find 4 clusters when there are only 3. This visual proof demonstrates why picking the right $K$ is so critical.</li>
-</ol>
-<hr />
-<h2>4. Evaluating Clustering Results</h2>
+<h2>3. Evaluating Clustering Results</h2>
 <p>Unlike supervised learning, <strong>unsupervised learning does not have labeled data</strong>, which means we cannot directly measure accuracy or precision. Instead, we evaluate how well data points are grouped using <strong>cluster evaluation metrics</strong>. These help determine whether clusters are <strong>compact</strong> (data points close together) and <strong>well-separated from other clusters</strong>.</p>
 
 <h3>4.1 Elbow Method</h3>
@@ -286,6 +277,11 @@ plt.xlabel("Number of clusters (k)")
 plt.ylabel("WCSS")
 plt.title("Elbow Method")
 plt.show()</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>🔍 Code Walkthrough — Elbow Method</strong><br />
+<strong>Line 1</strong>: We import <code>KMeans</code> from scikit-learn and <code>matplotlib</code> for plotting.<br />
+<strong>Lines 3–6</strong>: We loop through values of <code>k</code> from 1 to 10. For each value, we create a new KMeans model, fit it to our data <code>X</code>, then store the <code>inertia_</code> score (which <em>is</em> the WCSS) in the <code>wcss</code> list.<br />
+<strong>Lines 8–11</strong>: We plot <code>k</code> on the x-axis vs. WCSS on the y-axis. The <strong>elbow</strong> — the sharp bend in the curve — visually indicates the best <code>k</code> to use.</div></div>
 
 <h3>4.2 Silhouette Score</h3>
 <p>The <strong>Silhouette Score</strong> measures how well each data point fits within its assigned cluster by comparing:</p>
