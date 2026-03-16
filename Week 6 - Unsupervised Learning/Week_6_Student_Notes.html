@@ -332,15 +332,75 @@ Cluster evaluation helps us: <strong>choose the correct number of clusters</stro
 <!-- break -->
 
 <h2>5. Advanced Clustering Algorithms</h2>
-<p>K-Means works well when clusters are <em>spherical and similar in size</em>. For more complex data, consider these alternatives:</p>
+<p>K-Means is a great starting point, but it makes some strong assumptions: clusters are <em>roughly circular, similar in size, and have hard boundaries</em>. Real-world data rarely behaves so neatly. The algorithms below address these limitations.</p>
+
 <table>
   <thead><tr><th>Algorithm</th><th>Key Idea</th><th>Best For</th></tr></thead>
   <tbody>
-    <tr><td><strong>Gaussian Mixture Models (GMM)</strong></td><td>Probabilistic model — each cluster is a Gaussian distribution. Allows <em>soft</em> (overlapping) cluster membership.</td><td>Elliptical, overlapping clusters</td></tr>
-    <tr><td><strong>Self-Organizing Maps (SOM)</strong></td><td>A neural network that learns a low-dimensional, topology-preserving map of the data.</td><td>High-dimensional data visualization</td></tr>
-    <tr><td><strong>Spectral Clustering</strong></td><td>Uses the eigenvalues of a similarity matrix to reduce dimensionality before clustering. Excellent for non-convex shapes.</td><td>Complex, non-spherical cluster shapes</td></tr>
+    <tr><td><strong>Gaussian Mixture Models (GMM)</strong></td><td>Probabilistic — allows soft, overlapping cluster membership</td><td>Elliptical, overlapping clusters</td></tr>
+    <tr><td><strong>Self-Organizing Maps (SOM)</strong></td><td>Neural network that learns a topology-preserving 2D map</td><td>High-dimensional data visualization</td></tr>
+    <tr><td><strong>Spectral Clustering</strong></td><td>Uses graph eigenvalues to find non-convex clusters</td><td>Complex, non-spherical shapes</td></tr>
   </tbody>
 </table>
+
+<h3>5.1 Gaussian Mixture Models (GMM)</h3>
+<p>K-Means assigns each point to <em>exactly one</em> cluster (hard assignment). A <strong>Gaussian Mixture Model</strong> takes a softer, probabilistic approach: it assumes the data was generated from a mixture of several <strong>Gaussian (bell-curve) distributions</strong>, and it estimates the probability that each point belongs to each cluster.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Analogy: The Football Fan Problem</strong><br />
+Imagine you are classifying people at a stadium as "home fans" or "away fans" just by their seat location. K-Means draws a sharp line — everyone on the left is a home fan. GMM says "this person in the middle is 70% likely to be a home fan and 30% an away fan." It handles the <em>uncertainty</em> of the boundary far more realistically.</div></div>
+<p><strong>Key advantages over K-Means:</strong></p>
+<ul>
+  <li>Clusters can be <strong>elliptical</strong> (stretched — not just circular)</li>
+  <li>Points on cluster boundaries get <strong>soft probabilities</strong> rather than forced labels</li>
+  <li>Can model clusters of <strong>different sizes and shapes</strong></li>
+</ul>
+<pre><code class="language-python">from sklearn.mixture import GaussianMixture
+import numpy as np
+
+# Train a GMM with 3 components (clusters)
+gmm = GaussianMixture(n_components=3, random_state=42)
+gmm.fit(X)
+
+# Hard label assignment
+labels = gmm.predict(X)
+
+# Soft probability assignment (more informative)
+probs = gmm.predict_proba(X)
+print("Cluster probabilities for first point:", probs[0])</code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>🔍 Code Walkthrough — GMM</strong><br />
+<strong>Line 3</strong>: We initialise a GMM with <code>n_components=3</code>, analogous to <code>n_clusters=3</code> in K-Means.<br />
+<strong>Line 4</strong>: <code>.fit(X)</code> trains the model — it uses the <strong>Expectation-Maximisation (EM)</strong> algorithm internally (similar in spirit to K-Means' Assign → Update loop).<br />
+<strong>Line 7</strong>: <code>.predict(X)</code> returns a hard cluster label (0, 1, or 2) for each point — useful when you need a definitive assignment.<br />
+<strong>Line 10–11</strong>: <code>.predict_proba(X)</code> returns a probability for <em>each cluster</em> per point — e.g., <code>[0.05, 0.91, 0.04]</code> means this point is 91% likely in cluster 1. This is the unique power of GMM over K-Means.</div></div>
+
+<h3>5.2 Self-Organizing Maps (SOM)</h3>
+<p>A <strong>Self-Organizing Map</strong> is a type of neural network that learns to represent high-dimensional data on a <strong>low-dimensional grid (usually 2D)</strong>. Unlike K-Means which only groups data, a SOM also <em>preserves the topology</em> — nearby points in the original data end up near each other on the map.</p>
+<p><strong>How it works (simplified):</strong></p>
+<ol>
+  <li>Initialize a 2D grid of neurons, each with a random weight vector the same size as the input features.</li>
+  <li>For each data point, find the <strong>Best Matching Unit (BMU)</strong> — the neuron whose weights are closest.</li>
+  <li>Update the BMU and its neighbours to be slightly closer to the data point.</li>
+  <li>Repeat until the map stabilises.</li>
+</ol>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Real-World Use Case: World Country Map</strong><br />
+Researchers used SOMs to cluster 174 countries by economic indicators (GDP, inflation, unemployment). The resulting 2D map placed similar economies near each other — <em>without ever knowing regions of the world</em>. Countries from Western Europe clustered together; countries in Sub-Saharan Africa clustered together. The SOM discovered the economic geography of the world on its own.</div></div>
+
+<h3>5.3 Spectral Clustering</h3>
+<p>K-Means and GMM assume clusters can be captured by their center or distribution. But some natural groupings have <strong>complex, non-convex shapes</strong> — for example, two interleaved spirals or rings. Spectral Clustering solves this by treating the data as a <strong>graph</strong>.</p>
+<p><strong>Process:</strong></p>
+<ol>
+  <li><strong>Build a similarity graph</strong>: Connect each data point to its K nearest neighbours, weighted by how similar they are.</li>
+  <li><strong>Compute the Laplacian matrix</strong> of this graph and extract its <strong>eigenvalues/eigenvectors</strong>.</li>
+  <li><strong>Apply K-Means</strong> in the low-dimensional eigenspace — where the non-convex problem has become linearly separable.</li>
+</ol>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Insight</strong>: Think of Spectral Clustering as "re-drawing the map" before clustering. Directly clustering two concentric rings with K-Means fails — it splits them vertically. Spectral Clustering <em>unfolds</em> the rings into a flat space where K-Means works perfectly.<br /><br />In scikit-learn: <code>from sklearn.cluster import SpectralClustering</code> — its <code>.fit_predict(X)</code> method handles the full pipeline.
+</div></div>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Which Algorithm Should I Use?</strong><br />
+<strong>K-Means</strong>: Fast, simple — start here. Great for large datasets with round clusters.<br />
+<strong>GMM</strong>: When you need soft probabilities or expect elliptical/overlapping clusters.<br />
+<strong>SOM</strong>: When you want to visualise and explore a high-dimensional dataset in 2D.<br />
+<strong>Spectral</strong>: When you know (or suspect) your clusters have unusual, complex shapes.
+</div></div>
 
 <!-- break -->
 
