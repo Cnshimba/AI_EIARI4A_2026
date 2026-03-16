@@ -264,7 +264,151 @@ So far, we have relied on the "Right Answer" (Labels) to train our models. But i
 <li><strong>Experiment</strong>: We will see what happens when we lie to the machine—telling it to find 4 clusters when there are only 3. This visual proof demonstrates why picking the right $K$ is so critical.</li>
 </ol>
 <hr />
-<h2>4. Summary</h2>
+<h2>4. Evaluating Clustering Results</h2>
+<p>Unlike supervised learning, <strong>unsupervised learning does not have labeled data</strong>, which means we cannot directly measure accuracy or precision. Instead, we evaluate how well data points are grouped using <strong>cluster evaluation metrics</strong>. These help determine whether clusters are <strong>compact</strong> (data points close together) and <strong>well-separated from other clusters</strong>.</p>
+
+<h3>4.1 Elbow Method</h3>
+<p>The <strong>Elbow Method</strong> determines the <strong>optimal number of clusters (k)</strong>. We run K-Means with different values of <em>k</em> and compute the <strong>Within-Cluster Sum of Squares (WCSS)</strong>:</p>
+<p>$$WCSS = \sum_{i=1}^{k} \sum_{x \in C_i} ||x - \mu_i||^2$$</p>
+<p>Where $C_i$ is cluster $i$, $x$ is a data point, and $\mu_i$ is its centroid. As $k$ increases, WCSS decreases. The <strong>elbow point</strong> — where the rate of decrease sharply changes — indicates the optimal $k$.</p>
+
+<pre><code class="language-python">from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+
+wcss = []
+for k in range(1, 11):
+    kmeans = KMeans(n_clusters=k, random_state=42)
+    kmeans.fit(X)
+    wcss.append(kmeans.inertia_)
+
+plt.plot(range(1, 11), wcss, marker='o')
+plt.xlabel("Number of clusters (k)")
+plt.ylabel("WCSS")
+plt.title("Elbow Method")
+plt.show()</code></pre>
+
+<h3>4.2 Silhouette Score</h3>
+<p>The <strong>Silhouette Score</strong> measures how well each data point fits within its assigned cluster by comparing:</p>
+<ul>
+  <li><strong>a</strong> = average intra-cluster distance (distance to its own cluster members)</li>
+  <li><strong>b</strong> = average distance to the nearest <em>other</em> cluster</li>
+</ul>
+<p>$$s = \frac{b - a}{\max(a, b)}$$</p>
+<table>
+  <thead><tr><th>Score</th><th>Meaning</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Close to 1</strong></td><td>Well-separated clusters</td></tr>
+    <tr><td><strong>Around 0</strong></td><td>Overlapping clusters</td></tr>
+    <tr><td><strong>Negative</strong></td><td>Possible misclassification</td></tr>
+  </tbody>
+</table>
+<pre><code class="language-python">from sklearn.metrics import silhouette_score
+from sklearn.cluster import KMeans
+
+kmeans = KMeans(n_clusters=3, random_state=42)
+labels = kmeans.fit_predict(X)
+
+score = silhouette_score(X, labels)
+print("Silhouette Score:", score)</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why Evaluation Metrics Matter</strong><br />
+Cluster evaluation helps us: <strong>choose the correct number of clusters</strong>, measure <strong>cluster quality</strong>, and compare different algorithms. Without them, clustering results may look reasonable but may not represent <em>meaningful</em> patterns.</div></div>
+
+<!-- break -->
+
+<h2>5. Distance Metrics</h2>
+<p>Clustering algorithms measure <strong>"closeness"</strong> using distance functions. Choosing the right one is critical.</p>
+<table>
+  <thead><tr><th>Metric</th><th>Formula</th><th>Best Used When</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Euclidean Distance</strong></td><td>$d = \sqrt{\sum(p_i - q_i)^2}$</td><td>Numerical data, features on similar scales</td></tr>
+    <tr><td><strong>Cosine Similarity</strong></td><td>$\cos\theta = \frac{A \cdot B}{||A|| \cdot ||B||}$</td><td>Text data, word counts, or normalized vectors</td></tr>
+  </tbody>
+</table>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Insight</strong>: K-Means uses Euclidean distance by default. Because <strong>larger feature values dominate distance calculations</strong>, always apply <code>StandardScaler</code> to your data before clustering to ensure all features contribute equally.</div></div>
+
+<!-- break -->
+
+<h2>6. Advanced Clustering Algorithms</h2>
+<p>K-Means works well when clusters are <em>spherical and similar in size</em>. For more complex data, consider these alternatives:</p>
+<table>
+  <thead><tr><th>Algorithm</th><th>Key Idea</th><th>Best For</th></tr></thead>
+  <tbody>
+    <tr><td><strong>Gaussian Mixture Models (GMM)</strong></td><td>Probabilistic model — each cluster is a Gaussian distribution. Allows <em>soft</em> (overlapping) cluster membership.</td><td>Elliptical, overlapping clusters</td></tr>
+    <tr><td><strong>Self-Organizing Maps (SOM)</strong></td><td>A neural network that learns a low-dimensional, topology-preserving map of the data.</td><td>High-dimensional data visualization</td></tr>
+    <tr><td><strong>Spectral Clustering</strong></td><td>Uses the eigenvalues of a similarity matrix to reduce dimensionality before clustering. Excellent for non-convex shapes.</td><td>Complex, non-spherical cluster shapes</td></tr>
+  </tbody>
+</table>
+
+<!-- break -->
+
+<h2>7. Association Rule Mining</h2>
+<p>Association Rule Mining is another key form of unsupervised learning, focused on discovering <strong>interesting relationships between variables</strong> in large datasets.</p>
+<p>The most famous use case is <strong>Market Basket Analysis</strong>: discovering that customers who buy product A are also likely to buy product B.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Real-World Example</strong><br />
+The classic rule: <em>"People who buy diapers also tend to buy beer."</em> This was discovered by a retail chain purely by mining their transaction database — no labels needed!</div></div>
+<h3>7.1 The Apriori Algorithm</h3>
+<p>The <strong>Apriori</strong> algorithm finds <strong>frequent itemsets</strong> (sets of products that appear together) and generates association rules from them. It uses two key thresholds:</p>
+<ul>
+  <li><strong>Support</strong>: How often an itemset appears in the data. $Support(A) = \frac{\text{Transactions containing } A}{\text{Total Transactions}}$</li>
+  <li><strong>Confidence</strong>: How often the rule is correct. $Confidence(A \Rightarrow B) = \frac{Support(A \cup B)}{Support(A)}$</li>
+</ul>
+
+<!-- break -->
+
+<h2>8. Practical Implementation</h2>
+<p>Here is a complete end-to-end example bringing together K-Means, the Elbow Method, Silhouette Score, and visualization using PCA.</p>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+from sklearn.metrics import silhouette_score
+from sklearn.decomposition import PCA
+from sklearn.preprocessing import StandardScaler
+
+# 1. Generate synthetic data
+X, _ = make_blobs(n_samples=500, centers=4, random_state=42)
+
+# 2. Scale the data
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# 3. Elbow Method — find optimal K
+wcss = []
+for k in range(1, 11):
+    km = KMeans(n_clusters=k, random_state=42)
+    km.fit(X_scaled)
+    wcss.append(km.inertia_)
+
+plt.figure(figsize=(8, 4))
+plt.plot(range(1, 11), wcss, marker='o')
+plt.title('Elbow Method')
+plt.xlabel('Number of clusters (k)')
+plt.ylabel('WCSS')
+plt.show()
+
+# 4. Train final model with K=4
+kmeans = KMeans(n_clusters=4, random_state=42)
+labels = kmeans.fit_predict(X_scaled)
+
+# 5. Evaluate using Silhouette Score
+score = silhouette_score(X_scaled, labels)
+print(f"Silhouette Score: {score:.4f}")
+
+# 6. Visualize using PCA (compress to 2D for plotting)
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X_scaled)
+
+plt.figure(figsize=(8, 5))
+plt.scatter(X_pca[:, 0], X_pca[:, 1], c=labels, cmap='viridis', alpha=0.7)
+plt.title('K-Means Clusters (Visualized via PCA)')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.colorbar(label='Cluster')
+plt.show()</code></pre>
+
+<hr />
+<h2>9. Summary</h2>
 <p>Unsupervised Learning is powerful because Unlabeled Data is cheap and abundant, while Labeled Data is expensive.</p>
 <ul>
 <li>

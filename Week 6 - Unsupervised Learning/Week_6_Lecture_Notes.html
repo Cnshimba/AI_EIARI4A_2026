@@ -419,11 +419,97 @@
 <p><strong>Hierarchical Clustering</strong>: Creates tree of clusters</p>
 </li>
 <li>
-<p><strong>Gaussian Mixture Models</strong>: Probabilistic approach</p>
+<p><strong>Gaussian Mixture Models</strong>: Probabilistic approach — clusters can be elliptical and overlapping</p>
+</li>
+<li>
+<p><strong>Self-Organizing Maps (SOM)</strong>: Neural network that produces a low-dimensional topological map</p>
+</li>
+<li>
+<p><strong>Spectral Clustering</strong>: Uses graph eigenvalues — ideal for non-convex cluster shapes</p>
 </li>
 </ul>
 <hr />
-<h2>Lab Preview (5 mins)</h2>
+<h3>Part 6: Cluster Evaluation Metrics (10 mins)</h3>
+<h4>6.1 The Evaluation Challenge</h4>
+<ul>
+<li><p>No labels → can't use accuracy, precision, recall</p></li>
+<li><p>Must use <strong>internal metrics</strong> that assess cluster quality from the data itself</p></li>
+</ul>
+<h4>6.2 Elbow Method (WCSS)</h4>
+<ul>
+<li><p>Plot K vs. Within-Cluster Sum of Squares (WCSS) over a range of K values</p></li>
+<li><p>Formula: $WCSS = \sum_{i=1}^{k} \sum_{x \in C_i} ||x - \mu_i||^2$</p></li>
+<li><p>In scikit-learn, access via <code>kmeans.inertia_</code></p></li>
+<li><p>Pick K at the "elbow" — where improvement flattens</p></li>
+</ul>
+<h4>6.3 Silhouette Score</h4>
+<ul>
+<li><p>Measures how well each point fits its cluster vs. neighbors</p></li>
+<li><p>Formula: $s = \frac{b - a}{\max(a, b)}$ where <strong>a</strong> = intra-cluster distance, <strong>b</strong> = nearest-other-cluster distance</p></li>
+<li><p>Range: -1 (bad) to +1 (great). Values near 0 = overlapping clusters</p></li>
+<li><p>In scikit-learn: <code>silhouette_score(X, labels)</code></p></li>
+</ul>
+<blockquote>
+<p><strong>Teaching Point</strong>: Run both metrics together — Elbow for K selection, Silhouette for validation</p>
+</blockquote>
+<hr />
+<h3>Part 7: Distance Metrics (10 mins)</h3>
+<h4>7.1 Euclidean Distance</h4>
+<ul>
+<li><p>Default for K-Means: $d = \sqrt{\sum(p_i - q_i)^2}$</p></li>
+<li><p><strong>Problem</strong>: Sensitive to feature scale — larger features dominate</p></li>
+<li><p><strong>Solution</strong>: Always use <code>StandardScaler</code> before clustering</p></li>
+</ul>
+<h4>7.2 Cosine Similarity</h4>
+<ul>
+<li><p>Measures the angle between two vectors: $\cos\theta = \frac{A \cdot B}{||A|| \cdot ||B||}$</p></li>
+<li><p>Range: 0 (orthogonal/different) to 1 (identical direction)</p></li>
+<li><p>Ideal for <strong>text and NLP data</strong> where document length varies</p></li>
+</ul>
+<hr />
+<h3>Part 8: Association Rule Mining (10 mins)</h3>
+<h4>8.1 Definition</h4>
+<ul>
+<li><p>Discovers <strong>interesting relationships</strong> between items in large transaction databases</p></li>
+<li><p>Output: Rules of the form <strong>If A → then B</strong></p></li>
+</ul>
+<h4>8.2 Key Concepts</h4>
+<ul>
+<li><p><strong>Support</strong>: Frequency of itemset. $Support(A) = \frac{\text{Transactions with A}}{\text{Total Transactions}}$</p></li>
+<li><p><strong>Confidence</strong>: Reliability of the rule. $Confidence(A \Rightarrow B) = \frac{Support(A \cup B)}{Support(A)}$</p></li>
+</ul>
+<h4>8.3 Apriori Algorithm</h4>
+<ul>
+<li><p>Iteratively finds <strong>frequent itemsets</strong> by pruning items below a minimum support threshold</p></li>
+<li><p>Application: <strong>Market Basket Analysis</strong> (e.g., "Customers who buy diapers also buy beer")</p></li>
+</ul>
+<blockquote>
+<p><strong>Teaching Point</strong>: This is often covered in retail and recommender system contexts. Association rules operate on <em>tabular transaction data</em>, not distance-based clustering</p>
+</blockquote>
+<hr />
+<h3>Part 9: Live Python Demo (10 mins)</h3>
+<pre><code class="language-python">from sklearn.cluster import KMeans
+from sklearn.datasets import make_blobs
+from sklearn.metrics import silhouette_score
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+
+# Generate data
+X, _ = make_blobs(n_samples=500, centers=4, random_state=42)
+X_scaled = StandardScaler().fit_transform(X)
+
+# Elbow Method
+wcss = [KMeans(n_clusters=k, random_state=42).fit(X_scaled).inertia_ for k in range(1, 11)]
+plt.plot(range(1, 11), wcss, marker='o')
+plt.title('Elbow Method')
+plt.show()
+
+# Final model + Silhouette
+kmeans = KMeans(n_clusters=4, random_state=42)
+labels = kmeans.fit_predict(X_scaled)
+print("Silhouette Score:", silhouette_score(X_scaled, labels))</code></pre>
+<hr />
+
 <h3>Lab Activities</h3>
 <ol>
 <li>Generate synthetic data blobs using <code>make_blobs</code></li>
