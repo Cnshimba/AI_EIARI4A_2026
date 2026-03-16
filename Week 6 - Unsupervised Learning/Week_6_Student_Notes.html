@@ -318,7 +318,7 @@ Cluster evaluation helps us: <strong>choose the correct number of clusters</stro
 
 <!-- break -->
 
-<h2>5. Distance Metrics</h2>
+<h2>4. Distance Metrics</h2>
 <p>Clustering algorithms measure <strong>"closeness"</strong> using distance functions. Choosing the right one is critical.</p>
 <table>
   <thead><tr><th>Metric</th><th>Formula</th><th>Best Used When</th></tr></thead>
@@ -331,7 +331,7 @@ Cluster evaluation helps us: <strong>choose the correct number of clusters</stro
 
 <!-- break -->
 
-<h2>6. Advanced Clustering Algorithms</h2>
+<h2>5. Advanced Clustering Algorithms</h2>
 <p>K-Means works well when clusters are <em>spherical and similar in size</em>. For more complex data, consider these alternatives:</p>
 <table>
   <thead><tr><th>Algorithm</th><th>Key Idea</th><th>Best For</th></tr></thead>
@@ -344,12 +344,12 @@ Cluster evaluation helps us: <strong>choose the correct number of clusters</stro
 
 <!-- break -->
 
-<h2>7. Association Rule Mining</h2>
+<h2>6. Association Rule Mining</h2>
 <p>Association Rule Mining is another key form of unsupervised learning, focused on discovering <strong>interesting relationships between variables</strong> in large datasets.</p>
 <p>The most famous use case is <strong>Market Basket Analysis</strong>: discovering that customers who buy product A are also likely to buy product B.</p>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Real-World Example</strong><br />
 The classic rule: <em>"People who buy diapers also tend to buy beer."</em> This was discovered by a retail chain purely by mining their transaction database — no labels needed!</div></div>
-<h3>7.1 The Apriori Algorithm</h3>
+<h3>6.1 The Apriori Algorithm</h3>
 <p>The <strong>Apriori</strong> algorithm finds <strong>frequent itemsets</strong> (sets of products that appear together) and generates association rules from them. It uses two key thresholds:</p>
 <ul>
   <li><strong>Support</strong>: How often an itemset appears in the data. $Support(A) = \frac{\text{Transactions containing } A}{\text{Total Transactions}}$</li>
@@ -358,7 +358,7 @@ The classic rule: <em>"People who buy diapers also tend to buy beer."</em> This 
 
 <!-- break -->
 
-<h2>8. Practical Implementation</h2>
+<h2>7. Practical Implementation</h2>
 <p>Here is a complete end-to-end example bringing together K-Means, the Elbow Method, Silhouette Score, and visualization using PCA.</p>
 <pre><code class="language-python">import matplotlib.pyplot as plt
 import numpy as np
@@ -420,7 +420,7 @@ plt.show()</code></pre>
 
 <!-- break -->
 
-<h2>9. Lab Preview: Investigating Clusters</h2>
+<h2>8. Lab Preview: Investigating Clusters</h2>
 <p>In this week's lab, we will strip away the complexity of real-world data to focus on the mechanics of the algorithm.</p>
 <ol>
 <li><strong>Generate Data</strong>: We will use <code>scikit-learn</code>'s <code>make_blobs</code> function to create synthetic "blobs" of data. We will create 3 distinct groups.</li>
@@ -431,7 +431,7 @@ plt.show()</code></pre>
 </ol>
 
 <hr />
-<h2>10. Summary</h2>
+<h2>9. Summary</h2>
 <p>Unsupervised Learning is powerful because Unlabeled Data is cheap and abundant, while Labeled Data is expensive.</p>
 <ul>
 <li>
