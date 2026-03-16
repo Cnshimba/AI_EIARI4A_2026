@@ -409,12 +409,48 @@ Researchers used SOMs to cluster 174 countries by economic indicators (GDP, infl
 <p>The most famous use case is <strong>Market Basket Analysis</strong>: discovering that customers who buy product A are also likely to buy product B.</p>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Real-World Example</strong><br />
 The classic rule: <em>"People who buy diapers also tend to buy beer."</em> This was discovered by a retail chain purely by mining their transaction database — no labels needed!</div></div>
-<h3>6.1 The Apriori Algorithm</h3>
-<p>The <strong>Apriori</strong> algorithm finds <strong>frequent itemsets</strong> (sets of products that appear together) and generates association rules from them. It uses two key thresholds:</p>
+<h3>6.2 Practical Example: The Grocery Store</h3>
+<p>Imagine a small grocery store with 100 transactions in total. Let's calculate the metrics for the rule: <strong>{Milk} &rArr; {Bread}</strong>.</p>
 <ul>
-  <li><strong>Support</strong>: How often an itemset appears in the data. $Support(A) = \frac{\text{Transactions containing } A}{\text{Total Transactions}}$</li>
-  <li><strong>Confidence</strong>: How often the rule is correct. $Confidence(A \Rightarrow B) = \frac{Support(A \cup B)}{Support(A)}$</li>
+  <li><strong>Fact 1</strong>: 50 transactions contain Milk.</li>
+  <li><strong>Fact 2</strong>: 40 transactions contain Bread.</li>
+  <li><strong>Fact 3</strong>: 30 transactions contain <em>both</em> Milk and Bread.</li>
 </ul>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+    <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700">
+        <p class="font-bold text-primary dark:text-sky-400 mb-2">Calculating Support</p>
+        <p class="text-sm">How popular is the {Milk, Bread} combo?</p>
+        <p class="font-mono bg-white dark:bg-slate-800 p-2 rounded mt-2">Support = 30 / 100 = 0.3 (30%)</p>
+    </div>
+    <div class="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-700">
+        <p class="font-bold text-primary dark:text-sky-400 mb-2">Calculating Confidence</p>
+        <p class="text-sm">Of those who bought Milk, how many bought Bread?</p>
+        <p class="font-mono bg-white dark:bg-slate-800 p-2 rounded mt-2">Confidence = 30 / 50 = 0.6 (60%)</p>
+    </div>
+</div>
+
+<h3>6.3 Beyond Confidence: The Lift Metric</h3>
+<p>Confidence can be misleading. If <em>everyone</em> buys Bread regardless of Milk, the confidence will be high even if there is no real relationship. We use <strong>Lift</strong> to solve this:</p>
+<p>$$Lift(A \Rightarrow B) = \frac{Confidence(A \Rightarrow B)}{Support(B)}$$</p>
+<ul>
+  <li><strong>Lift > 1</strong>: Positive relationship (A and B are likely bought together).</li>
+  <li><strong>Lift = 1</strong>: No relationship (they are independent).</li>
+  <li><strong>Lift < 1</strong>: Negative relationship (buying A makes you <em>less</em> likely to buy B).</li>
+</ul>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Top Tip</strong>: In professional tools like <code>mlxtend</code>, we filter rules by a minimum Support (to ensure they happen often) and a Lift > 1 (to ensure the relationship is meaningful).</div></div>
+
+<h3>6.4 Common Applications</h3>
+<table>
+    <thead><tr><th>Industry</th><th>Application</th></tr></thead>
+    <tbody>
+        <tr><td><strong>E-commerce</strong></td><td>"Customers who viewed this also viewed..."</td></tr>
+        <tr><td><strong>Retail</strong></td><td>Planning store layouts (placing related items apart to force walking through aisles).</td></tr>
+        <tr><td><strong>Streaming</strong></td><td>Recommending the next movie based on your watch history.</td></tr>
+        <tr><td><strong>Cybersecurity</strong></td><td>Identifying sequences of login attempts that match known intrusion patterns.</td></tr>
+    </tbody>
+</table>
 
 <!-- break -->
 
