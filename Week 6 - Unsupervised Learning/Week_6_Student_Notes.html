@@ -455,7 +455,25 @@ The classic rule: <em>"People who buy diapers also tend to buy beer."</em> This 
 <!-- break -->
 
 <h2>7. Practical Implementation</h2>
-<p>Here is a complete end-to-end example bringing together K-Means, the Elbow Method, Silhouette Score, and visualization using PCA.</p>
+<p>In practice, clustering is rarely as simple as fitting a model. It involves a systematic workflow to ensure the results are robust and interpretable.</p>
+
+<h3>7.1 The Standard Unsupervised Workflow</h3>
+<p>When approaching a clustering problem, follow these steps:</p>
+<ol>
+    <li><strong>Feature Scaling</strong>: Clustering is distance-based. If one feature ranges from 0-1 and another from 0-10,000, the larger feature will dominate. Always use <code>StandardScaler</code>.</li>
+    <li><strong>Dimensionality Reduction (Optional)</strong>: If you have 50+ features, clustering becomes difficult (the "Curse of Dimensionality"). Reducing them to 5-10 "Principal Components" often helps.</li>
+    <li><strong>Selecting K</strong>: Use the <strong>Elbow Method</strong> and <strong>Silhouette Score</strong> to find the most natural number of groups.</li>
+    <li><strong>Clustering</strong>: Run the final model with your chosen K.</li>
+    <li><strong>Visualization</strong>: Use <strong>PCA</strong> to compress the results into 2D so you can actually "see" the groups.</li>
+</ol>
+
+<h3>7.2 Why PCA? (Visualizing the Invisible)</h3>
+<p>The code below uses <strong>Principal Component Analysis (PCA)</strong>. Why? Because as humans, we cannot visualize 4D, 10D, or 100D data. PCA mathematically rotates and squeezes the data into just two axes (PC1 and PC2) while keeping as much of the original "variance" (information) as possible. This allows us to draw a scatter plot and verify that our clusters aren't overlapping too much.</p>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Pro-Tip: K-Means is Sensitive to Outliers</strong><br />
+Because K-Means tries to minimize squared distances, a single point very far away (an outlier) can "pull" the centroid away from the actual group. Always check for and handle outliers before clustering!</div></div>
+
+<p>Here is a complete end-to-end example bringing together these steps:</p>
 <pre><code class="language-python">import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cluster import KMeans
