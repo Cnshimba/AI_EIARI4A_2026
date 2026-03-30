@@ -417,14 +417,17 @@ for epoch in range(epochs):
 print(f&quot;Final: W={W.numpy():.2f}, b={b.numpy():.2f} (Target: 3.0, 2.0)&quot;)
 </code></pre>
 <h3>6.7 The High-Level API: Keras</h3>
-<p>While <code>GradientTape</code> gives you low-level control, <strong>Keras</strong> provides the standard building blocks for Deep Learning.</p>
+<p>While <code>GradientTape</code> gives you low-level control, <strong>Keras</strong> provides the standard building blocks for Deep Learning, hiding the complex calculus and training loops behind a clean interface.</p>
 <p>In Keras, you assemble <strong>Layers</strong> into a <strong>Model</strong>.</p>
 <pre><code class="language-python"># The exact same regression model using Keras
 model = tf.keras.Sequential([
     tf.keras.layers.Dense(units=1, input_shape=[1])
 ])
 
+# 1. Compile: Attach the optimization algorithm and the loss function
 model.compile(optimizer='sgd', loss='mean_squared_error')
+
+# 2. Fit: Automatically run the forward/backward loop (like our custom loop above) for 5 epochs
 model.fit(inputs, outputs, epochs=5)
 </code></pre>
 <p>For Deep Learning, we simply stack more layers and use non-linear activations:</p>
@@ -433,6 +436,7 @@ model.fit(inputs, outputs, epochs=5)
     tf.keras.layers.Dense(10, activation='softmax') # Output Layer
 ])
 </code></pre>
+<p class="mt-4 font-medium text-primary dark:text-sky-400">Now that we understand these Keras building blocks, let's put them together in a complete, end-to-end project.</p>
 <hr />
 <h2>7. Example: Building an Image Classifier with Keras</h2>
 <p>To put everything together, let's build a simple Neural Network to classify images. We will use the famous <strong>Fashion MNIST</strong> dataset, which contains 70,000 grayscale images of clothing items (like shirts, shoes, and coats) in 10 categories, each $28 \times 28$ pixels in size.</p>
