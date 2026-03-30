@@ -418,8 +418,8 @@ for epoch in range(epochs):
 print(f&quot;Final: W={W.numpy():.2f}, b={b.numpy():.2f} (Target: 3.0, 2.0)&quot;)
 </code></pre>
 <h3>6.7 The High-Level API: Keras</h3>
-<p>While <code>GradientTape</code> gives you low-level control, <strong>Keras</strong> provides the standard building blocks for Deep Learning, hiding the complex calculus and training loops behind a clean interface.</p>
-<p>In Keras, you assemble <strong>Layers</strong> into a <strong>Model</strong>.</p>
+<p>While <code>GradientTape</code> gives you complete low-level control over the math, it is exhausting to write manual training loops for massive neural networks. This is where <strong>Keras</strong> comes in. Keras is TensorFlow's official high-level API. It was designed for human beings, prioritizing readability and rapid prototyping.</p>
+<p>In Keras, you don't write calculus. Instead, you treat neural networks like Lego blocks, assembling pre-built <strong>Layers</strong> into a <strong>Model</strong>.</p>
 <pre><code class="language-python"># The exact same regression model using Keras
 model = tf.keras.Sequential([
     tf.keras.layers.Dense(units=1, input_shape=[1])
@@ -431,12 +431,18 @@ model.compile(optimizer='sgd', loss='mean_squared_error')
 # 2. Fit: Automatically run the forward/backward loop (like our custom loop above) for 5 epochs
 model.fit(inputs, outputs, epochs=5)
 </code></pre>
-<p>For Deep Learning, we simply stack more layers and use non-linear activations:</p>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> Notice how those 3 lines of Keras code completely replace the 15 lines of raw math we wrote in Section 6.6! The <code>Dense(units=1)</code> layer automatically creates our Weight ($W$) and Bias ($b$). The <code>model.compile()</code> function links our Loss objective (MSE) and tells the model how to fix its mistakes (Stochastic Gradient Descent). Finally, calling <code>model.fit()</code> runs the entire training cycle—forward pass, loss, backward pass, and weight update—5 times automatically behind the scenes.
+</div>
+<p>To move beyond simple linear regression and actually do <strong>Deep Learning</strong>, all we have to do is stack more blocks together and apply the non-linear activation functions we learned about earlier in the lesson:</p>
 <pre><code class="language-python">model = tf.keras.Sequential([
     tf.keras.layers.Dense(128, activation='relu'), # Hidden Layer
     tf.keras.layers.Dense(10, activation='softmax') # Output Layer
 ])
 </code></pre>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> Expanding a network in Keras is trivial. The first line adds a large hidden layer of 128 neurons and uses the <code>relu</code> activation function (to stop the network's math from collapsing into a flat line). It is instantly connected to a final Output layer of 10 neurons wrapped in a <code>softmax</code> activation, giving us a probability curve across 10 possible classes. No manual calculus required!
+</div>
 <p class="mt-4 font-medium text-primary dark:text-sky-400">Now that we understand these Keras building blocks, let's put them together in a complete, end-to-end project.</p>
 <hr />
 <h2>7. Example: Building an Image Classifier with Keras</h2>
