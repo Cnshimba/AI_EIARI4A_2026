@@ -24,10 +24,10 @@
                         css: {
                             color: '#334155',
                             maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
+                            h1: { color: '#002F6E' },
                             h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            h3: { color: '#002F6E' },
+                            a: { color: '#002F6E', '&:hover': { color: '#c9984a' } },
                             blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
                             code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
                             'code::before': { content: '""' },
@@ -99,7 +99,7 @@
     <style>
         /* Glossary Tooltip */
         .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
+        .glossary-term:hover { color: #002F6E; }
         html.dark .glossary-term:hover { color: #ffffff; }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
@@ -112,7 +112,7 @@
             overflow-x: auto !important;
             font-size: 1.1em !important;
             line-height: 1.5 !important;
-            color: #e2e8f0 !important;
+            /* color removed to support highlight.js */
         }
         code {
             font-family: 'Courier New', monospace !important;
@@ -410,22 +410,23 @@
 <blockquote>
 <p><strong>Teaching Point</strong>: Show visual examples of failure cases</p>
 </blockquote>
-<h4>5.2 Alternative Algorithms (Brief mention)</h4>
+<h4>5.2 Alternative Algorithms — Expanding the Toolkit</h4>
 <ul>
 <li>
-<p><strong>DBSCAN</strong>: Density-based, handles arbitrary shapes</p>
+<p><strong>Gaussian Mixture Models (GMM)</strong>: 
+    <br>- <strong>Probabilistic</strong> approach (Soft vs. Hard assignment)
+    <br>- Handles elliptical clusters where K-Means fails
+    <br>- <strong>Teaching Point</strong>: Use the "Football Fan" analogy—some people on the boundary have fractional membership in both groups.</p>
 </li>
 <li>
-<p><strong>Hierarchical Clustering</strong>: Creates tree of clusters</p>
+<p><strong>Self-Organizing Maps (SOM)</strong>: 
+    <br>- Neural network that produces a low-dimensional topological map
+    <br>- <strong>Teaching Point</strong>: Mention the World Economic Geography example—similar countries cluster physically together on the map.</p>
 </li>
 <li>
-<p><strong>Gaussian Mixture Models</strong>: Probabilistic approach — clusters can be elliptical and overlapping</p>
-</li>
-<li>
-<p><strong>Self-Organizing Maps (SOM)</strong>: Neural network that produces a low-dimensional topological map</p>
-</li>
-<li>
-<p><strong>Spectral Clustering</strong>: Uses graph eigenvalues — ideal for non-convex cluster shapes</p>
+<p><strong>Spectral Clustering</strong>: 
+    <br>- Uses graph theory (eigenvalues) to cluster complex shapes (rings, spirals)
+    <br>- <strong>Teaching Point</strong>: It "re-draws" the data in a higher dimension where they become easy to separate.</p>
 </li>
 </ul>
 <hr />
@@ -473,19 +474,22 @@
 <li><p>Discovers <strong>interesting relationships</strong> between items in large transaction databases</p></li>
 <li><p>Output: Rules of the form <strong>If A → then B</strong></p></li>
 </ul>
-<h4>8.2 Key Concepts</h4>
+<h4>8.2 Metrics & Practical Calculation</h4>
 <ul>
-<li><p><strong>Support</strong>: Frequency of itemset. $Support(A) = \frac{\text{Transactions with A}}{\text{Total Transactions}}$</p></li>
-<li><p><strong>Confidence</strong>: Reliability of the rule. $Confidence(A \Rightarrow B) = \frac{Support(A \cup B)}{Support(A)}$</p></li>
-</ul>
-<h4>8.3 Apriori Algorithm</h4>
-<ul>
-<li><p>Iteratively finds <strong>frequent itemsets</strong> by pruning items below a minimum support threshold</p></li>
-<li><p>Application: <strong>Market Basket Analysis</strong> (e.g., "Customers who buy diapers also buy beer")</p></li>
+<li><strong>Support</strong>: Frequency ($30/100 = 0.3$)</li>
+<li><strong>Confidence</strong>: Reliability ($30/50 = 0.6$)</li>
+<li><strong>Lift</strong>: Relationship Strength. $Lift = \frac{Confidence(A \rightarrow B)}{Support(B)}$
+    <br>- Lift > 1: Likely bought together!
+    <br>- Lift = 1: Independent coincidence.</li>
 </ul>
 <blockquote>
-<p><strong>Teaching Point</strong>: This is often covered in retail and recommender system contexts. Association rules operate on <em>tabular transaction data</em>, not distance-based clustering</p>
+<p><strong>Class Activity</strong>: Use the Milk (50), Bread (40), Both (30) example from the notes. Ask students to calculate Confidence vs. Lift during the lecture.</p>
 </blockquote>
+<h4>8.3 Apriori Algorithm</h4>
+<ul>
+<li>Iteratively finds <strong>frequent itemsets</strong> by pruning items below a minimum support threshold</li>
+<li>Application: <strong>Market Basket Analysis</strong>, Recommendation Engines, sequence mining.</li>
+</ul>
 <hr />
 <h3>Part 9: Live Python Demo (10 mins)</h3>
 <pre><code class="language-python">from sklearn.cluster import KMeans

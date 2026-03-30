@@ -24,10 +24,10 @@
                         css: {
                             color: '#334155',
                             maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
+                            h1: { color: '#002F6E' },
                             h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            h3: { color: '#002F6E' },
+                            a: { color: '#002F6E', '&:hover': { color: '#c9984a' } },
                             blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
                             code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
                             'code::before': { content: '""' },
@@ -99,7 +99,7 @@
     <style>
         /* Glossary Tooltip */
         .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
+        .glossary-term:hover { color: #002F6E; }
         html.dark .glossary-term:hover { color: #ffffff; }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
@@ -112,7 +112,7 @@
             overflow-x: auto !important;
             font-size: 1.1em !important;
             line-height: 1.5 !important;
-            color: #e2e8f0 !important;
+            /* color removed to support highlight.js */
         }
         code {
             font-family: 'Courier New', monospace !important;
@@ -344,7 +344,17 @@ print(tf.multiply(a, b)) # [[1, 2], [3, 4]]
 # This is the most common operation in Neural Networks
 print(tf.matmul(a, b)) # [[3, 3], [7, 7]]
 </code></pre>
-<h3>6.4 Automatic Differentiation (<code>GradientTape</code>)</h3>
+<h3>6.4 Type Conversions and Broadcasting</h3>
+<p>Just like NumPy, TensorFlow supports <strong>Broadcasting</strong> (expanding smaller tensors to match larger ones for operations). However, TensorFlow is significantly stricter about <strong>Type Conversions</strong>: it will not automatically convert integer tensors to float tensors. You must do this manually using <code>tf.cast()</code> to avoid errors.</p>
+<pre><code class="language-python"># Broadcasting: Adding a scalar to a matrix
+print(tf.add(a, 10)) # Adds 10 to every element in tensor 'a'
+
+# Type Conversion
+t1 = tf.constant(42) # This is an int32 tensor
+t2 = tf.cast(t1, tf.float32) # Converting to float32
+</code></pre>
+
+<h3>6.5 Automatic Differentiation (<code>GradientTape</code>)</h3>
 <p>How do neural networks learn? By calculating <strong>gradients</strong> (derivatives) of the error with respect to the weights. TensorFlow handles this calculus automatically using the <strong>Gradient Tape</strong>.</p>
 <p>Any operation recorded inside a <code>with tf.GradientTape() as tape:</code> block can be differentiated.</p>
 <pre><code class="language-python">x = tf.Variable(3.0)
@@ -356,7 +366,7 @@ with tf.GradientTape() as tape:
 dy_dx = tape.gradient(y, x)
 print(dy_dx.numpy())  # Output: 6.0 (since 2 * 3 = 6)
 </code></pre>
-<h3>6.5 Comparison: Linear Regression from Scratch</h3>
+<h3>6.6 Comparison: Linear Regression from Scratch</h3>
 <p>Let's solve a simple linear problem: $y = W \cdot x + b$.<br />
 We will generate synthetic data and train a model to find $W$ and $b$ using raw Tensors.</p>
 <pre><code class="language-python">import matplotlib.pyplot as plt
@@ -406,7 +416,7 @@ for epoch in range(epochs):
 
 print(f&quot;Final: W={W.numpy():.2f}, b={b.numpy():.2f} (Target: 3.0, 2.0)&quot;)
 </code></pre>
-<h3>6.6 The High-Level API: Keras</h3>
+<h3>6.7 The High-Level API: Keras</h3>
 <p>While <code>GradientTape</code> gives you low-level control, <strong>Keras</strong> provides the standard building blocks for Deep Learning.</p>
 <p>In Keras, you assemble <strong>Layers</strong> into a <strong>Model</strong>.</p>
 <pre><code class="language-python"># The exact same regression model using Keras
@@ -424,7 +434,65 @@ model.fit(inputs, outputs, epochs=5)
 ])
 </code></pre>
 <hr />
-<h2>7. Summary</h2>
+<h2>7. Example: Building an Image Classifier with Keras</h2>
+<p>To put everything together, let's build a simple Neural Network to classify images. We will use the famous <strong>Fashion MNIST</strong> dataset, which contains 70,000 grayscale images of clothing items (like shirts, shoes, and coats) in 10 categories, each $28 \times 28$ pixels in size.</p>
+
+<h3>7.1 Loading the Data</h3>
+<p>Keras provides handy utility functions to fetch common datasets directly.</p>
+<pre><code class="language-python">import tensorflow as tf
+
+# Load the dataset
+fashion_mnist = tf.keras.datasets.fashion_mnist
+(X_train_full, y_train_full), (X_test, y_test) = fashion_mnist.load_data()
+
+# Scale pixel intensities down to the 0-1 range by dividing them by 255.0
+X_train_full = X_train_full / 255.0
+X_test = X_test / 255.0
+</code></pre>
+
+<h3>7.2 Building the Model using the Sequential API</h3>
+<p>We will construct a Multi-Layer Perceptron (MLP) with two hidden layers using the <strong>Sequential API</strong>. We use the Sequential model because our network is a simple linear stack of layers—information flows straight from input to output without any complex branching or multiple inputs.</p>
+<ul class="mb-4">
+    <li><strong><code>Flatten</code> Layer:</strong> Neural networks expect flat, 1D arrays of numbers, but our images are 2D grids ($28 \times 28$ pixels). The Flatten layer simply unrolls this 2D grid into a single long 1D array of 784 pixels.</li>
+    <li><strong><code>Dense</code> Layers:</strong> These are <strong>Fully-Connected</strong> layers (as discussed in Section 3). The term "Dense" means every single neuron in this layer is connected to every single neuron in the previous layer. This dense web of connections allows the network to learn complex hierarchical patterns.</li>
+</ul>
+<pre><code class="language-python">model = tf.keras.models.Sequential([
+    # Input layer: Reshapes the 28x28 image into a 1D array of 784 pixels
+    tf.keras.layers.Flatten(input_shape=[28, 28]),
+    
+    # First Hidden Layer: 300 neurons with ReLU activation
+    tf.keras.layers.Dense(300, activation="relu"),
+    
+    # Second Hidden Layer: 100 neurons with ReLU activation
+    tf.keras.layers.Dense(100, activation="relu"),
+    
+    # Output Layer: 10 neurons (one for each class) with Softmax activation
+    tf.keras.layers.Dense(10, activation="softmax")
+])
+</code></pre>
+<p>The <code>softmax</code> activation function ensures that the output values are all between 0 and 1, and that they sum up to 1, representing the probability of each class.</p>
+
+<h3>7.3 Compiling and Training the Model</h3>
+<p>After defining the model, we need to specify the loss function and the optimizer (how we update the weights).</p>
+<pre><code class="language-python"># Compile the model
+model.compile(loss="sparse_categorical_crossentropy",
+              optimizer="sgd", # Stochastic Gradient Descent
+              metrics=["accuracy"])
+
+# Train the model for 30 epochs
+history = model.fit(X_train_full, y_train_full, epochs=30, validation_split=0.1)
+</code></pre>
+
+<h3>7.4 Making Predictions</h3>
+<p>Finally, we can use our trained network to predict the class of a new image.</p>
+<pre><code class="language-python"># Predict the probabilities for the first 3 images in the test set
+X_new = X_test[:3]
+y_proba = model.predict(X_new)
+print(y_proba.round(2)) # Prints an array of probabilities for each class
+</code></pre>
+
+<hr />
+<h2>8. Summary</h2>
 <p>Neural Networks are built from layers of perceptrons. Activation functions such as ReLU give these networks the power to model complex patterns. Forward propagation is how the network makes predictions, while backpropagation is how it learns from its mistakes.</p>
 <p>Next week, we introduce the power tools: PyTorch and Convolutional Neural Networks (CNNs).</p>
             

@@ -19,7 +19,7 @@
             max-width: 1200px;
             margin: 0 auto 40px auto;
             padding: 80px 100px;
-            background: linear-gradient(135deg, #1e3a5f 0%, #142a46 100%);
+            background: linear-gradient(135deg, #002F6E 0%, #142a46 100%);
             border-radius: 20px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
             display: flex;
@@ -28,13 +28,13 @@
         }
         
         .slide:nth-child(even) {
-            background: linear-gradient(135deg, #142a46 0%, #1e3a5f 100%);
+            background: linear-gradient(135deg, #142a46 0%, #002F6E 100%);
         }
         
         .title-slide {
             text-align: center;
             align-items: center;
-            background: linear-gradient(135deg, #0f223d 0%, #1e3a5f 100%);
+            background: linear-gradient(135deg, #0f223d 0%, #002F6E 100%);
         }
         
         .title-slide h1 {
@@ -107,18 +107,22 @@
         }
         
         pre {
-            background: #0f0f0f;
-            border-left: 4px solid #c9984a;
-            padding: 25px;
-            margin: 25px 0;
-            overflow-x: auto;
-            border-radius: 8px;
+            background: #0f0f0f !important;
+            border-left: 4px solid #c9984a !important; /* VUT Gold */
+            padding: 25px !important;
+            margin: 25px 0 !important;
+            overflow-x: auto !important;
+            border-radius: 8px !important;
+            font-size: 1.1em !important;
+            line-height: 1.5 !important;
+            /* color removed to support highlight.js */
         }
         
         pre code {
-            background: transparent;
-            padding: 0;
-            color: inherit;
+            background: transparent !important;
+            padding: 0 !important;
+            color: inherit !important;
+            font-family: 'Courier New', monospace !important;
         }
         
         img {
@@ -157,6 +161,9 @@
     </script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
 </head>
 <body>
     <div class="slide title-slide">

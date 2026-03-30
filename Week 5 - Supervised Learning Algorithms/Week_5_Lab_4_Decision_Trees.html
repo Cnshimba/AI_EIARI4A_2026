@@ -24,10 +24,10 @@
                         css: {
                             color: '#334155',
                             maxWidth: '100%',
-                            h1: { color: '#1e3a5f' },
+                            h1: { color: '#002F6E' },
                             h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
-                            h3: { color: '#1e3a5f' },
-                            a: { color: '#1e3a5f', '&:hover': { color: '#c9984a' } },
+                            h3: { color: '#002F6E' },
+                            a: { color: '#002F6E', '&:hover': { color: '#c9984a' } },
                             blockquote: { borderLeftColor: '#c9984a', backgroundColor: 'rgba(201, 152, 74, 0.1)', color: '#475569' },
                             code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' },
                             'code::before': { content: '""' },
@@ -99,7 +99,7 @@
     <style>
         /* Glossary Tooltip */
         .glossary-term { color: #c9984a; border-bottom: 2px dotted #c9984a; cursor: help; position: relative; text-decoration: none; }
-        .glossary-term:hover { color: #1e3a5f; }
+        .glossary-term:hover { color: #002F6E; }
         html.dark .glossary-term:hover { color: #ffffff; }
 
         /* OPS3-Style Code Blocks (VUT Theme) */
@@ -112,7 +112,7 @@
             overflow-x: auto !important;
             font-size: 1.1em !important;
             line-height: 1.5 !important;
-            color: #e2e8f0 !important;
+            /* color removed to support highlight.js */
         }
         code {
             font-family: 'Courier New', monospace !important;
@@ -159,7 +159,7 @@
         <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 5</span>
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-3xl font-bold text-secondary m-0">Supervised Learning Algorithms</h1>
+        <h1 class="text-3xl font-bold text-secondary mt-0 mb-4">Supervised Learning Algorithms</h1>
         <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 4: Decision Trees</span>
     </div>
 </div>
@@ -300,16 +300,12 @@ print(f"Standard Deviation: {scores.std():.2%} (The higher this is, the higher t
 <h3>Summary</h3>
 <p>Look at the first split (The Root Node). Was it <code>Sex</code>? On the Titanic, "Women and children first" was a strong rule — the Decision Tree discovered this automatically by calculating which question reduced <strong>Entropy</strong> (messiness) the most! We achieved this professionally using pipelines.</p>
 
-            
-            
-        
-                         <div class="mt-8 flex justify-center">
-                            <a href="Week_5_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
-                                Back to Chapter Labs
-                            </a>
-                         </div>
-                         
+<div class="mt-8 flex justify-center">
+    <a href="Week_5_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
+        Back to Chapter Labs
+    </a>
+</div>
         </article>
     </main>
 
