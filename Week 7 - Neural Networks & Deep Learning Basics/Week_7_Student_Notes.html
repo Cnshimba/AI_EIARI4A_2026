@@ -233,7 +233,8 @@ We are leaving "Classical Machine Learning" behind. While Linear Regression drew
 While ReLU solves many problems, it is not perfect. Some neurons can become permanently inactive if they only receive negative inputs during training, a situation known as the “dying ReLU” problem. Variants such as Leaky ReLU were introduced to address this issue.</p></div></div>
 <hr />
 <h2>3. The Multi-Layer Perceptron (MLP)</h2>
-<p>One neuron is weak. But if we organize them into layers, they become powerful.</p>
+<p>A single perceptron is fundamentally limited: it can only learn <strong>linearly separable</strong> patterns. This means it can only make decisions by drawing a single straight line through data. The classic example of this limitation is the <strong>XOR problem</strong>: a single neuron cannot learn the Exclusive-OR logic gate because the data points simply cannot be separated by one straight line.</p>
+<p>However, by connecting multiple neurons together across consecutive <strong>hidden layers</strong>, the network gains the ability to combine these simple lines into highly complex, non-linear boundaries. This architecture—which has the mathematical capacity to approximate any function—is known as a Multi-Layer Perceptron (MLP).</p>
 <h3>3.1 Network Architecture</h3>
 <p>A standard Multi-Layer Perceptron (MLP) consists of three distinct types of layers (see Figure 3), each with a specific purpose:</p>
 <ol>
@@ -453,6 +454,10 @@ fashion_mnist = tf.keras.datasets.fashion_mnist
 X_train_full = X_train_full / 255.0
 X_test = X_test / 255.0
 </code></pre>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> Keras automatically downloads the dataset and splits it into training and testing sets. Because pixel brightness is represented as an integer from 0 (black) to 255 (white), we divide everything by 255.0 to scale the features down to a 0.0–1.0 float range. Neural networks converge much faster and more stably when input data is scaled.
+</div>
+
 
 <h3>7.2 Building the Model using the Sequential API</h3>
 <p>We will construct a Multi-Layer Perceptron (MLP) with two hidden layers using the <strong>Sequential API</strong>. We use the Sequential model because our network is a simple linear stack of layers—information flows straight from input to output without any complex branching or multiple inputs.</p>
@@ -475,6 +480,9 @@ X_test = X_test / 255.0
 ])
 </code></pre>
 <p>The <code>softmax</code> activation function ensures that the output values are all between 0 and 1, and that they sum up to 1, representing the probability of each class.</p>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> The data flows sequentially from the Flatten layer (which makes the image 1D) through the two hidden ReLU layers, extracting significantly more complex features at each step. Finally, it reaches the 10-neuron output layer. Using the <code>softmax</code> function ensures the final output gives us a clean probability distribution spanning all 10 possible clothing categories.
+</div>
 
 <h3>7.3 Compiling and Training the Model</h3>
 <p>After defining the model, we need to specify the loss function and the optimizer (how we update the weights).</p>
@@ -486,6 +494,9 @@ model.compile(loss="sparse_categorical_crossentropy",
 # Train the model for 30 epochs
 history = model.fit(X_train_full, y_train_full, epochs=30, validation_split=0.1)
 </code></pre>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> In the compile step, we configure the model. We use <code>sparse_categorical_crossentropy</code> as the loss function because our labels are single integers (0 through 9). The optimizer is <code>sgd</code> (Stochastic Gradient Descent), which directs exactly how weights are updated during backpropagation. When we call <code>model.fit()</code>, the training loop runs for 30 epochs (complete passes over the dataset). The <code>validation_split=0.1</code> parameter tells Keras to hold back 10% of our training data strictly to benchmark the model's performance at the end of each epoch.
+</div>
 
 <h3>7.4 Making Predictions</h3>
 <p>Finally, we can use our trained network to predict the class of a new image.</p>
@@ -494,6 +505,9 @@ X_new = X_test[:3]
 y_proba = model.predict(X_new)
 print(y_proba.round(2)) # Prints an array of probabilities for each class
 </code></pre>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> We take the first 3 images from our test set and ask the fully trained model to predict their classes using <code>model.predict()</code>. Instead of returning a single word like "shirt", it outputs a 10-element array for each image. Each number in the array represents the network's confidence that the image belongs to that specific mathematical class. The highest probability in that array becomes the model's final, definitive prediction.
+</div>
 
 <hr />
 <h2>8. Summary</h2>
