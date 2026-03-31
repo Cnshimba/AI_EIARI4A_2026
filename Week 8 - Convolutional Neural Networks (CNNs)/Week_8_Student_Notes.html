@@ -181,84 +181,100 @@ By the end of this chapter, you will be able to:<br />
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 8 Goal</strong>:<br />
 Last week, we introduced the concept of the Neural Network. This week, we transition to professional tools. We will build upon the <strong>TensorFlow and Keras</strong> skills you learned last week. By leveraging the high-level Keras API, we can focus entirely on architecture rather than low-level calculus. We will use this power to build a <strong>Convolutional Neural Network (CNN)</strong>, the architecture that revolutionized computer vision.</p></div></div>
-<h2>1. Deep Computer Vision with Keras</h2>
-<p>Last week we used Keras to build dense neural networks. This week, we will introduce the specific Layers needed for Computer Vision. Keras abstracts away the difficult tensor math so you can snap layers together like Lego blocks.</p>
+<h2>1. Convolutional Neural Networks (CNNs) Theory</h2>
+<p>Traditional Fully Connected Networks (like the one we built previously) face significant challenges when processing images. First, they ignore spatial structure; treating a pixel at coordinate (0,0) and (0,1) as completely independent inputs involves losing valuable contextual information. Second, they suffer from a parameter explosion. Connecting a standard 1000x1000 pixel image to a hidden layer of just 100 neurons would require 100 million weights, making training computationally prohibitive and prone to overfitting.</p>
 
-<h3>1.1 Image Data Dimensions (Channel-Last)</h3>
-<p>In standard Artificial Neural Networks, we deal with 1D vectors of data. In Computer Vision, we deal with images which are inherently 3D. TensorFlow and Keras use the <strong>Channel-Last</strong> convention by default:</p>
+<h3>1.1 Biological Inspiration: The Visual Cortex</h3>
+<p>CNNs are inspired by the architecture of the biological visual cortex. In the late 1950s, researchers <strong>David Hubel and Torsten Wiesel</strong> discovered that neurons in the visual cortex have a small <strong>local receptive field</strong>, meaning they only react to visual stimuli in a specific, limited region of the visual field.</p>
+<p>Some neurons fire only when they see vertical lines, others horizontal lines, and others still at specific angles. Modern CNNs mimic this by using small filters that "scan" the image for local patterns before aggregating them into complex objects.</p>
+
+<h3>1.2 The Mechanics: Filters and Convolutions</h3>
+<p>A CNN uses a <strong>Filter</strong> (or Kernel)—a small matrix, typically 3x3 or 5x5. This filter slides across the image, performing element-wise multiplication and summation. The result is a <strong>Feature Map</strong>, which highlights where specific patterns (edges, textures) occur.</p>
+<p><img alt="Figure 1: Convolution Operation" src="images/convolution_operation.png" /><br />
+<em>Figure 1: Convolution Operation. A 3x3 filter slides across the input image to produce feature maps.</em></p>
+
+<h3>1.3 Stride and Padding</h3>
+<p>Control of the output dimensions is managed by two critical hyperparameters:</p>
 <ul>
-<li><strong>Grayscale Image</strong>: <code>[Height, Width, 1]</code> (The 1 represents the single grayscale channel)</li>
-<li><strong>Color Image</strong>: <code>[Height, Width, 3]</code> (The 3 represents Red, Green, and Blue channels)</li>
+    <li><strong>Stride ($S$)</strong>: The distance the filter moves at each step. A stride of 1 moves one pixel at a time. A stride of 2 skips a pixel, effectively halving the output width and height.</li>
+    <li><strong>Padding ($P$)</strong>: Because filters have width, they "lose" pixels at the edges of an image.
+        <ul>
+            <li><strong>VALID Padding</strong>: No padding is used. The output is smaller than the input.</li>
+            <li><strong>SAME Padding</strong>: Zeros are added around the border so the output size matches the input size.</li>
+        </ul>
+    </li>
+</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Math Foundation: Calculation Output Size</strong><br />To calculate the output dimension ($O$) of a layer, use this formula:<br />
+    $$ O = \lfloor \frac{W - K + 2P}{S} \rfloor + 1 $$<br />
+    Where $W$ is input size, $K$ is kernel size, $P$ is padding, and $S$ is stride.</div></div>
+
+<h3>1.4 Pooling (Downsampling)</h3>
+<p>Once features are detected, exact location becomes less important than relative position. <strong>Pooling</strong> layers reduce the spatial dimensions of the feature maps, typically by keeping only the maximum value in a small window (Max Pooling).</p>
+<p><img alt="Figure 2: Max Pooling Operation" src="images/pooling_operation.png" /><br />
+<em>Figure 2: Max Pooling Operation. A 2x2 window slides across the feature map, keeping only the maximum value to reduce spatial dimensions.</em></p>
+
+<h3>1.5 The Unified Block: Conv, ReLU, Pool</h3>
+<p>A standard CNN layer is actually a functional unit consisting of three steps:</p>
+<ul>
+    <li><strong>Convolution</strong>: Feature extraction (linear).</li>
+    <li><strong>ReLU</strong>: Activation (non-linear).</li>
+    <li><strong>Pooling</strong>: Spatial reduction.</li>
+</ul>
+<p>A network learns deep features by stacking these blocks: Level 1 finds edges $\to$ Level 2 finds shapes $\to$ Level 3 finds objects.</p>
+
+<hr />
+
+<h2>2. Deep Computer Vision with Keras</h2>
+<p>Now that we understand the theory, we can implement these components efficiently using the high-level Keras API.</p>
+
+<h3>2.1 Image Data Dimensions (Channel-Last)</h3>
+<p>TensorFlow and Keras use the <strong>Channel-Last</strong> convention:</p>
+<ul>
+<li><strong>Grayscale Image</strong>: <code>[Height, Width, 1]</code></li>
+<li><strong>Color Image</strong>: <code>[Height, Width, 3]</code></li>
 <li><strong>Batch of Images</strong>: <code>[BatchSize, Height, Width, Channels]</code></li>
 </ul>
-<p>When loading image data using TensorFlow datasets or Keras preprocessing utilities, the data is automatically formatted this way.</p>
 
-<h3>1.2 The Conv2D Layer</h3>
-<p>The workhorse of any modern Computer Vision model is the Convolutional Layer. In Keras, this is called <code>layers.Conv2D</code>.</p>
+<h3>2.2 The Conv2D Layer</h3>
+<p>In Keras, the convolution operation is handled by <code>layers.Conv2D</code>.</p>
 <pre><code class="language-python">from tensorflow.keras import layers
 
 # Creating a Convolutional Layer
 conv_layer = layers.Conv2D(
     filters=32,            # Number of feature maps to output
     kernel_size=(3, 3),    # Size of the sliding window
-    activation='relu',     # Apply ReLU directly inside the layer!
-    input_shape=(28, 28, 1) # Only required for the very first layer
+    padding='same',        # Keep output size same as input
+    activation='relu',     # Apply ReLU directly
+    input_shape=(28, 28, 1) 
 )
 </code></pre>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Code Breakdown:</strong><br />
-<code>filters=32</code> — the layer will learn <strong>32 different patterns</strong> simultaneously; each produces its own feature map.<br />
-<code>kernel_size=(3, 3)</code> — the filter slides in a 3×3 window; this is the most common choice in modern CNNs.<br />
-<code>activation='relu'</code> — replaces any negative output with zero, introducing non-linearity without adding parameters.<br />
-<code>input_shape=(28, 28, 1)</code> — only required on the <em>first</em> layer so Keras can infer all subsequent shapes automatically.</div></div>
+<code>filters=32</code> — the layer will learn <strong>32 different patterns</strong> simultaneously.<br />
+<code>kernel_size=(3, 3)</code> — standard filter size.<br />
+<code>padding='same'</code> — tells Keras to add zero-padding so the image doesn't shrink.<br />
+<code>activation='relu'</code> — non-linearity used to detect complex features.</div></div>
 
-<h3>1.3 The MaxPooling2D Layer</h3>
-<p>To reduce computational load and provide translation invariance, we pair our Convolutional layers with Pooling layers.</p>
+<h3>2.3 The MaxPooling2D Layer</h3>
 <pre><code class="language-python"># Creating a Max Pooling Layer
 pool_layer = layers.MaxPooling2D(
     pool_size=(2, 2)       # Reduces spatial dimensions by half
 )
 </code></pre>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Code Breakdown:</strong><br />
-<code>pool_size=(2, 2)</code> — the layer looks at 2×2 blocks of the feature map and keeps only the <em>maximum</em> value from each block. This cuts both height and width in half (e.g., 28×28 → 14×14), reducing the number of values to process by <strong>75%</strong> while keeping the most prominent features. Unlike Conv2D, MaxPooling2D has <em>no learnable parameters</em>.</div></div>
+<code>pool_size=(2, 2)</code> — looks at 2×2 blocks and keeps only the maximum value, reducing the data by 75%.</div></div>
 
-<h3>1.4 Flatten & Dense Layers</h3>
-<p>At the end of a CNN, the feature maps must be collapsed into a 1D vector so they can be fed into standard Dense layers for final classification.</p>
+<h3>2.4 Flatten & Dense Layers</h3>
 <pre><code class="language-python">flatten_layer = layers.Flatten()
 dense_layer = layers.Dense(10, activation='softmax')
 </code></pre>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Insight — The Bridge Between Spatial and Linear:</strong><br />
 <code>layers.Flatten()</code> collapses every value in the 3D feature volume into a single long 1D array. If your last pooling layer outputs shape <code>[5, 5, 16]</code>, Flatten produces a vector of length 5×5×16 = <strong>400</strong>. The subsequent <code>layers.Dense(10, activation='softmax')</code> treats each of those 400 values as an independent feature and learns a weighted vote for each of the 10 digit classes.</div></div>
-
-<hr />
-<h2>2. Convolutional Neural Networks (CNNs)</h2>
-<p>Traditional Fully Connected Networks (like the one we built previously) face significant challenges when processing images. First, they ignore spatial structure; treating a pixel at coordinate (0,0) and (0,1) as completely independent inputs involves losing valuable contextual information. Second, they suffer from a parameter explosion. Connecting a standard 1000x1000 pixel image to a hidden layer of just 100 neurons would require 100 million weights, making training computationally prohibitive and prone to overfitting.</p>
-<h3>2.1 The Solution: Convolutions</h3>
-<p>Convolutional Neural Networks solve these problems by changing how neurons interact with the input. Instead of connecting every neuron to every pixel, a CNN uses a <strong>Filter</strong> (or Kernel)—a small matrix, typically 3x3 or 5x5. This filter slides across the image, looking for specific features such as vertical edges, horizontal lines, or color gradients. The result is a <strong>Feature Map</strong>, which highlights where these patterns occur in the image.</p>
-<p><img alt="Figure 1: Convolution Operation" src="images/convolution_operation.png" /><br />
-<em>Figure 1: Convolution Operation. A 3x3 filter slides across the input image, performing element-wise multiplication and summation to produce feature maps.</em></p>
-<h3>2.2 Pooling (Downsampling)</h3>
-<p>Once features are detected, exact location becomes less important than relative position. <strong>Pooling</strong> layers reduce the spatial dimensions of the feature maps, typically by keeping only the maximum value in a small window (Max Pooling). This reduces the computational load by discarding up to 75% of the data while making the network <strong>translation invariant</strong>—meaning a cat in the top-left corner is recognized just as well as a cat in the bottom-right.</p>
-<p><img alt="Figure 2: Max Pooling Operation" src="images/pooling_operation.png" /><br />
-<em>Figure 2: Max Pooling Operation. A 2x2 window slides across the feature map, keeping only the maximum value to reduce spatial dimensions.</em></p>
-<h3>2.3 The Unified Block: Conv, ReLU, Pool</h3>
-<p>A standard mistake beginners make is thinking of these layers as separate steps. In practice, they form a single <strong>Functional Unit</strong>.</p>
-<ul>
-<li>
-<p><strong>Convolution</strong>: Extracts the features (linear).</p>
-</li>
-<li>
-<p><strong>ReLU</strong>: Decides if the feature is important (non-linear).</p>
-</li>
-<li>
-<p><strong>Pooling</strong>: Condenses the feature map (spatial reduction).</p>
-</li>
-</ul>
 <p>This repeated pattern (<code>Conv -&gt; ReLU -&gt; Pool</code>) allows the network to learn increasingly abstract representations. The first block might find "Edges"; the second block finds "Shapes" (circles, squares); the third block finds "Objects" (eyes, wheels).</p>
 <p><img alt="Figure 3: CNN Feature Hierarchy" src="images/cnn_feature_hierarchy.png" /><br />
 <em>Figure 3: Hierarchical Feature Learning. CNNs learn increasingly complex features: Level 1 detects edges, Level 2 detects shapes, Level 3 detects objects.</em></p>
 <hr />
 <h2>3. Understanding Shapes: The Flow of Tensors</h2>
-<p>The #1 error beginners face in PyTorch is a <strong>Shape Mismatch</strong>. You must understand how the dimensions of your data change as it flows through the network.</p>
+<p>The #1 error beginners face in <strong>TensorFlow/Keras</strong> is a <strong>Shape Mismatch</strong>. You must understand how the dimensions of your data change as it flows through the network.</p>
 <h3>3.1 The Transformation Chain</h3>
 <p>Imagine we are processing a standard MNIST image (Grayscale, 28x28 pixels).<br />
 1.  <strong>Input</strong>: <code>[1, 28, 28]</code> (1 Channel, 28 Height, 28 Width).<br />

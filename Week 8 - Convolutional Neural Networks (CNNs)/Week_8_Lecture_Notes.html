@@ -172,324 +172,113 @@
 <strong>Duration</strong>: 90 Minutes</p></div></div>
 <hr />
 <h2>Lecture Outline</h2>
-<h3>Part 1: Intro to Keras for CNNs (20 mins)</h3>
-<h4>1.1 Why Frameworks Matter</h4>
+<h3>Part 1: The Why and the Biological Inspiration (20 mins)</h3>
+<h4>1.1 Problems with Fully-Connected Networks</h4>
 <ul>
-<li>
-<p><strong>Week 7 Limitation</strong>: Manual backpropagation</p>
-</li>
-<li>
-<p>Tedious gradient calculations</p>
-</li>
-<li>
-<p>Error-prone implementation</p>
-</li>
-<li>
-<p>CPU-only execution</p>
-</li>
-<li>
-<p><strong>TensorFlow/Keras Solution</strong>:</p>
-</li>
-<li>
-<p>Automatic differentiation (The Keras API)</p>
-</li>
-<li>
-<p>GPU acceleration</p>
-</li>
-<li>
-<p>Production-ready deployment</p>
-</li>
+<li><strong>Spatial Ignorance</strong>: Treats pixels as independent features; loses 2D relationships.</li>
+<li><strong>Parameter Explosion</strong>: 1000×1000 image → 100 hidden neurons = 100 million weights. Impossible to train and prone to overfitting.</li>
 </ul>
-<h4>1.2 Core Concepts</h4>
-<p><strong>Channel-Last Data Dimensions</strong>:</p>
+
+<h4>1.2 Biological Inspiration: The Visual Cortex</h4>
 <ul>
-<li>
-<p>Multi-dimensional arrays (like NumPy but GPU-enabled)</p>
-</li>
-<li>
-<p>Dimension examples:</p>
-</li>
-<li>
-<p>0D: Scalar (single number)</p>
-</li>
-<li>
-<p>1D: Vector [1, 2, 3]</p>
-</li>
-<li>
-<p>2D: Matrix [[1, 2], [3, 4]]</p>
-</li>
-<li>
-<p>3D: Image [C, H, W]</p>
-</li>
-<li>
-<p>4D: Batch [N, C, H, W]</p>
-</li>
+<li><strong>Hubel & Wiesel (1950s/60s)</strong>: Discovered that neurons in the visual cortex respond to small, local regions of the visual field (<strong>Local Receptive Fields</strong>).</li>
+<li><strong>Hierarchical Processing</strong>: Simple cells detect edges $\to$ Complex cells detect patterns $\to$ Hyper-complex cells detect objects.</li>
+<li><strong>CNN Architecture</strong>: Directly mimics this by using small sliding filters instead of global connections.</li>
 </ul>
-<p><strong>The Keras API</strong>:</p>
-<ul>
-<li>
-<p>Tracks all operations on tensors</p>
-</li>
-<li>
-<p>Builds computational graph</p>
-</li>
-<li>
-<p><code>loss.backward()</code> computes all gradients automatically</p>
-</li>
-<li>
-<p>Eliminates manual gradient derivation</p>
-</li>
-</ul>
-<blockquote>
-<p><strong>Demo</strong>: Show simple tensor operations and <code>.grad</code> attribute</p>
-</blockquote>
+
 <hr />
-<h3>Part 2: Why CNNs? (15 mins)</h3>
-<h4>2.1 Problems with Fully-Connected Networks</h4>
-<p><strong>Problem 1: Spatial Ignorance</strong></p>
+<h3>Part 2: CNN Mechanics — Filters, Padding, and Stride (20 mins)</h3>
+<h4>2.1 The Convolution Operation</h4>
 <ul>
-<li>
-<p>Treats pixels as independent features</p>
-</li>
-<li>
-<p>Loses neighboring pixel relationships</p>
-</li>
-<li>
-<p>Can't exploit 2D structure of images</p>
+<li>Slide a small window (<strong>Filter/Kernel</strong>) across the image.</li>
+<li>Weights represent patterns (e.g., vertical vs. horizontal lines).</li>
+<li>Outputs a <strong>Feature Map</strong>.</li>
+</ul>
+
+<h4>2.2 Controlling Dimensions: Stride and Padding</h4>
+<ul>
+<li><strong>Stride ($S$)</strong>: How many pixels the filter moves per step. High stride = smaller output.</li>
+<li><strong>Padding ($P$)</strong>:
+    <ul>
+        <li><strong>VALID</strong>: No padding; input shrinks.</li>
+        <li><strong>SAME</strong>: Zero-padding added to border so output size matches input.</li>
+    </ul>
 </li>
 </ul>
-<p><strong>Problem 2: Parameter Explosion</strong></p>
+
+<h4>2.3 Pooling Layer (Downsampling)</h4>
 <ul>
-<li>
-<p>1000×1000 image → 100 hidden neurons = 100 million weights</p>
-</li>
-<li>
-<p>Impossible to train</p>
-</li>
-<li>
-<p>Guaranteed overfitting</p>
-</li>
+<li><strong>Max Pooling</strong>: Keeps the maximum value in a window (usually 2×2).</li>
+<li><strong>Benefits</strong>: Translation invariance (shifting image slightly doesn't change key features) and 75% data reduction.</li>
 </ul>
-<h4>2.2 The CNN Solution</h4>
-<p><strong>Local Connectivity</strong>:</p>
-<ul>
-<li>
-<p>Each neuron connects to small local region (receptive field)</p>
-</li>
-<li>
-<p>Drastically reduces parameters</p>
-</li>
-</ul>
-<p><strong>Parameter Sharing</strong>:</p>
-<ul>
-<li>
-<p>Same filter used across entire image</p>
-</li>
-<li>
-<p>Learn "edge detector" once, apply everywhere</p>
-</li>
-</ul>
+
 <hr />
-<h3>Part 3: CNN Building Blocks (25 mins)</h3>
-<h4>3.1 Convolutional Layer</h4>
-<p><strong>Operation</strong>:</p>
+<h3>Part 3: Implementation in TensorFlow & Keras (20 mins)</h3>
+<h4>3.1 Why Frameworks Matter</h4>
 <ul>
-<li>
-<p>Slide small filter (3×3, 5×5) across image</p>
-</li>
-<li>
-<p>Element-wise multiplication + sum</p>
-</li>
-<li>
-<p>Produces feature map</p>
-</li>
+<li>Automates differentiation (Backpropagation).</li>
+<li>GPU acceleration for tensor math.</li>
+<li>Production-ready deployment (TFLite for Jetson).</li>
 </ul>
-<p><strong>Example</strong>: Edge detection filter</p>
-<pre><code>[-1  -1  -1]
-[ 0   0   0]
-[+1  +1  +1]
+
+<h4>3.2 Data Dimensions (Channel-Last)</h4>
+<ul>
+<li><strong>Keras/TF order</strong>: <code>[Batch, Height, Width, Channels]</code> (NHWC).</li>
+<li>Contrast with PyTorch's NCHW order.</li>
+</ul>
+
+<h4>3.3 The Keras Functional Unit</h4>
+<p><strong>Code Snippet for students to copy:</strong></p>
+<pre><code class="language-python">layers.Conv2D(32, (3,3), padding='same', activation='relu')
+layers.MaxPooling2D((2,2))
 </code></pre>
-<p>Detects horizontal edges</p>
-<p><strong>Parameters</strong>:</p>
-<ul>
-<li>
-<p>Filter size (kernel_size)</p>
-</li>
-<li>
-<p>Number of filters (out_channels)</p>
-</li>
-<li>
-<p>Stride (step size)</p>
-</li>
-<li>
-<p>Padding (border handling)</p>
-</li>
-</ul>
-<h4>3.2 Pooling Layer</h4>
-<p><strong>Max Pooling</strong>:</p>
-<ul>
-<li>
-<p>Take maximum value in window (typically 2×2)</p>
-</li>
-<li>
-<p>Reduces spatial dimensions by 50% each direction</p>
-</li>
-<li>
-<p>75% data reduction overall</p>
-</li>
-</ul>
-<p><strong>Benefits</strong>:</p>
-<ul>
-<li>
-<p>Translation invariance</p>
-</li>
-<li>
-<p>Computational efficiency</p>
-</li>
-<li>
-<p>Reduces overfitting</p>
-</li>
-</ul>
-<h4>3.3 The Conv-ReLU-Pool Block</h4>
-<p><strong>Standard Pattern</strong>:<br />
-1. Conv: Extract features (linear)<br />
-2. ReLU: Introduce non-linearity<br />
-3. Pool: Reduce dimensions</p>
-<p><strong>Hierarchical Learning</strong>:</p>
-<ul>
-<li>
-<p>Block 1: Edges, textures</p>
-</li>
-<li>
-<p>Block 2: Shapes, patterns</p>
-</li>
-<li>
-<p>Block 3: Objects, parts</p>
-</li>
-</ul>
-<blockquote>
-<p><strong>Visual</strong>: Show feature hierarchy diagram</p>
-</blockquote>
+
 <hr />
 <h3>Part 4: Shape Transformations (15 mins)</h3>
-<h4>4.1 Tracking Dimensions</h4>
-<p><strong>Critical Skill</strong>: Understanding tensor shape flow</p>
-<p><strong>Example (MNIST)</strong>:</p>
-<pre><code>Input:     [1, 28, 28]    # 1 channel, 28×28 pixels
-Conv1:     [6, 28, 28]    # 6 filters
-Pool1:     [6, 14, 14]    # 2×2 pooling
-Conv2:     [16, 5, 5]     # 16 filters
-Flatten:   [400]          # 16×5×5 = 400
-Output:    [10]           # 10 classes
+<h4>4.1 Calculate the Output Size</h4>
+<p><strong>The Golden Formula</strong>:</p>
+<p>$$ O = \lfloor \frac{W - K + 2P}{S} \rfloor + 1 $$</p>
+<p>Walk through an example on the board: Input 28x28, Kernel 5x5, No Padding, Stride 1 $\to$ Output 24x24.</p>
+
+<h4>4.2 Tracking the MNIST Flow</h4>
+<pre><code>Input:     [28, 28, 1]    # H, W, C
+Conv1:     [28, 28, 6]    # padding='same'
+Pool1:     [14, 14, 6]    # 2x2
+Conv2:     [10, 10, 16]   # 5x5 filter, valid padding
+Pool2:     [5, 5, 16]     # 2x2
+Flatten:   [400]          # 5x5x16
+Output:    [10]           # Classes
 </code></pre>
-<h4>4.2 Common Shape Errors</h4>
-<p><strong>Error</strong>: "ValueError: Invalid input shape for Flatten"<br />
-<strong>Cause</strong>: Incorrect flattening calculation<br />
-<strong>Solution</strong>: Carefully compute: channels × height × width</p>
+
 <hr />
 <h3>Part 5: LeNet-5 Architecture (10 mins)</h3>
-<h4>5.1 Historical Context</h4>
 <ul>
-<li>
-<p>Yann LeCun, 1998</p>
-</li>
-<li>
-<p>First successful CNN</p>
-</li>
-<li>
-<p>Revolutionized handwriting recognition</p>
-</li>
+<li><strong>Yann LeCun (1998)</strong>: The grandmother of modern CNNs.</li>
+<li><strong>Structure</strong>: Funnel design (Small filters $\to$ Pool $\to$ More filters $\to$ Flat $\to$ Dense).</li>
 </ul>
-<h4>5.2 Architecture Details</h4>
-<pre><code>INPUT (28×28, 1 channel)
-    ↓
-CONV1 (6 filters, 5×5)
-RELU
-POOL (2×2)
-    ↓
-CONV2 (16 filters, 5×5)
-RELU
-POOL (2×2)
-    ↓
-FLATTEN
-FC1 (120 neurons)
-RELU
-FC2 (84 neurons)
-RELU
-OUTPUT (10 classes)
-</code></pre>
+
 <hr />
 <h2>Lab Preview (5 mins)</h2>
 <h3>Lab Objectives</h3>
-<p>Build LeNet-5 in TensorFlow/Keras:<br />
-1. Define network architecture (<code>nn.Module</code>)<br />
-2. Implement forward pass<br />
-3. Set up loss function and optimizer<br />
-4. Train on MNIST dataset<br />
-5. Evaluate accuracy</p>
-<h3>Key TensorFlow/Keras Functions</h3>
-<ul>
-<li>
-<p><code>layers.Conv2D()</code>: Convolutional layer</p>
-</li>
-<li>
-<p><code>layers.MaxPooling2D()</code>: Max pooling</p>
-</li>
-<li>
-<p><code>layers.Dense()</code>: Fully connected</p>
-</li>
-<li>
-<p><code>activation='relu'</code>: Activation</p>
-</li>
-<li>
-<p><code>optimizer.zero_grad()</code>, <code>loss.backward()</code>, <code>optimizer.step()</code></p>
-</li>
-</ul>
-<hr />
-<h2>Summary (5 mins)</h2>
-<h3>Key Takeaways</h3>
 <ol>
-<li><strong>TensorFlow/Keras</strong>: Automates gradient calculation, enables GPU acceleration</li>
-<li><strong>CNNs</strong>: Solve image problems via local connectivity and parameter sharing</li>
-<li><strong>Conv-ReLU-Pool</strong>: Standard building block for feature extraction</li>
-<li><strong>Shape Flow</strong>: Critical to understand tensor transformations</li>
-<li><strong>LeNet-5</strong>: Classic CNN architecture, foundation for modern vision</li>
+<li>Define LeNet-5 using <code>models.Sequential()</code>.</li>
+<li>Compile with <code>optimizer='adam'</code> and <code>loss='sparse_categorical_crossentropy'</code>.</li>
+<li>Train using <code>model.fit()</code> on MNIST data.</li>
+<li>Export to <strong>TFLite</strong> for edge deployment.</li>
 </ol>
-<h3>Next Week</h3>
+
+<hr />
+<h2>Summary & Teaching Tips</h2>
 <ul>
-<li>
-<p><strong>Week 9</strong>: Advanced CNN Architectures</p>
-</li>
-<li>
-<p>AlexNet, VGG, ResNet</p>
-</li>
-<li>
-<p>Transfer learning</p>
-</li>
-<li>
-<p>Real-world applications</p>
+<li><strong>Visualization</strong>: Use a physical flashlight or paper cutout to demonstrate "sliding" filters.</li>
+<li><strong>Common Errors</strong>:
+    <ul>
+        <li>Forgetting to normalize input (0-255 $\to$ 0-1).</li>
+        <li>Incorrect dimension order (trying to use PyTorch NCHW in Keras).</li>
+        <li>Over-pooling (reducing dimensions to zero).</li>
+    </ul>
 </li>
 </ul>
-<hr />
-<h2>Teaching Tips</h2>
-<ol>
-<li><strong>Live Coding</strong>: Show TensorFlow/Keras tensor operations interactively</li>
-<li><strong>Visualization</strong>: Animate convolution and pooling operations</li>
-<li><strong>Shape Debugging</strong>: Walk through dimension calculations on board</li>
-<li><strong>Common Mistakes</strong>:</li>
-</ol>
-<ul>
-<li>
-<p>Forgetting to call <code>optimizer.zero_grad()</code></p>
-</li>
-<li>
-<p>Incorrect flatten size calculation</p>
-</li>
-<li>
-<p>Wrong tensor dimension order (HWC vs CHW)</p>
-</li>
-</ul>
-<hr />
             
             
         </article>
