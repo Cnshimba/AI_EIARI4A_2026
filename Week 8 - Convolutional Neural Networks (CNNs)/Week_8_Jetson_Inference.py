@@ -1,89 +1,61 @@
 import cv2
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torchvision.transforms as transforms
 import numpy as np
 
-# ---------------------------------------------------------
-# 1. Define the LeNet Architecture (Must match training!)
-# ---------------------------------------------------------
-class LeNet(nn.Module):
-    def __init__(self):
-        super(LeNet, self).__init__()
-        # Feature Extractor
-        self.conv1 = nn.Conv2d(1, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        
-        # Classifier
-        self.fc1 = nn.Linear(16 * 4 * 4, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
-
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = torch.flatten(x, 1)
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
+# Use tflite_runtime if on Edge, otherwise fallback to tf.lite
+try:
+    import tflite_runtime.interpreter as tflite
+except ImportError:
+    import tensorflow as tf
+    tflite = tf.lite
 
 # ---------------------------------------------------------
-# 2. Setup Device and Load Model
+# 1. Setup Device and Load TFLite Model
 # ---------------------------------------------------------
-def load_model(model_path):
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"Using device: {device}")
-    
-    model = LeNet().to(device)
-    
+def load_tflite_model(model_path):
+    print("Loading TFLite model...")
     try:
-        model.load_state_dict(torch.load(model_path, map_location=device))
+        interpreter = tflite.Interpreter(model_path=model_path)
+        interpreter.allocate_tensors()
         print("Model loaded successfully!")
-    except FileNotFoundError:
+    except ValueError:
         print(f"ERROR: Could not find '{model_path}'. Make sure you copied it to this folder.")
         exit(1)
         
-    model.eval() # Set to evaluation mode
-    return model, device
+    # Get input and output tensors
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
+    
+    return interpreter, input_details[0]['index'], output_details[0]['index']
 
 # ---------------------------------------------------------
-# 3. Preprocessing Function
+# 2. Preprocessing Function
 # ---------------------------------------------------------
-transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,))
-])
-
-def preprocess_frame(frame, device):
+def preprocess_frame(frame):
     # Convert to Grayscale
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     
     # Invert colors (MNIST is white text on black background, webcam is usually opposite)
-    # We use a simple threshold to make it "digit-like"
-    # Adaptive thresholding helps with varying lighting
+    # We use adaptive thresholding to help with varying lighting
     gray = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, 
                                  cv2.THRESH_BINARY_INV, 11, 2)
     
     # Resize to 28x28
     resized = cv2.resize(gray, (28, 28), interpolation=cv2.INTER_AREA)
     
-    # Apply PyTorch Transforms
-    tensor = transform(resized)
+    # Normalize to [0, 1] matching our training data
+    normalized = resized.astype(np.float32) / 255.0
     
-    # Add batch dimension (1, 1, 28, 28) and send to GPU
-    tensor = tensor.unsqueeze(0).to(device)
+    # Add batch and channel dimensions for TFLite (1, 28, 28, 1)
+    input_tensor = np.expand_dims(normalized, axis=(0, -1))
     
-    return tensor, resized
+    return input_tensor, resized
 
 # ---------------------------------------------------------
-# 4. Main Loop
+# 3. Main Loop
 # ---------------------------------------------------------
 def main():
-    MODEL_PATH = 'lenet_mnist.pth'
-    net, device = load_model(MODEL_PATH)
+    MODEL_PATH = 'lenet_mnist.tflite'
+    interpreter, input_index, output_index = load_tflite_model(MODEL_PATH)
     
     # Open Webcam (0 is usually the default USB camera)
     cap = cv2.VideoCapture(0)
@@ -112,16 +84,19 @@ def main():
         roi = frame[y1:y2, x1:x2]
         
         # Preprocess and Infer
-        input_tensor, debug_image = preprocess_frame(roi, device)
+        input_tensor, debug_image = preprocess_frame(roi)
         
-        with torch.no_grad():
-            outputs = net(input_tensor)
-            # Get probabilities
-            probs = F.softmax(outputs, dim=1)
-            confidence, predicted = torch.max(probs, 1)
-            
-        prediction = predicted.item()
-        conf_score = confidence.item()
+        # Set tensor to point to input data to be inferred
+        interpreter.set_tensor(input_index, input_tensor)
+        
+        # Run inference
+        interpreter.invoke()
+        
+        # Extract output data
+        outputs = interpreter.get_tensor(output_index)[0]
+        
+        prediction = np.argmax(outputs)
+        conf_score = outputs[prediction]
         
         # -----------------------------------------------------
         # Visualization
@@ -135,7 +110,7 @@ def main():
         cv2.putText(frame, text, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
         
         # Show the main window
-        cv2.imshow('Jetson Edge AI - LeNet', frame)
+        cv2.imshow('Jetson Edge AI - LeNet (TFLite)', frame)
         
         # Show what the network actually sees (the 28x28 input) - blown up for visibility
         debug_view = cv2.resize(debug_image, (200, 200), interpolation=cv2.INTER_NEAREST)

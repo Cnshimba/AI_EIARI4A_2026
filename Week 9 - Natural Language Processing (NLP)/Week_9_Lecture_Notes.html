@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 9 Lecture Notes - AI Course</title>
+    <title>Week 9 Student Notes - AI Course</title>
     
 <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -160,291 +160,91 @@
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-3xl font-bold text-secondary m-0">Natural Language Processing (NLP)</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lecture Notes</span>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
     </div>
 </div>
 
             
             
+
 <div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
 <strong>Module</strong>: Artificial Intelligence (AI)<br />
 <strong>Topic</strong>: Text Classification &amp; Word Embeddings<br />
-<strong>Duration</strong>: 90 Minutes</p></div></div>
+<strong>Estimated Reading Time</strong>: 35 Minutes</p></div></div>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
+By the end of this chapter, you will be able to:<br />
+1.  <strong>Explain</strong> the challenge of representing discrete text in continuous vector space.<br />
+2.  <strong>Differentiate</strong> between Bag-of-Words and Word Embeddings.<br />
+3.  <strong>Describe</strong> how 1D Convolutions can extract features from text.<br />
+4.  <strong>Implement</strong> a simple Text Classifier using PyTorch <code>EmbeddingBag</code>.</p></div></div>
+<!-- break -->
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 9 Goal</strong>:<br />
+Until now, we have dealt with numbers (Regression) and images (Pixels are just grids of numbers). Text is different. It is messy, discrete, and variable in length. Computers do not inherently understand words. To teach an AI to read, we must first translate language into mathematics. This week introduces <strong>Natural Language Processing (NLP)</strong>. We will cover the pipeline of Tokenization, Word Embeddings, and finally, creating a model that can "read" a sentence and understand its sentiment.</p></div></div>
+<h2>1. From Raw Text to Numerical Data</h2>
+<p>The fundamental challenge of Natural Language Processing (NLP) is representation. Computers execute mathematical operations; they cannot natively ingest sentences like "I love AI." We must translate discrete text into continuous mathematical vectors.</p>
+
+<h3>1.1 Traditional Preprocessing: Cleaning the Mess</h3>
+<p>Before advanced Deep Learning models ruled the field, raw text was cleaned heavily. A traditional pipeline involved:</p>
+<ul>
+<li><strong>Lowercasing</strong>: "The" and "the" become the identical string.</li>
+<li><strong>Stopword Removal</strong>: Eliminating high-frequency, low-meaning words ("and", "the", "is") to reduce noise.</li>
+<li><strong>Stemming/Lemmatization</strong>: Chopping prefixes/suffixes to find the root word. "Running", "Ran", and "Run" all map to "run".</li>
+</ul>
+
+<h3>1.2 Tokenization: Word, Character, and Subword (BPE)</h3>
+<p>We cannot parse an entire document at once. We break it into atomic units called <strong>Tokens</strong>.</p>
+<ul>
+<li><strong>Word-level Tokenization</strong>: Splitting by spaces (["I", "love", "AI"]). Limitation: massive vocabularies and inability to handle typos or completely new words.</li>
+<li><strong>Character-level Tokenization</strong>: ["I", " ", "l", "o", "v", "e", ...]. Limitation: characters carry almost no semantic meaning alone, making patterns very hard for the network to find.</li>
+<li><strong>Subword Tokenization (BPE)</strong>: The modern standard used by models like GPT. Byte-Pair Encoding merges the most frequent pairs of characters. Common words stay whole ("love"), while rare words split into logical subwords ("un", "believ", "able"). This gracefully balances vocabulary size and semantic clarity.</li>
+</ul>
+
+<h3>1.3 Vocabulary and Classical Vectorization</h3>
+<p>Once tokens are defined, we map them to a Vocabulary (a dictionary lookup, e.g., "Apple" = ID 150). Next, how do we represent a full sentence?</p>
+<ul>
+<li><strong>Bag of Words (BoW)</strong>: Represents a sentence purely by the count of each token. It destroys word order completely. "Dog bites man" and "Man bites dog" look mathematically identical in BoW!</li>
+<li><strong>TF-IDF (Term Frequency - Inverse Document Frequency)</strong>: An upgrade to BoW. It mathematically penalizes words that appear too frequently across <em>all</em> documents (like "the") to highlight rare, meaningful words. Very popular in classic Machine Learning (Scikit-Learn).</li>
+<li><strong>One-Hot Encoding</strong>: A vector of zeros with a single '1' at the word's ID. Extremely inefficient due to sparsity (a 50,000-word vocabulary means a vector of 50,000 dimensions for just one word!).</li>
+</ul>
+
 <hr />
-<h2>Lecture Outline</h2>
-<h3>Part 1: The NLP Challenge (15 mins)</h3>
-<h4>1.1 Why Text is Different</h4>
-<ul>
-<li>
-<p><strong>Structured Data</strong> (Week 5): Numbers in columns</p>
-</li>
-<li>
-<p><strong>Image Data</strong> (Week 8): Pixel grids (still numbers)</p>
-</li>
-<li>
-<p><strong>Text Data</strong>: Discrete, variable length, context-dependent</p>
-</li>
-</ul>
-<p><strong>Key Problem</strong>: Computers process numbers, not words</p>
-<h4>1.2 The Representation Challenge</h4>
-<ul>
-<li>
-<p>Cannot feed "Hello world" directly into matrix multiplication</p>
-</li>
-<li>
-<p>Need mathematical representation of language</p>
-</li>
-<li>
-<p>Must preserve semantic meaning</p>
-</li>
-</ul>
+<h2>2. The Rise of Word Embeddings</h2>
+<p>One-Hot Encoding was computationally brutal and contained zero semantic understanding (the vector for "King" was mathematically equidistant to "Queen" and "Potato").</p>
+<p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) changed everything. Instead of sparse arrays, every word is mapped to a <strong>Dense Vector</strong> (e.g., of size 300) containing floating-point numbers.</p>
+<p>These vectors are learned during training. The core intuition relies on distribution: <em>"You shall know a word by the company it keeps."</em> If "Dog" and "Cat" frequently appear next to "Pet", "Leash", and "Cute", their embedding vectors will shift closer together in mathematical space!</p>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Semantic Arithmetic</strong>: A famous consequence of well-trained embeddings is that mathematical operations mirror linguistic analogies: <br/> <code>Vector(King) - Vector(Man) + Vector(Woman) ≈ Vector(Queen)</code></p></div></div>
+
 <hr />
-<h3>Part 2: From Words to Numbers (20 mins)</h3>
-<h4>2.1 Tokenization</h4>
-<p><strong>Definition</strong>: Breaking text into atomic units</p>
-<p><strong>Example</strong>:</p>
-<pre><code>&quot;I love AI!&quot; → [&quot;I&quot;, &quot;love&quot;, &quot;AI&quot;, &quot;!&quot;]
-</code></pre>
-<p><strong>Strategies</strong>:</p>
-<ul>
-<li>
-<p>Word-level: Split on spaces</p>
-</li>
-<li>
-<p>Subword: BPE, WordPiece (used by modern LLMs)</p>
-</li>
-<li>
-<p>Character-level: Individual characters</p>
-</li>
-</ul>
-<h4>2.2 Preprocessing Pipeline</h4>
+<h2>3. The Architecture for Text</h2>
+<h3>3.1 The Sequence Problem: RNNs and LSTMs</h3>
+<p>To fix the "Bag of Words" problem of ignoring sequences, researchers developed <strong>Recurrent Neural Networks (RNNs)</strong>. These models process text word-by-word sequentially, maintaining a "hidden state" (memory) of everything read so far.</p>
+<p><strong>The Vanishing Gradient Problem</strong>: Basic RNNs suffer catastrophically on long paragraphs. When updating weights (backpropagation through time), gradients diminish exponentially. By word 50, the network completely forgets word 1. <strong>LSTMs (Long Short-Term Memory)</strong> introduced complex gates to "choose" what to remember and what to forget, fixing this problem for medium-length text.</p>
+
+<h3>3.2 1D Convolutions (TextCNN)</h3>
+<p>Surprisingly, Convolutional Neural Networks (CNNs) from last week also work exceptionally well on text! If an image is a 2D grid, a sentence is a 1D sequence of word embeddings. We can slide a 1D filter across 3 words at a time. This allows the network to detect <strong>N-Grams</strong> (local word patterns) like "Not Good" which instantly flip sentiment.</p>
+
+<h3>3.3 A Glimpse of the Future: Attention</h3>
+<p>LSTMs are unparallelizable (you must process word 3 before word 4), making them painfully slow to train on GPUs. This sparked the quest for a new architecture. Modern NLP replaces sequences with the <strong>Attention Mechanism</strong>: algorithms that allow the network to look at <em>all</em> words in a sentence simultaneously and calculate which words relate strictly to each other. This is the foundation of GenAI and Transformers, which we cover next week!</p>
+
+<hr />
+<h2>4. Lab Preview: Text Classification in Keras</h2>
+<p>In this week's lab, we will use TensorFlow and Keras to build a robust NLP classifier targeting the IMDB Movie Review dataset.</p>
 <ol>
-<li><strong>Lowercasing</strong>: "Apple" → "apple"</li>
-<li><strong>Stopword removal</strong>: Remove "the", "and", "is"</li>
-<li><strong>Stemming/Lemmatization</strong>: "running" → "run"</li>
+<li><strong>TextVectorization</strong>: We'll use the powerful Keras <code>TextVectorization</code> layer to automatically tokenize strings and build a vocabulary map under the hood.</li>
+<li><strong>Embedding Layer</strong>: We will dynamically train custom dense embeddings via <code>layers.Embedding</code>.</li>
+<li><strong>Modeling</strong>: We will use a fast 1D Pooling or Convolution approach to map sequences to sentiment prediction.</li>
+<li><strong>Jetson Export</strong>: You will convert this NLP model to TensorFlow Lite and run localized Edge NLP on your Jetson Orin Nano!</li>
 </ol>
-<p><strong>Purpose</strong>: Reduce vocabulary size, remove noise</p>
-<h4>2.3 One-Hot Encoding</h4>
-<p><strong>Approach</strong>: Create vocabulary, assign each word an index</p>
-<p><strong>Example</strong> (Vocab size = 5):</p>
-<pre><code>&quot;cat&quot;   = [1, 0, 0, 0, 0]
-&quot;dog&quot;   = [0, 1, 0, 0, 0]
-&quot;love&quot;  = [0, 0, 1, 0, 0]
-</code></pre>
-<p><strong>Problems</strong>:</p>
-<ul>
-<li>
-<p>Sparse (50,000-word vocab → 50,000-dim vectors)</p>
-</li>
-<li>
-<p>No semantic relationships ("cat" vs "dog" equally distant as "cat" vs "car")</p>
-</li>
-<li>
-<p>Memory inefficient</p>
-</li>
-</ul>
-<blockquote>
-<p><strong>Visual</strong>: Show text processing pipeline diagram</p>
-</blockquote>
-<hr />
-<h3>Part 3: Word Embeddings Revolution (25 mins)</h3>
-<h4>3.1 The Breakthrough</h4>
-<p><strong>Idea</strong>: Map words to dense, low-dimensional vectors</p>
-<p><strong>Example</strong>:</p>
-<ul>
-<li>
-<p>One-hot: 50,000 dimensions</p>
-</li>
-<li>
-<p>Embedding: 300 dimensions</p>
-</li>
-</ul>
-<h4>3.2 How Embeddings Learn Meaning</h4>
-<p><strong>Distributional Hypothesis</strong> (Firth, 1957):</p>
-<blockquote>
-<p>"You shall know a word by the company it keeps"</p>
-</blockquote>
-<p><strong>Training Approach</strong> (Word2Vec):</p>
-<ul>
-<li>
-<p>Look at context window (±5 words)</p>
-</li>
-<li>
-<p>Words appearing in similar contexts get similar vectors</p>
-</li>
-<li>
-<p>"King" appears near "palace", "crown", "man"</p>
-</li>
-<li>
-<p>"Queen" appears near "palace", "crown", "woman"</p>
-</li>
-<li>
-<p>Network learns "king" and "queen" are geometrically close</p>
-</li>
-</ul>
-<h4>3.3 Semantic Arithmetic</h4>
-<p><strong>Famous Example</strong>:<br />
-$$\text{King} - \text{Man} + \text{Woman} \approx \text{Queen}$$</p>
-<p><strong>Other Examples</strong>:</p>
-<ul>
-<li>
-<p>Paris - France + Italy ≈ Rome</p>
-</li>
-<li>
-<p>Walking - Walked + Swam ≈ Swimming</p>
-</li>
-</ul>
-<p><strong>Significance</strong>: Embeddings capture relationships, not just identity</p>
-<blockquote>
-<p><strong>Demo</strong>: Show word embedding visualization (King-Queen diagram)</p>
-</blockquote>
-<hr />
-<h3>Part 4: Neural Architectures for Text (20 mins)</h3>
-<h4>4.1 RNNs: The Sequential Approach</h4>
-<p><strong>Architecture</strong>:</p>
-<ul>
-<li>
-<p>Process one word at a time</p>
-</li>
-<li>
-<p>Maintain hidden state (memory)</p>
-</li>
-<li>
-<p>Pass information forward</p>
-</li>
-</ul>
-<p><strong>Problems</strong>:</p>
-<ul>
-<li>
-<p>Vanishing gradients (forgets beginning of long texts)</p>
-</li>
-<li>
-<p>Sequential (cannot parallelize)</p>
-</li>
-<li>
-<p>Slow training</p>
-</li>
-</ul>
-<p><strong>Historical Note</strong>: LSTMs improved but didn't solve core issues</p>
-<h4>4.2 CNNs for Text (TextCNN)</h4>
-<p><strong>Key Insight</strong>: Text is 1D image of word vectors</p>
-<p><strong>Operation</strong>:</p>
-<ul>
-<li>
-<p>1D convolution slides over word sequences</p>
-</li>
-<li>
-<p>Filters detect n-grams (2-3-4 word phrases)</p>
-</li>
-<li>
-<p>Example: Filter learns "not good" flips sentiment</p>
-</li>
-</ul>
-<p><strong>Advantages</strong>:</p>
-<ul>
-<li>
-<p>Parallel processing</p>
-</li>
-<li>
-<p>Fast training</p>
-</li>
-<li>
-<p>Detects local patterns effectively</p>
-</li>
-</ul>
-<blockquote>
-<p><strong>Visual</strong>: Show RNN vs CNN comparison</p>
-</blockquote>
-<hr />
-<h3>Part 5: Sentiment Analysis Application (10 mins)</h3>
-<h4>5.1 Problem Definition</h4>
-<p><strong>Task</strong>: Classify text as Positive/Negative</p>
-<p><strong>Example</strong>:</p>
-<ul>
-<li>
-<p>"This movie was amazing!" → Positive</p>
-</li>
-<li>
-<p>"Worst film ever." → Negative</p>
-</li>
-</ul>
-<h4>5.2 Pipeline</h4>
-<ol>
-<li><strong>Tokenize</strong>: Split into words</li>
-<li><strong>Numericalize</strong>: Words → IDs (vocabulary lookup)</li>
-<li><strong>Embed</strong>: IDs → Dense vectors (<code>nn.Embedding</code>)</li>
-<li><strong>Aggregate</strong>: Average embeddings or CNN</li>
-<li><strong>Classify</strong>: Linear layer → Sigmoid/Softmax</li>
-</ol>
-<hr />
-<h2>Lab Preview (5 mins)</h2>
-<h3>Lab Objectives</h3>
-<p>Build sentiment classifier in PyTorch:<br />
-1. Create vocabulary from training data<br />
-2. Implement <code>nn.EmbeddingBag</code> (averages word vectors)<br />
-3. Add linear classifier<br />
-4. Train on positive/negative reviews<br />
-5. Evaluate accuracy</p>
-<h3>Key PyTorch Components</h3>
-<ul>
-<li>
-<p><code>nn.Embedding</code>: Lookup table for word → vector</p>
-</li>
-<li>
-<p><code>nn.EmbeddingBag</code>: Embedding + averaging</p>
-</li>
-<li>
-<p>Simple but powerful for sentiment tasks</p>
-</li>
-</ul>
-<hr />
-<h2>Summary (5 mins)</h2>
-<h3>Key Takeaways</h3>
-<ol>
-<li><strong>Tokenization</strong>: First step in NLP pipeline</li>
-<li><strong>One-hot</strong>: Simple but inefficient</li>
-<li><strong>Embeddings</strong>: Dense vectors capturing semantic meaning</li>
-<li><strong>Semantic Arithmetic</strong>: Embeddings encode relationships</li>
-<li><strong>TextCNN</strong>: CNNs work for text via 1D convolutions</li>
-</ol>
-<h3>Next Week</h3>
-<ul>
-<li>
-<p><strong>Week 10</strong>: Foundation Models &amp; LLMs</p>
-</li>
-<li>
-<p>Transformers architecture</p>
-</li>
-<li>
-<p>Attention mechanisms</p>
-</li>
-<li>
-<p>ChatGPT and deployment</p>
-</li>
-</ul>
-<hr />
-<h2>Teaching Tips</h2>
-<ol>
-<li><strong>Use Examples</strong>: Show real tweets/reviews</li>
-<li><strong>Live Demo</strong>: Tokenize sentence on board</li>
-<li><strong>Visualization</strong>: Plot 2D projection of word embeddings</li>
-<li><strong>Historical Context</strong>: Explain RNN → CNN → Transformer evolution</li>
-<li><strong>Common Misconceptions</strong>:</li>
-</ol>
-<ul>
-<li>
-<p>"Embeddings are just compression" → No, they encode meaning</p>
-</li>
-<li>
-<p>"Bigger embedding = better" → Not always, 300 is standard</p>
-</li>
-<li>
-<p>"One-hot is always bad" → Works for small vocabs</p>
-</li>
-</ul>
-<hr />
-            
-            
+<div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">
+    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Test Your Knowledge</h3>
+    <p class="text-slate-600 dark:text-slate-300 mb-6">Ready to check your understanding of this week's material? Take the interactive quiz now!</p>
+    <a href="Week_9_Quiz.html" class="inline-block px-8 py-3 bg-[#002F6E] hover:bg-[#002355] text-white font-bold rounded-lg transition-colors shadow-md no-underline">
+        Start Quiz
+    </a>
+</div>
+
         </article>
     </main>
 
