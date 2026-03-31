@@ -169,13 +169,13 @@
 <li><strong>Explain</strong> why Standard NN fails on images.</li>
 <li><strong>Describe</strong> the Convolution and Pooling operations.</li>
 <li><strong>Calculate</strong> Tensor shapes through a network.</li>
-<li><strong>Build</strong> the LeNet-5 Architecture in PyTorch.</li>
+<li><strong>Build</strong> the LeNet-5 Architecture in TensorFlow/Keras.</li>
 </ol>
 </div>
 <div class="slide">
 <h2>2. Week 8 Goal</h2>
 <h3>Mastering Computer Vision</h3>
-<p>We are leaving manual backpropagation behind. This week, we adopt <strong>PyTorch</strong> to build professional-grade Deep Learning models. We will construct a <strong>CNN</strong> that can "see" and recognize handwritten digits, replicating the breakthrough that launched the modern AI boom.</p>
+<p>We build on the <strong>TensorFlow and Keras</strong> skills from last week and extend them to Computer Vision. We will construct a <strong>CNN</strong> that can "see" and recognize handwritten digits using the same high-level API you already know.</p>
 </div>
 <div class="slide">
 <h2>3. The Problem with Dense Networks</h2>
@@ -233,22 +233,20 @@
 <div class="slide">
 <h2>7. The LeNet-5 Architecture</h2>
 <p>The "Hello World" of Computer Vision.</p>
-<pre><code class="language-python">class LeNet(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.feature_extractor = nn.Sequential(
-            nn.Conv2d(1, 6, 5),    # C1
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),    # S2
-            nn.Conv2d(6, 16, 5),   # C3
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2)     # S4
-        )
-        self.classifier = nn.Sequential(
-            nn.Linear(16 * 4 * 4, 120),
-            nn.Linear(120, 84),
-            nn.Linear(84, 10)
-        )
+<pre><code class="language-python">model = models.Sequential([
+    # Block 1: Feature Extraction
+    layers.Conv2D(6, kernel_size=(5, 5), activation='relu',
+                  input_shape=(28, 28, 1), padding='same'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    # Block 2: Feature Extraction
+    layers.Conv2D(16, kernel_size=(5, 5), activation='relu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    # Classifier Head
+    layers.Flatten(),
+    layers.Dense(120, activation='relu'),
+    layers.Dense(84,  activation='relu'),
+    layers.Dense(10,  activation='softmax')
+])
 </code></pre>
 </div>
 <div class="slide">
@@ -265,7 +263,7 @@
 <h2>9. Summary</h2>
 <ul>
 <li>
-<p><strong>PyTorch</strong>: Handles the gradient math for us.</p>
+<p><strong>TensorFlow/Keras</strong>: Handles gradient math via <code>model.compile()</code> and <code>model.fit()</code>.</p>
 </li>
 <li>
 <p><strong>CNNs</strong>: Use Filters to find features and Pooling to reduce size.</p>

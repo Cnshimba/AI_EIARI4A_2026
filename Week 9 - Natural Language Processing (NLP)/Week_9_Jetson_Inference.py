@@ -1,106 +1,121 @@
-import torch
-import torch.nn as nn
+"""
+Week 9 - Jetson Edge AI: Sentiment Analysis (TFLite)
+======================================================
+Run on your Jetson Orin Nano AFTER exporting sentiment_model.tflite from the lab notebook.
+
+Usage:
+    python3 Week_9_Jetson_Inference.py
+
+The script loads the TFLite sentiment model and runs a simple interactive
+loop where you can type sentences and get a POSITIVE/NEGATIVE prediction.
+"""
+
+import numpy as np
 import json
-import argparse
-import sys
+
+# Use tflite_runtime on edge devices (lightweight), fallback to full TF
+try:
+    import tflite_runtime.interpreter as tflite
+    print("Using tflite_runtime (Edge mode)")
+except ImportError:
+    import tensorflow as tf
+    tflite = tf.lite
+    print("Using full TensorFlow (Development mode)")
 
 # ---------------------------------------------------------
-# 1. Define Model Architecture (Must match training!)
+# CONFIG — Match these to your training parameters!
 # ---------------------------------------------------------
-class TextClassifier(nn.Module):
-    def __init__(self, vocab_size, embed_dim, num_class):
-        super(TextClassifier, self).__init__()
-        self.embedding = nn.EmbeddingBag(vocab_size, embed_dim, sparse=False)
-        self.fc = nn.Linear(embed_dim, num_class)
-
-    def forward(self, text, offsets):
-        embedded = self.embedding(text, offsets)
-        return self.fc(embedded)
+MODEL_PATH  = "sentiment_model.tflite"
+VOCAB_SIZE  = 10000
+MAXLEN      = 200
 
 # ---------------------------------------------------------
-# 2. Helper Functions
+# 1. Recreate a simple word-index lookup from IMDb dataset
+#    (on Jetson we can't import keras easily, so we use
+#    the pre-saved JSON lookup table)
 # ---------------------------------------------------------
-def prepare_sequence(seq, to_ix):
-    # Split by space and map to Index. Use <UNK> (ID 1) if word not found.
-    idxs = [to_ix.get(w, to_ix.get("<UNK>", 1)) for w in seq.lower().split()]
-    return torch.tensor(idxs, dtype=torch.long)
-
-def load_data(model_path, vocab_path, device):
-    print(f"Loading vocab from {vocab_path}...")
+def load_vocab():
+    """Try to load saved vocab.json, otherwise fetch from Keras."""
     try:
-        with open(vocab_path, 'r') as f:
-            word_to_ix = json.load(f)
+        with open("vocab.json", "r") as f:
+            word_index = json.load(f)
+        print(f"Loaded vocabulary ({len(word_index)} words) from vocab.json")
+        return word_index
     except FileNotFoundError:
-        print("Error: Vocab file not found.")
-        sys.exit(1)
-        
-    print(f"Loading model from {model_path}...")
-    try:
-        # Config (Must match training)
-        VOCAB_SIZE = len(word_to_ix)
-        EMBED_DIM = 10
-        NUM_CLASS = 2
-        
-        model = TextClassifier(VOCAB_SIZE, EMBED_DIM, NUM_CLASS).to(device)
-        model.load_state_dict(torch.load(model_path, map_location=device))
-        model.eval()
-        return model, word_to_ix
-    except FileNotFoundError:
-        print("Error: Model file not found.")
-        sys.exit(1)
+        import tensorflow as tf
+        print("vocab.json not found — downloading from Keras (requires internet)...")
+        word_index = tf.keras.datasets.imdb.get_word_index()
+        # Shift by 3 to match the IMDb convention
+        word_index = {k: (v + 3) for k, v in word_index.items()}
+        word_index["<PAD>"]   = 0
+        word_index["<START>"] = 1
+        word_index["<UNK>"]   = 2
+        word_index["<UNUSED>"]= 3
+        with open("vocab.json", "w") as f:
+            json.dump(word_index, f)
+        print("Saved vocab.json for future runs.")
+        return word_index
 
 # ---------------------------------------------------------
-# 3. Main Loop
+# 2. Load TFLite model
+# ---------------------------------------------------------
+def load_model():
+    interpreter = tflite.Interpreter(model_path=MODEL_PATH)
+    interpreter.allocate_tensors()
+    input_index  = interpreter.get_input_details()[0]["index"]
+    output_index = interpreter.get_output_details()[0]["index"]
+    print("TFLite model loaded successfully!")
+    return interpreter, input_index, output_index
+
+# ---------------------------------------------------------
+# 3. Encode a sentence to a padded integer sequence
+# ---------------------------------------------------------
+def encode_sentence(sentence, word_index):
+    words  = sentence.lower().strip().split()
+    ids    = [word_index.get(w, word_index["<UNK>"]) for w in words]
+    ids    = ids[:MAXLEN]                       # truncate
+    padded = ids + [0] * (MAXLEN - len(ids))    # post-pad
+    return np.array(padded, dtype=np.int32).reshape(1, MAXLEN)
+
+# ---------------------------------------------------------
+# 4. Run Inference
+# ---------------------------------------------------------
+def predict(interpreter, input_index, output_index, sentence, word_index):
+    input_tensor = encode_sentence(sentence, word_index)
+    interpreter.set_tensor(input_index, input_tensor)
+    interpreter.invoke()
+    score = interpreter.get_tensor(output_index)[0][0]
+    label = "POSITIVE 😊" if score >= 0.5 else "NEGATIVE 😞"
+    return label, score
+
+# ---------------------------------------------------------
+# 5. Interactive Loop
 # ---------------------------------------------------------
 def main():
-    parser = argparse.ArgumentParser(description='Jetson Text Classification Inference')
-    parser.add_argument('--model', type=str, default='text_classifier.pth', help='Path to .pth model file')
-    parser.add_argument('--vocab', type=str, default='vocab.json', help='Path to .json vocab file')
-    args = parser.parse_args()
+    print("\n=== Jetson Edge AI — Sentiment Analyser (TFLite) ===")
+    print("Loading resources...\n")
 
-    # Device handling
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
+    word_index = load_vocab()
+    interpreter, in_idx, out_idx = load_model()
 
-    model, word_to_ix = load_data(args.model, args.vocab, device)
-    
-    print("\n" + "="*40)
-    print("      Jetson NLP Sentiment Analyzer      ")
-    print("="*40)
-    print("Type a sentence to analyze sentiment.")
-    print("Type 'quit' or 'exit' to stop.")
-    print("-" * 40)
+    print("\nType a sentence and press Enter. Type 'quit' to exit.\n")
 
     while True:
         try:
-            user_input = input("\nInput > ")
-            if user_input.lower() in ['quit', 'exit']:
-                break
-            
-            if not user_input.strip():
-                continue
-
-            # Preprocess
-            text_tensor = prepare_sequence(user_input, word_to_ix).to(device)
-            offsets = torch.tensor([0], dtype=torch.long).to(device)
-            
-            # Infer
-            with torch.no_grad():
-                output = model(text_tensor, offsets)
-                probabilities = torch.softmax(output, dim=1)
-                predicted_cls = output.argmax(1).item()
-                confidence = probabilities[0][predicted_cls].item()
-
-            sentiment = "POSITIVE :)" if predicted_cls == 1 else "NEGATIVE :("
-            color_code = "\033[92m" if predicted_cls == 1 else "\033[91m" # Green or Red
-            reset_code = "\033[0m"
-            
-            print(f"Sentiment: {color_code}{sentiment}{reset_code} ({confidence*100:.1f}%)")
-
-        except KeyboardInterrupt:
+            text = input("Input > ").strip()
+        except (EOFError, KeyboardInterrupt):
             break
-            
-    print("\nGoodbye!")
+
+        if text.lower() in ("quit", "exit", "q"):
+            break
+
+        if not text:
+            continue
+
+        label, score = predict(interpreter, in_idx, out_idx, text, word_index)
+        print(f"  Sentiment: {label} ({score * 100:.1f}% confidence)\n")
+
+    print("Goodbye!")
 
 if __name__ == "__main__":
     main()
