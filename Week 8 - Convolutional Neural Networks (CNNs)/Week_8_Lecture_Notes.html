@@ -168,11 +168,11 @@
             
 <div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
 <strong>Module</strong>: Artificial Intelligence (AI)<br />
-<strong>Topic</strong>: CNNs with PyTorch<br />
+<strong>Topic</strong>: CNNs with TensorFlow/Keras<br />
 <strong>Duration</strong>: 90 Minutes</p></div></div>
 <hr />
 <h2>Lecture Outline</h2>
-<h3>Part 1: Introduction to PyTorch (20 mins)</h3>
+<h3>Part 1: Intro to Keras for CNNs (20 mins)</h3>
 <h4>1.1 Why Frameworks Matter</h4>
 <ul>
 <li>
@@ -188,10 +188,10 @@
 <p>CPU-only execution</p>
 </li>
 <li>
-<p><strong>PyTorch Solution</strong>:</p>
+<p><strong>TensorFlow/Keras Solution</strong>:</p>
 </li>
 <li>
-<p>Automatic differentiation (Autograd)</p>
+<p>Automatic differentiation (The Keras API)</p>
 </li>
 <li>
 <p>GPU acceleration</p>
@@ -201,7 +201,7 @@
 </li>
 </ul>
 <h4>1.2 Core Concepts</h4>
-<p><strong>Tensors</strong>:</p>
+<p><strong>Channel-Last Data Dimensions</strong>:</p>
 <ul>
 <li>
 <p>Multi-dimensional arrays (like NumPy but GPU-enabled)</p>
@@ -225,7 +225,7 @@
 <p>4D: Batch [N, C, H, W]</p>
 </li>
 </ul>
-<p><strong>Autograd</strong>:</p>
+<p><strong>The Keras API</strong>:</p>
 <ul>
 <li>
 <p>Tracks all operations on tensors</p>
@@ -383,7 +383,7 @@ Flatten:   [400]          # 16×5×5 = 400
 Output:    [10]           # 10 classes
 </code></pre>
 <h4>4.2 Common Shape Errors</h4>
-<p><strong>Error</strong>: "RuntimeError: size mismatch"<br />
+<p><strong>Error</strong>: "ValueError: Invalid input shape for Flatten"<br />
 <strong>Cause</strong>: Incorrect flattening calculation<br />
 <strong>Solution</strong>: Carefully compute: channels × height × width</p>
 <hr />
@@ -421,25 +421,25 @@ OUTPUT (10 classes)
 <hr />
 <h2>Lab Preview (5 mins)</h2>
 <h3>Lab Objectives</h3>
-<p>Build LeNet-5 in PyTorch:<br />
+<p>Build LeNet-5 in TensorFlow/Keras:<br />
 1. Define network architecture (<code>nn.Module</code>)<br />
 2. Implement forward pass<br />
 3. Set up loss function and optimizer<br />
 4. Train on MNIST dataset<br />
 5. Evaluate accuracy</p>
-<h3>Key PyTorch Functions</h3>
+<h3>Key TensorFlow/Keras Functions</h3>
 <ul>
 <li>
-<p><code>nn.Conv2d()</code>: Convolutional layer</p>
+<p><code>layers.Conv2D()</code>: Convolutional layer</p>
 </li>
 <li>
-<p><code>nn.MaxPool2d()</code>: Max pooling</p>
+<p><code>layers.MaxPooling2D()</code>: Max pooling</p>
 </li>
 <li>
-<p><code>nn.Linear()</code>: Fully connected</p>
+<p><code>layers.Dense()</code>: Fully connected</p>
 </li>
 <li>
-<p><code>nn.ReLU()</code>: Activation</p>
+<p><code>activation='relu'</code>: Activation</p>
 </li>
 <li>
 <p><code>optimizer.zero_grad()</code>, <code>loss.backward()</code>, <code>optimizer.step()</code></p>
@@ -449,7 +449,7 @@ OUTPUT (10 classes)
 <h2>Summary (5 mins)</h2>
 <h3>Key Takeaways</h3>
 <ol>
-<li><strong>PyTorch</strong>: Automates gradient calculation, enables GPU acceleration</li>
+<li><strong>TensorFlow/Keras</strong>: Automates gradient calculation, enables GPU acceleration</li>
 <li><strong>CNNs</strong>: Solve image problems via local connectivity and parameter sharing</li>
 <li><strong>Conv-ReLU-Pool</strong>: Standard building block for feature extraction</li>
 <li><strong>Shape Flow</strong>: Critical to understand tensor transformations</li>
@@ -473,7 +473,7 @@ OUTPUT (10 classes)
 <hr />
 <h2>Teaching Tips</h2>
 <ol>
-<li><strong>Live Coding</strong>: Show PyTorch tensor operations interactively</li>
+<li><strong>Live Coding</strong>: Show TensorFlow/Keras tensor operations interactively</li>
 <li><strong>Visualization</strong>: Animate convolution and pooling operations</li>
 <li><strong>Shape Debugging</strong>: Walk through dimension calculations on board</li>
 <li><strong>Common Mistakes</strong>:</li>

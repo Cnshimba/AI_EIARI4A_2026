@@ -1,0 +1,196 @@
+import json
+import os
+
+notebook_path = r"c:\Users\carlos\OneDrive - Vaal University of Technology\WORK\2026\AI_v2_html\Week 8 - Convolutional Neural Networks (CNNs)\Week_8_Lab_1_LeNet.ipynb"
+
+cells = [
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "# Week 8 Lab 1: LeNet-5 Architecture Implementation (Keras)\n",
+            "\n",
+            "> **Goal**: Implement the foundational LeNet-5 Convolutional Neural Network (CNN) to recognize handwritten digits using TensorFlow and Keras, and export the model for Edge deployment."
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 1. Setup and Load Data\n",
+            "\n",
+            "**Why it Matters**: A CNN requires the data to have spatial dimensionality. For MNIST, we must reshape our 1D arrays into 3D tensors: `[Height=28, Width=28, Channels=1]`."
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "import tensorflow as tf\n",
+            "from tensorflow.keras import layers, models, datasets\n",
+            "import matplotlib.pyplot as plt\n",
+            "\n",
+            "# Load MNIST dataset\n",
+            "(train_images, train_labels), (test_images, test_labels) = datasets.mnist.load_data()\n",
+            "\n",
+            "# Reshape to include the Channel dimension (Channel-Last format for TF)\n",
+            "train_images = train_images.reshape((60000, 28, 28, 1)) / 255.0\n",
+            "test_images = test_images.reshape((10000, 28, 28, 1)) / 255.0\n",
+            "\n",
+            "print(f\"Train Data Shape: {train_images.shape}\")"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 2. Building LeNet-5\n",
+            "\n",
+            "**Concept**: The LeNet-5 architecture alternates between **Convolutional Layers** (to extract features) and **Pooling Layers** (to compress spatial resolution). Finally, it connects to **Dense Layers** for classification.\n",
+            "\n",
+            "**Task**: Run the cell below to define the architecture."
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "model = models.Sequential([\n",
+            "    # Block 1: Feature Extraction\n",
+            "    layers.Conv2D(6, kernel_size=(5, 5), activation='relu', input_shape=(28, 28, 1), padding='same'),\n",
+            "    layers.MaxPooling2D(pool_size=(2, 2)),\n",
+            "    \n",
+            "    # Block 2: Feature Extraction\n",
+            "    layers.Conv2D(16, kernel_size=(5, 5), activation='relu'),\n",
+            "    layers.MaxPooling2D(pool_size=(2, 2)),\n",
+            "    \n",
+            "    # Flatten and Classify\n",
+            "    layers.Flatten(),\n",
+            "    layers.Dense(120, activation='relu'),\n",
+            "    layers.Dense(84, activation='relu'),\n",
+            "    layers.Dense(10, activation='softmax')\n",
+            "])\n",
+            "\n",
+            "model.summary()"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "**Observation**: Look at the Output Shapes in the summary. Notice how the height and width (the middle two numbers) get smaller due to Pooling, but the number of filters (the last number) increases due to Convolution."
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 3. Training the Model\n",
+            "\n",
+            "**Task**: Compile and fit the model to the training data. This takes significantly less code than raw framework implementations."
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "model.compile(optimizer='adam',\n",
+            "              loss='sparse_categorical_crossentropy',\n",
+            "              metrics=['accuracy'])\n",
+            "\n",
+            "history = model.fit(train_images, train_labels, epochs=5, \n",
+            "                    validation_data=(test_images, test_labels))"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 4. Evaluate and Visualize Predictions\n",
+            "\n",
+            "Let's see the CNN in action!"
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "import numpy as np\n",
+            "\n",
+            "# Predict the first 5 test images\n",
+            "predictions = model.predict(test_images[:5])\n",
+            "\n",
+            "plt.figure(figsize=(10, 5))\n",
+            "for i in range(5):\n",
+            "    plt.subplot(1, 5, i+1)\n",
+            "    plt.imshow(test_images[i].reshape(28, 28), cmap='gray')\n",
+            "    plt.title(f\"Pred: {np.argmax(predictions[i])}\")\n",
+            "    plt.axis('off')\n",
+            "plt.show()"
+        ]
+    },
+    {
+        "cell_type": "markdown",
+        "metadata": {},
+        "source": [
+            "## 5. Export for Jetson Edge Deployment (TensorFlow Lite)\n",
+            "\n",
+            "To deploy this CNN on an embedded edge device like the **Jetson Orin Nano**, we should convert it into a highly optimized format called **TensorFlow Lite (.tflite)**. \n",
+            "\n",
+            "**Task**: Run the cell below to export your trained model."
+        ]
+    },
+    {
+        "cell_type": "code",
+        "execution_count": None,
+        "metadata": {},
+        "outputs": [],
+        "source": [
+            "# Convert the model\n",
+            "converter = tf.lite.TFLiteConverter.from_keras_model(model)\n",
+            "tflite_model = converter.convert()\n",
+            "\n",
+            "# Save the model to disk\n",
+            "with open('lenet_mnist.tflite', 'wb') as f:\n",
+            "    f.write(tflite_model)\n",
+            "\n",
+            "print(\"Model successfully exported to: lenet_mnist.tflite\")\n",
+            "print(\"You can now transfer this file to your Jetson device!\")"
+        ]
+    }
+]
+
+notebook_data = {
+    "cells": cells,
+    "metadata": {
+        "kernelspec": {
+            "display_name": "Python 3",
+            "language": "python",
+            "name": "python3"
+        },
+        "language_info": {
+            "codemirror_mode": {"name": "ipython", "version": 3},
+            "file_extension": ".py",
+            "mimetype": "text/x-python",
+            "name": "python",
+            "nbconvert_exporter": "python",
+            "pygments_lexer": "ipython3",
+            "version": "3.8.0"
+        }
+    },
+    "nbformat": 4,
+    "nbformat_minor": 4
+}
+
+with open(notebook_path, "w", encoding="utf-8") as f:
+    json.dump(notebook_data, f, indent=2)
+
+print("Keras Notebook created successfully!")

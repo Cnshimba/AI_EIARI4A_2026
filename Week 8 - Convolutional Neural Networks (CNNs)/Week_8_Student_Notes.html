@@ -169,142 +169,56 @@
 
 <div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
 <strong>Module</strong>: Artificial Intelligence (AI)<br />
-<strong>Topic</strong>: Convolutional Neural Networks (CNNs) with PyTorch<br />
+<strong>Topic</strong>: Convolutional Neural Networks (CNNs) with TensorFlow & Keras<br />
 <strong>Estimated Reading Time</strong>: 40 Minutes</p></div></div>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
 By the end of this chapter, you will be able to:<br />
 1.  <strong>Explain</strong> the limitations of Dense Networks for image data.<br />
 2.  <strong>Describe</strong> the mechanics of Convolution and Pooling layers.<br />
 3.  <strong>Calculate</strong> the output shape of a tensor passing through a CNN.<br />
-4.  <strong>Implement</strong> the classic LeNet-5 architecture in PyTorch.</p></div></div>
+4.  <strong>Implement</strong> the classic LeNet-5 architecture in Keras.</p></div></div>
 <!-- break -->
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 8 Goal</strong>:<br />
-Last week, we introduced the concept of the Neural Network. This week, we transition to professional tools. We will introduce <strong>PyTorch</strong>, a framework that handles the calculus automatically ("Autograd"), allowing us to focus on architecture rather than implementation details. We will use this power to build a <strong>Convolutional Neural Network (CNN)</strong>, the architecture that revolutionized computer vision.</p></div></div>
-<h2>1. Introduction to PyTorch</h2>
-<p>PyTorch is a deep learning framework developed by Meta's AI research lab. It has become the industry standard for research and development due to its dynamic computation graph and Pythonic nature.</p>
-<h3>1.1 Tensors</h3>
-<p>At the heart of PyTorch is the <strong>Tensor</strong>. While it mimics the behavior of a NumPy array, a Tensor is designed to run on hardware accelerators like GPUs. Mathematically, it is a multi-dimensional matrix. To visualize this:</p>
+Last week, we introduced the concept of the Neural Network. This week, we transition to professional tools. We will build upon the <strong>TensorFlow and Keras</strong> skills you learned last week. By leveraging the high-level Keras API, we can focus entirely on architecture rather than low-level calculus. We will use this power to build a <strong>Convolutional Neural Network (CNN)</strong>, the architecture that revolutionized computer vision.</p></div></div>
+<h2>1. Deep Computer Vision with Keras</h2>
+<p>Last week we used Keras to build dense neural networks. This week, we will introduce the specific Layers needed for Computer Vision. Keras abstracts away the difficult tensor math so you can snap layers together like Lego blocks.</p>
+
+<h3>1.1 Image Data Dimensions (Channel-Last)</h3>
+<p>In standard Artificial Neural Networks, we deal with 1D vectors of data. In Computer Vision, we deal with images which are inherently 3D. TensorFlow and Keras use the <strong>Channel-Last</strong> convention by default:</p>
 <ul>
-<li>
-<p><strong>Scalar (0D Tensor)</strong>: <code>42</code></p>
-</li>
-<li>
-<p><strong>Vector (1D Tensor)</strong>: <code>[1, 2, 3]</code></p>
-</li>
-<li>
-<p><strong>Matrix (2D Tensor)</strong>: <code>[[1, 2], [3, 4]]</code></p>
-</li>
-<li>
-<p><strong>Image (3D Tensor)</strong>: <code>[ColorChannels, Height, Width]</code> (PyTorch uses Channel-First convention)</p>
-</li>
-<li>
-<p><strong>Batch (4D Tensor)</strong>: <code>[BatchSize, ColorChannels, Height, Width]</code></p>
-</li>
+<li><strong>Grayscale Image</strong>: <code>[Height, Width, 1]</code> (The 1 represents the single grayscale channel)</li>
+<li><strong>Color Image</strong>: <code>[Height, Width, 3]</code> (The 3 represents Red, Green, and Blue channels)</li>
+<li><strong>Batch of Images</strong>: <code>[BatchSize, Height, Width, Channels]</code></li>
 </ul>
-<p>In Deep Learning, we often work with 4-dimensional tensors to represent a batch of images.</p>
-<p><strong>Creating Tensors:</strong></p>
-<pre><code class="language-python">import torch
+<p>When loading image data using TensorFlow datasets or Keras preprocessing utilities, the data is automatically formatted this way.</p>
 
-# From raw data
-x = torch.tensor([[1, 2], [3, 4]])
+<h3>1.2 The Conv2D Layer</h3>
+<p>The workhorse of any modern Computer Vision model is the Convolutional Layer. In Keras, this is called <code>layers.Conv2D</code>.</p>
+<pre><code class="language-python">from tensorflow.keras import layers
 
-# Zeros / Ones (useful for initialization)
-zeros = torch.zeros(3, 3)
-ones = torch.ones(2, 5)
-
-# Random values (most common for weight initialization)
-rand = torch.randn(3, 3)  # Normal distribution (mean=0, std=1)
-
-# Check properties
-print(x.shape)   # torch.Size([2, 2])
-print(x.dtype)   # torch.int64
-print(x.device)  # cpu (or cuda:0 if on GPU)
+# Creating a Convolutional Layer
+conv_layer = layers.Conv2D(
+    filters=32,            # Number of feature maps to output
+    kernel_size=(3, 3),    # Size of the sliding window
+    activation='relu',     # Apply ReLU directly inside the layer!
+    input_shape=(28, 28, 1) # Only required for the very first layer
+)
 </code></pre>
-<h3>1.2 Tensor Operations</h3>
-<p>PyTorch supports the same mathematical operations as TensorFlow/NumPy, but with its own syntax.</p>
-<pre><code class="language-python">a = torch.tensor([[1.0, 2.0], [3.0, 4.0]])
-b = torch.tensor([[1.0, 1.0], [1.0, 1.0]])
 
-# Element-wise Addition
-print(a + b)        # tensor([[2., 3.], [4., 5.]])
-
-# Element-wise Multiplication (Hadamard Product)
-print(a * b)        # tensor([[1., 2.], [3., 4.]])
-
-# Matrix Multiplication (Dot Product) — the core of neural networks
-print(a @ b)        # tensor([[3., 3.], [7., 7.]])
-# Equivalent: torch.matmul(a, b)
-
-# Reshaping (critical for CNNs)
-c = torch.randn(2, 3, 4)     # Shape: [2, 3, 4]
-print(c.view(2, 12).shape)   # Shape: [2, 12] — flatten last two dims
-print(c.view(-1).shape)      # Shape: [24] — flatten everything
+<h3>1.3 The MaxPooling2D Layer</h3>
+<p>To reduce computational load and provide translation invariance, we pair our Convolutional layers with Pooling layers.</p>
+<pre><code class="language-python"># Creating a Max Pooling Layer
+pool_layer = layers.MaxPooling2D(
+    pool_size=(2, 2)       # Reduces spatial dimensions by half
+)
 </code></pre>
-<h3>1.3 Autograd (Automatic Differentiation)</h3>
-<p>The most significant advantage of using a framework like PyTorch is <strong>Autograd</strong>. In our previous manual implementation, we had to derive and write the code for the backward pass (<code>backward()</code>) by hand, ensuring every dot product and gradient was calculated correctly. In PyTorch, this entire process is automated.</p>
-<p>To enable gradient tracking, set <code>requires_grad=True</code> on a tensor:</p>
-<pre><code class="language-python"># Create a tensor that tracks gradients
-x = torch.tensor(3.0, requires_grad=True)
 
-# Define a computation
-y = x ** 2    # y = x^2
-
-# Compute gradients (dy/dx = 2x)
-y.backward()
-
-print(x.grad)  # tensor(6.)  — because 2 * 3 = 6
+<h3>1.4 Flatten & Dense Layers</h3>
+<p>At the end of a CNN, the feature maps must be collapsed into a 1D vector so they can be fed into standard Dense layers for final classification.</p>
+<pre><code class="language-python">flatten_layer = layers.Flatten()
+dense_layer = layers.Dense(10, activation='softmax')
 </code></pre>
-<p>By simply calling <code>loss.backward()</code>, the engine traverses the computation graph in reverse and calculates the precise gradient for every parameter in the network.</p>
-<h3>1.4 Building Models with <code>nn.Module</code></h3>
-<p>In PyTorch, every neural network is defined as a <strong>class</strong> that inherits from <code>torch.nn.Module</code>. This is unlike TensorFlow/Keras where you just list layers in a <code>Sequential</code> call.</p>
-<p>There are two required parts:<br />
-1.  <strong><code>__init__()</code></strong>: Define the layers (parameters).<br />
-2.  <strong><code>forward()</code></strong>: Define how data flows through the layers.</p>
-<pre><code class="language-python">import torch.nn as nn
-import torch.nn.functional as F
-
-class SimpleNet(nn.Module):
-    def __init__(self):
-        super(SimpleNet, self).__init__()
-        self.fc1 = nn.Linear(784, 128)   # Input: 784 features -&gt; 128 neurons
-        self.fc2 = nn.Linear(128, 10)    # 128 neurons -&gt; 10 classes
-
-    def forward(self, x):
-        x = x.view(-1, 784)             # Flatten the input
-        x = F.relu(self.fc1(x))          # Hidden layer + ReLU
-        x = self.fc2(x)                  # Output layer (raw scores)
-        return x
-
-model = SimpleNet()
-print(model)
-</code></pre>
-<h3>1.5 Loss Functions and Optimizers</h3>
-<p>After defining the model architecture, we need two more components:</p>
-<p><strong>Loss Function</strong> — measures how wrong the prediction is:</p>
-<pre><code class="language-python">criterion = nn.CrossEntropyLoss()  # For classification (combines Softmax + NLLLoss)
-</code></pre>
-<p><strong>Optimizer</strong> — updates the weights to reduce the loss:</p>
-<pre><code class="language-python">optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
-</code></pre>
-<h3>1.6 The Training Loop</h3>
-<p>Unlike Keras (where you call <code>model.fit()</code>), PyTorch requires you to write the training loop explicitly. This gives you full control over every step:</p>
-<pre><code class="language-python">for epoch in range(5):
-    for images, labels in train_loader:
-        # 1. Forward Pass
-        outputs = model(images)
-        loss = criterion(outputs, labels)
-
-        # 2. Backward Pass
-        optimizer.zero_grad()   # Clear old gradients
-        loss.backward()         # Compute new gradients
-
-        # 3. Update Weights
-        optimizer.step()        # Apply gradients to weights
-
-    print(f&quot;Epoch {epoch+1}, Loss: {loss.item():.4f}&quot;)
-</code></pre>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why <code>optimizer.zero_grad()</code>?</strong> PyTorch accumulates gradients by default. If you forget to zero them, gradients from the previous batch will be added to the current batch, corrupting the training process.</p></div></div>
 <hr />
 <h2>2. Convolutional Neural Networks (CNNs)</h2>
 <p>Traditional Fully Connected Networks (like the one we built previously) face significant challenges when processing images. First, they ignore spatial structure; treating a pixel at coordinate (0,0) and (0,1) as completely independent inputs involves losing valuable contextual information. Second, they suffer from a parameter explosion. Connecting a standard 1000x1000 pixel image to a hidden layer of just 100 neurons would require 100 million weights, making training computationally prohibitive and prone to overfitting.</p>
@@ -338,14 +252,14 @@ print(model)
 <h3>3.1 The Transformation Chain</h3>
 <p>Imagine we are processing a standard MNIST image (Grayscale, 28x28 pixels).<br />
 1.  <strong>Input</strong>: <code>[1, 28, 28]</code> (1 Channel, 28 Height, 28 Width).<br />
-2.  <strong>Pass through Conv Layer (k=5, p=2)</strong>: The number of channels increases (we find multiple features), but the height/width stays roughly the same. -&gt; <code>[6, 28, 28]</code> (6 Feature Maps).<br />
-3.  <strong>Pass through Pool Layer (2x2)</strong>: The spatial dimensions are cut in half. -&gt; <code>[6, 14, 14]</code>.<br />
-4.  <strong>Repeat</strong>: Another Conv/Pool block might take us to -&gt; <code>[16, 5, 5]</code>.</p>
+2.  <strong>Pass through Conv Layer (k=5, padding="same")</strong>: The number of channels increases (we find multiple features), but the height/width stays roughly the same. -&gt; <code>[28, 28, 6]</code> (6 Feature Maps).<br />
+3.  <strong>Pass through Pool Layer (2x2)</strong>: The spatial dimensions are cut in half. -&gt; <code>[14, 14, 6]</code>.<br />
+4.  <strong>Repeat</strong>: Another Conv/Pool block might take us to -&gt; <code>[5, 5, 16]</code>.</p>
 <h3>3.2 The Flattening Problem</h3>
-<p>At the end of the feature extraction, we have a 3D volume of data (<code>16 channels x 5 height x 5 width</code>). But our final Classifier (Fully Connected Layer) expects a flat list of numbers (a 1D Vector).<br />
+<p>At the end of the feature extraction, we have a 3D volume of data (<code>5 height x 5 width x 16 channels</code>). But our final Classifier (Fully Connected Layer) expects a flat list of numbers (a 1D Vector).<br />
 Before we can classify, we must <strong>Flatten</strong> the tensor:<br />
 $$ 16 \times 5 \times 5 = 400 $$<br />
-Our 1D Vector will have a length of 400. This is why you will see <code>x.view(-1, 400)</code> in the code. If you calculate this number wrong, your code will crash.</p>
+Our 1D Vector will have a length of 400. This is why you will see <code>layers.Flatten()</code> in the code. If you calculate this number wrong, your code will crash.</p>
 <hr />
 <h2>4. The Architecture: LeNet-5</h2>
 <p>Proposed by Yann LeCun in 1998, <strong>LeNet-5</strong> is the foundational architecture of modern computer vision. It was originally designed to recognize handwritten zip codes on mail.</p>
@@ -354,17 +268,17 @@ Our 1D Vector will have a length of 400. This is why you will see <code>x.view(-
 <em>Figure 4: LeNet-5 Architecture. The network processes a 28x28 input image through convolutional and pooling layers, then flattens and classifies via fully connected layers to output 10 class predictions.</em></p>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>ReLU Mechanic</strong>: Mathematically, the derivative of ReLU is 1 for positive inputs and 0 for negative inputs, which explains both its efficiency and the risk of "dead neurons".</p></div></div>
 <hr />
-<h2>5. Lab Preview: LeNet in PyTorch</h2>
-<p>In this week's lab (Experiment 1), we will implement the LeNet-5 architecture using PyTorch. This lab moves away from raw math and focuses on the high-level API <code>torch.nn</code>.</p>
+<h2>5. Lab Preview: LeNet in Keras</h2>
+<p>In this week's lab, we will implement the LeNet-5 architecture using TensorFlow/Keras.</p>
 <ol>
-<li><strong>Define the Network</strong>: You will create a class that inherits from <code>nn.Module</code>, defining the layers (<code>Conv2d</code>, <code>Linear</code>) in the constructor.</li>
-<li><strong>Forward Pass</strong>: You will implement the <code>forward()</code> method to define how data flows through these layers.</li>
-<li><strong>Training</strong>: You will use the <code>torch.optim</code> module to handle the weight updates, replacing our manual Gradient Descent loops.</li>
+<li><strong>Define the Network</strong>: You will create a class that inherits from <code>models.Sequential()</code>, stacking layers like <code>Conv2D</code> and <code>Dense</code> in the constructor.</li>
+<li><strong>Forward Pass</strong>: Keras handles the forward pass automatically based on layer order.</li>
+<li><strong>Training</strong>: You will use <code>model.compile()</code> to define an optimizer and <code>model.fit()</code> to train the network.</li>
 </ol>
 <p>This lab demonstrates the massive productivity gain provided by modern Deep Learning frameworks.</p>
 <hr />
 <h2>6. Summary</h2>
-<p>We have transitioned from the manual mechanics of backpropagation to the automated efficiency of PyTorch. We introduced the Convolutional Neural Network, which uses filters and pooling to efficiently process image data. This week's lab will generate a fully functional LeNet-5 model, capable of reading handwritten digits with high accuracy.</p>
+<p>We expanded our framework toolkit to include Convolutional layers in TensorFlow/Keras. We introduced the Convolutional Neural Network, which uses filters and pooling to efficiently process image data. This week's lab will generate a fully functional LeNet-5 model, capable of reading handwritten digits with high accuracy.</p>
             
             
 <div class="mt-12 p-8 bg-[#002F6E]/10 dark:bg-[#002F6E]/20 rounded-xl border border-[#002F6E] text-center">

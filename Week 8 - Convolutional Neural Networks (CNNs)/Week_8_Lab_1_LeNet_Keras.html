@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Week 8 Lab 1 Lenet Pytorch - AI Course</title>
+    <title>Week 8 Student Notes - AI Course</title>
     
 <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -160,11 +160,10 @@
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-3xl font-bold text-secondary m-0">Convolutional Neural Networks (CNNs)</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab: CNNs with PyTorch (LeNet-5)</span>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Lab 1: LeNet-5 Architecture (Keras)</span>
     </div>
 </div>
 
-            
 <div class="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700 flex items-center justify-between">
     <div>
         <h4 class="font-bold text-slate-800 dark:text-slate-200">Jupyter Notebook Available</h4>
@@ -175,242 +174,80 @@
     </a>
 </div>
 
-            
-<h2>Foreword</h2>
-<p>In this lab, we build our first <strong>Convolutional Neural Network (CNN)</strong> using <strong>PyTorch</strong>.<br />
-We will implement the classic <strong>LeNet-5</strong> architecture to classify handwritten digits (MNIST).</p>
-<p>PyTorch simplifies the process:</p>
-<ul>
-<li>
-<p>No more manual backprop (Autograd handles it).</p>
-</li>
-<li>
-<p>Layers are pre-defined (<code>nn.Conv2d</code>, <code>nn.Linear</code>).</p>
-</li>
-</ul>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Implement the foundational LeNet-5 Convolutional Neural Network (CNN) to recognize handwritten digits using TensorFlow and Keras, and export the model for Edge deployment.</div></div>
+
 <hr />
-<h2>Part 1: Training LeNet on PC</h2>
-<h3>Step 1: Import Dependencies</h3>
-<p>We import <code>torch</code> and <code>torchvision</code>. The latter contains popular datasets (MNIST) and transforms.</p>
-<pre><code class="language-python">import torch
-import torch.nn as nn
-import torch.optim as optim
-import torchvision
-import torchvision.transforms as transforms
-import matplotlib.pyplot as plt
-import numpy as np
+<h2>1. Setup and Load Data</h2>
+<p>Unlike raw algorithms where we used 1D rows for features, a CNN requires spatial dimensions. We load the MNIST dataset and reshape the 28x28 arrays into 3D tensors: <code>[Height=28, Width=28, Channels=1]</code>.</p>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras import layers, models, datasets
 
-# Device configuration (Use GPU if available, else CPU)
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(f&quot;Using device: {device}&quot;)
+# Load MNIST dataset
+(train_images, train_labels), (test_images, test_labels) = datasets.mnist.load_data()
+
+# Reshape to include the Channel dimension (Channel-Last format for TF)
+train_images = train_images.reshape((60000, 28, 28, 1)) / 255.0
+test_images = test_images.reshape((10000, 28, 28, 1)) / 255.0
+
+print(f"Train Data Shape: {train_images.shape}")
 </code></pre>
-<h3>Step 2: Prepare the Dataset</h3>
-<p>We use <code>torchvision</code> to download and transform the MNIST data.</p>
-<ul>
-<li>
-<p>We transform images to Tensors.</p>
-</li>
-<li>
-<p>We normalize them (Mean 0.5, Std 0.5) to help training.</p>
-</li>
-</ul>
-<pre><code class="language-python"># Hyper-parameters
-batch_size = 64
 
-# Transformations: Convert to Tensor and Normalize
-transform = transforms.Compose([
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,), (0.5,)) # Normalize to range [-1, 1]
+<hr />
+<h2>2. Building LeNet-5</h2>
+<p>The LeNet-5 architecture alternates between <strong>Convolutional Layers</strong> (to extract features) and <strong>Pooling Layers</strong> (to compress spatial resolution), followed by <strong>Dense Layers</strong> for the final classification.</p>
+<pre><code class="language-python">model = models.Sequential([
+    # Block 1: Feature Extraction
+    layers.Conv2D(6, kernel_size=(5, 5), activation='relu', input_shape=(28, 28, 1), padding='same'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    
+    # Block 2: Feature Extraction
+    layers.Conv2D(16, kernel_size=(5, 5), activation='relu'),
+    layers.MaxPooling2D(pool_size=(2, 2)),
+    
+    # Flatten and Classify
+    layers.Flatten(),
+    layers.Dense(120, activation='relu'),
+    layers.Dense(84, activation='relu'),
+    layers.Dense(10, activation='softmax')
 ])
 
-# Download and Load Data
-# This will create a 'data' folder
-try:
-    train_dataset = torchvision.datasets.MNIST(root='./data', train=True, transform=transform, download=True)
-    test_dataset = torchvision.datasets.MNIST(root='./data', train=False, transform=transform)
-
-    train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
-
-    print(f&quot;Training Batch: {len(train_loader)} batches&quot;)
-except Exception as e:
-    print(f&quot;Error loading data: {e}&quot;)
+model.summary()
 </code></pre>
-<h3>Step 3: Define the LeNet-5 Architecture</h3>
-<p>We define a class that inherits from <code>nn.Module</code>.</p>
-<p><strong>LeNet-5 Structure:</strong><br />
-1.  <strong>Conv1</strong>: 1 input channel (grayscale) -&gt; 6 output channels (5x5 kernel).<br />
-2.  <strong>Pool</strong>: 2x2 Max Pooling.<br />
-3.  <strong>Conv2</strong>: 6 input channels -&gt; 16 output channels.<br />
-4.  <strong>Pool</strong>: 2x2 Max Pooling.<br />
-5.  <strong>FC1</strong> (Fully Connected): Flatten -&gt; 120 neurons.<br />
-6.  <strong>FC2</strong>: 84 neurons.<br />
-7.  <strong>Output</strong>: 10 neurons (Digits 0-9).</p>
-<pre><code class="language-python">class LeNet(nn.Module):
-    def __init__(self):
-        super(LeNet, self).__init__()
-        # Feature Extractor (Convolutional Layers)
-        self.conv1 = nn.Conv2d(1, 6, 5) # In: 1, Out: 6, Kernel: 5x5
-        self.pool = nn.MaxPool2d(2, 2)  # Kernel: 2x2, Stride: 2
-        self.conv2 = nn.Conv2d(6, 16, 5)
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Observation:</strong> Look at the summary output. Notice how the height and width decrease after Pooling, but the number of filters increases after Convolution. The Flatten layer reshapes the 3D tensor back into a 1D vector for the Dense layer.</div></div>
 
-        # Classifier (Fully Connected Layers)
-        # Input to FC1 depends on image size. MNIST is 28x28.
-        # Conv1(5x5) -&gt; 24x24 -&gt; Pool(2x2) -&gt; 12x12
-        # Conv2(5x5) -&gt; 8x8 -&gt; Pool(2x2) -&gt; 4x4
-        # So final feature map is 16 channels * 4 * 4 pixels = 256 inputs.
-        self.fc1 = nn.Linear(16 * 4 * 4, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
-
-    def forward(self, x):
-        x = self.pool(torch.relu(self.conv1(x)))
-        x = self.pool(torch.relu(self.conv2(x)))
-        x = torch.flatten(x, 1) # Flatten all dimensions except batch
-        x = torch.relu(self.fc1(x))
-        x = torch.relu(self.fc2(x))
-        x = self.fc3(x)
-        return x
-
-net = LeNet().to(device)
-print(net)
-</code></pre>
-<h3>Step 4: Define Loss and Optimizer</h3>
-<p>We use <strong>CrossEntropyLoss</strong> (standard for classification) and <strong>SGD</strong> (Stochastic Gradient Descent) with momentum.</p>
-<pre><code class="language-python">criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
-</code></pre>
-<h3>Step 5: Training Loop</h3>
-<p>We iterate through the dataset multiple times (epochs).</p>
-<pre><code class="language-python">epochs = 5
-loss_history = []
-
-print(&quot;Starting Training...&quot;)
-for epoch in range(epochs):  
-    running_loss = 0.0
-    for i, data in enumerate(train_loader, 0):
-        inputs, labels = data
-        inputs, labels = inputs.to(device), labels.to(device)
-
-        # Zero the parameter gradients
-        optimizer.zero_grad()
-
-        # Forward + Backward + Optimize
-        outputs = net(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()
-
-        running_loss += loss.item()
-        if i % 200 == 199:    # Print every 200 mini-batches
-            print(f'[{epoch + 1}, {i + 1:5d}] loss: {running_loss / 200:.3f}')
-            loss_history.append(running_loss / 200)
-            running_loss = 0.0
-
-print('Finished Training')
-</code></pre>
-<h3>Step 6: Visualize Loss Curve</h3>
-<p>Let's see how the error decreased over time.</p>
-<pre><code class="language-python">plt.plot(loss_history)
-plt.xlabel('Batch Intervals (x200)')
-plt.ylabel('Loss')
-plt.show()
-</code></pre>
-<h3>Step 7: Evaluate on Test Data</h3>
-<p>We check the accuracy on the 10,000 test images.</p>
-<pre><code class="language-python">correct = 0
-total = 0
-# No gradient needed for evaluation
-with torch.no_grad():
-    for data in test_loader:
-        images, labels = data
-        images, labels = images.to(device), labels.to(device)
-        outputs = net(images)
-        # The class with the highest energy is what we choose as prediction
-        _, predicted = torch.max(outputs.data, 1)
-        total += labels.size(0)
-        correct += (predicted == labels).sum().item()
-
-print(f'Accuracy of the network on the 10000 test images: {100 * correct / total:.2f} %')
-</code></pre>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Expected Result</strong>: You should achieve <strong>&gt;98% accuracy</strong> with this simple network!</p></div></div>
 <hr />
-<h2>Part 2: Deploying LeNet-5 to NVIDIA Jetson Orin Nano</h2>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base">This guide is a "Part 2" extension of Lab 1. It assumes you have a trained PyTorch model and an NVIDIA Jetson device (Nano, Orin Nano, or AGX) with a USB webcam.</p></div></div>
-<h3>Goal</h3>
-<p>Take the digit classification model you trained in Jupyter Notebook on your PC and deploy it to an edge device (Jetson Orin Nano) to classify handwritten digits in the real world using a webcam.</p>
-<h3>Step 1: Save Your Trained Model</h3>
-<p>In your <code>Week_8_Lab_1_LeNet.ipynb</code> notebook on your PC, you trained a model called <code>net</code>. We need to save its learned parameters (weights) to a file so we can move it.</p>
-<p>Add the following code to a new cell at the end of your notebook and run it:</p>
-<pre><code class="language-python"># Save the trained model weights
-PATH = './lenet_mnist.pth'
-torch.save(net.state_dict(), PATH)
-print(f&quot;Model saved to {PATH}&quot;)
+<h2>3. Compiling and Training</h2>
+<p>Thanks to the high-level Keras API, training this complex neural network requires only two functional calls.</p>
+<pre><code class="language-python">model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+
+history = model.fit(train_images, train_labels, epochs=5, 
+                    validation_data=(test_images, test_labels))
 </code></pre>
-<p>This will create a file named <code>lenet_mnist.pth</code> in your working directory.</p>
-<h3>Step 2: Transfer Files to the Jetson</h3>
-<p>You need to move two files to your Jetson device:<br />
-1.  The model weights file: <code>lenet_mnist.pth</code><br />
-2.  The inference script: <code>Week_8_Jetson_Inference.py</code> (provided in the course materials)</p>
-<p>You can use a USB drive or <code>scp</code> (Secure Copy) over the network.</p>
-<p><strong>Using SCP (Example):</strong><br />
-Open your terminal (PowerShell or Command Prompt) and run:</p>
-<pre><code class="language-powershell"># Syntax: scp &lt;source_files&gt; &lt;username&gt;@&lt;jetson_ip_address&gt;:&lt;destination_folder&gt;
-scp lenet_mnist.pth Week_8_Jetson_Inference.py jetson@192.168.1.50:/home/jetson/Desktop/
+
+<hr />
+<h2>4. Edge Export for Jetson</h2>
+<p>Embedded systems like the Nvidia Jetson Orin Nano require optimized models. We use <code>TFLiteConverter</code> to convert our weighty floating-point CNN into a lean TensorFlow Lite model.</p>
+<pre><code class="language-python"># Convert the model
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+tflite_model = converter.convert()
+
+# Save the model to disk
+with open('lenet_mnist.tflite', 'wb') as f:
+    f.write(tflite_model)
+
+print("Export Complete! Transfer lenet_mnist.tflite to your Jetson.")
 </code></pre>
-<p><em>(Replace <code>jetson</code>, <code>192.168.1.50</code>, and the paths with your actual details).</em></p>
-<h3>Step 3: Run Inference on Jetson</h3>
-<ol>
-<li>Connect a USB Webcam to the Jetson.</li>
-<li>Open a terminal on the Jetson.</li>
-<li>Navigate to the folder where you copied the files.<br />
-<code>bash
-    cd ~/Desktop</code></li>
-<li>Run the inference script using Python 3.<br />
-<code>bash
-    python3 Week_8_Jetson_Inference.py</code></li>
-</ol>
-<h3>How It Works</h3>
-<ul>
-<li>
-<p>The script loads your trained <code>lenet_mnist.pth</code>.</p>
-</li>
-<li>
-<p>It opens the webcam feed using OpenCV.</p>
-</li>
-<li>
-<p>It grabs a frame, converts it to grayscale, creating a <strong>Region of Interest (ROI)</strong> in the center (the green box).</p>
-</li>
-<li>
-<p>It resizes that box to 28x28 pixels (what LeNet expects).</p>
-</li>
-<li>
-<p>It runs the image through the Neural Network on the Jetson's GPU (CUDA).</p>
-</li>
-<li>
-<p>It displays the predicted number on the screen.</p>
-</li>
-</ul>
-<h3>Troubleshooting</h3>
-<ul>
-<li>
-<p><strong>"No Camera Found"</strong>: Ensure your camera is plugged in. Try changing <code>cap = cv2.VideoCapture(0)</code> to <code>cv2.VideoCapture(1)</code> in the python script if you have multiple cameras.</p>
-</li>
-<li>
-<p><strong>"CUDA error"</strong>: Typically happens if the Jetson PyTorch version is incompatible. The script attempts to fall back to CPU if CUDA is unavailable, but on a Jetson, you really want CUDA!</p>
-</li>
-</ul>
-            
-            
-        
-                         <div class="mt-8 flex justify-center">
-                            <a href="Week_8_Student_Notes.html#labs" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
-                                Back to Chapter Labs
-                            </a>
-                         </div>
-                         
-        </article>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_8_Student_Notes.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m7 7l-7-7 7-7"></path></svg>
+        Back to Student Notes
+    </a>
+</div>
+</article>
     </main>
 
     <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
