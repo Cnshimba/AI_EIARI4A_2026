@@ -176,7 +176,7 @@ By the end of this chapter, you will be able to:<br />
 1.  <strong>Explain</strong> the challenge of representing discrete text in continuous vector space.<br />
 2.  <strong>Differentiate</strong> between Bag-of-Words and Word Embeddings.<br />
 3.  <strong>Describe</strong> how 1D Convolutions can extract features from text.<br />
-4.  <strong>Implement</strong> a simple Text Classifier using PyTorch <code>EmbeddingBag</code>.</p></div></div>
+4.  <strong>Implement</strong> a simple Text Classifier using the Keras <code>Embedding</code> and <code>Conv1D</code> layers.</p></div></div>
 <!-- break -->
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 9 Goal</strong>:<br />
@@ -215,6 +215,22 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 <p>These vectors are learned during training. The core intuition relies on distribution: <em>"You shall know a word by the company it keeps."</em> If "Dog" and "Cat" frequently appear next to "Pet", "Leash", and "Cute", their embedding vectors will shift closer together in mathematical space!</p>
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Semantic Arithmetic</strong>: A famous consequence of well-trained embeddings is that mathematical operations mirror linguistic analogies: <br/> <code>Vector(King) - Vector(Man) + Vector(Woman) ≈ Vector(Queen)</code></p></div></div>
+
+<p>In Keras, we add an <code>Embedding</code> layer as the very first layer of our text model. It acts as a learnable lookup table that maps each word ID to its dense vector:</p>
+<pre><code class="language-python">from tensorflow.keras import layers, models
+
+# vocab_size = total number of unique words in our vocabulary
+# output_dim = how many dimensions each word is mapped to (64 is common)
+embedding_layer = layers.Embedding(
+    input_dim=10000,  # Vocabulary size: we track the 10,000 most common words
+    output_dim=64,    # Each word becomes a 64-dimensional dense vector
+    input_length=200  # Each input sequence has been padded to 200 words
+)
+</code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Code Breakdown:</strong><br />
+<code>input_dim=10000</code> — the layer allocates one row in its weight matrix for each of the 10,000 words. This means the Embedding layer alone has <strong>10,000 × 64 = 640,000 learnable parameters</strong>.<br />
+<code>output_dim=64</code> — the size of each word's vector. Larger = richer representation, but slower to train.<br />
+<code>input_length=200</code> — tells Keras our sequences are exactly 200 tokens long (after padding). The layer output shape will be <code>[batch, 200, 64]</code> — a small 2D matrix per review, not a flat number!</div></div>
 
 <hr />
 <h2>3. The Architecture for Text</h2>

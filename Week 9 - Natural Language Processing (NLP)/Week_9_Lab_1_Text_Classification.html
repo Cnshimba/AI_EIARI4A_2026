@@ -190,6 +190,7 @@ vocab_size = 10000
 
 print(f"Training reviews: {len(train_data)}")
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>What just happened?</strong> The dataset is pre-encoded: every word has already been mapped to an integer ID before you downloaded it. Setting <code>num_words=10000</code> tells IMDb to only keep the 10,000 most frequently occurring words and replace anything rarer with an <em>unknown</em> token. This reduces memory and prevents the network from over-fitting on exotic vocabulary. The labels are simple: <code>0</code> = negative review, <code>1</code> = positive review.</div></div>
 
 <hr />
 <h2>2. Padding Sequences</h2>
@@ -200,6 +201,7 @@ print(f"Training reviews: {len(train_data)}")
 train_padded = pad_sequences(train_data, maxlen=maxlen, padding='post', truncating='post')
 test_padded = pad_sequences(test_data, maxlen=maxlen, padding='post', truncating='post')
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this step?</strong> Every review has a different number of words. For example, one reviewer might write 3 sentences (≈60 words) while another writes a full essay (≈1200 words). A Keras batch tensor must be rectangular, so all sequences in a batch need the same length. With <code>padding='post'</code> we append zeros at the <em>end</em> of short reviews; with <code>truncating='post'</code> we cut long reviews from the end too. The chosen <code>maxlen=200</code> is a practical trade-off — covers most reviews without wasting computation on outliers.</div></div>
 
 <hr />
 <h2>3. Building the TextCNN Architecture</h2>
@@ -237,6 +239,7 @@ with open('sentiment_model.tflite', 'wb') as f:
     
 print("Export Complete! Transfer sentiment_model.tflite to your Jetson.")
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Expected Result:</strong> By Epoch 3, validation accuracy should reach around <strong>87–90%</strong>. This is an impressive result for a model trained in under 60 seconds on a CPU! The exported <code>sentiment_model.tflite</code> file will be just a few MB in size. Transfer it to your Jetson together with <code>Week_9_Jetson_Inference.py</code> — the script will interactively classify any sentence you type into it.</div></div>
 
 <div class="mt-8 flex justify-center">
     <a href="Week_9_Student_Notes.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">

@@ -192,6 +192,7 @@ test_images = test_images.reshape((10000, 28, 28, 1)) / 255.0
 
 print(f"Train Data Shape: {train_images.shape}")
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>What just happened?</strong> The MNIST dataset was downloaded automatically and split into 60,000 training and 10,000 test images. The <code>.reshape(..., 1)</code> adds the <strong>Channel dimension</strong> that Keras's <code>Conv2D</code> layer expects — a grayscale image has 1 channel. Dividing by <code>255.0</code> normalises pixel values from the range [0–255] to [0–1], which greatly stabilises gradient descent.</div></div>
 
 <hr />
 <h2>2. Building LeNet-5</h2>
@@ -226,6 +227,7 @@ model.summary()
 history = model.fit(train_images, train_labels, epochs=5, 
                     validation_data=(test_images, test_labels))
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Expected Result:</strong> By Epoch 5 you should see both <em>Training Accuracy</em> and <em>Validation Accuracy</em> above <strong>98%</strong>. If they diverge widely (training high, validation low) the model is overfitting — try adding a <code>layers.Dropout(0.3)</code> layer before <code>Flatten</code>. <code>sparse_categorical_crossentropy</code> is used instead of standard categorical cross-entropy because our labels are plain integers (0–9) rather than one-hot vectors.</div></div>
 
 <hr />
 <h2>4. Edge Export for Jetson</h2>
@@ -240,6 +242,7 @@ with open('lenet_mnist.tflite', 'wb') as f:
 
 print("Export Complete! Transfer lenet_mnist.tflite to your Jetson.")
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why TFLite?</strong> A standard Keras <code>.h5</code> or <code>SavedModel</code> contains the full training graph, Python runtime dependencies, and large buffers — far too heavy for an embedded board. <code>TFLiteConverter</code> strips all of that away and serialises only the <strong>inference graph</strong> in a flat-buffer format that runs natively on the Jetson CUDA engine and Arm CPU at near-zero overhead. Transfer <code>lenet_mnist.tflite</code> to the Jetson together with <code>Week_8_Jetson_Inference.py</code> and run it there.</div></div>
 
 <div class="mt-8 flex justify-center">
     <a href="Week_8_Student_Notes.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">

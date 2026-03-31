@@ -205,6 +205,11 @@ conv_layer = layers.Conv2D(
     input_shape=(28, 28, 1) # Only required for the very first layer
 )
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Code Breakdown:</strong><br />
+<code>filters=32</code> — the layer will learn <strong>32 different patterns</strong> simultaneously; each produces its own feature map.<br />
+<code>kernel_size=(3, 3)</code> — the filter slides in a 3×3 window; this is the most common choice in modern CNNs.<br />
+<code>activation='relu'</code> — replaces any negative output with zero, introducing non-linearity without adding parameters.<br />
+<code>input_shape=(28, 28, 1)</code> — only required on the <em>first</em> layer so Keras can infer all subsequent shapes automatically.</div></div>
 
 <h3>1.3 The MaxPooling2D Layer</h3>
 <p>To reduce computational load and provide translation invariance, we pair our Convolutional layers with Pooling layers.</p>
@@ -213,12 +218,17 @@ pool_layer = layers.MaxPooling2D(
     pool_size=(2, 2)       # Reduces spatial dimensions by half
 )
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Code Breakdown:</strong><br />
+<code>pool_size=(2, 2)</code> — the layer looks at 2×2 blocks of the feature map and keeps only the <em>maximum</em> value from each block. This cuts both height and width in half (e.g., 28×28 → 14×14), reducing the number of values to process by <strong>75%</strong> while keeping the most prominent features. Unlike Conv2D, MaxPooling2D has <em>no learnable parameters</em>.</div></div>
 
 <h3>1.4 Flatten & Dense Layers</h3>
 <p>At the end of a CNN, the feature maps must be collapsed into a 1D vector so they can be fed into standard Dense layers for final classification.</p>
 <pre><code class="language-python">flatten_layer = layers.Flatten()
 dense_layer = layers.Dense(10, activation='softmax')
 </code></pre>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Insight — The Bridge Between Spatial and Linear:</strong><br />
+<code>layers.Flatten()</code> collapses every value in the 3D feature volume into a single long 1D array. If your last pooling layer outputs shape <code>[5, 5, 16]</code>, Flatten produces a vector of length 5×5×16 = <strong>400</strong>. The subsequent <code>layers.Dense(10, activation='softmax')</code> treats each of those 400 values as an independent feature and learns a weighted vote for each of the 10 digit classes.</div></div>
+
 <hr />
 <h2>2. Convolutional Neural Networks (CNNs)</h2>
 <p>Traditional Fully Connected Networks (like the one we built previously) face significant challenges when processing images. First, they ignore spatial structure; treating a pixel at coordinate (0,0) and (0,1) as completely independent inputs involves losing valuable contextual information. Second, they suffer from a parameter explosion. Connecting a standard 1000x1000 pixel image to a hidden layer of just 100 neurons would require 100 million weights, making training computationally prohibitive and prone to overfitting.</p>
