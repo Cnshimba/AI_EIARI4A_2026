@@ -244,8 +244,19 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 
 <hr />
 <h2>2. The Rise of Word Embeddings</h2>
-<p>One-Hot Encoding was computationally brutal and contained zero semantic understanding (the vector for "King" was mathematically equidistant to "Queen" and "Potato").</p>
-<p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) changed everything. Instead of sparse arrays, every word is mapped to a <strong>Dense Vector</strong> (e.g., of size 300) containing floating-point numbers.</p>
+<p><strong>The "Zero Meaning" Problem</strong>: In One-Hot Encoding, every word is treated as an isolated island. There is no concept of "similarity." Because every word gets its own unique ID, the mathematical distance between "Pizza" and "Burger" is exactly the same as the distance between "Pizza" and "Calculus." The computer has no way of knowing that two words are related.</p>
+
+<p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) solved this by mapping words to <strong>Dense Vectors</strong>. Instead of sparse arrays, every word is mapped to a list of floating-point numbers (e.g., a vector of size 300).</p>
+
+<div class="bg-gray-100 dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 my-6">
+    <h4 class="mt-0 font-bold">Concept: The GPS for Meaning</h4>
+    <p class="text-sm">Word embeddings are like <strong>GPS coordinates</strong> on a giant map of human language.</p>
+    <ul class="text-xs">
+        <li><strong>One-Hot</strong>: A list of names on a paper; no way to see distance.</li>
+        <li><strong>Embeddings</strong>: Coordinates $(x, y, z)$. On this map, <strong>"King"</strong> and <strong>"Queen"</strong> are located at nearly the same coordinates. <strong>"Pizza"</strong> and <strong>"Burger"</strong> are in the same neighborhood.</li>
+    </ul>
+    <p class="text-xs mt-2 font-bold italic">The computer "understands" similarity because it can calculate the distance between these coordinates!</p>
+</div>
 <p><strong>Word2Vec Learning Architectures</strong>:</p>
 <ul>
     <li><strong>CBOW (Continuous Bag of Words)</strong>: Predicts a target word from its surrounding context. Fast and works well for frequent words.</li>
