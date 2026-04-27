@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 4: Live Edge Detection - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { primary: '#002F6E', secondary: '#c9984a' },
+                typography: {
+                    DEFAULT: { css: { h1: { color: '#002F6E' }, h2: { color: '#c9984a' } } }
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_10_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 10</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Lab 4: Live Edge Detection</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Real-time Computer Vision with YOLOv8</span>
+    </div>
+</div>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Use a pre-trained <strong>YOLOv8 (You Only Look Once)</strong> model to perform real-time object detection on a live video stream. You will compare performance on CPU vs GPU and explore the "Nano" version of the architecture.</div></div>
+
+<hr />
+
+<h2>Part 1: The YOLO Architecture</h2>
+<p>Unlike traditional classifiers that look at an image multiple times, **YOLO** treats detection as a single regression problem, straight from pixels to bounding box coordinates and class probabilities. We will use the <strong>Nano (n)</strong> version, which is optimized for edge devices like the Raspberry Pi and Jetson Nano.</p>
+
+<h3>1.1 Installation</h3>
+<pre><code># Install the Ultralytics library
+pip install ultralytics opencv-python</code></pre>
+
+<hr />
+
+<h2>Part 2: Live Detection Script</h2>
+<p>This script opens your webcam, feeds each frame into the YOLOv8 model, and draws bounding boxes around detected objects in real-time.</p>
+
+<pre><code class="language-python">from ultralytics import YOLO
+import cv2
+
+# Load the nano model (very lightweight)
+model = YOLO('yolov8n.pt') 
+
+# Open webcam (0 is default)
+cap = cv2.VideoCapture(0)
+
+while cap.isOpened():
+    success, frame = cap.read()
+    if not success:
+        break
+
+    # Run inference on the frame
+    results = model(frame, stream=True)
+
+    # Visualize the results on the frame
+    for r in results:
+        annotated_frame = r.plot()
+
+    # Display the resulting frame
+    cv2.imshow("YOLOv8 Edge Detection", annotated_frame)
+
+    # Break loop on 'q' press
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+cap.release()
+cv2.destroyAllWindows()</code></pre>
+
+<hr />
+
+<h2>Part 3: Performance Analysis</h2>
+<p>While the script is running, observe the console output. You will see time measurements (e.g., <code>15.0ms preprocess, 100.2ms inference</code>).</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Hardware</th>
+            <th>Expected Inference Time</th>
+            <th>Smoothness</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>High-end Laptop (GPU)</strong></td>
+            <td>~5ms - 15ms</td>
+            <td>Very Smooth (30+ FPS)</td>
+        </tr>
+        <tr>
+            <td><strong>Standard Laptop (CPU)</strong></td>
+            <td>~50ms - 150ms</td>
+            <td>Choppy (5-10 FPS)</td>
+        </tr>
+        <tr>
+            <td><strong>Raspberry Pi 5 (CPU)</strong></td>
+            <td>~100ms - 200ms</td>
+            <td>Laggy (3-5 FPS)</td>
+        </tr>
+        <tr>
+            <td><strong>Jetson Nano (CUDA)</strong></td>
+            <td>~20ms - 40ms</td>
+            <td>Usable (15-25 FPS)</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 border-[#002F6E]">
+    <p><strong>Observation</strong>: Note how the <strong>Nano</strong> model allows real-time interaction even on non-specialized hardware, whereas larger models (like YOLOv8x) would be too slow.</p>
+</div>
+
+<hr />
+
+<h2>Part 4: Challenge</h2>
+<p>Modify the script to only detect <strong>"Person"</strong> and <strong>"Cell Phone"</strong>. You can do this by passing a list of classes to the model: <code>model(frame, classes=[0, 67])</code>.</p>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        Finish Week 10
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+    </a>
+</div>
+        </article>
+    </main>
+</body>
+</html>
