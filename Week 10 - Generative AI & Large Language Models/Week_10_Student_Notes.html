@@ -182,6 +182,25 @@ By the end of this chapter, you will be able to:<br />
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 10 Goal:</strong><br />
 Earlier in the course, we trained a small custom model on 20 sentences—an educational exercise, but not how real-world AI works today. We're now in the era of <strong>foundation models</strong>: massive neural networks pre-trained on vast internet-scale data (Wikipedia, books, Reddit, code, and more) by companies like OpenAI, Meta, Anthropic, and Google. Models like GPT-4o, Llama 3.1, Claude 3.5, and Gemma exemplify generalized intelligence emerging from scale. This week, we shift from "training from scratch" to <strong>prompting and deploying</strong> these pre-built giants. We'll dive into the Transformer architecture that powers them and adopt the mindset of an AI Engineer who leverages rather than builds these models.</p></div></div>
 <h2>1. The Transformer Revolution</h2>
+
+<div class="bg-gray-100 dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 my-6">
+    <h4 class="mt-0 font-bold text-primary dark:text-sky-400">Jargon Buster: Week 10 Key Terms</h4>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+        <div class="p-3 bg-white dark:bg-slate-800 rounded shadow-sm">
+            <strong>Foundation Model</strong>: A "pre-built" giant AI trained on the whole internet. You don't build it; you use it as a starting point.
+        </div>
+        <div class="p-3 bg-white dark:bg-slate-800 rounded shadow-sm">
+            <strong>Weights / Parameters</strong>: The "billions of knobs" inside the AI's brain. Their values define how the AI responds.
+        </div>
+        <div class="p-3 bg-white dark:bg-slate-800 rounded shadow-sm">
+            <strong>Inference</strong>: Using the AI to get an answer. Training is "school"; Inference is the "job."
+        </div>
+        <div class="p-3 bg-white dark:bg-slate-800 rounded shadow-sm">
+            <strong>Quantization</strong>: Shrinking a model so it fits on your phone or laptop without losing too much intelligence.
+        </div>
+    </div>
+</div>
+
 <p>Before 2017, sequence models like Recurrent Neural Networks (RNNs) and LSTMs processed text <strong>sequentially</strong>—word by word. This was slow (no parallelization across time steps) and suffered from vanishing gradients, making it hard to capture long-range dependencies.</p>
 <p>In 2017, Google researchers published the groundbreaking paper <strong>"Attention Is All You Need"</strong>, introducing the <strong>Transformer</strong> architecture—which ditched recurrence entirely in favor of attention mechanisms.</p>
 <p><img alt="Figure 1: The Transformer Architecture (Encoder-Decoder)" src="images/transformer_architecture.png" /><br />
