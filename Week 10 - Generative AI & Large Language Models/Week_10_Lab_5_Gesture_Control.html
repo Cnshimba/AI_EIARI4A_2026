@@ -130,8 +130,37 @@ cv2.destroyAllWindows()</code></pre>
 
 <hr />
 
-<h2>Part 4: Challenge</h2>
-<p>Modify the script to calculate the horizontal distance (X axis) between your thumb tip (Landmark 4) and your index tip (Landmark 8). Use this dynamic distance to output a "throttle" percentage from 0% to 100%, effectively turning your hand into a wireless volume knob or speed controller.</p>
+<h2>Part 4: Connecting to Pysimverse (Drone Simulator)</h2>
+<p>Because you are already isolating discrete gesture commands, we can pipe these triggers directly into an actual robotic control API! Using the <code>pysimverse</code> drone simulator you configured earlier in the semester, let's make the simulated drone physically maneuver based on your gestures.</p>
+
+<pre><code class="language-python"># Add this to the TOP of your script
+import pysimverse as ps
+
+# Connect to your local 3D Drone Simulator
+print("[SYSTEM] Connecting to Pysimverse engine...")
+drone = ps.Drone()
+drone.connect()
+
+# ... Inside your MediaPipe inner loop ...
+
+# Logic: Index Finger Up -> Drone Ascends
+if index_tip_y < wrist_y - 0.3 and middle_tip_y > wrist_y - 0.1:
+    cv2.putText(image, "COMMAND: TAKEOFF", (50, 50), 
+                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    drone.takeoff()  # Physically moves the drone in the simulator!
+
+# Logic: Closed Fist -> Drone Lands
+elif index_tip_y > wrist_y - 0.15 and middle_tip_y > wrist_y - 0.15:
+    cv2.putText(image, "COMMAND: LAND", (50, 50), 
+                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+    drone.land()
+</code></pre>
+<p>By running <code>pysimverse</code> alongside this script, your webcam instantly becomes a real-time, edge-AI remote control interfacing with a 3D physics engine!</p>
+
+<hr />
+
+<h2>Part 5: Challenge</h2>
+<p>Modify the script to calculate the horizontal distance (X axis) between your thumb tip (Landmark 4) and your index tip (Landmark 8). Feed this dynamic number into <code>drone.set_velocity()</code> to turn your hand into a wireless, analog speed throttle.</p>
 
 <div class="mt-8 flex justify-center">
     <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
