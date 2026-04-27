@@ -21,35 +21,55 @@
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
     <main class="container mx-auto px-4 max-w-5xl mb-12">
-        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
-            <h1 class="text-3xl font-bold text-secondary text-center">Lab 3: Multimodal Vision at the Edge</h1>
-            <p class="text-center font-medium">Extracting meaning from images locally with Moondream2.</p>
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_10_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 10</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Lab 3: Multimodal Vision at the Edge</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Distributed Inference with Jetson Nano</span>
+    </div>
+</div>
 
-            <h2>Goal</h2>
-            <p>Deploy <strong>Moondream2</strong> (a 1.6 Billion parameter vision model) to analyze images using an automated Python script. This is the foundation for visual inspection robots or automated surveillance.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Deploy <strong>Moondream2</strong> to analyze images locally and explore <strong>LAN-based inference</strong>. You will learn how to use a central Jetson Nano server as an AI provider for other computers on the same network.</div></div>
 
-            <hr />
+<hr />
 
-            <h2>Part 1: The Model</h2>
-            <p><strong>Moondream2</strong> is a tiny yet powerful Vision-Language Model (VLM). It can "see" an image and answer questions about it.</p>
-            <pre><code># Pull the moondream model (about 1.6 GB)
+<h2>Part 1: Running Moondream Locally</h2>
+<p><strong>Moondream2</strong> is a tiny yet powerful Vision-Language Model (VLM). It can "see" an image and answer questions about it.</p>
+<pre><code># Pull the moondream model (about 1.6 GB)
 ollama pull moondream</code></pre>
 
-            <hr />
+<hr />
 
-            <h2>Part 2: Visual Analysis with Python</h2>
-            <p>We will create a script that takes a <strong>Base64 encoded image</strong> and sends it to our local model.</p>
+<h2>Part 2: Distributed Inference (The LAN Setup)</h2>
+<p>In many labs, we have dedicated AI boards like the <strong>NVIDIA Jetson Nano</strong>. Instead of running a model on every slow laptop, we can run it on the Jetson and connect to it over the network.</p>
 
-            <pre><code class="language-python">import requests
+<h3>2.1 Server Side: Allowing Remote Connections</h3>
+<p>By default, Ollama only listens to <code>localhost</code> (127.0.0.1). To allow other computers to connect, you must set an environment variable on the <strong>Jetson Service</strong>:</p>
+<pre><code># On the Jetson Server (Linux)
+export OLLAMA_HOST=0.0.0.0:11434
+ollama serve</code></pre>
+
+<h3>2.2 Client Side: Connecting via Python</h3>
+<p>Update your script's URL from <code>localhost</code> to the <strong>Jetson's IP address</strong> (e.g., <code>192.168.1.100</code>).</p>
+
+<pre><code class="language-python">import requests
 import base64
+
+JETSON_IP = "192.168.1.100" # Replace with your Jetson's actual IP
 
 def image_to_base64(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode('utf-8')
 
-def analyze_image(image_path, prompt):
+def analyze_image_remote(image_path, prompt):
     img_b64 = image_to_base64(image_path)
-    url = "http://localhost:11434/api/generate"
+    url = f"http://{JETSON_IP}:11434/api/generate"
     
     data = {
         "model": "moondream",
@@ -61,26 +81,40 @@ def analyze_image(image_path, prompt):
     response = requests.post(url, json=data)
     return response.json()['response']
 
-# Try it out (ensure you have an image file handy)
-print(analyze_image("circuit_diagram.jpg", "Identify the components in this diagram."))</code></pre>
+print(analyze_image_remote("pcb_board.jpg", "Detect any burnt components."))</code></pre>
 
-            <hr />
+<hr />
 
-            <h2>Part 3: Practical Activity</h2>
-            <p>Find an image of a <strong>Raspberry Pi 5</strong> or a <strong>Circuit Schematic</strong>. Use the script to:</p>
-            <ol>
-                <li>List all the visible chips.</li>
-                <li>Describe the layout of the board.</li>
-                <li>Count how many USB ports are visible.</li>
-            </ol>
-            <p><strong>Observation</strong>: Note how a 1.6B model can perform specific visual tasks as well as much larger models!</p>
+<h2>Part 3: Distributed VS Code Assistant</h2>
+<p>In <strong>Lab 2</strong>, we used a local model for code help. Now, we will configure the **Continue extension** to use the **Jetson Nano** on the network.</p>
 
-            <div class="mt-8 flex justify-center">
-                <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
-                    Finish: Take Week 10 Quiz
-                </a>
-            </div>
-        </article>
+<ol>
+    <li>Open <strong>Continue Config</strong> (<code>config.json</code>).</li>
+    <li>Add a new model entry with the <code>apiBase</code> pointing to your Jetson:</li>
+</ol>
+
+<pre><code class="language-json">{
+  "title": "Jetson-Llama3",
+  "model": "llama3.1:8b",
+  "apiBase": "http://192.168.1.100:11434",
+  "provider": "ollama"
+}</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 border-[#002F6E]">
+    <p><strong>Note</strong>: This allows a low-power laptop to have "Jetson-grade" intelligence without the thermal heat or battery drain of running the model locally!</p>
+</div>
+
+<hr />
+
+<h2>Part 4: Activity</h2>
+<p>Use the Jetson-connected Moondream2 script to analyze a <strong>Circuit Diagram</strong>. Can the model correctly identify the resistors vs Capacitors?</p>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        Finish: Take Week 10 Quiz
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+    </a>
+</div>
     </main>
 </body>
 </html>
