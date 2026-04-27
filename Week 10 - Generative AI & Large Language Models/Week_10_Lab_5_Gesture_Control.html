@@ -131,8 +131,19 @@ cv2.destroyAllWindows()</code></pre>
 <hr />
 
 <h2>Part 4: Connecting to Pysimverse (Drone Simulator)</h2>
-<p>Because you are already isolating discrete gesture commands, we can pipe these triggers directly into an actual robotic control API! Using the <code>pysimverse</code> drone simulator you configured earlier in the semester, let's make the simulated drone physically maneuver based on your gestures.</p>
+<p>Because you are already isolating discrete gesture commands, we can pipe these triggers directly into an actual robotic control API! We will use <strong>Pysimverse</strong>, a lightweight 3D python drone simulator.</p>
 
+<h3>4.1 Installing the Simulator Environment</h3>
+<p>To run this simulation, you need two pieces of software: the 3D physics application, and the Python library that talks to it.</p>
+<ol>
+    <li><strong>Download the Simulator App</strong>: Download and extract the <code>Pysimverse</code> desktop application provided by your instructor on the VUT student portal. Launch the <code>.exe</code> file and keep the 3D environment running in the background.</li>
+    <li><strong>Install the Python API</strong>: In your terminal, install the API package so your Python script can send commands to the engine over your local network.
+    <pre><code>pip install pysimverse</code></pre>
+    </li>
+</ol>
+
+<h3>4.2 The Control Script</h3>
+<p>Let's make the simulated drone physically maneuver based on your hand gestures.</p>
 <pre><code class="language-python"># Add this to the TOP of your script
 import pysimverse as ps
 
