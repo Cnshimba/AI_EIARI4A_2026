@@ -228,11 +228,15 @@
 <p><strong>Query (Q)</strong>: What am I looking for?<br />
 <strong>Key (K)</strong>: What do I offer as a match?<br />
 <strong>Value (V)</strong>: What content do I provide?</p>
-<p><strong>Steps</strong>:<br />
-1. Compute similarity: score = Q · K^T<br />
-2. Scale: score / √d_k<br />
-3. Softmax: weights = softmax(scores)<br />
-4. Weighted sum: output = weights · V</p>
+<p><strong>Scaled Dot-Product Attention</strong> computes a weighted sum of values based on the relationship between Queries and Keys:</p>
+<div class="bg-gray-100 dark:bg-gray-900 p-6 rounded-lg font-serif text-lg text-center my-6">
+    $Attention(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$
+</div>
+<p><strong>Steps:</strong><br />
+1. <strong>Similarity</strong>: $Q \cdot K^T$ calculates how much each word relates to others.<br />
+2. <strong>Scaling</strong>: Divided by $\sqrt{d_k}$ to prevent gradient explosion.<br />
+3. <strong>Normalization</strong>: Softmax turns scores into probabilities.<br />
+4. <strong>Aggregation</strong>: Multiplied by $V$ to get context.</p>
 <p><strong>Causal Masking</strong>: In decoder models (GPT), prevent peeking at future tokens</p>
 <h4>1.4 Multi-Head Attention</h4>
 <p><strong>Why Multiple Heads?</strong></p>
@@ -354,6 +358,13 @@
 <li>
 <p>Best for: Translation, summarization</p>
 </li>
+</ul>
+<h4>2.4 LLM Tiers: Size vs. Application</h4>
+<p>Classifying models by parameter count helps engineers select the right tool for the hardware (Pi 5 vs Server):</p>
+<ul>
+<li><strong>SLM (Small) [1B-4B]</strong>: Edge devices, offline private summarization (e.g., Phi-3 Mini).</li>
+<li><strong>Mid-Sized [7B-35B]</strong>: Standard chatbots, focused coding models (e.g., Llama-3 8B).</li>
+<li><strong>Large [70B+]</strong>: High-level reasoning, complex logic (e.g., Llama-3 70B).</li>
 </ul>
 <h4>2.4 Emergent Abilities</h4>
 <p><strong>Phenomenon</strong>: Capabilities not explicitly trained</p>

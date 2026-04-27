@@ -211,11 +211,15 @@ Earlier in the course, we trained a small custom model on 20 sentences—an educ
 <p><strong>Value (V)</strong>: The actual content to retrieve.</p>
 </li>
 </ul>
-<p>Steps:<br />
-1. Compute dot-product similarity: score = Q · Kᵀ<br />
-2. Scale by √dₖ (dimension) to stabilize gradients.<br />
-3. Softmax to get weights.<br />
-4. Weighted sum: Attention = softmax(scores) · V</p>
+<p><strong>Scaled Dot-Product Attention</strong> computes a weighted sum of values based on the relationship between Queries and Keys:</p>
+<div class="bg-gray-100 dark:bg-gray-900 p-6 rounded-lg font-serif text-lg text-center my-6">
+    $Attention(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V$
+</div>
+<p><strong>Steps:</strong><br />
+1. <strong>Similarity</strong>: $Q \cdot K^T$ calculates how much each word relates to others (dot-product).<br />
+2. <strong>Scaling</strong>: Divided by $\sqrt{d_k}$ (where $d_k$ is the vector dimension). This prevents the dot-product from exploding, which would cause the gradients to vanish during Softmax.<br />
+3. <strong>Normalization</strong>: Softmax turns scores into probabilities (summing to 1).<br />
+4. <strong>Aggregation</strong>: Multiplied by $V$ to get the final contextual representation.</p>
 <p>In decoder-only models (like GPT), causal masking prevents "peeking" at future tokens.</p>
 <h3>1.5 Parallelization &amp; Scale</h3>
 <p>By processing all words at once, Transformers are highly parallelizable on GPUs/TPUs. Self-attention scales quadratically with sequence length, which makes very long contexts computationally expensive and motivates recent efficiency innovations. However, this parallelization enabled training on thousands of GPUs for months, consuming petabytes of data—leading to <strong>emergent abilities</strong> (e.g., arithmetic, translation) not explicitly trained for.</p>
@@ -251,6 +255,44 @@ Earlier in the course, we trained a small custom model on 20 sentences—an educ
 <h3>2.3 Foundation Model Flavors</h3>
 <p>While all modern models use Transformers, they come in different architectural flavors suited for specific tasks. <strong>Encoder-only</strong> models (like BERT) are bidirectional, meaning they look at the whole sentence at once; they excel at "understanding" tasks like classification or sentiment analysis. <strong>Decoder-only</strong> models (like GPT, Llama, and Claude) are autoregressive, meaning they predict the next word in a sequence; these have become the dominant architecture for modern generative AI and chatbots. Finally, <strong>Encoder-Decoder</strong> models (like T5) combine both, making them ideal for sequence-to-sequence tasks like translation or summarization.</p>
 <p>Many 2025–2026 models are multimodal (text + image/video/audio).</p>
+<h3>2.5 Classification of LLMs: Size vs. Application</h3>
+<p>Modern AI utilizes a "Tier" system based on parameter count. As a Computer Systems Engineer, choosing the right size is a tradeoff between <strong>Latency, Memory, and Intelligence</strong>.</p>
+<table>
+    <thead>
+        <tr>
+            <th>Tier</th>
+            <th>Size (Params)</th>
+            <th>Examples</th>
+            <th>Primary Applications</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>SLM (Small)</strong></td>
+            <td>1B - 4B</td>
+            <td>Phi-3 Mini, Qwen-2.5-1.5B</td>
+            <td>Edge devices (Pi 5), simple text summarization, private offline tasks.</td>
+        </tr>
+        <tr>
+            <td><strong>Mid-Sized</strong></td>
+            <td>7B - 14B</td>
+            <td>Llama-3.1 8B, Mistral-7B</td>
+            <td>General purpose chatbots, local coding help, RAG (Search) systems.</td>
+        </tr>
+        <tr>
+            <td><strong>Large/Heavy</strong></td>
+            <td>70B - 405B</td>
+            <td>Llama-3.3 70B, Qwen-72B</td>
+            <td>Complex reasoning, multi-step planning, high-accuracy engineering tasks.</td>
+        </tr>
+        <tr>
+            <td><strong>Frontier/API</strong></td>
+            <td>Unk (Proprietary)</td>
+            <td>GPT-4o, Claude 3.5 Sonnet</td>
+            <td>World-class creative writing, advanced agentic workflows, multi-modal analysis.</td>
+        </tr>
+    </tbody>
+</table>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 2</strong><br />
 -   <strong>Pre-training</strong>: Teaches the model "Language and Facts" (The base capability).<br />
 -   <strong>Alignment (RLHF/DPO)</strong>: Teaches the model "Helpfulness and Safety" (The chat personality).<br />
