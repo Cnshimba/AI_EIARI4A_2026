@@ -182,7 +182,7 @@ By the end of this chapter, you will be able to:<br />
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 9 Goal</strong>:<br />
 Until now, we have dealt with numbers (Regression) and images (Pixels are just grids of numbers). Text is different. It is messy, discrete, and variable in length. Computers do not inherently understand words. To teach an AI to read, we must first translate language into mathematics. This week introduces <strong>Natural Language Processing (NLP)</strong>. We will cover the pipeline of Tokenization, Word Embeddings, and finally, creating a model that can "read" a sentence and understand its sentiment.</p></div></div>
 <h2>1. From Raw Text to Numerical Data</h2>
-<p>The fundamental challenge of Natural Language Processing (NLP) is representation. Computers execute mathematical operations; they cannot natively ingest sentences like "I love AI." We must translate discrete text into continuous mathematical vectors.</p>
+<p>The fundamental challenge of Natural Language Processing (NLP) is representation. Computers execute mathematical operations; they cannot natively ingest sentences like "I love AI." We must translate <strong>discrete</strong> text (separate, distinct words) into <strong>continuous</strong> mathematical vectors (decimal numbers the computer can multiply).</p>
 
 <div class="bg-gray-100 dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 my-6">
     <h4 class="mt-0 font-bold">Concrete Example: Translating "I love AI"</h4>
@@ -215,7 +215,7 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 </ul>
 
 <h3>1.2 Tokenization: Word, Character, and Subword (BPE)</h3>
-<p>We cannot parse an entire document at once. We break it into atomic units called <strong>Tokens</strong>.</p>
+<p>We cannot parse an entire document at once. We break it into atomic units called <strong>Tokens</strong> (the smallest "pieces" of text the AI can see, such as words or sub-words).</p>
 <ul>
 <li><strong>Word-level Tokenization</strong>: Splitting by spaces (["I", "love", "AI"]). Limitation: massive vocabularies and inability to handle typos or completely new words.</li>
 <li><strong>Character-level Tokenization</strong>: ["I", " ", "l", "o", "v", "e", ...]. Limitation: characters carry almost no semantic meaning alone, making patterns very hard for the network to find.</li>
@@ -232,7 +232,7 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
     </div>
     Where $tf(t, d)$ is the frequency of term $t$ in document $d$, and the second term is the <em>Inverse Document Frequency</em>.
 </li>
-<li><strong>One-Hot Encoding</strong>: A vector of zeros with a single '1' at the word's ID. Extremely inefficient due to sparsity.</li>
+<li><strong>One-Hot Encoding</strong>: A vector of zeros with a single '1' at the word's ID. Extremely inefficient due to <strong>sparsity</strong> (when a vector is 99% zeros, which wastes memory).</li>
 </ul>
 
 <h3>1.4 Measuring Similarity: Cosine Similarity</h3>
@@ -246,7 +246,7 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 <h2>2. The Rise of Word Embeddings</h2>
 <p><strong>The "Zero Meaning" Problem</strong>: In One-Hot Encoding, every word is treated as an isolated island. There is no concept of "similarity." Because every word gets its own unique ID and its own column in a matrix, the mathematical distance between "Pizza" and "Burger" is exactly the same as the distance between "Pizza" and "Quantum Physics." The computer has no way of knowing that two words are related.</p>
 
-<p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) solved this by mapping words to <strong>Dense Vectors</strong>. Instead of thousands of zeros, words are represented by a smaller list of floating-point numbers (e.g., a vector of size 300).</p>
+<p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) solved this by mapping words to <strong>Dense Vectors</strong> (vectors packed with meaningful numbers instead of zeros). Instead of thousands of zeros, words are represented by a smaller list of floating-point numbers (e.g., a vector of size 300).</p>
 
 <div class="bg-[#002F6E]/5 dark:bg-[#002F6E]/20 p-6 rounded-xl border border-[#002F6E]/30 my-6">
     <h4 class="mt-0 font-bold text-primary dark:text-sky-400 font-serif">Analogy: The GPS for Meaning</h4>
