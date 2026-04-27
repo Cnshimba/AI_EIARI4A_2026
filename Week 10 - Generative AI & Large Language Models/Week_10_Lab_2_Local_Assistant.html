@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 2: Local AI Assistant - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: { primary: '#002F6E', secondary: '#c9984a' },
+                typography: {
+                    DEFAULT: { css: { h1: { color: '#002F6E' }, h2: { color: '#c9984a' } } }
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <h1 class="text-3xl font-bold text-secondary text-center">Lab 2: Building Your AI Pair Programmer</h1>
+            <p class="text-center font-medium">Integration of local LLMs into the developer workflow.</p>
+
+            <h2>Goal</h2>
+            <p>Connect your local <strong>Ollama</strong> instance to **VS Code** to create a free, private, and offline alternative to GitHub Copilot.</p>
+
+            <hr />
+
+            <h2>Part 1: Setup Continue</h2>
+            <p><strong>Continue</strong> is an open-source extension for VS Code that allows you to use any LLM for code autocomplete and chat.</p>
+            <ol>
+                <li>Open <strong>VS Code</strong>.</li>
+                <li>Go to the <strong>Extensions</strong> tab (Ctrl+Shift+X).</li>
+                <li>Search for <strong>"Continue"</strong> and install it.</li>
+            </ol>
+
+            <hr />
+
+            <h2>Part 2: Configuring the Local Provider</h2>
+            <p>We need to tell Continue to talk to our local Ollama server instead of a cloud API.</p>
+            <ol>
+                <li>Click the <strong>Continue</strong> icon in the sidebar.</li>
+                <li>Click the <strong>gear icon (config)</strong> at the bottom.</li>
+                <li>Paste the following configuration into the <code>models</code> section:</li>
+            </ol>
+            
+            <pre><code>{
+  "title": "Local Phi-3",
+  "model": "phi3:mini",
+  "provider": "ollama"
+}</code></pre>
+
+            <hr />
+
+            <h2>Part 3: Testing the Offline Assistant</h2>
+            <p><strong>Turn off your Wi-Fi</strong>. This is the ultimate test of localized AI.</p>
+            <ol>
+                <li>Highlight some code in a Python file.</li>
+                <li>Press <code>Ctrl + I</code> (Inline Edit) or <code>Ctrl + L</code> (Chat).</li>
+                <li>Ask: <em>"Add comments to this function and optimize the loops."</em></li>
+            </ol>
+            <p>The model running on your laptop/Pi 5 should generate the response immediately without any internet connection.</p>
+
+            <div class="mt-8 flex justify-center">
+                <a href="Week_10_Lab_3_Edge_Vision.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+                    Next: Lab 3 (Multimodal Vision)
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+                </a>
+            </div>
+        </article>
+    </main>
+</body>
+</html>

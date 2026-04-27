@@ -504,7 +504,83 @@
     </div>
     
     <script>
-        const quizData = {"scenario": [{"type": "scenario", "question": "What is the key innovation in the \"Transformer\" architecture (2017)?", "options": ["Self-Attention Mechanism", "Convolutional Layers", "Recurrent Loops", "Max Pooling"], "answer": "Self-Attention Mechanism", "explanation": "\"Attention is All You Need\". It allows the model to look at the entire sentence at once and weigh the importance of relationships between words."}, {"type": "scenario", "question": "How does a GPT model generate text?", "options": ["It predicts the next token (word/part of word) probability distribution one at a time.", "It writes the whole paragraph at once.", "It searches Google and copies the text.", "It translates from a database."], "answer": "It predicts the next token (word/part of word) probability distribution one at a time.", "explanation": "It is an \"Autoregressive\" model. It writes word 1, then uses word 1 to predict word 2, etc."}, {"type": "scenario", "question": "What is \"Temperature\" in the context of LLM sampling?", "options": ["A parameter controlling randomness (High = Creative/Random, Low = Deterministic/Focused).", "The heat of the GPU.", "The speed of generation.", "The size of the model."], "answer": "A parameter controlling randomness (High = Creative/Random, Low = Deterministic/Focused).", "explanation": "Low temp (0.1) is good for code/math. High temp (0.8) is good for poetry/stories."}, {"type": "scenario", "question": "What is \"RAG\" (Retrieval-Augmented Generation)?", "options": ["Feeding external data (PDFs, Databases) to the LLM to ground its answers in facts.", "Making the model angry.", "Randomly generating answers.", "A type of neural network."], "answer": "Feeding external data (PDFs, Databases) to the LLM to ground its answers in facts.", "explanation": "RAG fixes the knowledge cutoff and hallucination issues by giving the model an open book test."}], "fill_blank": [{"type": "fill_blank", "question": "_______ AI refers to algorithms that can create new content, including audio, code, images, text, simulations, and videos.", "answer": "Generative", "explanation": "Contrast with Discriminative AI (Classifiers) which simply separates data."}, {"type": "fill_blank", "question": "A _______ is the basic unit of text that an LLM processes. It can be a word, part of a word, or a character (approx 0.75 words).", "answer": "Token", "explanation": "\"Smart\" is 1 token. \"Smartphones\" might be 2 tokens."}, {"type": "fill_blank", "question": "_______ allows the model to dynamically focus on different parts of the input sequence when generating each output token.", "answer": "Attention", "explanation": "When generating \"ate\", the model pays valid attention to \"apple\" earlier in the sentence."}], "matching": [{"type": "matching", "question": "Match the GenAI term to its definition", "pairs": {"LLM (Large Language Model)": "A massive transformer trained on internet-scale text", "Hallucination": "When an LLM generates factually incorrect information confidently", "Prompt Engineering": "The art of crafting inputs to guide the model's output", "FineTuning": "Updating a pre-trained model on a specific dataset"}, "explanation": "The vocabulary of the modern AI era."}, {"type": "matching", "question": "Match the Model to its Creator", "pairs": {"GPT4": "OpenAI", "Llama 3": "Meta (Facebook)", "Claude": "Anthropic", "Gemini": "Google"}, "explanation": "The current titans of the Model Zoo."}, {"type": "matching", "question": "Match the component to the acronym", "pairs": {"GAN": "Generative Adversarial Network (Image generation)", "VAE": "Variational Autoencoder (Compression/Generation)", "BERT": "Bidirectional Encoder Representations from Transformers (Understanding)", "GPT": "Generative Pre-trained Transformer (Generation)"}, "explanation": "BERT reads left-to-right and right-to-left (Encoder). GPT reads left-to-right only (Decoder)."}], "ordering": [{"type": "ordering", "question": "Order the lifecycle of an LLM", "sequence": ["Pre-training (Learning grammar/facts from wrong internet data)", "Supervised Fine-Tuning (SFT) (Learning to follow instructions)", "RLHF (Reinforcement Learning from Human Feedback)", "Deployment (Inference)", "Prompt Engineering (User Interaction)"], "explanation": "Pre-training takes months. Fine-tuning takes days. Prompting takes seconds."}, {"type": "ordering", "question": "Order the steps of \"Context\" processing", "sequence": ["User enters prompt", "Tokenizer converts text to IDs", "Embedding layer converts IDs to Vectors", "Evaluation through Transformer Layers (Attention + FFN)", "Un-embedding (Vectors to Probabilities)", "Sampling (Selecting the next token)"], "explanation": "The journey of a prompt."}], "code": [{"type": "code", "question": "Load a pipeline from Hugging Face Transformers", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Generate text using a pipeline", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Use the tokenizer", "starter": "", "answer": "", "explanation": ""}]};
+        const quizData = {
+    "scenario": [
+        {
+            "type": "scenario",
+            "question": "What is the primary motivation for using a Small Language Model (SLM) on an edge device like a Raspberry Pi 5?",
+            "options": [
+                "To reduce latency and ensure data privacy by keeping inference local.",
+                "To achieve higher accuracy than GPT-4.",
+                "Because edge devices have more RAM than cloud servers.",
+                "To increase the cost of model deployment."
+            ],
+            "answer": "To reduce latency and ensure data privacy by keeping inference local.",
+            "explanation": "SLMs (1B-4B params) are optimized for restricted hardware, providing fast responses without needing an internet connection or cloud fees."
+        },
+        {
+            "type": "scenario",
+            "question": "At what stage should Quantization (reducing bit-precision) typically occur?",
+            "options": [
+                "During pre-training to make the learning faster.",
+                "After training is complete (Post-Training Quantization) to compress the model.",
+                "Only during the decoding/sampling phase.",
+                "Quantization is not used in modern LLM deployment."
+            ],
+            "answer": "After training is complete (Post-Training Quantization) to compress the model.",
+            "explanation": "Models are usually trained in high precision (FP16) and then quantized (INT8/4) later to save memory during deployment."
+        },
+        {
+            "type": "scenario",
+            "question": "What is the key innovation in the \"Transformer\" architecture (2017)?",
+            "options": ["Self-Attention Mechanism", "Convolutional Layers", "Recurrent Loops", "Max Pooling"],
+            "answer": "Self-Attention Mechanism",
+            "explanation": "\"Attention is All You Need\" introduced self-attention, allowing models to process all words in a sequence simultaneously."
+        }
+    ],
+    "fill_blank": [
+        {
+            "type": "fill_blank",
+            "question": "The _______ mechanism allows a Transformer to weigh the importance of different words in a sentence relative to a specific target word.",
+            "answer": "Attention",
+            "explanation": "Specifically Scaled Dot-Product Attention (Q, K, V)."
+        },
+        {
+            "type": "fill_blank",
+            "question": "_______ is the standard open-source tool used to download and run quantized models like Phi-3 or Llama-3 locally.",
+            "answer": "Ollama",
+            "explanation": "Ollama makes it easy to run GGUF models on CPUs and GPUs locally."
+        }
+    ],
+    "matching": [
+        {
+            "type": "matching",
+            "question": "Match the LLM Tier to its likely Hardware Target",
+            "pairs": {
+                "SLM (1.5B - 3B)": "Raspberry Pi 5 / Mobile Phone",
+                "Mid-Sized (7B - 8B)": "Laptop CPU / Entry-level GPU",
+                "Large (70B+)": "Server GPU Cluster (H100s)",
+                "Vision-VLM (Moondream)": "Multimodal Edge Vision tasks"
+            },
+            "explanation": "Model size determines where it can realistically run based on VRAM/RAM constraints."
+        }
+    ],
+    "ordering": [
+        {
+            "type": "ordering",
+            "question": "Order the steps of a local SLM inference request via Ollama API",
+            "sequence": [
+                "Ollama server receives HTTP POST request",
+                "Tokenizer converts prompt to IDs",
+                "Model processes IDs through Transformer layers",
+                "Next token is sampled from probability distribution",
+                "JSON response is returned to the user script"
+            ],
+            "explanation": "This describes the full loop from API call to result."
+        }
+    ],
+    "code": []
+};
         
         let currentAttempt = 1;
         let maxAttempts = 3;

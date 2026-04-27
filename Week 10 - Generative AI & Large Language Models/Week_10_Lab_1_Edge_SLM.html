@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 1: Edge SLM Deployment - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { primary: '#002F6E', secondary: '#c9984a', background: '#f8fafc', card: '#ffffff' },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#002F6E' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#002F6E' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+            <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                <h1 class="text-3xl font-bold text-secondary m-0">Lab 1: Universal SLM Deployment</h1>
+                <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Localized AI on Raspberry Pi & Laptops</span>
+            </div>
+
+            <h2>Goal</h2>
+            <p>Deploy a <strong>Small Language Model (SLM)</strong> locally using <strong>Ollama</strong>. You will measure the performance differences between different hardware tiers (Laptop CPU vs Raspberry Pi 5 vs VM).</p>
+
+            <hr />
+
+            <h2>Part 1: Setting up Ollama</h2>
+            <p>Ollama is the standard tool for running quantized models locally. It abstracts the complexity of <code>llama.cpp</code>.</p>
+
+            <h3>1.1 Installation</h3>
+            <ul>
+                <li><strong>Windows/Mac</strong>: Download the installer from <a href="https://ollama.com">ollama.com</a>.</li>
+                <li><strong>Linux / Raspberry Pi 5</strong>: Run this command in your terminal:
+                    <pre><code>curl -fsSL https://ollama.com/install.sh | sh</code></pre>
+                </li>
+            </ul>
+
+            <hr />
+
+            <h2>Part 2: Selecting & Running an SLM</h2>
+            <p>We will use <strong>Phi-3 Mini</strong> (3.8B parameters) or <strong>Phi-2</strong> (2.7B parameters). These models are small enough to run on a Pi 5 or a basic laptop while remaining highly capable.</p>
+
+            <h3>2.1 Run the Model</h3>
+            <pre><code># This will download and start the model
+ollama run phi3:mini</code></pre>
+
+            <h3>2.2 Benchmark Performance</h3>
+            <p>Ask the model a complex question like: <em>"Explain the relationship between the Fourier Transform and Signal Processing in 4 paragraphs."</em></p>
+            <p><strong>Note the speed:</strong> Look at the output. Does it feel "instant" or "gradual"?</p>
+            <ul>
+                <li><strong>Laptop (i7/M1+)</strong>: Should achieve ~20-50 tokens/sec.</li>
+                <li><strong>Raspberry Pi 5 (8GB)</strong>: Should achieve ~3-7 tokens/sec.</li>
+            </ul>
+
+            <hr />
+
+            <h2>Part 3: The API Protocol</h2>
+            <p>Ollama runs a local server at port <code>11434</code>. You can talk to it via simple HTTP requests.</p>
+
+            <h3>3.1 Python Script (The Edge Agent)</h3>
+            <pre><code class="language-python">import requests
+
+def talk_to_local_ai(prompt):
+    url = "http://localhost:11434/api/generate"
+    data = {
+        "model": "phi3:mini",
+        "prompt": prompt,
+        "stream": False
+    }
+    response = requests.post(url, json=data)
+    return response.json()['response']
+
+print(talk_to_local_ai("What is the capital of South Africa?"))</code></pre>
+
+            <div class="mt-8 flex justify-center">
+                <a href="Week_10_Lab_2_Local_Assistant.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+                    Next: Lab 2 (AI Assistant)
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+                </a>
+            </div>
+        </article>
+    </main>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 3: Edge Vision - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: { primary: '#002F6E', secondary: '#c9984a' },
+                typography: {
+                    DEFAULT: { css: { h1: { color: '#002F6E' }, h2: { color: '#c9984a' } } }
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            <h1 class="text-3xl font-bold text-secondary text-center">Lab 3: Multimodal Vision at the Edge</h1>
+            <p class="text-center font-medium">Extracting meaning from images locally with Moondream2.</p>
+
+            <h2>Goal</h2>
+            <p>Deploy <strong>Moondream2</strong> (a 1.6 Billion parameter vision model) to analyze images using an automated Python script. This is the foundation for visual inspection robots or automated surveillance.</p>
+
+            <hr />
+
+            <h2>Part 1: The Model</h2>
+            <p><strong>Moondream2</strong> is a tiny yet powerful Vision-Language Model (VLM). It can "see" an image and answer questions about it.</p>
+            <pre><code># Pull the moondream model (about 1.6 GB)
+ollama pull moondream</code></pre>
+
+            <hr />
+
+            <h2>Part 2: Visual Analysis with Python</h2>
+            <p>We will create a script that takes a <strong>Base64 encoded image</strong> and sends it to our local model.</p>
+
+            <pre><code class="language-python">import requests
+import base64
+
+def image_to_base64(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+def analyze_image(image_path, prompt):
+    img_b64 = image_to_base64(image_path)
+    url = "http://localhost:11434/api/generate"
+    
+    data = {
+        "model": "moondream",
+        "prompt": prompt,
+        "images": [img_b64],
+        "stream": False
+    }
+    
+    response = requests.post(url, json=data)
+    return response.json()['response']
+
+# Try it out (ensure you have an image file handy)
+print(analyze_image("circuit_diagram.jpg", "Identify the components in this diagram."))</code></pre>
+
+            <hr />
+
+            <h2>Part 3: Practical Activity</h2>
+            <p>Find an image of a <strong>Raspberry Pi 5</strong> or a <strong>Circuit Schematic</strong>. Use the script to:</p>
+            <ol>
+                <li>List all the visible chips.</li>
+                <li>Describe the layout of the board.</li>
+                <li>Count how many USB ports are visible.</li>
+            </ol>
+            <p><strong>Observation</strong>: Note how a 1.6B model can perform specific visual tasks as well as much larger models!</p>
+
+            <div class="mt-8 flex justify-center">
+                <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+                    Finish: Take Week 10 Quiz
+                </a>
+            </div>
+        </article>
+    </main>
+</body>
+</html>

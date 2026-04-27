@@ -312,35 +312,28 @@ Earlier in the course, we trained a small custom model on 20 sentences—an educ
 -   <strong>Pipeline</strong>: Tokenize -&gt; Inference -&gt; Decode.<br />
 -   <strong>Optimization</strong>: Techniques like Quantization and FlashAttention are critical for running these giants on real hardware.</p></div></div>
 <hr />
-<h2>4. Lab Preview: Choosing Your Path</h2>
-<p>For Week 10, we have provided <strong>two separate labs</strong> depending on your available hardware. Choose the one that fits your setup:</p>
-<h3>Option A: Lab 1 (CPU Inference)</h3>
-<p><strong>Best for:</strong> Laptops (even without GPUs), MacBooks (M1/M2/M3), and standard desktops.</p>
-<ul>
-<li>
-<p><strong>Technology</strong>: We use <strong>Quantization</strong> (GGUF format) to compress the model to ~5GB.</p>
-</li>
-<li>
-<p><strong>Tool</strong>: <code>ctransformers</code> library.</p>
-</li>
-<li>
-<p><strong>Result</strong>: You will run a powerful Llama 3.1 8B model locally, though at a slower speed (3-10 tokens/sec).</p>
-</li>
-</ul>
-<h3>Option B: Lab 2 (GPU Acceleration)</h3>
-<p><strong>Best for:</strong> Gaming PCs or Cloud Instances with NVIDIA GPUs (6GB+ VRAM).</p>
-<ul>
-<li>
-<p><strong>Technology</strong>: We use <strong>8-bit loading</strong> via CUDA cores.</p>
-</li>
-<li>
-<p><strong>Tool</strong>: <code>transformers</code> + <code>accelerate</code> libraries.</p>
-</li>
-<li>
-<p><strong>Result</strong>: You will experience blazing fast generation speeds (50+ tokens/sec).</p>
-</li>
-</ul>
-<p>In both labs, you will build a local Python script to chat with the AI, keeping your data completely private.</p>
+<h2>4. Lab Preview: Edge AI & Localized LLMs</h2>
+<p>For Week 10, we focus on <strong>Local Empowerment</strong>. You will learn to deploy and use AI entirely on your own hardware.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h3 class="mt-0">Lab 1: Universal SLM</h3>
+        <p class="text-sm">Deploy <strong>Phi-3</strong> on your Laptop or Pi 5. Master the Ollama API and benchmark edge performance.</p>
+        <a href="Week_10_Lab_1_Edge_SLM.html" class="text-secondary font-bold no-underline hover:underline">View Lab &rarr;</a>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h3 class="mt-0">Lab 2: AI Assistant</h3>
+        <p class="text-sm">Integrate Ollama with <strong>VS Code</strong>. Build your own private, offline alternative to GitHub Copilot.</p>
+        <a href="Week_10_Lab_2_Local_Assistant.html" class="text-secondary font-bold no-underline hover:underline">View Lab &rarr;</a>
+    </div>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+        <h3 class="mt-0">Lab 3: Edge Vision</h3>
+        <p class="text-sm">Deploy <strong>Moondream2</strong>. Use Python to analyze images locally for visual inspection tasks.</p>
+        <a href="Week_10_Lab_3_Edge_Vision.html" class="text-secondary font-bold no-underline hover:underline">View Lab &rarr;</a>
+    </div>
+</div>
+
+<p>In these labs, you are not just using a web-chat; you are architecting a local AI stack that follows your rules and keeps your data private.</p>
 <hr />
 <h2>5. Summary &amp; Key Takeaways</h2>
 <ul>
