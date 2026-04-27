@@ -248,14 +248,17 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 
 <p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) solved this by mapping words to <strong>Dense Vectors</strong> (vectors packed with meaningful numbers instead of zeros). Instead of thousands of zeros, words are represented by a smaller list of floating-point numbers (e.g., a vector of size 300).</p>
 
-<div class="bg-[#002F6E]/5 dark:bg-[#002F6E]/20 p-6 rounded-xl border border-[#002F6E]/30 my-6">
-    <h4 class="mt-0 font-bold text-primary dark:text-sky-400 font-serif">Analogy: The GPS for Meaning</h4>
-    <p class="text-sm italic">Think of Word Embeddings like <strong>GPS coordinates</strong> on a giant map of human language.</p>
-    <ul class="text-xs">
-        <li><strong>One-Hot</strong>: Just a list of addresses with no map. "1 Main St" and "2 Main St" are just names; you don't know how close they are.</li>
-        <li><strong>Embeddings</strong>: Coordinates (Latitude, Longitude). On this map, words like <strong>"King"</strong> and <strong>"Queen"</strong> are located in the same "Royal Neighborhood." Words like <strong>"Pizza"</strong> and <strong>"Burger"</strong> are in the "Fast Food District."</li>
-    </ul>
-    <p class="text-xs mt-2 font-bold">Concept: The model learns these coordinates by seeing which words appear in the same sentences across millions of books.</p>
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300">
+    <svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.414a2 2 0 01-2.828 0l-4.243-3.757a2 2 0 010-2.828l4.243-3.757a2 2 0 012.828 0l4.243 3.757a2 2 0 010 2.828z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+    <div class="flex-1 text-sm md:text-base">
+        <strong>Analogy: The GPS for Meaning</strong><br />
+        Think of Word Embeddings like <strong>GPS coordinates</strong> on a giant map of human language.
+        <ul class="mt-2 mb-2">
+            <li><strong>One-Hot</strong>: Just a list of addresses with no map. "1 Main St" and "2 Main St" are just names; you don't know how close they are.</li>
+            <li><strong>Embeddings</strong>: Coordinates (Latitude, Longitude). On this map, words like <strong>"King"</strong> and <strong>"Queen"</strong> are located in the same "Royal Neighborhood." Words like <strong>"Pizza"</strong> and <strong>"Burger"</strong> are in the "Fast Food District."</li>
+        </ul>
+        <strong>Concept</strong>: The model learns these coordinates by seeing which words appear in the same sentences across millions of books.
+    </div>
 </div>
 <p><strong>Word2Vec Learning Architectures</strong>:</p>
 <ul>
