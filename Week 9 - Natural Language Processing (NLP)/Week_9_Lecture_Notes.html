@@ -176,7 +176,7 @@ By the end of this chapter, you will be able to:<br />
 1.  <strong>Explain</strong> the challenge of representing discrete text in continuous vector space.<br />
 2.  <strong>Differentiate</strong> between Bag-of-Words and Word Embeddings.<br />
 3.  <strong>Describe</strong> how 1D Convolutions can extract features from text.<br />
-4.  <strong>Implement</strong> a simple Text Classifier using PyTorch <code>EmbeddingBag</code>.</p></div></div>
+4.  <strong>Implement</strong> a simple Text Classifier using Keras <code>layers.Embedding</code>.</p></div></div>
 <!-- break -->
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 9 Goal</strong>:<br />
@@ -204,14 +204,35 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 <p>Once tokens are defined, we map them to a Vocabulary (a dictionary lookup, e.g., "Apple" = ID 150). Next, how do we represent a full sentence?</p>
 <ul>
 <li><strong>Bag of Words (BoW)</strong>: Represents a sentence purely by the count of each token. It destroys word order completely. "Dog bites man" and "Man bites dog" look mathematically identical in BoW!</li>
-<li><strong>TF-IDF (Term Frequency - Inverse Document Frequency)</strong>: An upgrade to BoW. It mathematically penalizes words that appear too frequently across <em>all</em> documents (like "the") to highlight rare, meaningful words. Very popular in classic Machine Learning (Scikit-Learn).</li>
-<li><strong>One-Hot Encoding</strong>: A vector of zeros with a single '1' at the word's ID. Extremely inefficient due to sparsity (a 50,000-word vocabulary means a vector of 50,000 dimensions for just one word!).</li>
+<li><strong>TF-IDF (Term Frequency - Inverse Document Frequency)</strong>: An upgrade to BoW. It mathematically penalizes words that appear too frequently across <em>all</em> documents (like "the") to highlight rare, meaningful words.
+    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg my-2 font-mono text-sm">
+        $$TF-IDF(t, d, D) = tf(t, d) \cdot \log\left(\frac{N}{|d \in D : t \in d|}\right)$$
+    </div>
+    Where $tf(t, d)$ is the frequency of term $t$ in document $d$, and the second term is the <em>Inverse Document Frequency</em>.
+</li>
+<li><strong>One-Hot Encoding</strong>: A vector of zeros with a single '1' at the word's ID. Extremely inefficient due to sparsity.</li>
 </ul>
+
+<h3>1.4 Measuring Similarity: Cosine Similarity</h3>
+<p>Once text is converted to vectors, how do we know if two sentences are similar? We use the <strong>Cosine Similarity</strong>, which measures the cosine of the angle between two multi-dimensional vectors. Unlike Euclidean distance, it is agnostic to the <em>magnitude</em> (length) of the vectors, focusing purely on <em>orientation</em>.</p>
+<div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg my-4 font-mono text-center">
+    $$\text{similarity} = \cos(\theta) = \frac{\mathbf{A} \cdot \mathbf{B}}{\|\mathbf{A}\| \|\mathbf{B}\|} = \frac{\sum_{i=1}^{n} A_i B_i}{\sqrt{\sum_{i=1}^{n} A_i^2} \sqrt{\sum_{i=1}^{n} B_i^2}}$$
+</div>
+<p>A result of <code>1.0</code> means the vectors are identical in direction; <code>0.0</code> means they are orthogonal (unrelated).</p>
 
 <hr />
 <h2>2. The Rise of Word Embeddings</h2>
 <p>One-Hot Encoding was computationally brutal and contained zero semantic understanding (the vector for "King" was mathematically equidistant to "Queen" and "Potato").</p>
 <p><strong>Word Embeddings</strong> (like Word2Vec, GloVe, or Keras's <code>layers.Embedding</code>) changed everything. Instead of sparse arrays, every word is mapped to a <strong>Dense Vector</strong> (e.g., of size 300) containing floating-point numbers.</p>
+<p><strong>Word2Vec Learning Architectures</strong>:</p>
+<ul>
+    <li><strong>CBOW (Continuous Bag of Words)</strong>: Predicts a target word from its surrounding context. Fast and works well for frequent words.</li>
+    <li><strong>Skip-gram</strong>: Predicts the surrounding context words given a single target word. Performs better with smaller datasets and rare words.</li>
+</ul>
+<p>Both utilize a <strong>Softmax</strong> objective function to maximize the probability of predicting the correct word $w$ given context $c$:</p>
+<div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg my-2 font-mono text-sm">
+    $$P(w|c) = \frac{\exp({v'_w}^\top v_c)}{\sum_{w'=1}^V \exp({v'_{w'}}^\top v_c)}$$
+</div>
 <p>These vectors are learned during training. The core intuition relies on distribution: <em>"You shall know a word by the company it keeps."</em> If "Dog" and "Cat" frequently appear next to "Pet", "Leash", and "Cute", their embedding vectors will shift closer together in mathematical space!</p>
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Semantic Arithmetic</strong>: A famous consequence of well-trained embeddings is that mathematical operations mirror linguistic analogies: <br/> <code>Vector(King) - Vector(Man) + Vector(Woman) ≈ Vector(Queen)</code></p></div></div>
@@ -220,9 +241,25 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 <h2>3. The Architecture for Text</h2>
 <h3>3.1 The Sequence Problem: RNNs and LSTMs</h3>
 <p>To fix the "Bag of Words" problem of ignoring sequences, researchers developed <strong>Recurrent Neural Networks (RNNs)</strong>. These models process text word-by-word sequentially, maintaining a "hidden state" (memory) of everything read so far.</p>
-<p><strong>The Vanishing Gradient Problem</strong>: Basic RNNs suffer catastrophically on long paragraphs. When updating weights (backpropagation through time), gradients diminish exponentially. By word 50, the network completely forgets word 1. <strong>LSTMs (Long Short-Term Memory)</strong> introduced complex gates to "choose" what to remember and what to forget, fixing this problem for medium-length text.</p>
+<p><strong>The Vanishing Gradient Problem</strong>: Basic RNNs suffer catastrophically on long paragraphs. When updating weights (backpropagation through time), gradients diminish exponentially. By word 50, the network completely forgets word 1.</p>
 
-<h3>3.2 1D Convolutions (TextCNN)</h3>
+<h3>3.2 Advanced RNNs: LSTM and GRU</h3>
+<p><strong>LSTMs (Long Short-Term Memory)</strong> introduced complex gates to "choose" what to remember and what to forget. The mathematical heart of an LSTM cell consists of three gates:</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg font-mono text-xs">
+        <strong>Forget Gate ($f_t$):</strong><br/>
+        $f_t = \sigma(W_f \cdot [h_{t-1}, x_t] + b_f)$
+    </div>
+    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg font-mono text-xs">
+        <strong>Input Gate ($i_t$):</strong><br/>
+        $i_t = \sigma(W_i \cdot [h_{t-1}, x_t] + b_i)$
+    </div>
+</div>
+<p>These gates are used to update the <strong>Cell State ($C_t$)</strong>, allowing information to persist across long sequences without being multiplied by small gradients repeatedly.</p>
+
+<p><strong>GRUs (Gated Recurrent Units)</strong> are a popular, simplified version of LSTMs that merge the forget and input gates into a single <strong>Update Gate</strong>, making them faster to train with fewer parameters while maintaining similar performance.</p>
+
+<h3>3.3 1D Convolutions (TextCNN)</h3>
 <p>Surprisingly, Convolutional Neural Networks (CNNs) from last week also work exceptionally well on text! If an image is a 2D grid, a sentence is a 1D sequence of word embeddings. We can slide a 1D filter across 3 words at a time. This allows the network to detect <strong>N-Grams</strong> (local word patterns) like "Not Good" which instantly flip sentiment.</p>
 
 <h3>3.3 A Glimpse of the Future: Attention</h3>

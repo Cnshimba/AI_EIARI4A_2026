@@ -602,6 +602,46 @@ $$f(z) = max(0, z) = \begin{cases} z &amp; \text{if } z &gt; 0 \ 0 &amp; \text{i
 </li>
 </ul>
 <hr />
+<h2>Part 6: From Cloud to Edge — TensorFlow Lite (10 mins)</h2>
+<h3>6.1 The Deployment Problem</h3>
+<ul>
+<li><p>Students have just built and trained a model — <em>now what?</em></p></li>
+<li><p>Running on a desktop with a GPU is fine for research</p></li>
+<li><p>Real-world AI runs on <strong>edge devices</strong>: phones, wearables, microcontrollers, IoT sensors</p></li>
+<li><p>Edge constraints: no GPU, 256 KB RAM, 1× AAA battery</p></li>
+<li><p><strong>TensorFlow Lite</strong> bridges the gap between training and real-world deployment</p></li>
+</ul>
+<h4>Key Question for Class</h4>
+<blockquote>
+<p>"Your Lab 3 water quality model has 83% accuracy. How would you get it running on a waterproof sensor in a river 50 km from the nearest WiFi tower?"</p>
+</blockquote>
+<h3>6.2 The Three-Step TFLite Pipeline</h3>
+<ul>
+<li><p><strong>Step 1 — Train:</strong> Standard Keras model (already done in Lab 3)</p></li>
+<li><p><strong>Step 2 — Convert:</strong> <code>tf.lite.TFLiteConverter</code> → <code>.tflite</code> file (FlatBuffer binary)</p></li>
+<li><p><strong>Step 3 — Deploy:</strong> TFLite Interpreter on device (no training runtime needed)</p></li>
+</ul>
+<blockquote>
+<p><strong>Live Demo</strong>: Show conversion of Lab 3 Water Quality model — 3 lines of code, < 5 seconds</p>
+</blockquote>
+<h3>6.3 Quantization — Shrinking the Model</h3>
+<ul>
+<li><p>Default weights: <code>float32</code> (4 bytes per weight)</p></li>
+<li><p>After quantization: <code>int8</code> (1 byte per weight)</p></li>
+<li><p>Result: <strong>4× smaller</strong> file, <strong>2–3× faster</strong> inference, &lt;1% accuracy loss</p></li>
+<li><p>One-line change: <code>converter.optimizations = [tf.lite.Optimize.DEFAULT]</code></p></li>
+</ul>
+<h3>6.4 TFLite vs Full TensorFlow</h3>
+<ul>
+<li><p>TensorFlow: Train → research → cloud deployment</p></li>
+<li><p>TFLite: Inference only → no Python required → runs on Android, iOS, Raspberry Pi, ESP32</p></li>
+<li><p>Privacy advantage: data never leaves the device</p></li>
+<li><p>Latency advantage: milliseconds vs. hundreds of milliseconds (no network round-trip)</p></li>
+</ul>
+<blockquote>
+<p><strong>Teaching Point</strong>: Connect Section 6.1 of Student Notes — the TF ecosystem slide already mentions "TF Lite" — this is where that promise is fulfilled.</p>
+</blockquote>
+<hr />
 <h2>Summary (5 mins)</h2>
 <h3>Key Takeaways</h3>
 <ol>

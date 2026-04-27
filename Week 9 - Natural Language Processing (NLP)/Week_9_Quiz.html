@@ -504,7 +504,104 @@
     </div>
     
     <script>
-        const quizData = {"scenario": [{"type": "scenario", "question": "What is the main problem with the \"Bag of Words\" (BoW) approach?", "options": ["It loses the order of words and semantic meaning/context.", "It is too computationally expensive.", "It only works on English text.", "It cannot handle large vocabularies."], "answer": "It loses the order of words and semantic meaning/context.", "explanation": "\"Dog bites Man\" and \"Man bites Dog\" have the exact same BoW representation, but opposite meanings."}, {"type": "scenario", "question": "What is \"TF-IDF\" used for?", "options": ["To weigh words by how important they are to a document relative to a corpus.", "To translate text between languages.", "To generate new text.", "To check spelling."], "answer": "To weigh words by how important they are to a document relative to a corpus.", "explanation": "Term Frequency - Inverse Document Frequency. It lowers the weight of common words like \"the\" and boosts unique words."}, {"type": "scenario", "question": "In Sentiment Analysis, what are we trying to predict?", "options": ["The emotional tone (Positive, Negative, Neutral) of the text.", "The author of the text.", "The language of the text.", "The topic of the text."], "answer": "The emotional tone (Positive, Negative, Neutral) of the text.", "explanation": "A classic classification task."}, {"type": "scenario", "question": "Why are RNNs \"Recurrent\"?", "options": ["The output of the previous step is fed as input to the current step.", "They recurse infinitely.", "They only work on current events.", "They run backwards."], "answer": "The output of the previous step is fed as input to the current step.", "explanation": "This allows them to maintain a \"hidden state\" (memory) of what they have seen so far in the sentence."}], "fill_blank": [{"type": "fill_blank", "question": "Word _______ (like Word2Vec) represent words as dense vectors where similar words are close to each other in vector space.", "answer": "Embeddings", "explanation": "King - Man + Woman = Queen. The vector math of meaning."}, {"type": "fill_blank", "question": "_______ is the process of breaking down a stream of text into words, phrases, symbols, or other meaningful elements called tokens.", "answer": "Tokenization", "explanation": "The first step in almost all NLP pipelines."}, {"type": "fill_blank", "question": "_______ Models are designed to handle data where the order matters, such as time series or sentences.", "answer": "Sequence", "explanation": "Order is meaning. \"Bob killed Alice\" != \"Alice killed Bob\"."}], "matching": [{"type": "matching", "question": "Match the NLP term to its definition", "pairs": {"Tokenization": "Splitting text into individual words or subwords", "Stopwords": "Common words (and, the, is) often removed during preprocessing", "Lemmatization": "Reducing words to their dictionary root form (better than stemming)"}, "explanation": "Preprocessing is 80% of NLP."}, {"type": "matching", "question": "Match the Deep Learning NLP architecture to its era", "pairs": {"RNN (Recurrent Neural Network)": "Process text sequentially, suffers from vanishing gradient", "LSTM (Long ShortTerm Memory)": "Improved RNN with gates to remember long context", "Transformer": "Parallel processing with Self-Attention (State of the Art)", "NGram": "Statistical probability of next word based on N previous words"}, "explanation": "Transformers (2017) revolutionized NLP by discarding sequential processing for attention."}, {"type": "matching", "question": "Match the application to the NLP Task", "pairs": {"Google Translate": "Machine Translation", "Siri/Alexa": "Speech Recognition & Question Answering", "Gmail Spam Filter": "Text Classification", "ChatGPT": "Text Generation"}, "explanation": "NLP is everywhere in modern tech."}], "ordering": [{"type": "ordering", "question": "Order the standard NLP Preprocessing Pipeline", "sequence": ["Text Cleaning (Remove HTML, URLs)", "Tokenization (Split string)", "Lowercasing", "Stopword Removal", "Vectorization (Convert to numbers)"], "explanation": "Clean -> Split -> Normalize -> Filter -> Encode."}, {"type": "ordering", "question": "Order the evolution of Word Representations (Oldest to Newest)", "sequence": ["One-Hot Encoding (Sparse, high dim)", "Bag of Words (Frequency counts)", "TF-IDF (Weighted counts)", "Word2Vec/GloVe (Static Embeddings)", "BERT/GPT (Contextual Embeddings)"], "explanation": "We moved from counting words to understanding their meaning in context."}], "code": [{"type": "code", "question": "Create a CountVectorizer (Bag of Words)", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Access the vocabulary of the CountVectorizer", "starter": "", "answer": "", "explanation": ""}, {"type": "code", "question": "Use Python string methods to clean text", "starter": "", "answer": "", "explanation": ""}]};
+        const quizData = {
+            "scenario": [
+                {
+                    "type": "scenario",
+                    "question": "What is the main problem with the \"Bag of Words\" (BoW) approach?",
+                    "options": ["It loses the order of words and semantic meaning/context.", "It is too computationally expensive.", "It only works on English text.", "It cannot handle large vocabularies."],
+                    "answer": "It loses the order of words and semantic meaning/context.",
+                    "explanation": "\"Dog bites Man\" and \"Man bites Dog\" have the exact same BoW representation, but opposite meanings."
+                },
+                {
+                    "type": "scenario",
+                    "question": "In the TF-IDF formula, what is the role of the 'Inverse Document Frequency' (IDF)?",
+                    "options": ["To boost the weight of words that appear in many files.", "To penalize common words like 'the' and 'is' that appear in almost all documents.", "To calculate the number of characters in a word.", "To reverse the word order."],
+                    "answer": "To penalize common words like 'the' and 'is' that appear in almost all documents.",
+                    "explanation": "IDF = log(N / df). If df is large, IDF becomes small, reducing the importance of common words."
+                },
+                {
+                    "type": "scenario",
+                    "question": "What does a Cosine Similarity score of 1.0 indicate about two vectors?",
+                    "options": ["The vectors are exactly the same direction (perfectly similar).", "The vectors are perpendicular (unrelated).", "The vectors are opposite directions.", "The vectors are empty."],
+                    "answer": "The vectors are exactly the same direction (perfectly similar).",
+                    "explanation": "Cosine similarity measures orientation. 1.0 means the angle between them is 0 degrees."
+                },
+                {
+                    "type": "scenario",
+                    "question": "Why are RNNs \"Recurrent\"?",
+                    "options": ["The output of the previous step is fed as input to the current step.", "They recurse infinitely.", "They only work on current events.", "They run backwards."],
+                    "answer": "The output of the previous step is fed as input to the current step.",
+                    "explanation": "This allows them to maintain a \"hidden state\" (memory) of what they have seen so far in the sequence."
+                }
+            ],
+            "fill_blank": [
+                {
+                    "type": "fill_blank", 
+                    "question": "In an LSTM cell, the _______ gate decides which information from the previous cell state should be discarded.", 
+                    "answer": "Forget", 
+                    "explanation": "The Forget Gate (f_t) uses a sigmoid function to output a value between 0 and 1 for each number in the cell state."
+                },
+                {
+                    "type": "fill_blank", 
+                    "question": "_______ is the Word2Vec architecture that predicts a target word from its surrounding context words.", 
+                    "answer": "CBOW", 
+                    "explanation": "Continuous Bag of Words (CBOW) is usually faster than Skip-gram."
+                },
+                {
+                    "type": "fill_blank", 
+                    "question": "The process of breaking down a stream of text into words or subwords is called _______.", 
+                    "answer": "Tokenization", 
+                    "explanation": "The first step in almost all NLP pipelines."
+                }
+            ],
+            "matching": [
+                {
+                    "type": "matching",
+                    "question": "Match the LSTM Gate Equation component to its purpose",
+                    "pairs": {
+                        "Sigma (σ)": "Activation function (Sigmoid) determining gate openings",
+                        "W_f": "Weight matrix for the Forget Gate",
+                        "h_{t-1}": "Hidden state from the previous time step",
+                        "x_t": "Input vector at the current time step"
+                    },
+                    "explanation": "Understanding the notation is key to implementing RNN architectures."
+                },
+                {
+                    "type": "matching",
+                    "question": "Match the NLP term to its definition",
+                    "pairs": {
+                        "Tokenization": "Splitting text into individual words or subwords",
+                        "Stopwords": "Common words (and, the, is) often removed during preprocessing",
+                        "Lemmatization": "Reducing words to their dictionary root form"
+                    },
+                    "explanation": "Preprocessing is the foundation of NLP."
+                }
+            ],
+            "ordering": [
+                {
+                    "type": "ordering",
+                    "question": "Order the standard NLP Preprocessing Pipeline",
+                    "sequence": ["Text Cleaning", "Tokenization", "Lowercasing", "Stopword Removal", "Vectorization"],
+                    "explanation": "Clean -> Split -> Normalize -> Filter -> Encode."
+                },
+                {
+                    "type": "ordering",
+                    "question": "Order the evolution of Word Representations (Oldest to Newest)",
+                    "sequence": ["One-Hot Encoding", "Bag of Words", "TF-IDF", "Word2Vec", "BERT/GPT"],
+                    "explanation": "Evolution from frequency counting to contextual understanding."
+                }
+            ],
+            "code": [
+                {
+                    "type": "code",
+                    "question": "Write the Cosine Similarity formula using NumPy vectors A and B.",
+                    "starter": "import numpy as np\n\ndef cosine_similarity(A, B):\n    # TODO: Calculate and return similarity\n    pass",
+                    "answer": "return np.dot(A, B) / (np.linalg.norm(A) * np.linalg.norm(B))",
+                    "explanation": "Dot product divided by the product of magnitudes."
+                }
+            ]
+        };
         
         let currentAttempt = 1;
         let maxAttempts = 3;

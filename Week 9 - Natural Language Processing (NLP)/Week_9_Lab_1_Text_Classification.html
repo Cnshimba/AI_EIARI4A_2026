@@ -179,6 +179,30 @@ Implement a complete NLP pipeline—Tokenization, Word Embeddings, and CNN proce
 
 <hr />
 <h2>1. Setup Data</h2>
+<p>In real-world NLP, the most critical step is handling <strong>Raw Text</strong>. While large datasets often provide pre-tokenized IDs to save bandwidth, we will first look at how to manually prepare a string for a neural network using the <code>TextVectorization</code> layer.</p>
+
+<h3>1.1 Bonus: Processing Raw Strings</h3>
+<p>Computers cannot see "I love this movie!". We must map each word to an ID. Keras provides a layer that handles tokenization, lowercasing, and punctuation stripping in one go.</p>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras.layers import TextVectorization
+
+# Sample raw data
+raw_reviews = ["I love this movie!", "Absolute waste of time.", "Highly recommended strategy."]
+
+# Create the vectorization layer
+vectorize_layer = TextVectorization(max_tokens=1000, output_mode='int', output_sequence_length=10)
+
+# Adapt the layer to the text (builds the vocabulary)
+vectorize_layer.adapt(raw_reviews)
+
+# Convert strings to integer tensors
+integer_data = vectorize_layer(raw_reviews)
+print(f"Integer Mappings:\n{integer_data.numpy()}")
+print(f"Vocabulary: {vectorize_layer.get_vocabulary()}")
+</code></pre>
+
+<h3>1.2 Loading the IMDb Benchmark</h3>
+<p>Because full-scale text datasets like IMDb contain 50,000+ reviews, they are often provided as pre-tokenized Integer IDs to save space.</p>
 <p>Because text must be translated to numeric form, mapping dictionaries take massive amounts of RAM and disk space. Instead of raw text, Keras supplies the IMDb dataset already pre-tokenized into Integer IDs.</p>
 <pre><code class="language-python">import tensorflow as tf
 from tensorflow.keras import layers, models, datasets
@@ -204,7 +228,21 @@ test_padded = pad_sequences(test_data, maxlen=maxlen, padding='post', truncating
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Why this step?</strong> Every review has a different number of words. For example, one reviewer might write 3 sentences (≈60 words) while another writes a full essay (≈1200 words). A Keras batch tensor must be rectangular, so all sequences in a batch need the same length. With <code>padding='post'</code> we append zeros at the <em>end</em> of short reviews; with <code>truncating='post'</code> we cut long reviews from the end too. The chosen <code>maxlen=200</code> is a practical trade-off — covers most reviews without wasting computation on outliers.</div></div>
 
 <hr />
-<h2>3. Building the TextCNN Architecture</h2>
+<h2>3. Comparing Architectures</h2>
+<h3>3.1 Baseline: GlobalAveragePooling1D (Bag of Embeddings)</h3>
+<p>Before jumping into complex Convolutions or RNNs, it is best practice to build a simple <strong>Baseline</strong>. This model simply averages all word vectors in a sentence. While it ignores word order, it is surprisingly effective for sentiment analysis where specific keywords ("excellent", "terrible") carry most of the weight.</p>
+<pre><code class="language-python">baseline_model = models.Sequential([
+    layers.Embedding(vocab_size, 16, input_length=maxlen),
+    layers.GlobalAveragePooling1D(), # Average the word vectors
+    layers.Dense(16, activation='relu'),
+    layers.Dense(1, activation='sigmoid')
+])
+
+baseline_model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+baseline_model.summary()
+</code></pre>
+
+<h3>3.2 Advanced: The TextCNN Architecture</h3>
 <p>The <code>Embedding</code> layer is trained simultaneously with the classification layer, creating dense word representations mapping to 64 dimensions.</p>
 <pre><code class="language-python">model = models.Sequential([
     layers.Embedding(input_dim=vocab_size, output_dim=64, input_length=maxlen),

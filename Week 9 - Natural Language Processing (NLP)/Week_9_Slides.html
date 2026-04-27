@@ -169,7 +169,7 @@
 <li><strong>Explain</strong> the Language Gap (Numbers vs. Meaning).</li>
 <li><strong>Perform</strong> Tokenization and Preprocessing.</li>
 <li><strong>Contrast</strong> One-Hot Encoding and Embeddings.</li>
-<li><strong>Build</strong> a Sentiment Classifier in PyTorch.</li>
+<li><strong>Build</strong> a Sentiment Classifier in TensorFlow/Keras.</li>
 </ol>
 </div>
 <div class="slide">
@@ -194,7 +194,7 @@
 </div>
 <div class="slide">
 <h2>4. The NLP Pipeline</h2>
-<p><img alt="NLP Pipeline" src="images/nlp_pipeline.png" /></p>
+<p><img alt="NLP Pipeline" src="images/text_processing_pipeline.png" /></p>
 <ol>
 <li><strong>Corpus</strong>: Your raw text (dataset).</li>
 <li><strong>Tokenization</strong>: Splitting text into chunks (words/sub-words).</li>
@@ -255,20 +255,20 @@
 </details>
 </div>
 <div class="slide">
-<h2>8. EmbeddingBag (PyTorch)</h2>
+<h2>8. GlobalAveragePooling1D (Keras)</h2>
 <p>A fast, efficient way to handle variable-length text.</p>
-<pre><code class="language-python">self.embedding = nn.EmbeddingBag(
-    num_embeddings=vocab_size, 
-    embedding_dim=64, 
-    sparse=False
-)
+<pre><code class="language-python">model = Sequential([
+    layers.Embedding(vocab_size, 64),
+    layers.GlobalAveragePooling1D(), # Average word vectors
+    layers.Dense(1, activation='sigmoid')
+])
 </code></pre>
 <ul>
 <li>
 <p><strong>What it does</strong>: Looks up vectors for all words in a sentence and <strong>Averages</strong> them into one single vector.</p>
 </li>
 <li>
-<p><strong>Why</strong>: Feeding variable length sentences into a Linear layer is hard. Averaging makes them fixed size!</p>
+<p><strong>Why</strong>: Feeding variable length sentences into a Dense layer is hard. Averaging makes them fixed size!</p>
 </li>
 </ul>
 </div>
@@ -284,9 +284,7 @@
 <li>
 <p><strong>Embeddings</strong>: The secret sauce that gives words meaning (geometry).</p>
 </li>
-<li>
-<p><strong>EmbeddingBag</strong>: A simple, fast way to classify text by averaging word vectors.</p>
-</li>
+<li><p><strong>GlobalAveragePooling</strong>: A simple, fast way to classify text by averaging word vectors.</p></li>
 </ul>
 </div>
 

@@ -516,6 +516,125 @@ print(y_proba.round(2)) # Prints an array of probabilities for each class
 </div>
 
 <hr />
+<h2>7.5 From Cloud to Edge: Deploying with TensorFlow Lite</h2>
+<p>You have now trained a model and made predictions on a powerful desktop or server. But what happens when you need your AI to run on a <strong>smartphone, a Raspberry Pi, a microcontroller, or an IoT sensor</strong>? These devices have almost no GPU, very little RAM, and run on a tiny battery.</p>
+<p>This is the problem that <strong>TensorFlow Lite (TFLite)</strong> solves. It is Google's lightweight solution for deploying machine learning models on edge devices.</p>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>What is "the Edge"?</strong><br />
+"The Edge" refers to any computing device that is <em>at the edge of a network</em> — close to where data is generated — rather than in a centralised cloud server. Your phone, a smart doorbell camera, a medical wearable, or an autonomous vehicle's onboard computer are all edge devices. Running AI at the edge means real-time results without needing an internet connection.</div></div>
+
+<h3>7.5.1 The TFLite Workflow: Three Steps</h3>
+<p>Deploying a Keras model to an edge device follows three steps:</p>
+<ol>
+<li><strong>Train</strong> a standard Keras model (exactly as you did in Section 7.2–7.3).</li>
+<li><strong>Convert</strong> the trained model to the compact <code>.tflite</code> format using the TFLite Converter.</li>
+<li><strong>Run Inference</strong> on the edge device using the lightweight TFLite Interpreter — no TensorFlow installation required.</li>
+</ol>
+
+<h3>7.5.2 Step 1 — Convert a Trained Keras Model</h3>
+<p>The TFLite Converter takes your trained <code>.keras</code> model and produces a single, optimised <code>.tflite</code> file. This file packages the model architecture and its learned weights into an extremely compact binary format.</p>
+<pre><code class="language-python">import tensorflow as tf
+
+# Assume 'model' is your already-trained Keras model from Section 7.3
+
+# Step 1: Create a TFLite converter from the Keras model
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+
+# Step 2: Run the conversion
+tflite_model = converter.convert()
+
+# Step 3: Save the .tflite file to disk
+with open("water_quality_model.tflite", "wb") as f:
+    f.write(tflite_model)
+
+print("✅ TFLite model saved successfully!")
+</code></pre>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> The converter inspects every layer of your trained Keras model and rewrites it in a flat FlatBuffer binary format. This format is significantly smaller (~4× smaller than a standard SavedModel) and is optimised for fast loading on constrained hardware. The resulting <code>.tflite</code> file is completely self-contained — it includes both the model structure and all learned weights.
+</div>
+
+<h3>7.5.3 Step 2 — Optional: Quantization (Making it Even Smaller)</h3>
+<p>By default, model weights are stored as 32-bit floating point numbers (<code>float32</code>). <strong>Quantization</strong> converts these weights to 8-bit integers (<code>int8</code>), which:</p>
+<ul>
+<li>Reduces the model file size by up to <strong>4×</strong></li>
+<li>Speeds up inference by <strong>2–3×</strong> on devices without a floating-point unit (FPU)</li>
+<li>Reduces power consumption — critical for battery-powered devices</li>
+<li>Causes a small drop in accuracy (typically &lt;1%)</li>
+</ul>
+<pre><code class="language-python"># Enable Dynamic Range Quantization (the simplest form)
+converter = tf.lite.TFLiteConverter.from_keras_model(model)
+converter.optimizations = [tf.lite.Optimize.DEFAULT]
+
+tflite_quant_model = converter.convert()
+
+with open("water_quality_model_quantized.tflite", "wb") as f:
+    f.write(tflite_quant_model)
+
+# Compare file sizes
+import os
+original_size = os.path.getsize("water_quality_model.tflite")
+quantized_size = os.path.getsize("water_quality_model_quantized.tflite")
+print(f"Original:   {original_size / 1024:.1f} KB")
+print(f"Quantized:  {quantized_size / 1024:.1f} KB")
+print(f"Reduction:  {(1 - quantized_size/original_size)*100:.1f}%")
+</code></pre>
+
+<h3>7.5.4 Step 3 — Run Inference with the TFLite Interpreter</h3>
+<p>On the target device, you load the <code>.tflite</code> file using the <strong>TFLite Interpreter</strong>. This is a stripped-down runtime — it can load and run <code>.tflite</code> models but has no training functionality, keeping it small enough to run on a Raspberry Pi or Android phone.</p>
+<pre><code class="language-python">import numpy as np
+import tensorflow as tf
+
+# ── Load the TFLite model ─────────────────────────────────────────────────────
+interpreter = tf.lite.Interpreter(model_path="water_quality_model.tflite")
+interpreter.allocate_tensors()
+
+# ── Inspect input/output shapes ───────────────────────────────────────────────
+input_details  = interpreter.get_input_details()
+output_details = interpreter.get_output_details()
+
+print("Input shape: ", input_details[0]['shape'])   # e.g. [1, 9]
+print("Output shape:", output_details[0]['shape'])   # e.g. [1, 1]
+
+# ── Prepare a single water sample (9 features, float32) ───────────────────────
+# (Remember: the same StandardScaler from Lab 3 must be applied first!)
+sample = X_test[0:1].astype(np.float32)  # shape: (1, 9)
+
+# ── Run inference ─────────────────────────────────────────────────────────────
+interpreter.set_tensor(input_details[0]['index'], sample)
+interpreter.invoke()
+
+# ── Read the output ───────────────────────────────────────────────────────────
+output = interpreter.get_tensor(output_details[0]['index'])
+prediction = "Safe ✅" if output[0][0] > 0.5 else "Not Safe ❌"
+print(f"Water Quality Prediction: {prediction}  (confidence: {output[0][0]:.2%})")
+</code></pre>
+<div class="mt-4 p-4 bg-white dark:bg-slate-700/50 rounded-lg border border-gray-100 dark:border-gray-600 shadow-sm text-sm">
+    <strong class="text-primary dark:text-sky-400">What's happening here?</strong> Unlike regular Keras inference (<code>model.predict()</code>), the TFLite Interpreter works with raw tensor buffers. You must manually: (1) retrieve the input tensor index, (2) copy your data in, (3) call <code>invoke()</code>, and (4) read the output tensor. This low-level API is intentional — it lets the runtime run on microcontrollers with no operating system.
+</div>
+
+<h3>7.5.5 TFLite vs Full TensorFlow — When to Use Which</h3>
+<table>
+<thead>
+<tr><th>Feature</th><th>TensorFlow (Full)</th><th>TensorFlow Lite</th></tr>
+</thead>
+<tbody>
+<tr><td>Use case</td><td>Training, research, cloud</td><td>Deployment, edge, mobile</td></tr>
+<tr><td>Target hardware</td><td>GPU / TPU server</td><td>CPU-only, phone, MCU</td></tr>
+<tr><td>Model format</td><td><code>SavedModel</code> / <code>.keras</code></td><td><code>.tflite</code></td></tr>
+<tr><td>Can train?</td><td>Yes</td><td>No (inference only)</td></tr>
+<tr><td>Typical model size</td><td>Megabytes to gigabytes</td><td>Kilobytes to low MB</td></tr>
+<tr><td>Latency</td><td>High (network round-trip)</td><td>Ultra-low (on-device)</td></tr>
+<tr><td>Privacy</td><td>Data sent to server</td><td>Data never leaves device</td></tr>
+</tbody>
+</table>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Real-World Applications of TFLite</strong><br />
+<strong>Healthcare:</strong> A wearable ECG monitor runs a TFLite model locally to detect arrhythmias — no data ever leaves the patient's wrist.<br />
+<strong>Agriculture:</strong> A solar-powered field sensor classifies leaf disease from a photograph, alerting farmers offline — no 4G needed.<br />
+<strong>Smart Home:</strong> A doorbell camera uses TFLite face detection entirely on-device, eliminating server round-trips for instant response.<br />
+<strong>Water Quality Monitoring:</strong> Your Lab 3 model could run on a cheap ESP32 microcontroller dropped into a dam — checking potability continuously, 24/7.</div></div>
+
+<hr />
 <h2>8. Summary</h2>
 <p>Neural Networks are built from layers of perceptrons. Activation functions such as ReLU give these networks the power to model complex patterns. Forward propagation is how the network makes predictions, while backpropagation is how it learns from its mistakes.</p>
 <p>Next week, we introduce the power tools: PyTorch and Convolutional Neural Networks (CNNs).</p>
