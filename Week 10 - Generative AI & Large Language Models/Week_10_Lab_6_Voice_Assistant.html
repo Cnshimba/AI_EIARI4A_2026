@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 6: Local Voice Assistant - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { primary: '#002F6E', secondary: '#c9984a' },
+                typography: {
+                    DEFAULT: { css: { h1: { color: '#002F6E' }, h2: { color: '#c9984a' } } }
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_10_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 10</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Lab 6: Local Voice Assistant</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Chaining Whisper + Ollama on Edge Hardware</span>
+    </div>
+</div>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Ollama is strictly designed for Text and Vision models, meaning it cannot natively "hear" audio. To build a voice assistant, we must architect a pipeline. In this lab, we will capture your microphone, use OpenAI's open-source <strong>Whisper</strong> model to transcribe the speech offline, and feed that text into Ollama to generate a smart response.</div></div>
+
+<hr />
+
+<h2>Part 1: The Voice Architecture</h2>
+<p>Modern AI systems rarely rely on a single monolithic model. A state-of-the-art voice assistant relies on three distinct AI engines working in sequence:</p>
+<ol>
+    <li><strong>Acoustic Model (Local)</strong>: Turns audio waves into Words (Whisper).</li>
+    <li><strong>Language Model (Local)</strong>: Reads the words and generates a logical textual reply (Phi-3 via Ollama).</li>
+    <li><strong>TTS Model (Optional)</strong>: Turns the reply back into audio waves (e.g., Pyttsx3 / Coqui).</li>
+</ol>
+
+<h3>1.1 Installation</h3>
+<p>We will use <code>SpeechRecognition</code> to handle microphone drivers and <code>whisper</code> for the actual AI transcription.</p>
+<pre><code># Install necessary audio and NLP libraries
+pip install SpeechRecognition pyaudio openai-whisper requests</code></pre>
+
+<hr />
+
+<h2>Part 2: The Whisper-Ollama Pipeline</h2>
+<p>Create a file named <code>voice_assistant.py</code>. We will configure it to listen to your default microphone. Once you stop speaking, it passes the audio to Whisper. Whisper's output is then immediately requested via the Ollama python API.</p>
+
+<pre><code class="language-python">import speech_recognition as sr
+import whisper
+import requests
+import json
+import warnings
+
+# Suppress PyTorch warnings
+warnings.filterwarnings("ignore", category=UserWarning)
+
+print("Loading Whisper 'base' model... (This runs 100% offline)")
+# 'base' and 'tiny' run incredibly fast even on CPU or Jetson Nano
+model = whisper.load_model("base")
+recognizer = sr.Recognizer()
+
+# Ensure Ollama is running in the background (e.g., phi3 or llama3)
+OLLAMA_API = "http://localhost:11434/api/generate"
+OLLAMA_MODEL = "phi3" 
+
+def ask_ollama(prompt_text):
+    print(f"\n[Ollama] Thinking...", end="", flush=True)
+    payload = {
+        "model": OLLAMA_MODEL,
+        "prompt": prompt_text,
+        "stream": False
+    }
+    try:
+        response = requests.post(OLLAMA_API, json=payload)
+        response_text = response.json()["response"]
+        print(f"\r[Ollama response]:\n{response_text}\n")
+    except Exception as e:
+        print("\n\n[ERROR] Is Ollama running? Run: ollama serve")
+
+print("Initializing Microphone...")
+with sr.Microphone() as source:
+    recognizer.adjust_for_ambient_noise(source)
+    print("Ready! Say something...")
+    
+    while True:
+        try:
+            # Listen to the user
+            audio = recognizer.listen(source)
+            print("\n[Whisper] Transcribing audio...")
+            
+            # Save temporary wav buffer
+            with open("temp.wav", "wb") as f:
+                f.write(audio.get_wav_data())
+            
+            # Transcribe via Whisper
+            result = model.transcribe("temp.wav")
+            transcription = result["text"].strip()
+            print(f"[You said]: {transcription}")
+            
+            if transcription:
+                # Pipe transcription to LLM Foundation Model
+                ask_ollama(transcription)
+
+        except KeyboardInterrupt:
+            print("\nShutting down assistant.")
+            break
+        except Exception as e:
+            print(f"Error: {e}")
+</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 border-[#002F6E]">
+    <p><strong>System Engineering Insight</strong>: Notice how <em>fast</em> this is on a modern laptop? Real-time translation used to require massive server farms. By using a <strong>SLM (Small Language Model)</strong> for intelligence and a heavily quantized <strong>Acoustic Model (Whisper base)</strong>, you've created a zero-latency, zero-cost, 100% private Siri/Alexa alternative.</p>
+</div>
+
+<hr />
+
+<h2>Part 3: Challenge</h2>
+<p>Currently, the AI responds in text. Can you write a function using Python's <code>pyttsx3</code> library to make your computer actually <strong>speak</strong> the response generated by Ollama aloud?</p>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        Finish Week 10
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+    </a>
+</div>
+        </article>
+    </main>
+</body>
+</html>
