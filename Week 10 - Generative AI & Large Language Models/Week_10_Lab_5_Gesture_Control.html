@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 5: Gesture Control - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { primary: '#002F6E', secondary: '#c9984a' },
+                typography: {
+                    DEFAULT: { css: { h1: { color: '#002F6E' }, h2: { color: '#c9984a' } } }
+                }
+            }
+        }
+    }
+</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+            
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_10_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 10</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Lab 5: Hand Gesture Control</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Real-time Robotics Interfaces with MediaPipe</span>
+    </div>
+</div>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Transform your webcam into a physical control interface. You will use Google's <strong>MediaPipe</strong> to map 3D hand landmarks in real-time, interpreting gestures (like "Index Finger Up" or "Fist") to simulate sending commands to a drone, robot arm, or smart home system.</div></div>
+
+<hr />
+
+<h2>Part 1: The MediaPipe Architecture</h2>
+<p>While models like YOLO detect <em>where</em> an object is (a bounding box), models like <strong>MediaPipe Hands</strong> detect the exact structural skeleton of the object. It outputs exactly 21 3D coordinates (landmarks) mapping every joint in the human hand. Because it is highly optimized, it runs at 30+ FPS even on basic CPUs like the Raspberry Pi.</p>
+
+<h3>1.1 Installation</h3>
+<pre><code># Install MediaPipe and OpenCV
+pip install mediapipe opencv-python</code></pre>
+
+<hr />
+
+<h2>Part 2: Live Landmark Tracking</h2>
+<p>Let's open the webcam and draw the 21 hand landmarks. This script initializes the MediaPipe Hands solution and overlays the connections directly onto your video feed.</p>
+
+<pre><code class="language-python">import cv2
+import mediapipe as mp
+
+mp_drawing = mp.solutions.drawing_utils
+mp_hands = mp.solutions.hands
+
+cap = cv2.VideoCapture(0)
+
+# Initialize the Hands model
+with mp_hands.Hands(min_detection_confidence=0.7, min_tracking_confidence=0.7) as hands:
+    while cap.isOpened():
+        success, image = cap.read()
+        if not success:
+            break
+
+        # Convert colors from BGR (OpenCV) to RGB (MediaPipe)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        results = hands.process(image)
+        
+        # Convert back to BGR for rendering
+        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+        # Draw the hand annotations on the image
+        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                mp_drawing.draw_landmarks(
+                    image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
+
+        cv2.imshow('MediaPipe Hand Tracking', image)
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+
+cap.release()
+cv2.destroyAllWindows()</code></pre>
+
+<hr />
+
+<h2>Part 3: From Vision to Kinematic Control</h2>
+<p>Drawing lines is visually satisfying, but it does not control a robot. To issue a command, we must translate these coordinates into <strong>kinematic logic</strong>. We do this by calculating the relative distances between joints.</p>
+
+<p>For example, to detect an "Open Hand" vs a "Closed Fist", we can measure the distance between the fingertip (Landmark 8) and the wrist (Landmark 0).</p>
+
+<h3>3.1 The Gesture Logic Script</h3>
+<p>Replace your inner loop with the following code to implement basic gesture control. This logic triggers a simulated "System Action" when specific spatial conditions are met.</p>
+
+<pre><code class="language-python">        if results.multi_hand_landmarks:
+            for hand_landmarks in results.multi_hand_landmarks:
+                
+                # Extract specific landmarks (Y coordinates are normalized 0.0 to 1.0)
+                wrist_y = hand_landmarks.landmark[0].y
+                index_tip_y = hand_landmarks.landmark[8].y
+                middle_tip_y = hand_landmarks.landmark[12].y
+                
+                # Logic: Is the index finger fully extended while the middle finger is down?
+                # (Remember: Y=0 is the top of the screen, Y=1 is the bottom)
+                if index_tip_y < wrist_y - 0.3 and middle_tip_y > wrist_y - 0.1:
+                    cv2.putText(image, "COMMAND: DRONE ASCEND", (50, 50), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+                    print("[SYSTEM] Executing ASCEND command via UDP...")
+                
+                # Logic: Are all fingers curled in (Fist)?
+                elif index_tip_y > wrist_y - 0.15 and middle_tip_y > wrist_y - 0.15:
+                    cv2.putText(image, "COMMAND: EMERGENCY STOP", (50, 50), 
+                                cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
+                    print("[SYSTEM] Executing BRAKE / STOP...")
+
+                mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)</code></pre>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 border-[#002F6E]">
+    <p><strong>System Engineering Insight</strong>: This is exactly how commercial quadcopters (like DJI drones) interpret "Follow Me" or "Take Photo" gestures. The vision system acts as a sensor, providing structured JSON coordinate data to the flight controller over an internal serial bus.</p>
+</div>
+
+<hr />
+
+<h2>Part 4: Challenge</h2>
+<p>Modify the script to calculate the horizontal distance (X axis) between your thumb tip (Landmark 4) and your index tip (Landmark 8). Use this dynamic distance to output a "throttle" percentage from 0% to 100%, effectively turning your hand into a wireless volume knob or speed controller.</p>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_10_Quiz.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        Finish Week 10
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+    </a>
+</div>
+        </article>
+    </main>
+</body>
+</html>
