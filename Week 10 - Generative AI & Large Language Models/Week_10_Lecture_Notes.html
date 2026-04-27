@@ -268,7 +268,19 @@
 </ul>
 <hr />
 <h3>Part 2: Large Language Models (25 mins)</h3>
-<h4>2.1 Pre-Training: The Foundation</h4>
+<h4>2.1 Training from Scratch vs. Pre-training</h4>
+<p><strong>Training from Scratch</strong>:</p>
+<ul>
+    <li>Full control, zero external bias.</li>
+    <li>Con: Millions of dollars, trillions of tokens, month of compute.</li>
+</ul>
+<p><strong>Pre-training (Foundation Models)</strong>:</p>
+<ul>
+    <li>Low cost, state-of-the-art weights, immediate results.</li>
+    <li>Con: Inherits internet bias, fixed vocabulary.</li>
+    <li><strong>Practicality</strong>: 99% of projects start here.</li>
+</ul>
+<h4>2.2 Pre-Training: The Foundation</h4>
 <p><strong>Objective</strong>: Predict next token</p>
 <p><strong>Training Data</strong> (2024-2026 models):</p>
 <ul>
@@ -366,7 +378,14 @@
 <li><strong>Mid-Sized [7B-35B]</strong>: Standard chatbots, focused coding models (e.g., Llama-3 8B).</li>
 <li><strong>Large [70B+]</strong>: High-level reasoning, complex logic (e.g., Llama-3 70B).</li>
 </ul>
-<h4>2.4 Emergent Abilities</h4>
+<h4>2.5 Customization: Making it "Yours"</h4>
+<p>How to adapt a base model to your specific domain:</p>
+<ul>
+    <li><strong>Prompting</strong>: Influencing output via the input (Zero-shot/Few-shot).</li>
+    <li><strong>RAG</strong>: Retrieval-Augmented Generation. Connecting to external PDFs/DBs.</li>
+    <li><strong>Fine-tuning</strong>: Updating weights on small datasets (LoRA/QLoRA).</li>
+</ul>
+<h4>2.6 Emergent Abilities</h4>
 <p><strong>Phenomenon</strong>: Capabilities not explicitly trained</p>
 <p><strong>Examples</strong>:</p>
 <ul>
@@ -427,17 +446,12 @@
 </li>
 </ul>
 <h4>3.3 Hugging Face Ecosystem</h4>
-<p><strong>The Hub</strong>: GitHub for AI</p>
+<p><strong>The "GitHub of AI"</strong>:</p>
 <ul>
-<li>
-<p>500,000+ models</p>
-</li>
-<li>
-<p>Datasets and demos</p>
-</li>
-<li>
-<p>Free hosting</p>
-</li>
+    <li><strong>Model Hub</strong>: 1M+ models with gated access & versioning.</li>
+    <li><strong>Datasets</strong>: Curated data for evaluation/fine-tuning.</li>
+    <li><strong>transformers library</strong>: Standard Python API for thousands of models.</li>
+    <li><strong>Spaces</strong>: Instant deployment for demos (Streamlit/Gradio).</li>
 </ul>
 <p><strong>Key Libraries</strong>:</p>
 <ul>

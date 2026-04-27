@@ -56,14 +56,62 @@
 
             <hr />
 
-            <h2>Part 2: Selecting & Running an SLM</h2>
-            <p>We will use <strong>Phi-3 Mini</strong> (3.8B parameters) or <strong>Phi-2</strong> (2.7B parameters). These models are small enough to run on a Pi 5 or a basic laptop while remaining highly capable.</p>
+            <h2>Part 2: Mastering the Ollama CLI</h2>
+            <p>Before installing models, let's explore the commands used to manage your local AI server.</p>
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ollama list</code></td>
+                        <td>List all models currently downloaded to your hardware.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ollama pull &lt;model&gt;</code></td>
+                        <td>Download a model from the hub without running it yet.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ollama run &lt;model&gt;</code></td>
+                        <td>Download (if missing) and start an interactive chat session.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ollama ps</code></td>
+                        <td>Show which models are currently loaded into VRAM/RAM.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ollama rm &lt;model&gt;</code></td>
+                        <td>Delete a model to free up disk space.</td>
+                    </tr>
+                    <tr>
+                        <td><code>ollama serve</code></td>
+                        <td>Start the server manually (usually handled automatically by the app).</td>
+                    </tr>
+                </tbody>
+            </table>
 
-            <h3>2.1 Run the Model</h3>
-            <pre><code># This will download and start the model
-ollama run phi3:mini</code></pre>
+            <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 border-[#c9984a]">
+                <p><strong>Task 1</strong>: Open your terminal and type <code>ollama list</code>. Since you just installed it, the list should be empty.</p>
+            </div>
 
-            <h3>2.2 Benchmark Performance</h3>
+            <hr />
+
+            <h2>Part 3: Selecting & Running an SLM</h2>
+            <p>We will use <strong>Phi-3 Mini</strong> (3.8B parameters). This model is small enough to run on a Pi 5 or a basic laptop while remaining highly capable.</p>
+
+            <h3>3.1 Pull vs Run</h3>
+            <p>Run the following command to download the model specifically without entering the chat yet:</p>
+            <pre><code>ollama pull phi3:mini</code></pre>
+            <p>Verify it is downloaded using <code>ollama list</code>.</p>
+
+            <h3>3.2 Start the Chat</h3>
+            <pre><code>ollama run phi3:mini</code></pre>
+
+            <h3>3.3 Benchmark Performance</h3>
             <p>Ask the model a complex question like: <em>"Explain the relationship between the Fourier Transform and Signal Processing in 4 paragraphs."</em></p>
             <p><strong>Note the speed:</strong> Look at the output. Does it feel "instant" or "gradual"?</p>
             <ul>
@@ -73,10 +121,10 @@ ollama run phi3:mini</code></pre>
 
             <hr />
 
-            <h2>Part 3: The API Protocol</h2>
+            <h2>Part 4: The API Protocol</h2>
             <p>Ollama runs a local server at port <code>11434</code>. You can talk to it via simple HTTP requests.</p>
 
-            <h3>3.1 Python Script (The Edge Agent)</h3>
+            <h3>4.1 Python Script (The Edge Agent)</h3>
             <pre><code class="language-python">import requests
 
 def talk_to_local_ai(prompt):

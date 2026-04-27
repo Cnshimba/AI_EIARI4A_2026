@@ -233,7 +233,33 @@ Earlier in the course, we trained a small custom model on 20 sentences—an educ
 <hr />
 <h2>2. Large Language Models (LLMs)</h2>
 <p>Modern LLMs follow a two-stage process: <strong>pre-training</strong> (expensive) + <strong>post-training</strong> (alignment).</p>
-<h3>2.1 Pre-training: Next-Token Prediction</h3>
+<h3>2.1 Training from Scratch vs. Pre-training</h3>
+<p>As a Computer Systems Engineer, you must decide whether to build a custom model or leverage an existing foundation model. This is the difference between <strong>Primary Research</strong> and <strong>Application Engineering</strong>.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+    <div class="bg-red-50 dark:bg-red-900/10 p-6 rounded-xl border border-red-200 dark:border-red-800">
+        <h4 class="mt-0 text-red-700 dark:text-red-400">Training from Scratch</h4>
+        <ul class="text-sm">
+            <li><strong>Data</strong>: Requires trillions of tokens (petabytes of text).</li>
+            <li><strong>Compute</strong>: Requires thousands of GPUs (H100s) for months.</li>
+            <li><strong>Cost</strong>: Millions of dollars in electricity and hardware.</li>
+            <li><strong>Advantage</strong>: Zero bias from internet data; full control over vocabulary.</li>
+            <li><strong>When to use?</strong>: For high-security military applications or extremely niche languages with no existing support.</li>
+        </ul>
+    </div>
+    <div class="bg-green-50 dark:bg-green-900/10 p-6 rounded-xl border border-green-200 dark:border-green-800">
+        <h4 class="mt-0 text-green-700 dark:text-green-400">Pre-trained models (Transfer Learning)</h4>
+        <ul class="text-sm">
+            <li><strong>Data</strong>: Minimal (or zero if using out-of-the-box).</li>
+            <li><strong>Compute</strong>: High-end laptop or single consumer GPU.</li>
+            <li><strong>Cost</strong>: Free (Open Source) or pay-per-token.</li>
+            <li><strong>Advantage</strong>: State-of-the-art weights; immediate deployment; multi-task capability.</li>
+            <li><strong>When to use?</strong>: 99% of commercial and academic projects.</li>
+        </ul>
+    </div>
+</div>
+
+<h3>2.2 Pre-training: Next-Token Prediction</h3>
 <p>The model predicts the next token in massive text corpora. This simple objective accidentally teaches grammar, facts, reasoning, and code.</p>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>How Training Works</strong>: During training, the model makes a prediction, compares it to the actual next token using a <strong>loss function</strong> (e.g., cross-entropy), and then adjusts its <strong>weights</strong> (parameters) to reduce this error. This process repeats billions of times across trillions of tokens. Critically, <strong>only the weights are learned</strong>—the model's architecture and <strong>hyperparameters</strong> (like learning rate, batch size, number of layers) are set by engineers before training and remain fixed.</p></div></div>
 <h3>2.2 Alignment: From Text Completer to Helpful Assistant</h3>
@@ -293,13 +319,26 @@ Earlier in the course, we trained a small custom model on 20 sentences—an educ
         </tr>
     </tbody>
 </table>
+
+<h3>2.6 Customization: Making a Foundation Model "Yours"</h3>
+<p>If you have a pre-trained model but need it to perform a specific task, you have three primary options:</p>
+<ol>
+    <li><strong>Prompt Engineering</strong>: No code/weights modified. You simply clever-craft the input (e.g., "Act as a VUT Cisco instructor...").</li>
+    <li><strong>RAG (Retrieval-Augmented Generation)</strong>: You give the model "eyes" to look at a PDF or database <em>during</em> the chat. This is the gold standard for accuracy without retraining.</li>
+    <li><strong>Fine-Tuning (LoRA/QLoRA)</strong>: You slightly update the weights on a small dataset (e.g., 500 examples of your company's support tickets). <strong>LoRA</strong> (Low-Rank Adaptation) allows you to do this on a single GPU by only training a tiny fraction of the parameters.</li>
+</ol>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 2</strong><br />
 -   <strong>Pre-training</strong>: Teaches the model "Language and Facts" (The base capability).<br />
 -   <strong>Alignment (RLHF/DPO)</strong>: Teaches the model "Helpfulness and Safety" (The chat personality).<br />
 -   <strong>Decoder-Only</strong>: The dominant architecture for today's Generative AI (GPT-4, Claude, Llama).</p></div></div>
 <hr />
-<h2>3. Hugging Face &amp; Deployment</h2>
-<p>Hugging Face is the "GitHub of AI"—hosting millions of open-source models, datasets, and tools.</p>
+<h2>3. Hugging Face &amp; The Ecosystem</h2>
+<p>Hugging Face is the <strong>central nervous system of the open-source AI community</strong>. It is not just one repository; it consists of three pillars:</p>
+<ul>
+    <li><strong>The Model Hub</strong>: Over 1 million models (Llama, Phi, Mistral, etc.) organized by task (Translation, Object Detection, Chat).</li>
+    <li><strong>The Datasets Hub</strong>: High-quality data for training and evaluation.</li>
+    <li><strong>The Transformers Library</strong>: A Python library that allows you to download and run any model with just 3 lines of code.</li>
+</ul>
 <h3>3.1 The Standard Deployment Pipeline</h3>
 <p>Deploying an LLM involves a standardized pipeline, regardless of whether you are running a tiny model on your laptop or a massive one in the cloud. First, you <strong>Select a Model</strong> appropriate for your hardware constraints (e.g., Phi-3 for CPUs vs Llama-405B for GPU clusters). Next, the input text must be <strong>Tokenized</strong>, converting human language into the specific numerical IDs the model understands. The core step is <strong>Inference</strong>, where the model runs a forward pass to generate probability scores (logits) for the next possible token. Finally, a <strong>Decoding</strong> strategy (like sampling or greedy search) picks the best token and converts it back into text, repeating this loop until the response is complete.</p>
 <p>Tools like <code>transformers</code> library + <code>pipeline()</code> abstract this. Modern stacks often use <strong>vLLM</strong> for ultra-fast, high-throughput inference serving.</p>
