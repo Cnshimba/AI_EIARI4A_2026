@@ -184,6 +184,28 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 <h2>1. From Raw Text to Numerical Data</h2>
 <p>The fundamental challenge of Natural Language Processing (NLP) is representation. Computers execute mathematical operations; they cannot natively ingest sentences like "I love AI." We must translate discrete text into continuous mathematical vectors.</p>
 
+<div class="bg-gray-100 dark:bg-gray-900 p-6 rounded-xl border border-gray-200 dark:border-gray-700 my-6">
+    <h4 class="mt-0 font-bold">Concrete Example: Translating "I love AI"</h4>
+    <p class="text-sm">Imagine our total vocabulary $V$ consists of only 4 words: <code>{"I", "love", "AI", "Math"}</code>.</p>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+        <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400">One-Hot Encoding (Tokens)</p>
+            <ul class="text-xs list-none p-0">
+                <li><code>"I"    &nbsp;→ [1, 0, 0, 0]</code></li>
+                <li><code>"love" → [0, 1, 0, 0]</code></li>
+                <li><code>"AI"   &nbsp;→ [0, 0, 1, 0]</code></li>
+            </ul>
+        </div>
+        <div>
+            <p class="text-xs font-bold uppercase tracking-widest text-slate-400">Bag of Words (Sentence)</p>
+            <p class="text-xs">The sentence <strong>"I love AI"</strong> becomes a single sum vector:</p>
+            <code>Vector = [1, 1, 1, 0]</code>
+        </div>
+    </div>
+    <p class="text-xs mt-4 text-slate-500 italic">Notice how "Math" is 0 because it's absent. As vocabularies grow to 50,000+ words, these vectors become incredibly long and sparse (mostly zeros).</p>
+</div>
+
 <h3>1.1 Traditional Preprocessing: Cleaning the Mess</h3>
 <p>Before advanced Deep Learning models ruled the field, raw text was cleaned heavily. A traditional pipeline involved:</p>
 <ul>
