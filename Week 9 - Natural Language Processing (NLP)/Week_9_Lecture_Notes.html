@@ -257,7 +257,18 @@ Until now, we have dealt with numbers (Regression) and images (Pixels are just g
 </div>
 <p>These gates are used to update the <strong>Cell State ($C_t$)</strong>, allowing information to persist across long sequences without being multiplied by small gradients repeatedly.</p>
 
-<p><strong>GRUs (Gated Recurrent Units)</strong> are a popular, simplified version of LSTMs that merge the forget and input gates into a single <strong>Update Gate</strong>, making them faster to train with fewer parameters while maintaining similar performance.</p>
+<p><strong>GRUs (Gated Recurrent Units)</strong> are a popular, simplified version of LSTMs that merge the forget and input gates into a single <strong>Update Gate</strong> ($z_t$) and a <strong>Reset Gate</strong> ($r_t$):</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg font-mono text-xs">
+        <strong>Update Gate ($z_t$):</strong><br/>
+        $z_t = \sigma(W_z \cdot [h_{t-1}, x_t] + b_z)$
+    </div>
+    <div class="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg font-mono text-xs">
+        <strong>Reset Gate ($r_t$):</strong><br/>
+        $r_t = \sigma(W_r \cdot [h_{t-1}, x_t] + b_r)$
+    </div>
+</div>
+<p>GRUs are faster to train and have fewer parameters, making them ideal when training data or computation is limited.</p>
 
 <h3>3.3 1D Convolutions (TextCNN)</h3>
 <p>Surprisingly, Convolutional Neural Networks (CNNs) from last week also work exceptionally well on text! If an image is a 2D grid, a sentence is a 1D sequence of word embeddings. We can slide a 1D filter across 3 words at a time. This allows the network to detect <strong>N-Grams</strong> (local word patterns) like "Not Good" which instantly flip sentiment.</p>
