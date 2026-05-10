@@ -45,7 +45,7 @@
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
         <h1 class="text-3xl font-bold text-secondary m-0">Lab 0: Baseline Transformer Internals</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Deep Dive Architecture</span>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">VUT Prospectus Fine-Tuning</span>
     </div>
 </div>
 
@@ -60,7 +60,7 @@
 </div>
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
-Explore a small Transformer architecture, understand its parameter count, and perform fine-tuning on a custom text dataset using the TensorFlow/Keras framework.</div></div>
+Explore a small Transformer architecture and perform fine-tuning on the <strong>VUT Prospectus 2026</strong>. This demonstrates how a generative model can learn domain-specific information even at a 1-million parameter scale.</div></div>
 
 <hr />
 
@@ -110,22 +110,28 @@ print("TensorFlow version:", tf.__version__)</code></pre>
     model = tf.keras.Model(inputs=inputs, outputs=outputs)
     return model
 
-# Create the model with a restricted vocabulary for educational purposes
-vocab_size = 2000
+# Increase vocab_size to capture more prospectus vocabulary
+vocab_size = 5000
 model = build_mini_transformer(vocab_size=vocab_size)
-
-model.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
-model.summary()</code></pre>
+model.compile(optimizer="adam", loss="sparse_categorical_crossentropy")</code></pre>
 
 <hr />
 
-<h2>3. The Data Pipeline</h2>
-<p>We use the <code>TextVectorization</code> layer to handle tokenization, consistent with Week 9.</p>
-<pre><code class="language-python">vectorize_layer = tf.keras.layers.TextVectorization(
+<h2>3. The Data Pipeline: Loading the VUT Prospectus</h2>
+<p>We use the <code>TextVectorization</code> layer to handle tokenization and load our custom prospectus text file.</p>
+<pre><code class="language-python"># Load the extracted prospectus text
+with open("vut_prospectus_text.txt", 'r', encoding='utf-8') as f:
+    text = f.read()
+
+vectorize_layer = tf.keras.layers.TextVectorization(
     max_tokens=vocab_size,
     output_mode='int',
     output_sequence_length=129 # 128 inputs + 1 target
 )
+
+# Split the text into overlapping chunks
+chunk_size, step = 500, 100
+text_chunks = [text[i : i + chunk_size] for i in range(0, len(text) - chunk_size, step)]
 
 def prepare_dataset(texts, batch_size=32):
     ds = tf.data.Dataset.from_tensor_slices(texts)
@@ -137,47 +143,48 @@ def prepare_dataset(texts, batch_size=32):
     dataset = ds.batch(batch_size).map(vectorize_layer).map(split_input_target)
     return dataset.prefetch(tf.data.AUTOTUNE)
 
-# Sample data for testing
-sample_data = ["The Vaal University of Technology is a leading provider of high quality education."] * 50
-dataset = prepare_dataset(sample_data)</code></pre>
+dataset = prepare_dataset(text_chunks)</code></pre>
 
 <hr />
 
 <h2>4. Fine-Tuning Task</h2>
-<p>In this task, we simulate transfer learning by freezing the attention layers and only training the Feed Forward and Output layers.</p>
-<pre><code class="language-python"># Freeze the Attention Layers to simulate Transfer Learning
-for layer in model.layers:
-    if "mha" in layer.name:
-        layer.trainable = False
-
-model.compile(optimizer=tf.keras.optimizers.Adam(1e-4), loss="sparse_categorical_crossentropy")
-print("Fine-tuning started...")
-model.fit(dataset, epochs=5)</code></pre>
+<p>We will train the model to predict the next word in the VUT Prospectus sequences. We increase the epochs to allow the model to 'overfit' slightly to the facts in the text.</p>
+<pre><code class="language-python">print("Training started...")
+model.fit(dataset, epochs=20)</code></pre>
 
 <hr />
 
-<h2>5. Generative Inference</h2>
-<p>This function implements the <strong>autoregressive generation loop</strong>. It takes a prompt, predicts the next token, appends it, and repeats.</p>
-<pre><code class="language-python">def generate(model, prompt, length=10):
+<h2>5. Generative Inference (VUT QA)</h2>
+<p>This function implements the <strong>autoregressive generation loop</strong>. It takes a prompt, predicts the next token, and appends it.</p>
+<pre><code class="language-python">def generate(model, prompt, length=20, seq_len=128):
     tokens = vectorize_layer([prompt])
+    # Pad or truncate to seq_len
+    if tokens.shape[1] > seq_len:
+        tokens = tokens[:, -seq_len:]
+    elif tokens.shape[1] < seq_len:
+        pad = np.zeros((1, seq_len - tokens.shape[1]), dtype=np.int32)
+        tokens = tf.convert_to_tensor(np.concatenate([pad, tokens.numpy()], axis=1), dtype=tf.int32)
+        
+    result = prompt
     for _ in range(length):
         preds = model.predict(tokens, verbose=0)
         next_id = np.argmax(preds[0, -1, :])
         
         # Shift tokens for next prediction
         tokens_np = tokens.numpy()
-        tokens_np = np.roll(tokens_np, -1)
+        tokens_np = np.roll(tokens_np, -1, axis=1)
         tokens_np[0, -1] = next_id
-        tokens = tf.convert_to_tensor(tokens_np)
-        
-        word = vectorize_layer.get_vocabulary()[next_id]
-        prompt += " " + word
-    return prompt
+        tokens = tf.convert_to_tensor(tokens_np, dtype=tf.int32)
 
-print(generate(model, "the university"))</code></pre>
+        word = vectorize_layer.get_vocabulary()[next_id]
+        if word == "": break
+        result += " " + word
+    return result
+
+print(generate(model, "The Faculty of Engineering"))</code></pre>
 
 <div class="mt-8 flex justify-center">
-    <a href="Week_10_Lab_1_Edge_SLM.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+    <a href="Week_10_Lab_1_Edge_SLM.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors no-underline">
         Next: Lab 1 (Universal SLM)
         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
     </a>
