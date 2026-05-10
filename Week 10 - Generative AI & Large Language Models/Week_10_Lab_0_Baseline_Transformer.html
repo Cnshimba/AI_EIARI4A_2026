@@ -181,7 +181,17 @@ model.fit(dataset, epochs=20)</code></pre>
         result += " " + word
     return result
 
-print(generate(model, "The Faculty of Engineering"))</code></pre>
+print("--- Test 1 ---")
+print(generate(model, "The Faculty of Engineering"))
+# Expected: The Faculty of Engineering and Technology offers diplomas and degrees in electrical...
+
+print("\n--- Test 2 ---")
+print(generate(model, "Admission requirements for"))
+# Expected: Admission requirements for engineering include a minimum APS score of 28...
+
+print("\n--- Test 3 ---")
+print(generate(model, "Vaal University of Technology offers"))
+# Expected: Vaal University of Technology offers state of the art facilities for vocational...</code></pre>
 
 <div class="mt-8 flex justify-center">
     <a href="Week_10_Lab_1_Edge_SLM.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors no-underline">
