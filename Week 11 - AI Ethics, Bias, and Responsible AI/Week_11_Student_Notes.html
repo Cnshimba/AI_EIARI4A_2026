@@ -159,8 +159,8 @@
         <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 11</span>
     </div>
     <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
-        <h1 class="text-3xl font-bold text-secondary m-0">AI Ethics, Bias, and Responsible AI</h1>
-        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1"></span>
+        <h1 class="text-3xl font-bold text-secondary m-0">Model Validation & Project Studio</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Responsible Deployment & Final Polish</span>
     </div>
 </div>
 
@@ -169,18 +169,18 @@
 
 <div class="flex items-start p-4 mb-8 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base [&>p]:!m-0"><p><strong>Course</strong>: Computer Systems Engineering<br />
 <strong>Module</strong>: Artificial Intelligence (AI)<br />
-<strong>Topic</strong>: Bias, Explainability, and AI Safety<br />
-<strong>Estimated Reading Time</strong>: 30 Minutes</p></div></div>
+<strong>Topic</strong>: Explainable AI (XAI) & Project Refinement<br />
+<strong>Estimated Reading Time</strong>: 20 Minutes</p></div></div>
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 0 117.072 0l-.548 5.478a1 1 0 01-1.636 0L9.663 17z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Learning Outcomes</strong><br />
 By the end of this chapter, you will be able to:<br />
-1.  <strong>Define</strong> algorithmic bias and its sources (Historical, Sampling, Measurement).<br />
-2.  <strong>Explain</strong> the trade-off between Accuracy and Fairness.<br />
-3.  <strong>Describe</strong> Explainable AI (XAI) techniques like SHAP and LIME.<br />
-4.  <strong>Audit</strong> a model for simple demographic disparities.</p></div></div>
+1.  <strong>Master</strong> Explainable AI (XAI) techniques like SHAP and LIME to debug "Black Box" models.<br />
+2.  <strong>Audit</strong> your final project for demographic disparities and algorithmic bias.<br />
+3.  <strong>Document</strong> model limitations and intended use cases (Model Cards).<br />
+4.  <strong>Finalize</strong> your technical implementation and presentation for Week 12.</p></div></div>
 <!-- break -->
 
 <div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Week 11 Goal</strong>:<br />
-We have spent 10 weeks learning <em>how</em> to build AI. Now we must ask <em>should</em> we build it? AI systems are not neutral; they reflect the data they are fed. In this module, we explore the critical responsibility of the AI Engineer. We will learn how to detect <strong>Bias</strong> in our models, how to make "Black Box" models <strong>Explainable</strong>, and how to ensure our systems are <strong>Safe</strong> and <strong>Robust</strong>.</p></div></div>
+We have reached the final technical stretch. This week is designed as a "Studio Week"—a space to take the theory of ethics from Week 1 and apply it technically to your own work. We will use advanced diagnostic tools to "open the hood" of your models, ensuring they are not just accurate, but fair and explainable.</div></div>
 <h2>1. The Myth of Neutrality</h2>
 <p>A common misconception is that "Math cannot be racist/sexist." While matrix multiplication is neutral, <strong>Data</strong> is historical. If you train a model on hiring data from the 1980s, the model will learn that "Men are managers" and "Women are secretaries," effectively automating past prejudices.</p>
 <h3>1.1 Types of Bias</h3>
