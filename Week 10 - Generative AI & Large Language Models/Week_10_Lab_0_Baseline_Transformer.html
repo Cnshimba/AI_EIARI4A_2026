@@ -93,10 +93,10 @@ print("TensorFlow version:", tf.__version__)</code></pre>
     
     # 2. Transformer Blocks
     for i in range(2):
-        # Multi-Head Attention layer
+        # Multi-Head Attention layer (with Causal Masking for generation)
         attention_output = layers.MultiHeadAttention(
             num_heads=num_heads, key_dim=embed_dim, name=f"mha_{i}"
-        )(x, x)
+        )(x, x, use_causal_mask=True)
         x = layers.LayerNormalization(epsilon=1e-6)(x + attention_output)
         
         # Feed Forward Network
