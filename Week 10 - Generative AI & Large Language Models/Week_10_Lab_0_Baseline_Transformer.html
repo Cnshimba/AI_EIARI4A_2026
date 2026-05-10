@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 10 Lab 0: Baseline Transformer Internals - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { primary: '#002F6E', secondary: '#c9984a', background: '#f8fafc', card: '#ffffff' },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#002F6E' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#002F6E' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_10_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 10</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Lab 0: Baseline Transformer Internals</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Deep Dive Architecture</span>
+    </div>
+</div>
+
+<div class="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700 flex items-center justify-between">
+    <div>
+        <h4 class="font-bold text-slate-800 dark:text-slate-200">Jupyter Notebook Available</h4>
+        <p class="text-sm text-slate-600 dark:text-slate-400 m-0">Download the interactive coding lab to run on your local machine.</p>
+    </div>
+    <a href="Week_10_Lab_0_Baseline_Transformer.ipynb" download target="_blank" class="ml-4 px-4 py-2 bg-secondary hover:bg-yellow-600 text-white font-medium rounded-md transition-colors shadow-sm no-underline whitespace-nowrap">
+        Download .ipynb
+    </a>
+</div>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Explore a small Transformer architecture, understand its parameter count, and perform fine-tuning on a custom text dataset using the TensorFlow/Keras framework.</div></div>
+
+<hr />
+
+<h2>1. Setup and Imports</h2>
+<p>We use TensorFlow's Keras API, consistent with the models developed earlier in the course (Week 9).</p>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras import layers
+import numpy as np
+import os
+
+print("TensorFlow version:", tf.__version__)</code></pre>
+
+<hr />
+
+<h2>2. Building the 1M Parameter Architecture</h2>
+<p>This model uses a <strong>Decoder-style</strong> architecture. We will implement a custom Transformer block using the Keras functional API.</p>
+<p><strong>Architecture details:</strong></p>
+<ul>
+    <li><strong>Embedding Dimension:</strong> 128</li>
+    <li><strong>Transformer Blocks:</strong> 2</li>
+    <li><strong>Attention Heads:</strong> 4</li>
+    <li><strong>Feed Forward Dimension:</strong> 512</li>
+</ul>
+
+<pre><code class="language-python">def build_mini_transformer(vocab_size, seq_len=128, embed_dim=128, num_heads=4, ff_dim=512):
+    inputs = layers.Input(shape=(seq_len,))
+    
+    # 1. Token Embedding
+    x = layers.Embedding(input_dim=vocab_size, output_dim=embed_dim)(inputs)
+    
+    # 2. Transformer Blocks
+    for i in range(2):
+        # Multi-Head Attention layer
+        attention_output = layers.MultiHeadAttention(
+            num_heads=num_heads, key_dim=embed_dim, name=f"mha_{i}"
+        )(x, x)
+        x = layers.LayerNormalization(epsilon=1e-6)(x + attention_output)
+        
+        # Feed Forward Network
+        ffn_output = layers.Dense(ff_dim, activation="relu")(x)
+        ffn_output = layers.Dense(embed_dim)(ffn_output)
+        x = layers.LayerNormalization(epsilon=1e-6)(x + ffn_output)
+    
+    # 3. Output layer (Predicting next token probability)
+    outputs = layers.Dense(vocab_size, activation="softmax")(x)
+    
+    model = tf.keras.Model(inputs=inputs, outputs=outputs)
+    return model
+
+# Create the model with a restricted vocabulary for educational purposes
+vocab_size = 2000
+model = build_mini_transformer(vocab_size=vocab_size)
+
+model.compile(optimizer="adam", loss="sparse_categorical_crossentropy")
+model.summary()</code></pre>
+
+<hr />
+
+<h2>3. The Data Pipeline</h2>
+<p>We use the <code>TextVectorization</code> layer to handle tokenization, consistent with Week 9.</p>
+<pre><code class="language-python">vectorize_layer = tf.keras.layers.TextVectorization(
+    max_tokens=vocab_size,
+    output_mode='int',
+    output_sequence_length=129 # 128 inputs + 1 target
+)
+
+def prepare_dataset(texts, batch_size=32):
+    ds = tf.data.Dataset.from_tensor_slices(texts)
+    vectorize_layer.adapt(ds.batch(64))
+    
+    def split_input_target(chunk):
+        return chunk[:, :-1], chunk[:, 1:]
+
+    dataset = ds.batch(batch_size).map(vectorize_layer).map(split_input_target)
+    return dataset.prefetch(tf.data.AUTOTUNE)
+
+# Sample data for testing
+sample_data = ["The Vaal University of Technology is a leading provider of high quality education."] * 50
+dataset = prepare_dataset(sample_data)</code></pre>
+
+<hr />
+
+<h2>4. Fine-Tuning Task</h2>
+<p>In this task, we simulate transfer learning by freezing the attention layers and only training the Feed Forward and Output layers.</p>
+<pre><code class="language-python"># Freeze the Attention Layers to simulate Transfer Learning
+for layer in model.layers:
+    if "mha" in layer.name:
+        layer.trainable = False
+
+model.compile(optimizer=tf.keras.optimizers.Adam(1e-4), loss="sparse_categorical_crossentropy")
+print("Fine-tuning started...")
+model.fit(dataset, epochs=5)</code></pre>
+
+<hr />
+
+<h2>5. Generative Inference</h2>
+<p>This function implements the <strong>autoregressive generation loop</strong>. It takes a prompt, predicts the next token, appends it, and repeats.</p>
+<pre><code class="language-python">def generate(model, prompt, length=10):
+    tokens = vectorize_layer([prompt])
+    for _ in range(length):
+        preds = model.predict(tokens, verbose=0)
+        next_id = np.argmax(preds[0, -1, :])
+        
+        # Shift tokens for next prediction
+        tokens_np = tokens.numpy()
+        tokens_np = np.roll(tokens_np, -1)
+        tokens_np[0, -1] = next_id
+        tokens = tf.convert_to_tensor(tokens_np)
+        
+        word = vectorize_layer.get_vocabulary()[next_id]
+        prompt += " " + word
+    return prompt
+
+print(generate(model, "the university"))</code></pre>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_10_Lab_1_Edge_SLM.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        Next: Lab 1 (Universal SLM)
+        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7-7 7"></path></svg>
+    </a>
+</div>
+</article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+</body>
+</html>
