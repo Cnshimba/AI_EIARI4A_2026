@@ -193,6 +193,29 @@ print("\n--- Test 3 ---")
 print(generate(model, "Vaal University of Technology offers"))
 # Expected: Vaal University of Technology offers state of the art facilities for vocational...</code></pre>
 
+<hr />
+
+<h2>6. The Prospectus Chatbot Interface</h2>
+<p>The final part of the lab includes an interactive <strong>ipywidgets</strong> interface. This allows you to "talk" to your model directly inside the notebook.</p>
+
+<div class="my-8 p-6 bg-slate-100 dark:bg-slate-800 rounded-xl border-2 border-primary shadow-inner">
+    <h4 class="mt-0 text-primary dark:text-sky-400">VUT Prospectus Interactive Chat (Preview)</h4>
+    <div class="space-y-4">
+        <div class="p-3 bg-white dark:bg-slate-700 rounded-lg shadow-sm border border-gray-200 dark:border-gray-600 text-sm md:text-base">
+            <strong>You:</strong> Admission requirements for engineering are...
+        </div>
+        <div class="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg border-l-4 border-primary shadow-sm text-sm md:text-base">
+            <strong>VUT-Bot:</strong> Admission requirements for engineering are a minimum APS score of 28 with Level 4 in Mathematics and Physical Science...
+        </div>
+    </div>
+    <div class="mt-4 flex space-x-2">
+        <div class="flex-1 p-2 bg-white dark:bg-slate-700 border border-gray-300 dark:border-gray-600 rounded text-gray-400 italic text-sm">Type a prompt...</div>
+        <div class="px-4 py-2 bg-primary text-white rounded font-bold opacity-50 text-sm">Ask AI</div>
+    </div>
+</div>
+
+<p><strong>Pro Tip:</strong> Since this is a <strong>Base Model</strong> (it predicts the next word), it works best when you start a sentence for it to finish. It acts as an "intelligent autocomplete" for the VUT Prospectus.</p>
+
 <div class="mt-8 flex justify-center">
     <a href="Week_10_Lab_1_Edge_SLM.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors no-underline">
         Next: Lab 1 (Universal SLM)
