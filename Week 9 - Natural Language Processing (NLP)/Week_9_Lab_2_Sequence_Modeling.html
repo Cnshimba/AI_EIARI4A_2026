@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Week 9 Lab 2: Sequence Modeling & The Functional API - AI Course</title>
+<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                fontFamily: { sans: ['Inter', 'sans-serif'] },
+                colors: { primary: '#002F6E', secondary: '#c9984a', background: '#f8fafc', card: '#ffffff' },
+                typography: {
+                    DEFAULT: {
+                        css: {
+                            color: '#334155',
+                            maxWidth: '100%',
+                            h1: { color: '#002F6E' },
+                            h2: { color: '#c9984a', borderBottom: '2px solid #c9984a', paddingBottom: '0.5rem' },
+                            h3: { color: '#002F6E' },
+                            code: { color: '#d63384', backgroundColor: '#f1f5f9', borderRadius: '0.25rem', padding: '0.2rem 0.4rem' }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>hljs.highlightAll();</script>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 pt-20 transition-colors duration-300">
+    <main class="container mx-auto px-4 max-w-5xl mb-12">
+        <article class="prose lg:prose-lg dark:prose-invert max-w-none bg-white dark:bg-slate-800 p-6 md:p-12 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 transition-colors duration-300">
+<div class="flex items-stretch bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm mb-8 overflow-hidden">
+    <div class="w-48 flex-shrink-0 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 p-4">
+        <div class="w-32 h-32 rounded-full bg-primary border-4 border-secondary flex items-center justify-center shadow-lg mb-2 overflow-hidden">
+            <img src="../images/week_9_icon.png" class="h-full w-full object-contain p-4 grayscale invert mix-blend-screen" alt="Icon">
+        </div>
+        <span class="text-sm font-black text-slate-400 uppercase tracking-widest">WEEK 9</span>
+    </div>
+    <div class="flex-1 flex flex-col items-center justify-center p-6 text-center">
+        <h1 class="text-3xl font-bold text-secondary m-0">Lab 2: Sequence Modeling</h1>
+        <span class="text-lg font-medium text-gray-500 dark:text-gray-400 mt-1">Introduction to the Functional API</span>
+    </div>
+</div>
+
+<div class="mb-8 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700 flex items-center justify-between">
+    <div>
+        <h4 class="font-bold text-slate-800 dark:text-slate-200">Jupyter Notebook Available</h4>
+        <p class="text-sm text-slate-600 dark:text-slate-400 m-0">Download the interactive coding lab to run on your local machine.</p>
+    </div>
+    <a href="Week_9_Lab_2_Sequence_Modeling.ipynb" download target="_blank" class="ml-4 px-4 py-2 bg-secondary hover:bg-yellow-600 text-white font-medium rounded-md transition-colors shadow-sm no-underline whitespace-nowrap">
+        Download .ipynb
+    </a>
+</div>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#c9984a]/10 dark:bg-[#c9984a]/20 border-[#c9984a] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#c9984a]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Lab Goal</strong><br />
+Transition from simple stacks (Sequential) to complex graphs (Functional API). We will build an LSTM-based sequence model to understand how temporal data flows through a network.</div></div>
+
+<hr />
+
+<h2>1. Why the Functional API?</h2>
+<p>Until now, we have used <code>models.Sequential</code>. This is great for simple stacks, but real-world models (like Transformers) often have complex branching or shared layers.</p>
+<p>The <strong>Functional API</strong> treats layers like mathematical functions: <code>output = layer(input)</code>.</p>
+
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras import layers, Model
+
+# 1. Define the Input shape
+inputs = layers.Input(shape=(100,))
+
+# 2. Chain the layers like functions
+x = layers.Embedding(input_dim=5000, output_dim=64)(inputs)
+x = layers.LSTM(128, return_sequences=False)(x)
+x = layers.Dropout(0.5)(x)
+outputs = layers.Dense(1, activation='sigmoid')(x)
+
+# 3. Create the Model object
+model = Model(inputs=inputs, outputs=outputs)
+model.summary()</code></pre>
+
+<hr />
+
+<h2>2. Sequence Prediction Task</h2>
+<p>We will build a model that predicts the next number in a sine wave. This is the simplest form of <strong>Generative AI</strong>.</p>
+<pre><code class="language-python"># Generate a sine wave
+t = np.linspace(0, 100, 1000)
+data = np.sin(t)
+
+def create_sequences(data, seq_length=50):
+    x = []
+    y = []
+    for i in range(len(data) - seq_length):
+        x.append(data[i:i+seq_length])
+        y.append(data[i+seq_length])
+    return np.array(x), np.array(y)
+
+seq_length = 50
+x_train, y_train = create_sequences(data, seq_length)
+x_train = x_train.reshape(-1, seq_length, 1) # (batch, steps, features)</code></pre>
+
+<hr />
+
+<h2>3. Building the LSTM (Functional)</h2>
+<pre><code class="language-python">inputs = layers.Input(shape=(seq_length, 1))
+
+# First LSTM layer (returns full sequence)
+x = layers.LSTM(64, return_sequences=True)(inputs)
+
+# Second LSTM layer (returns only the final state)
+x = layers.LSTM(64, return_sequences=False)(x)
+
+outputs = layers.Dense(1)(x)
+
+model = Model(inputs=inputs, outputs=outputs)
+model.compile(optimizer='adam', loss='mse')
+
+model.fit(x_train, y_train, epochs=10, batch_size=32)</code></pre>
+
+<hr />
+
+<h2>4. Generative Hallucination</h2>
+<p>By feeding the model's output back as input, we can generate an infinite future sequence. This mirrors the "Next Token Prediction" loop of LLMs.</p>
+
+<div class="mt-8 flex justify-center">
+    <a href="Week_9_Student_Notes.html" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary hover:bg-primary/90 shadow-sm transition-colors">
+        Back to Student Notes
+    </a>
+</div>
+</article>
+    </main>
+
+    <footer class="text-center text-slate-500 dark:text-slate-400 text-sm pb-24">
+        Vaal University of Technology - AI Module 2026
+    </footer>
+</body>
+</html>
