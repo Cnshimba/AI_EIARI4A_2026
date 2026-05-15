@@ -361,11 +361,48 @@ Earlier in the course, we trained a small custom model on 20 sentences—an educ
 <h3>3.1 The Standard Deployment Pipeline</h3>
 <p>Deploying an LLM involves a standardized pipeline, regardless of whether you are running a tiny model on your laptop or a massive one in the cloud. First, you <strong>Select a Model</strong> appropriate for your hardware constraints (e.g., Phi-3 for CPUs vs Llama-405B for GPU clusters). Next, the input text must be <strong>Tokenized</strong>, converting human language into the specific numerical IDs the model understands. The core step is <strong>Inference</strong>, where the model runs a forward pass to generate probability scores (logits) for the next possible token. Finally, a <strong>Decoding</strong> strategy (like sampling or greedy search) picks the best token and converts it back into text, repeating this loop until the response is complete.</p>
 <p>Tools like <code>transformers</code> library + <code>pipeline()</code> abstract this. Modern stacks often use <strong>vLLM</strong> for ultra-fast, high-throughput inference serving.</p>
-<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Quantization Timing</strong>: During training, model weights are adjusted to minimize prediction error (loss). Quantization does not retrain the model; it only reduces the numerical precision of the already learned weights. Models are <strong>first trained</strong> in high precision (FP16/BF16) to learn accurate weights, then <strong>compressed afterward</strong> (INT8/INT4) for efficient deployment with minimal quality loss.</p>
-<p>[!TIP]<br />
-<strong>Hardware Tip</strong>: Use quantization (e.g., 4-bit) for local deployment; use APIs for closed models.</p>
-<p>[!NOTE]<br />
-<strong>Key Takeaways: Section 3</strong><br />
+<h3>3.2 Comprehensive Tutorial: Quantization in Large Language Models (LLMs)</h3>
+<p>Quantization is a critical process for modern AI Engineers, enabling the deployment of "foundation models"—pre-built giants trained on internet-scale data—onto real-world hardware like laptops, smartphones, and edge sensors.</p>
+
+<h4>1. What is Quantization and What Gets Quantized?</h4>
+<p>Quantization is the process of <strong>mapping a continuous mathematical space to a discrete one</strong>. In practical terms, it involves taking the high-precision "real" values (floating-point numbers) that make up a model and placing them into discrete "buckets" represented by integers.</p>
+<ul>
+    <li><strong>Weights (Parameters):</strong> These are the "billions of knobs" inside the AI's brain. They are the primary target for quantization to reduce the model's storage footprint.</li>
+    <li><strong>Activations:</strong> These are the values that "flow" through the network during a forward pass (inference). Quantizing activations further speeds up mathematical operations.</li>
+</ul>
+
+<h4>2. Why Quantize? (Speed and Hardware)</h4>
+<ul>
+    <li><strong>Computational Efficiency:</strong> On modern CPUs, adding two integers is a simple bitwise operation that typically completes in a <strong>single clock cycle</strong>. In contrast, floating-point addition is complex, requiring exponent alignment and normalization, which can take <strong>three to four clock cycles</strong>.</li>
+    <li><strong>Hardware Compatibility:</strong> Many edge devices, such as <strong>Google’s Coral Edge TPU</strong>, are optimized for low power and <strong>do not support floating-point operations</strong> at all. Quantizing a model into 8-bit integers is the only way to run AI locally on such hardware.</li>
+</ul>
+
+<h4>3. Memory Usage and VRAM: How LLMs Use Memory</h4>
+<p>The memory required by an LLM is primarily determined by its <strong>parameter count</strong> multiplied by its <strong>numerical precision</strong>.</p>
+<ul>
+    <li><strong>The VRAM Problem:</strong> A massive model like <strong>DeepSeek R1</strong> has 671 billion parameters. In its original high-precision format, it requires approximately <strong>720 GB of VRAM</strong>.</li>
+    <li><strong>The Compression Solution:</strong> Quantization can shrink this footprint by <strong>over 80%</strong>. For example, a quantized version of DeepSeek R1 can fit into 131 GB, allowing it to run on just two Nvidia H100 GPUs instead of a massive cluster.</li>
+    <li><strong>Is the whole model loaded in RAM?</strong> Yes. Even though models like DeepSeek use a "Mixture of Experts" architecture where only some parameters are active at once, we typically must <strong>load the entire model into memory</strong> (RAM or VRAM) for inference to occur.</li>
+</ul>
+
+<h4>4. Mathematical Mechanics: "The Scale and the Zero Point"</h4>
+<p>To turn a float into an integer while maintaining the model's "intelligence," we use a quantization scheme:</p>
+<ol>
+    <li><strong>Calibration:</strong> We determine the <strong>clipping range</strong> ($\alpha$ and $\beta$), which are the minimum and maximum values flowing through the network.</li>
+    <li><strong>Scale ($s$):</strong> This is the ratio between the real-value range and the integer range (e.g., mapping -1.0 to 1.0 into -128 to 127).</li>
+    <li><strong>Zero Point ($z$):</strong> For asymmetric ranges (common in <strong>ReLU</strong> activations which are strictly positive), we use an integer offset called a "zero point" to ensure the real value of 0 is accurately represented.</li>
+    <li><strong>Fixed-Point Arithmetic:</strong> To avoid floating-point math entirely, we use a trick where we store fractions as integers and keep track of the decimal point at a "fixed" position, often using <strong>powers of two</strong> for binary efficiency.</li>
+</ol>
+
+<h4>5. Integration into the AI Workflow</h4>
+<p>In your <strong>Week 10 curriculum</strong>, quantization is the bridge between a "Foundation Model" and a "Local Assistant".</p>
+<ul>
+    <li><strong>Post-Training Quantization (PTQ):</strong> Most open-weights models (like Llama or Phi) are published in floating-point format and then quantized by the community into formats like <strong>GGUF, GPTQ, or AWQ</strong> specifically for deployment.</li>
+    <li><strong>Quantization-Aware Training (QAT):</strong> For extreme compression (4-bit or even 1-bit), the model is "prepared" during training to be resilient to the loss of precision.</li>
+    <li><strong>Practical Lab Application:</strong> In <strong>Lab 1</strong>, you will deploy <strong>Phi-3</strong> (a Small Language Model) using <strong>Ollama</strong>. Ollama uses these quantized files to allow "Mini" models to run efficiently on your laptop CPU or a Raspberry Pi 5 by leveraging these integer-based efficiency gains.</li>
+</ul>
+
+<div class="flex items-start p-4 my-4 rounded-lg border-l-4 shadow-sm bg-[#002F6E]/10 dark:bg-[#002F6E]/20 border-[#002F6E] text-slate-700 dark:text-slate-300"><svg class="w-6 h-6 mr-3 flex-shrink-0 text-[#002F6E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg><div class="flex-1 text-sm md:text-base"><strong>Key Takeaways: Section 3</strong><br />
 -   <strong>The Hub</strong>: Hugging Face is the central repository for open-source AI.<br />
 -   <strong>Pipeline</strong>: Tokenize -&gt; Inference -&gt; Decode.<br />
 -   <strong>Optimization</strong>: Techniques like Quantization and FlashAttention are critical for running these giants on real hardware.</p></div></div>
