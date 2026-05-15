@@ -424,26 +424,31 @@
 <p>Cloud instances: Expensive at scale</p>
 </li>
 </ul>
-<h4>3.2 Quantization</h4>
-<p><strong>Concept</strong>: Reduce numerical precision</p>
-<p><strong>Examples</strong>:</p>
+<h4>3.2 Quantization (The Bridge to Edge AI)</h4>
+<p><strong>Concept</strong>: Mapping continuous mathematical space (high-precision floats) to a discrete one (integers).</p>
+
+<p><strong>Why Quantize?</strong></p>
 <ul>
-<li>
-<p>FP16 → INT8: 2x compression</p>
-</li>
-<li>
-<p>FP16 → INT4: 4x compression</p>
-</li>
+<li><strong>Computational Efficiency</strong>: Integer math takes ~1 clock cycle; floating-point takes 3-4 cycles.</li>
+<li><strong>Hardware Compatibility</strong>: Edge devices (like TPUs/NPUs) often only support 8-bit integer operations.</li>
 </ul>
-<p><strong>Trade-off</strong>: Minimal quality loss for huge size reduction</p>
-<p><strong>Formats</strong>:</p>
+
+<p><strong>The Memory Impact (Example: DeepSeek R1)</strong>:</p>
 <ul>
-<li>
-<p>GGUF (CPU-friendly)</p>
-</li>
-<li>
-<p>AWQ/GPTQ (GPU-optimized)</p>
-</li>
+<li><strong>Original</strong>: 671 billion parameters in FP16 = ~720 GB VRAM.</li>
+<li><strong>Quantized</strong>: Reduced to ~131 GB (fits on two H100 GPUs instead of a massive cluster).</li>
+</ul>
+
+<p><strong>The Mechanics (Scale & Zero Point)</strong>:</p>
+<ul>
+<li><strong>Calibration</strong>: Determine the min/max values flowing through the network.</li>
+<li><strong>Scale ($s$) & Zero Point ($z$)</strong>: Formulas used to map real values to integer ranges (e.g., -128 to 127) while keeping zero exactly zero.</li>
+</ul>
+
+<p><strong>Deployment Integration</strong>:</p>
+<ul>
+<li><strong>Formats</strong>: GGUF (CPU-friendly), AWQ/GPTQ (GPU-optimized).</li>
+<li><strong>Lab Connection</strong>: In Lab 1, we deploy Phi-3 using Ollama, which uses quantized files to run efficiently on local laptops and Pi 5s.</li>
 </ul>
 <h4>3.3 Hugging Face Ecosystem</h4>
 <p><strong>The "GitHub of AI"</strong>:</p>
